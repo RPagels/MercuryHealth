@@ -1,0 +1,78 @@
+﻿@model MercuryHealth.Web.Models.Nutrition
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Nutrition</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Quantity" class="control-label"></label>
+                <input asp-for="Quantity" class="form-control" />
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MealTime" class="control-label"></label>
+                <input asp-for="MealTime" class="form-control" />
+                <span asp-validation-for="MealTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Tags" class="control-label"></label>
+                <input asp-for="Tags" class="form-control" />
+                <span asp-validation-for="Tags" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Calories" class="control-label"></label>
+                <input asp-for="Calories" class="form-control" />
+                <span asp-validation-for="Calories" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProteinInGrams" class="control-label"></label>
+                <input asp-for="ProteinInGrams" class="form-control" />
+                <span asp-validation-for="ProteinInGrams" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FatInGrams" class="control-label"></label>
+                <input asp-for="FatInGrams" class="form-control" />
+                <span asp-validation-for="FatInGrams" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CarbohydratesInGrams" class="control-label"></label>
+                <input asp-for="CarbohydratesInGrams" class="form-control" />
+                <span asp-validation-for="CarbohydratesInGrams" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SodiumInGrams" class="control-label"></label>
+                <input asp-for="SodiumInGrams" class="form-control" />
+                <span asp-validation-for="SodiumInGrams" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Color" class="control-label"></label>
+                <input asp-for="Color" class="form-control" />
+                <span asp-validation-for="Color" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
