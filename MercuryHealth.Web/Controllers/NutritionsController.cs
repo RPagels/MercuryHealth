@@ -23,7 +23,40 @@ namespace MercuryHealth.Web.Controllers
         // GET: Nutritions
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Nutrition.ToListAsync());
+            // Keep color logic out of the ViewPage, per MVC pattern, use a ViewModel.
+            var nutritions = from n in _context.Nutrition select n;
+
+            List<NutritionViewModel> NutritionViewModels = new List<NutritionViewModel>();
+
+            foreach (var mynutritionrec in nutritions)
+            {
+                NutritionViewModel nvm = new NutritionViewModel();
+
+                nvm.Id = mynutritionrec.Id;
+                nvm.Calories = mynutritionrec.Calories;
+                nvm.CarbohydratesInGrams = mynutritionrec.CarbohydratesInGrams;
+                nvm.Color = mynutritionrec.Color;
+                nvm.Description = mynutritionrec.Description;
+                nvm.FatInGrams = mynutritionrec.FatInGrams;
+                nvm.MealTime = mynutritionrec.MealTime;
+                nvm.ProteinInGrams = mynutritionrec.ProteinInGrams;
+                nvm.Quantity = mynutritionrec.Quantity;
+                nvm.SodiumInGrams = mynutritionrec.SodiumInGrams;
+                nvm.Tags = mynutritionrec.Tags;
+                nvm.FontColor = "Black";
+
+                // Check for text with API in it
+                if (mynutritionrec.Tags == "API Update")
+                {
+                    nvm.FontColor = "Red";
+                }
+
+                NutritionViewModels.Add(nvm);
+
+            }
+
+            //return View(await _context.Nutrition.ToListAsync());
+            return View(NutritionViewModels);
         }
 
         // GET: Nutritions/Details/5

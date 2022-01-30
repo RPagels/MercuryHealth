@@ -18,5 +18,8 @@ namespace MercuryHealth.Web.Data
         public DbSet<MercuryHealth.Web.Models.Nutrition> Nutrition { get; set; }
 
         public DbSet<MercuryHealth.Web.Models.Exercises> Exercises { get; set; }
+
+        public DbSet<MercuryHealth.Web.Models.AccessLogs> AccessLogs { get; set; }
+
     }
 }

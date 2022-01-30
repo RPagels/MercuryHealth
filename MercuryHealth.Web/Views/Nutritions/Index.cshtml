@@ -1,15 +1,15 @@
-﻿@model IEnumerable<MercuryHealth.Web.Models.Nutrition>
+﻿@model IEnumerable<MercuryHealth.Web.Models.NutritionViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Nutrition";
 }
 
-<h1>Index</h1>
+<h1>Nutrition</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table class="table" style="font-size: 14px;">
     <thead>
         <tr>
             <th>
@@ -48,40 +48,40 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
+            <td style="color:@item.FontColor">
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
-            <td>
+            <td style="color:@item.FontColor">
                 @Html.DisplayFor(modelItem => item.Quantity)
             </td>
-            <td>
+            <td style="color:@item.FontColor">
                 @Html.DisplayFor(modelItem => item.MealTime)
             </td>
-            <td>
+            <td style="color:@item.FontColor">
                 @Html.DisplayFor(modelItem => item.Tags)
             </td>
-            <td>
+            <td style="color:@item.FontColor">
                 @Html.DisplayFor(modelItem => item.Calories)
             </td>
-            <td>
+            <td style="color:@item.FontColor">
                 @Html.DisplayFor(modelItem => item.ProteinInGrams)
             </td>
-            <td>
+            <td style="color:@item.FontColor">
                 @Html.DisplayFor(modelItem => item.FatInGrams)
             </td>
-            <td>
+            <td style="color:@item.FontColor">
                 @Html.DisplayFor(modelItem => item.CarbohydratesInGrams)
             </td>
-            <td>
+            <td style="color:@item.FontColor">
                 @Html.DisplayFor(modelItem => item.SodiumInGrams)
             </td>
-            <td>
+            <td style="color:@item.FontColor">
                 @Html.DisplayFor(modelItem => item.Color)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" id="button_edit_@item.Id" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" id="button_details_@item.Id" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" id="button_delete_@item.Id" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }
