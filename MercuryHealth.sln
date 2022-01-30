@@ -5,10 +5,9 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MercuryHealth.Web", "MercuryHealth.Web\MercuryHealth.Web.csproj", "{8BE75C87-0099-4E7F-955F-FBD2F40663A6}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MercuryHealth.IaC", "MercuryHealth.IaC", "{4F526A93-92B4-4515-84B8-614FA749EF82}"
-	ProjectSection(SolutionItems) = preProject
-		TextFile1.txt = TextFile1.txt
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MercuryHealth.Database", "MercuryHealth.Database\MercuryHealth.Database.csproj", "{D1A42668-E372-4DA4-96C9-257E8AE8851B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MercuryHealth.UnitTess", "MercuryHealth.UnitTess\MercuryHealth.UnitTess.csproj", "{6C8EC509-24E0-489E-B3BE-547436F9230E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,6 +19,14 @@ Global
 		{8BE75C87-0099-4E7F-955F-FBD2F40663A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8BE75C87-0099-4E7F-955F-FBD2F40663A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8BE75C87-0099-4E7F-955F-FBD2F40663A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1A42668-E372-4DA4-96C9-257E8AE8851B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1A42668-E372-4DA4-96C9-257E8AE8851B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1A42668-E372-4DA4-96C9-257E8AE8851B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1A42668-E372-4DA4-96C9-257E8AE8851B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C8EC509-24E0-489E-B3BE-547436F9230E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C8EC509-24E0-489E-B3BE-547436F9230E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C8EC509-24E0-489E-B3BE-547436F9230E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C8EC509-24E0-489E-B3BE-547436F9230E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
