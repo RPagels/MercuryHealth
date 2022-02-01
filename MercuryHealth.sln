@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MercuryHealth.IaC", "Mercur
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MercuryHealth.UITests", "MercuryHealth.UITests\MercuryHealth.UITests.csproj", "{3CC35DC5-BE99-4A05-8004-2CF9390FAB16}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MercuryHealth.UnitTests", "MercuryHealth.UnitTests\MercuryHealth.UnitTests.csproj", "{E5D0A34C-761C-474E-85E2-7924B6DE7708}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{3CC35DC5-BE99-4A05-8004-2CF9390FAB16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3CC35DC5-BE99-4A05-8004-2CF9390FAB16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3CC35DC5-BE99-4A05-8004-2CF9390FAB16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5D0A34C-761C-474E-85E2-7924B6DE7708}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5D0A34C-761C-474E-85E2-7924B6DE7708}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5D0A34C-761C-474E-85E2-7924B6DE7708}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5D0A34C-761C-474E-85E2-7924B6DE7708}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
