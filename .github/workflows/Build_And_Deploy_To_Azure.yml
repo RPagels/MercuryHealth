@@ -63,6 +63,8 @@ jobs:
           dotnet publish MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} -o './website'
           dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} --no-restore
           dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './uitests'
+          dotnet build MercuryHealth.FunctionApp/MercuryHealth.FunctionApp.csproj --configuration ${{ env.buildConfiguration }} --no-restore
+          dotnet publish MercuryHealth.FunctionApp/MercuryHealth.FunctionApp.csproj --configuration ${{ env.buildConfiguration }} -o './functionapp'
 
       - name: dotnet retore database
         run: dotnet restore MercuryHealth.Database/MercuryHealth.Database.csproj
@@ -81,6 +83,13 @@ jobs:
         with:
           name: MercuryHealth.Website
           path: ${{ github.workspace }}/website
+
+      - name: Upload Build Artifacts-FunctionApp
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: MercuryHealth.FunctionApp
+          path: ${{ github.workspace }}/functionapp
 
       - name: Upload Build Artifacts-Database
         if: ${{ github.event_name != 'pull_request' }}
