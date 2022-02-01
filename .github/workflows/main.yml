@@ -179,11 +179,11 @@ jobs:
     name: Deploy Database
     runs-on: windows-latest
 
-    env:
-      ResourceGroupName: ${{ env.Azure_Resource_Group }} #MercuryHealth-rg
-      WebsiteName: ${{ env.Website_Name }} #'webSite-747wo5rgee7z4'
-      slot-name: 'dev'
-      if: (success() && (github.ref == 'refs/heads/main'))
+#    env:
+#      ResourceGroupName: ${{ env.Azure_Resource_Group }} #MercuryHealth-rg
+#      WebsiteName: ${{ env.Website_Name }} #'webSite-747wo5rgee7z4'
+#      slot-name: 'dev'
+#      if: (success() && (github.ref == 'refs/heads/main'))
 
     needs: [Deploy_Stage_IaC]
     steps:
