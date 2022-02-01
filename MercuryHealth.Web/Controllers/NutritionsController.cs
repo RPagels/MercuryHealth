@@ -8,12 +8,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MercuryHealth.Web.Data;
 using MercuryHealth.Web.Models;
+using Microsoft.ApplicationInsights;
 
 namespace MercuryHealth.Web.Controllers
 {
     public class NutritionsController : Controller
     {
         private readonly MercuryHealthWebContext _context;
+        private readonly TelemetryClient telemetry;
 
         public NutritionsController(MercuryHealthWebContext context)
         {
@@ -54,6 +56,9 @@ namespace MercuryHealth.Web.Controllers
                 NutritionViewModels.Add(nvm);
 
             }
+
+            // Application Insights - Track Events
+            telemetry.TrackEvent("TrackEvent-Nutrition ViewModel Created");
 
             //return View(await _context.Nutrition.ToListAsync());
             return View(NutritionViewModels);

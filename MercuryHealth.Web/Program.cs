@@ -8,6 +8,7 @@ builder.Services.AddDbContext<MercuryHealthWebContext>(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
 
 var app = builder.Build();
 
