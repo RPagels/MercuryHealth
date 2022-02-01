@@ -241,6 +241,14 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+    # Deploy Application
+    - name: 'Deploy Website Application'
+      uses: azure/webapps-deploy@v2
+      with:
+          app-name: ${{ env.Website_Name }}
+          slot-name: 'Dev'
+          package: './MercuryHealth.Website'
+          
     # Deploy Function Application
     - name: 'Deploy Function Application'
       uses: Azure/functions-action@v1
@@ -251,14 +259,6 @@ jobs:
         package: './MercuryHealth.FunctionApp'
         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_31EA46D328744ACA9B1525450ECD3D5B }}
 
-    # Deploy Application
-    - name: 'Deploy Website Application'
-      uses: azure/webapps-deploy@v2
-      with:
-          app-name: ${{ env.Website_Name }}
-          slot-name: 'Dev'
-          package: './MercuryHealth.Website'
-          
     - name: Azure logout
       run: |
         az logout
