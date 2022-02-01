@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MercuryHealth.UITests", "Me
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MercuryHealth.UnitTests", "MercuryHealth.UnitTests\MercuryHealth.UnitTests.csproj", "{E5D0A34C-761C-474E-85E2-7924B6DE7708}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MercuryHealth.FunctionApp", "MercuryHealth.FunctionApp\MercuryHealth.FunctionApp.csproj", "{AB69832B-58BB-471E-BD0D-60FF091F70FD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{E5D0A34C-761C-474E-85E2-7924B6DE7708}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5D0A34C-761C-474E-85E2-7924B6DE7708}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5D0A34C-761C-474E-85E2-7924B6DE7708}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB69832B-58BB-471E-BD0D-60FF091F70FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB69832B-58BB-471E-BD0D-60FF091F70FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB69832B-58BB-471E-BD0D-60FF091F70FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB69832B-58BB-471E-BD0D-60FF091F70FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
