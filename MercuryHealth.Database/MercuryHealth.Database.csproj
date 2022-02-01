@@ -1,9 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="MSBuild.Sdk.SqlProj/2.0.0-beta.1">
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<SqlServerVersion>SqlAzure</SqlServerVersion>
+		<!--<TargetName>MercuryHealthGroup.Database</TargetName>-->
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
+	<ItemGroup>
+		<PostDeploy Include="Script.PostDeployment.sql" />
+		<!--<PreDeploy Include="Pre-Deployment\Script.PreDeployment.sql" />-->
+	</ItemGroup>
 </Project>

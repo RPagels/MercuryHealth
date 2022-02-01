@@ -1,6 +1,10 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using NUnit.Framework;
 
-namespace MercuryHealth.UnitTess
+namespace MercuryHealth.UITests
+
 {
     public class Tests
     {
@@ -16,3 +20,4 @@ namespace MercuryHealth.UnitTess
         }
     }
 }
+

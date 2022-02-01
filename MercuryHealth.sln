@@ -5,11 +5,13 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MercuryHealth.Web", "MercuryHealth.Web\MercuryHealth.Web.csproj", "{8BE75C87-0099-4E7F-955F-FBD2F40663A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MercuryHealth.Database", "MercuryHealth.Database\MercuryHealth.Database.csproj", "{D1A42668-E372-4DA4-96C9-257E8AE8851B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MercuryHealth.Database", "MercuryHealth.Database\MercuryHealth.Database.csproj", "{D1A42668-E372-4DA4-96C9-257E8AE8851B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MercuryHealth.UnitTess", "MercuryHealth.UnitTess\MercuryHealth.UnitTess.csproj", "{6C8EC509-24E0-489E-B3BE-547436F9230E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MercuryHealth.UnitTests", "MercuryHealth.UnitTess\MercuryHealth.UnitTests.csproj", "{6C8EC509-24E0-489E-B3BE-547436F9230E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MercuryHealth.IaC", "MercuryHealth.IaC", "{1DCD72D4-AA74-4A44-888B-D8CC9ED8DB12}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MercuryHealth.UITests", "MercuryHealth.UITests\MercuryHealth.UITests.csproj", "{3CC35DC5-BE99-4A05-8004-2CF9390FAB16}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,10 @@ Global
 		{6C8EC509-24E0-489E-B3BE-547436F9230E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C8EC509-24E0-489E-B3BE-547436F9230E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C8EC509-24E0-489E-B3BE-547436F9230E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CC35DC5-BE99-4A05-8004-2CF9390FAB16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CC35DC5-BE99-4A05-8004-2CF9390FAB16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CC35DC5-BE99-4A05-8004-2CF9390FAB16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CC35DC5-BE99-4A05-8004-2CF9390FAB16}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
