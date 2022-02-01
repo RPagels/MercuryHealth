@@ -199,3 +199,57 @@ jobs:
       run: |
         az logout
 
+###################################################################
+# CD Stage - Application                                             #
+###################################################################
+  Deploy_Stage_Application:
+#  Dev:
+    if: contains(github.event_name, 'push')
+
+    name: Deploy Application
+    runs-on: ubuntu-latest
+
+    needs: [Deploy_Stage_IaC]
+    steps:
+
+#    - name: Download Build Artifacts-Function Application
+#      uses: actions/download-artifact@v2
+#      continue-on-error: false
+#      with:
+#        name: MercuryHealthGroup.FunctionApp
+#        path: ${{ github.workspace }}/MercuryHealthGroup.FunctionApp
+
+    - name: Download Build Artifacts-Website Applicationn
+      uses: actions/download-artifact@v2
+      continue-on-error: false
+      with:
+        name: MercuryHealth.Website
+        path: ${{ github.workspace }}/MercuryHealth.Website
+        
+    - name: Login to Azure
+      uses: azure/login@v1
+      continue-on-error: false
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    # Deploy Function Application
+    - name: 'Deploy Function Application'
+      uses: Azure/functions-action@v1
+      id: fa
+      with:
+        app-name: ${{ env.Function_AppName }}
+        slot-name: 'Production'
+        package: './MercuryHealth.FunctionApp'
+        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B58A9370B82F4AD79D7BBD9D6F4724C5 }}
+
+    # Deploy Application
+    - name: 'Deploy Website Application'
+      uses: azure/webapps-deploy@v2
+      with:
+          app-name: ${{ env.Website_Name }}
+          slot-name: 'Dev'
+          package: './MercuryHealth.Website'
+          
+    - name: Azure logout
+      run: |
+        az logout
