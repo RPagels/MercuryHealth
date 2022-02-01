@@ -61,11 +61,16 @@ jobs:
           dotnet restore
           dotnet build MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} --no-restore
           dotnet publish MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} -o './website'
+          dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} --no-restore
+          dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './uitests'
 
       - name: dotnet retore database
         run: dotnet restore MercuryHealth.Database/MercuryHealth.Database.csproj
       - name: dotnet build database
         run: dotnet build MercuryHealth.Database/MercuryHealth.Database.csproj --configuration ${{ env.buildConfiguration }} --no-restore --output './database'
+
+      - name: dotnet run unit tests
+        run: dotnet test MercuryHealth.UnitTests/MercuryHealth.UnitTests.csproj
 
       ###########################################
       # Upload Artifacts
@@ -74,21 +79,28 @@ jobs:
         if: ${{ github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v2
         with:
-          name: MercuryHealthGroup.Website
+          name: MercuryHealth.Website
           path: ${{ github.workspace }}/website
 
       - name: Upload Build Artifacts-Database
         if: ${{ github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v2
         with:
-          name: MercuryHealthGroup.Database
+          name: MercuryHealth.Database
           path: ${{ github.workspace }}/database
 
+      - name: Upload Build Artifacts-UI Tests
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: MercuryHealth.UITests
+          path: ${{ github.workspace }}/uitests
+        
       - name: Upload Infrastucture Files
         if: ${{ github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v2
         with:
-          name: MercuryHealthGroup.IaC
+          name: MercuryHealth.IaC
           path: ${{ github.workspace }}/MercuryHealth.IaC/*
 
       - name: "Azure login"
@@ -110,7 +122,98 @@ jobs:
         run: |
           az logout
 
+###################################################################
+# CD Stage - Infrastructure                                       #
+###################################################################
+  Deploy_Stage_IaC:
+#    if: contains(github.event_name, 'push')
+# ASk Dave!!!!
 
+    name: Deploy Infrastructure
+    runs-on: ubuntu-latest
+
+    env:
+      ResourceGroupName: ${{ env.Azure_Resource_Group }}
+      WebsiteName: ${{ env.Website_Name }}
+      slot-name: 'dev'
+      if: (success() && (github.ref == 'refs/heads/main'))
+
+    needs: [Build_Stage_Application]
+    steps:
+    - name: Download Build Artifact-Infrastructure
+      uses: actions/download-artifact@v2
+      continue-on-error: false
+      with:
+        name: MercuryHealth.IaC
+        path: ${{ github.workspace }}/MercuryHealth.IaC
         
+    - name: Login to Azure
+      uses: azure/login@v1
+      continue-on-error: false
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+      
+# Deploy ARM Template
+    - name: Deploy Infrastucture
+      uses: azure/arm-deploy@v1
+      with:
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+        resourceGroupName: ${{ env.Azure_Resource_Group }}
+        template: ./MercuryHealth.IaC/main-1.bicep
+        parameters: ./MercuryHealth.IaC/main-1.params.json sqlAdministratorLogin=${{ secrets.SQL_DB_LOGIN }} sqlAdministratorLoginPassword=${{ secrets.SQL_DB_PASSWORD }}
+        deploymentMode: Incremental
+        failOnStdErr: false
 
+    - name: Azure logout
+      run: |
+        az logout
+        
+###################################################################
+# CD Stage - Database                                             #
+###################################################################
+  Deploy_Stage_Database:
+#  Dev:
+#    if: contains(github.event_name, 'push')
+# ASk Dave!!!!
+
+    name: Deploy Database
+    runs-on: windows-latest
+
+    env:
+      ResourceGroupName: ${{ env.Azure_Resource_Group }} #MercuryHealth-rg
+      WebsiteName: ${{ env.Website_Name }} #'webSite-747wo5rgee7z4'
+      slot-name: 'dev'
+      if: (success() && (github.ref == 'refs/heads/main'))
+
+    needs: [Deploy_Stage_IaC]
+    steps:
+
+#    - name: Download all workflow run artifacts
+#      uses: actions/download-artifact@v2
+  
+    - name: Download Build Artifact-Database
+      uses: actions/download-artifact@v2
+      continue-on-error: false
+      with:
+        name: MercuryHealth.Database
+        path: ${{ github.workspace }}/MercuryHealth.Database
+
+    - name: Login to Azure
+      uses: azure/login@v1
+      continue-on-error: false
+      with:
+        creds: ${{ secrets.AZURE_SQL_CREDENTIALS }}
+    
+# Deploy Database *.dacpac file - Requires windows-latest runner!!!
+    - name: 'Deploy the database to Azure'
+      uses: Azure/sql-action@v1.2
+      with:
+        server-name: ${{ secrets.SQL_DB_Server_Name }}
+        
+        connection-string: ${{ secrets.SQL_DB_Connection_String }}
+        dacpac-package: './MercuryHealth.Database/MercuryHealth.Database.dacpac'
+
+    - name: Azure logout
+      run: |
+        az logout
 
