@@ -132,11 +132,11 @@ jobs:
     name: Deploy Infrastructure
     runs-on: ubuntu-latest
 
-    env:
-      ResourceGroupName: ${{ env.Azure_Resource_Group }}
-      WebsiteName: ${{ env.Website_Name }}
-      slot-name: 'dev'
-      if: (success() && (github.ref == 'refs/heads/main'))
+#   env:
+#      ResourceGroupName: ${{ env.Azure_Resource_Group }}
+#      WebsiteName: ${{ env.Website_Name }}
+#      slot-name: 'dev'
+#      if: (success() && (github.ref == 'refs/heads/main'))
 
     needs: [Build_Stage_Application]
     steps:
