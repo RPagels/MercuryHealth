@@ -111,7 +111,7 @@ resource AppInsights_webSiteName 'Microsoft.Insights/components@2020-02-02' = {
   //dependsOn: [
   //  appService
   //]
-}
+//}
 
 output appInsightsInstrumentationKey string = AppInsights_webSiteName.properties.InstrumentationKey
 output appInsightsConnectionString string = AppInsights_webSiteName.properties.ConnectionString

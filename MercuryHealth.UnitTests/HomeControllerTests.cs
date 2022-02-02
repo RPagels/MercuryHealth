@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace MercuryHealth.UnitTests;
 
-public class Tests
+public class HomeControllerTests
 {
     private const string Expected = "Hello World!";
 
