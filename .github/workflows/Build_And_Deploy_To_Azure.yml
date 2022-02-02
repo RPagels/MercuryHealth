@@ -272,16 +272,51 @@ jobs:
 
     # Deploy APIs
     - name: 'Deploy APIs'
-      uses: azure/webapps-deploy@v2
-      with:
-          app-name: ${{ env.Website_Name }}
-          slot-name: 'Dev'
-          package: './MercuryHealth.API'
+      run: echo 'Deploy APIs'
+#      uses: azure/webapps-deploy@v2
+#      with:
+#          app-name: ${{ env.Website_Name }}
+#          slot-name: 'Dev'
+#          package: './MercuryHealth.API'
           
     - name: Azure logout
       run: |
         az logout
 
+###################################################################
+# CD Stage - UI Testing                         
+###################################################################
+  UITesting_Stage_Application:
+    if: contains(github.event_name, 'push')
+
+    name: UI Test Application
+    runs-on: ubuntu-latest
+
+    needs: [Deploy_Stage_Application, Deploy_Stage_Database]
+    steps:
+      - name: Checkout GitHub Actions 
+        uses: actions/checkout@v2
+          
+      - name: Login to Azure
+        uses: azure/login@v1
+        continue-on-error: false
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+      - name: 'UI Testing with Playwright'
+        run: echo 'UI Testing with Playwright'
+      
+#      - name: 'Azure Load Testing'
+#        uses: azure/load-testing@main
+#        with:
+#          loadTestConfigFile: 'SampleApp.yaml'
+#          loadTestResource: ${{ env.LOAD_TEST_RESOURCE }}
+#          resourceGroup: ${{ env.LOAD_TEST_RESOURCE_GROUP }}
+
+      - name: Azure logout
+        run: |
+          az logout
+          
 ###################################################################
 # CD Stage - Load and Performance Testing                         #
 ###################################################################
@@ -291,7 +326,7 @@ jobs:
     name: Load Test Application
     runs-on: ubuntu-latest
 
-    needs: [Deploy_Stage_Application, Deploy_Stage_Database]
+    needs: [UITesting_Stage_Application]
     steps:
       - name: Checkout GitHub Actions 
         uses: actions/checkout@v2
