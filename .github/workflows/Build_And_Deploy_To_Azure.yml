@@ -106,14 +106,14 @@ jobs:
         if: ${{ github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v2
         with:
-          name: MercuryHealthGroup.API
+          name: MercuryHealth.API
           path: ${{ github.workspace }}/api
 
       - name: Upload Build Artifacts-UI Tests
         if: ${{ github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v2
         with:
-          name: MercuryHealthGroup.UITests
+          name: MercuryHealth.UITests
           path: ${{ github.workspace }}/uitests
 
       - name: Upload Infrastucture Files
