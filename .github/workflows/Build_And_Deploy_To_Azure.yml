@@ -65,6 +65,10 @@ jobs:
           dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './uitests'
           dotnet build MercuryHealth.FunctionApp/MercuryHealth.FunctionApp.csproj --configuration ${{ env.buildConfiguration }} --no-restore
           dotnet publish MercuryHealth.FunctionApp/MercuryHealth.FunctionApp.csproj --configuration ${{ env.buildConfiguration }} -o './functionapp'
+          dotnet build MercuryHealth.API/MercuryHealth.API.csproj --configuration ${{ env.buildConfiguration }} --no-restore
+          dotnet publish MercuryHealth.API/MercuryHealth.API.csproj --configuration ${{ env.buildConfiguration }} -o './api'
+          dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} --no-restore
+          dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './uitests'
 
       - name: dotnet retore database
         run: dotnet restore MercuryHealth.Database/MercuryHealth.Database.csproj
@@ -98,13 +102,20 @@ jobs:
           name: MercuryHealth.Database
           path: ${{ github.workspace }}/database
 
+      - name: Upload Build Artifacts-API
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: MercuryHealthGroup.API
+          path: ${{ github.workspace }}/api
+
       - name: Upload Build Artifacts-UI Tests
         if: ${{ github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v2
         with:
-          name: MercuryHealth.UITests
+          name: MercuryHealthGroup.UITests
           path: ${{ github.workspace }}/uitests
-        
+
       - name: Upload Infrastucture Files
         if: ${{ github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v2
@@ -259,6 +270,49 @@ jobs:
         package: './MercuryHealth.FunctionApp'
         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_31EA46D328744ACA9B1525450ECD3D5B }}
 
+    # Deploy APIs
+    - name: 'Deploy APIs'
+      uses: azure/webapps-deploy@v2
+      with:
+          app-name: ${{ env.Website_Name }}
+          slot-name: 'Dev'
+          package: './MercuryHealth.API'
+          
     - name: Azure logout
       run: |
         az logout
+
+###################################################################
+# CD Stage - Load and Performance Testing                         #
+###################################################################
+  LoadTesting_Stage_Application:
+    if: contains(github.event_name, 'push')
+
+    name: Load Test Application
+    runs-on: ubuntu-latest
+
+    needs: [Deploy_Stage_Application, Deploy_Stage_Database]
+    steps:
+      - name: Checkout GitHub Actions 
+        uses: actions/checkout@v2
+          
+      - name: Login to Azure
+        uses: azure/login@v1
+        continue-on-error: false
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+      - name: 'Azure Load Testing'
+        run: echo 'Azure Load Testing'
+      
+#      - name: 'Azure Load Testing'
+#        uses: azure/load-testing@main
+#        with:
+#          loadTestConfigFile: 'SampleApp.yaml'
+#          loadTestResource: ${{ env.LOAD_TEST_RESOURCE }}
+#          resourceGroup: ${{ env.LOAD_TEST_RESOURCE_GROUP }}
+
+      - name: Azure logout
+        run: |
+          az logout
+        
