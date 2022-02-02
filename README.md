@@ -1,9 +1,10 @@
 # Mercury Health
 
-[![Build_And_Deploy_To_Azure](https://github.com/RPagels/MercuryHealth/actions/workflows/Build_And_Deploy_To_Azure.yml/badge.svg)](https://github.com/RPagels/MercuryHealth/actions/workflows/Build_And_Deploy_To_Azure.yml)
-
 # Introduction
 The amazing Mercury Health development team has embraced a DevOps approach and is using continuous integration for builds and unit tests. If everything passes they use release management for continuous deployment that deploys to various environments and runs UI automation and load tests from coast to coast.
+
+# GitHub Status
+[![Build_And_Deploy_To_Azure](https://github.com/RPagels/MercuryHealth/actions/workflows/Build_And_Deploy_To_Azure.yml/badge.svg)](https://github.com/RPagels/MercuryHealth/actions/workflows/Build_And_Deploy_To_Azure.yml)
 
 # Mercury Health Resources
 ### Team Resources
@@ -16,3 +17,6 @@ The amazing Mercury Health development team has embraced a DevOps approach and i
 - [Dev](http://mercuryhealth-Dev.azurewebsites.net)
 - [QA](http://mercuryhealth-QA.azurewebsites.net)
 - [Prod](http://mercuryhealth.azurewebsites.net)
+
+# Contributing
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
