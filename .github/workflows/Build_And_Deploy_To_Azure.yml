@@ -221,12 +221,12 @@ jobs:
     needs: [Deploy_Stage_IaC]
     steps:
 
-#    - name: Download Build Artifacts-Function Application
-#      uses: actions/download-artifact@v2
-#      continue-on-error: false
-#      with:
-#        name: MercuryHealthGroup.FunctionApp
-#        path: ${{ github.workspace }}/MercuryHealthGroup.FunctionApp
+    - name: Download Build Artifacts-Function Application
+      uses: actions/download-artifact@v2
+      continue-on-error: false
+      with:
+        name: MercuryHealth.FunctionApp
+        path: ${{ github.workspace }}/MercuryHealth.FunctionApp
 
     - name: Download Build Artifacts-Website Applicationn
       uses: actions/download-artifact@v2
