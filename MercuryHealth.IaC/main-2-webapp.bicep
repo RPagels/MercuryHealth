@@ -56,23 +56,23 @@ resource appService 'Microsoft.Web/sites@2021-01-15' = {
   }
 }
 
-resource webSiteConnectionStrings 'Microsoft.Web/sites/config@2021-01-15' = {
-  name: '${webSiteName}/connectionstrings'
-  properties: {
-    DefaultConnection: {
-      value: 'Data Source=tcp:${sqlserverName},1433;Initial Catalog=${sqlDBName};User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};'
-      type: 'SQLAzure'
-    }
-  }
-  dependsOn: [
-    appService
-  ]
-}
+// resource webSiteConnectionStrings 'Microsoft.Web/sites/config@2021-01-15' = {
+//   name: '${webSiteName}/connectionstrings'
+//   properties: {
+//     DefaultConnection: {
+//       value: 'Data Source=tcp:${sqlserverName},1433;Initial Catalog=${sqlDBName};User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};'
+//       type: 'SQLAzure'
+//     }
+//   }
+//   dependsOn: [
+//     appService
+//   ]
+// }
   
 resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-02-01' = {
   name: '${webSiteName}/appsettings'
   properties: {
-    'ConnectionStrings:MyDatabaseContext': 'Data Source=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};'
+    'ConnectionStrings:DefaultConnection': 'Data Source=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};'
     'ApimSubscriptionKey': 'e2d1cf7c...for APIM - TBD'
     'ConnectionStrings:AppConfig': configStoreEndpoint
     'Environment': 'Prod'
