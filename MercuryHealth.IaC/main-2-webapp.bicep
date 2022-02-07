@@ -130,7 +130,7 @@ resource standardWebTest  'Microsoft.Insights/webtests@2020-10-05-preview' = {
   name: 'demo-webtest'
   location: 'eastus'
   tags: {
-    'hidden-link:/subscriptions/ade29918-737f-497e-8808-4bffda5cc46d/resourceGroups/rg-article/providers/microsoft.insights/components/appi-demo': 'Resource'
+    'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/appInsights-4vwxkvpofrtbq': 'Resource'
   }
   kind: 'ping'
   properties: {
