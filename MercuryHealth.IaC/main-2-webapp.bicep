@@ -161,7 +161,7 @@ resource standardWebTest  'Microsoft.Insights/webtests@2020-10-05-preview' = {
     ]
     Configuration: null
     Request: {
-      RequestUrl: 'https://website-4vwxkvpofrtbq.azurewebsites.net'
+      RequestUrl: 'https://website-4vwxkvpofrtbq-dev.azurewebsites.net/'
       Headers: null
       HttpVerb: 'GET'
       RequestBody: null
