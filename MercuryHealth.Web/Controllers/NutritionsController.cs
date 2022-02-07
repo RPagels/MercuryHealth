@@ -17,9 +17,10 @@ namespace MercuryHealth.Web.Controllers
         private readonly MercuryHealthWebContext _context;
         private readonly TelemetryClient telemetry;
 
-        public NutritionsController(MercuryHealthWebContext context)
+        public NutritionsController(MercuryHealthWebContext context, TelemetryClient telemetry)
         {
             _context = context;
+            this.telemetry = telemetry;
         }
 
         // GET: Nutritions

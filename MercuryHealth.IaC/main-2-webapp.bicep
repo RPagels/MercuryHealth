@@ -73,7 +73,7 @@ resource appService 'Microsoft.Web/sites@2021-01-15' = {
 resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-02-01' = {
   name: '${webSiteName}/appsettings'
   properties: {
-    'ConnectionStrings:DefaultConnection': 'Data Source=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};'
+    'ConnectionStrings:DefaultConnection': 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
     'ApimSubscriptionKey': 'e2d1cf7c...for APIM - TBD'
     'ConnectionStrings:AppConfig': configStoreEndpoint
     'Environment': 'Prod'
@@ -126,8 +126,8 @@ resource webAppPortalName_environments 'Microsoft.Web/sites/slots@2020-06-01' = 
 //   }
 // }
 
-resource standardWebTest  'Microsoft.Insights/webtests@2020-10-05-preview' = {
-  name: 'demo-webtest'
+resource standardWebTestPageHome  'Microsoft.Insights/webtests@2020-10-05-preview' = {
+  name: 'appInsights-PageHome'
   location: 'eastus'
   tags: {
     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/appInsights-4vwxkvpofrtbq': 'Resource'
@@ -135,7 +135,7 @@ resource standardWebTest  'Microsoft.Insights/webtests@2020-10-05-preview' = {
   kind: 'ping'
   properties: {
     SyntheticMonitorId: 'appInsights-4vwxkvpofrtbq'
-    Name: 'standardWebTest-4vwxkvpofrtbq'
+    Name: 'appInsights-Page Home'
     Description: null
     Enabled: true
     Frequency: 900
@@ -162,6 +162,116 @@ resource standardWebTest  'Microsoft.Insights/webtests@2020-10-05-preview' = {
     Configuration: null
     Request: {
       RequestUrl: 'https://website-4vwxkvpofrtbq-dev.azurewebsites.net/'
+      Headers: null
+      HttpVerb: 'GET'
+      RequestBody: null
+      ParseDependentRequests: false
+      FollowRedirects: null
+    }
+    ValidationRules: {
+      ExpectedHttpStatusCode: 200
+      IgnoreHttpsStatusCode: false
+      ContentValidation: null
+      SSLCheck: true
+      SSLCertRemainingLifetimeCheck: 7
+    }
+  }
+  dependsOn: [
+   appService
+  ]
+}
+
+resource standardWebTestPageNutritions  'Microsoft.Insights/webtests@2020-10-05-preview' = {
+  name: 'appInsights-Page Nutritions'
+  location: 'eastus'
+  tags: {
+    'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/appInsights-4vwxkvpofrtbq': 'Resource'
+  }
+  kind: 'ping'
+  properties: {
+    SyntheticMonitorId: 'appInsights-4vwxkvpofrtbq'
+    Name: 'appInsights-Page Nutritions'
+    Description: null
+    Enabled: true
+    Frequency: 900
+    Timeout: 120 
+    Kind: 'standard'
+    RetryEnabled: true
+    Locations: [
+      {
+        Id: 'emea-nl-ams-azr'
+      }
+      {
+        Id: 'emea-ru-msa-edge'
+      }
+      {
+        Id: 'apac-hk-hkn-azr'
+      }
+      {
+        Id: 'latam-br-gru-edge'
+      }
+      {
+        Id: 'emea-au-syd-edge'
+      }
+    ]
+    Configuration: null
+    Request: {
+      RequestUrl: 'https://website-4vwxkvpofrtbq-dev.azurewebsites.net/Nutritions'
+      Headers: null
+      HttpVerb: 'GET'
+      RequestBody: null
+      ParseDependentRequests: false
+      FollowRedirects: null
+    }
+    ValidationRules: {
+      ExpectedHttpStatusCode: 200
+      IgnoreHttpsStatusCode: false
+      ContentValidation: null
+      SSLCheck: true
+      SSLCertRemainingLifetimeCheck: 7
+    }
+  }
+  dependsOn: [
+   appService
+  ]
+}
+
+resource standardWebTestPageExercises  'Microsoft.Insights/webtests@2020-10-05-preview' = {
+  name: 'appInsights-Page Exercises'
+  location: 'eastus'
+  tags: {
+    'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/appInsights-4vwxkvpofrtbq': 'Resource'
+  }
+  kind: 'ping'
+  properties: {
+    SyntheticMonitorId: 'appInsights-4vwxkvpofrtbq'
+    Name: 'appInsights-Page Exercises'
+    Description: null
+    Enabled: true
+    Frequency: 900
+    Timeout: 120 
+    Kind: 'standard'
+    RetryEnabled: true
+    Locations: [
+      {
+        Id: 'emea-nl-ams-azr'
+      }
+      {
+        Id: 'emea-ru-msa-edge'
+      }
+      {
+        Id: 'apac-hk-hkn-azr'
+      }
+      {
+        Id: 'latam-br-gru-edge'
+      }
+      {
+        Id: 'emea-au-syd-edge'
+      }
+    ]
+    Configuration: null
+    Request: {
+      RequestUrl: 'https://website-4vwxkvpofrtbq-dev.azurewebsites.net/Exercises'
       Headers: null
       HttpVerb: 'GET'
       RequestBody: null
