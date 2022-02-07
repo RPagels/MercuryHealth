@@ -12,7 +12,7 @@ param configStoreEndpoint string
 param appInsightsInstrumentationKey string
 param appInsightsConnectionString string
 param defaultTags object
-param testName string = 'testName'
+//param testName string = 'testName'
 
 // Varabiles
 var standardPlanMaxAdditionalSlots = 3
@@ -134,8 +134,8 @@ resource standardWebTest  'Microsoft.Insights/webtests@2020-10-05-preview' = {
   }
   kind: 'ping'
   properties: {
-    SyntheticMonitorId: 'demo-webtest-id'
-    Name: 'demo-webtest'
+    SyntheticMonitorId: 'appInsights-4vwxkvpofrtbq'
+    Name: 'appInsights-4vwxkvpofrtbq'
     Description: null
     Enabled: true
     Frequency: 300
