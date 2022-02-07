@@ -135,10 +135,10 @@ resource standardWebTest  'Microsoft.Insights/webtests@2020-10-05-preview' = {
   kind: 'ping'
   properties: {
     SyntheticMonitorId: 'appInsights-4vwxkvpofrtbq'
-    Name: 'appInsights-4vwxkvpofrtbq'
+    Name: 'standardWebTest-4vwxkvpofrtbq'
     Description: null
     Enabled: true
-    Frequency: 300
+    Frequency: 900
     Timeout: 120 
     Kind: 'standard'
     RetryEnabled: true
