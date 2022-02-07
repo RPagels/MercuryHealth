@@ -278,7 +278,17 @@ jobs:
 #          app-name: ${{ env.Website_Name }}
 #          slot-name: 'Dev'
 #          package: './MercuryHealth.API'
-          
+
+    - name: Annotate deployment
+      uses: wictorwilen/application-insights-action@v1
+      id: annotation
+      with:
+        applicationId: ${{ secrets.AppInsightsApplicationID }}
+        apiKey: ${{secrets.AppInsightsDeployAnnotationAPIKey}}
+        releaseName: ${{ github.event_name }}
+        message: ${{ github.event.head_commit.message }}
+        actor: ${{ github.actor }}
+    
     - name: Azure logout
       run: |
         az logout
