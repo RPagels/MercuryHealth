@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MercuryHealth.UnitTests", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MercuryHealth.FunctionApp", "MercuryHealth.FunctionApp\MercuryHealth.FunctionApp.csproj", "{AB69832B-58BB-471E-BD0D-60FF091F70FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MercuryHealth.API", "MercuryHealth.API\MercuryHealth.API.csproj", "{7A2059F9-644F-425B-8CE2-CD16F3A30E8E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MercuryHealth.API", "MercuryHealth.API\MercuryHealth.API.csproj", "{7A2059F9-644F-425B-8CE2-CD16F3A30E8E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
