@@ -128,7 +128,7 @@ resource webAppPortalName_environments 'Microsoft.Web/sites/slots@2020-06-01' = 
 
 resource standardWebTest  'Microsoft.Insights/webtests@2020-10-05-preview' = {
   name: 'demo-webtest'
-  location: 'westeurope'
+  location: 'eastus'
   tags: {
     'hidden-link:/subscriptions/ade29918-737f-497e-8808-4bffda5cc46d/resourceGroups/rg-article/providers/microsoft.insights/components/appi-demo': 'Resource'
   }
