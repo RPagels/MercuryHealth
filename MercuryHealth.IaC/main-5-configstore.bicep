@@ -137,5 +137,7 @@ resource configStoreName_appconfig_featureflag_4 'Microsoft.AppConfiguration/con
   }
 }
 
-output configStoreEndpoint string = config.properties.endpoint
-output configStoreConnection string = config.listKeys()
+//output configStoreEndpoint string = config.properties.endpoint
+// disable-next-line outputs-should-not-contain-secrets // Does not contain a password
+output configStoreConnection string = listKeys(config.id, config.apiVersion).keys[0].value
+

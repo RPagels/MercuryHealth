@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "187291644617372452"
+      "templateHash": "10105576410915352436"
     }
   },
   "parameters": {
@@ -85,8 +85,8 @@
           "sqlAdministratorLoginPassword": {
             "value": "[parameters('sqlAdministratorLoginPassword')]"
           },
-          "configStoreEndpoint": {
-            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'configstoredeploy'), '2020-06-01').outputs.configStoreEndpoint.value]"
+          "configStoreConnection": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'configstoredeploy'), '2020-06-01').outputs.configStoreConnection.value]"
           },
           "appInsightsInstrumentationKey": {
             "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy'), '2020-06-01').outputs.appInsightsInstrumentationKey.value]"
@@ -105,7 +105,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "11798144078348607112"
+              "templateHash": "14751981426183850654"
             }
           },
           "parameters": {
@@ -138,7 +138,7 @@
             "webSiteName": {
               "type": "string"
             },
-            "configStoreEndpoint": {
+            "configStoreConnection": {
               "type": "string"
             },
             "appInsightsInstrumentationKey": {
@@ -202,7 +202,7 @@
               "properties": {
                 "ConnectionStrings:DefaultConnection": "[format('Server=tcp:{0},1433;Initial Catalog={1};Persist Security Info=False;User Id={2}@{3};Password={4};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;', parameters('sqlserverfullyQualifiedDomainName'), parameters('sqlDBName'), parameters('sqlAdministratorLogin'), parameters('sqlserverName'), parameters('sqlAdministratorLoginPassword'))]",
                 "ApimSubscriptionKey": "e2d1cf7c...for APIM - TBD",
-                "ConnectionStrings:AppConfig": "[parameters('configStoreEndpoint')]",
+                "ConnectionStrings:AppConfig": "[parameters('configStoreConnection')]",
                 "Environment": "Prod",
                 "WEBSITE_RUN_FROM_PACKAGE": "1",
                 "APPINSIGHTS_INSTRUMENTATIONKEY": "[parameters('appInsightsInstrumentationKey')]",
@@ -557,7 +557,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "16728717823869395579"
+              "templateHash": "4536156414028213604"
             }
           },
           "parameters": {
@@ -692,13 +692,9 @@
             }
           ],
           "outputs": {
-            "configStoreEndpoint": {
-              "type": "string",
-              "value": "[reference(resourceId('Microsoft.AppConfiguration/configurationStores', parameters('configStoreName'))).endpoint]"
-            },
             "configStoreConnection": {
               "type": "string",
-              "value": "[listKeys(resourceId('Microsoft.AppConfiguration/configurationStores', parameters('configStoreName')), '2021-03-01-preview')]"
+              "value": "[listKeys(resourceId('Microsoft.AppConfiguration/configurationStores', parameters('configStoreName')), '2021-03-01-preview').keys[0].value]"
             }
           }
         }
