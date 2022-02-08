@@ -1,7 +1,8 @@
 ﻿using MercuryHealth.Web.Data;
 using MercuryHealth.Web.Models;
 using Microsoft.AspNetCore.Mvc;
-//using Microsoft.FeatureManagement;
+using Microsoft.FeatureManagement;
+using Microsoft.FeatureManagement.Mvc;
 using System.Diagnostics;
 
 namespace MercuryHealth.Web.Controllers
@@ -10,16 +11,16 @@ namespace MercuryHealth.Web.Controllers
     {
         //private readonly ILogger<HomeController> _logger;
         private readonly MercuryHealthWebContext _context;
-        // readonly IFeatureManager _featureManager;
+        readonly IFeatureManager _featureManager;
 
         public IConfiguration Configuration { get; set; }
 
         //        public HomeController(ILogger<HomeController> logger)
-        //public HomeController(MercuryHealthWebContext context, IConfiguration config, IFeatureManagerSnapshot featureManager)
-        public HomeController(MercuryHealthWebContext context, IConfiguration config)
+        public HomeController(MercuryHealthWebContext context, IConfiguration config, IFeatureManagerSnapshot featureManager)
+        //public HomeController(MercuryHealthWebContext context, IConfiguration config)
 
         {
-            //_featureManager = featureManager;
+            _featureManager = featureManager;
             _context = context;
             Configuration = config;
         }
@@ -59,7 +60,22 @@ namespace MercuryHealth.Web.Controllers
             //return View();
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> Privacy()
+        {
+            if (await _featureManager.IsEnabledAsync("PrivacyBeta"))
+            {
+                return View(new PrivacyModel { Name = "Privacy Beta" });
+            }
+            else
+            {
+                return View(new PrivacyModel { Name = "Privacy" });
+            }
+        }
+
+        // Check for Feature Flag
+        // If Feature Flag is disabled, the entire method is disabled.
+        [FeatureGate(MyFeatureFlags.EnableMetricsDashboard)]
+        public IActionResult Metrics()
         {
             return View();
         }
