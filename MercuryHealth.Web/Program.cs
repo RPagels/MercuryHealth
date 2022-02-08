@@ -4,30 +4,48 @@ using MercuryHealth.Web.Data;
 using Microsoft.FeatureManagement;
 using Microsoft.Extensions.Azure;
 using NuGet.Configuration;
-
+using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 //Retrieve the Connection String from the secrets manager 
 var connectionString = builder.Configuration.GetConnectionString("AppConfig");
 
+//builder.Host.ConfigureAppConfiguration(builder =>
+//{
+//    //Connect to your App Config Store using the connection string
+//    builder.AddAzureAppConfiguration(connectionString);
+
+//});
+
 builder.Host.ConfigureAppConfiguration(builder =>
 {
     //Connect to your App Config Store using the connection string
-    builder.AddAzureAppConfiguration(connectionString);
-})
-            .ConfigureServices(services =>
-            {
-                services.AddControllersWithViews();
-            });
+    builder.AddAzureAppConfiguration(options =>
+    {
+        options.Connect(connectionString)
+        // Load all keys that start with `WebDemo:` and have no label
+        //.Select("WebDemo:*")
+        .ConfigureRefresh(refreshOptions =>
+         {
+             refreshOptions.Register("Settings:EnableMetricsDashboard", refreshAll: true);
+             // Set Cache timeout for one value only
+             //refresh.Register("Settings:EnableMetricsDashboard").SetCacheExpiration(TimeSpan.FromSeconds(10));
+         })
+        .UseFeatureFlags(featureFlagOptions =>
+        {
+            featureFlagOptions.CacheExpirationInterval = TimeSpan.FromSeconds(20);
+        });
+    });
+});
 
-//var app = builder.Build();
 
 // ////////////////////////////////////////////////////
 // Load configuration from Azure App Configuration
 //builder.Configuration.AddAzureAppConfiguration(options =>
 //{
-//    options.Connect(Environment.GetEnvironmentVariable("AppConfig"))
+//    //options.Connect(Environment.GetEnvironmentVariable("AppConfig"))
+//    options.Connect(connectionString)
 //           // Load all keys that start with `WebDemo:` and have no label
 //           //.Select("WebDemo:*")
 //           .Select("*:*")
@@ -47,8 +65,8 @@ builder.Host.ConfigureAppConfiguration(builder =>
 
 //            .ConfigureRefresh(refresh =>
 //            {
-//                // Set Cache timeout for one value only
-//                refresh.Register("Settings:EnableMetricsDashboard").SetCacheExpiration(TimeSpan.FromSeconds(10));
+//                        // Set Cache timeout for one value only
+//                        refresh.Register("Settings:EnableMetricsDashboard").SetCacheExpiration(TimeSpan.FromSeconds(10));
 //            });
 
 //});

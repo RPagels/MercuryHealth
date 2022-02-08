@@ -41,6 +41,11 @@ var defaultTags = {
 //  location: 'eastus'
 //}
 
+resource config 'Microsoft.AppConfiguration/configurationStores@2021-03-01-preview' existing = {
+  name: configStoreName
+}
+var configStoreConnectionString = '${listKeys(config.id, config.apiVersion).keys[0].value}'
+
 // Create Web App
 module webappmod './main-2-webapp.bicep' = {
   name: 'webappdeploy'
@@ -54,7 +59,7 @@ module webappmod './main-2-webapp.bicep' = {
      sqlAdministratorLogin: sqlAdministratorLogin
      sqlAdministratorLoginPassword: sqlAdministratorLoginPassword
      //configStoreEndpoint: configstoremod.outputs.configStoreEndpoint
-     configStoreConnectionString: configstoremod.outputs.configStoreConnectionString
+     configStoreConnectionString: configStoreConnectionString //configstoremod.outputs.configStoreConnectionString
      appInsightsInstrumentationKey: appinsightsmod.outputs.appInsightsInstrumentationKey
      appInsightsConnectionString: appinsightsmod.outputs.appInsightsConnectionString
      defaultTags: defaultTags

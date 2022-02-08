@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "7269653970647698769"
+      "templateHash": "1020507604904193651"
     }
   },
   "parameters": {
@@ -86,7 +86,7 @@
             "value": "[parameters('sqlAdministratorLoginPassword')]"
           },
           "configStoreConnectionString": {
-            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'configstoredeploy'), '2020-06-01').outputs.configStoreConnectionString.value]"
+            "value": "[format('{0}', listKeys(resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName')), '2021-03-01-preview').keys[0].value)]"
           },
           "appInsightsInstrumentationKey": {
             "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy'), '2020-06-01').outputs.appInsightsInstrumentationKey.value]"
@@ -417,7 +417,6 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')]",
-        "[resourceId('Microsoft.Resources/deployments', 'configstoredeploy')]",
         "[resourceId('Microsoft.Resources/deployments', 'sqldbdeploy')]"
       ]
     },
@@ -557,7 +556,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "4544480073695388485"
+              "templateHash": "6113625039538986440"
             }
           },
           "parameters": {
@@ -690,13 +689,7 @@
                 "[resourceId('Microsoft.AppConfiguration/configurationStores', parameters('configStoreName'))]"
               ]
             }
-          ],
-          "outputs": {
-            "configStoreConnectionString": {
-              "type": "string",
-              "value": "[reference(resourceId('Microsoft.AppConfiguration/configurationStores', parameters('configStoreName'))).endpoint]"
-            }
-          }
+          ]
         }
       }
     },
