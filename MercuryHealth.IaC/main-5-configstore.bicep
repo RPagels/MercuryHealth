@@ -33,13 +33,13 @@ param featureFlagLabel2 string = 'Metrics'
 var featureFlagValue2 = {
   id: featureFlagKey2
   description: 'EnableMetricsDashboard with label.'
-  enabled: true
+  enabled: false
 }
 
 param featureFlagKey3 string = 'EnableCognitiveServices'
 param featureFlagLabel3 string = 'Cognitive Services'
 var featureFlagValue3 = {
-  id: featureFlagKey2
+  id: featureFlagKey3
   description: 'Enable Cognitive Services.'
   enabled: false
 }
@@ -138,3 +138,4 @@ resource configStoreName_appconfig_featureflag_4 'Microsoft.AppConfiguration/con
 }
 
 output configStoreEndpoint string = config.properties.endpoint
+output configStoreConnection string = config.listKeys()

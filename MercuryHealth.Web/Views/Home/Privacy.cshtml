@@ -1,6 +1,17 @@
-﻿@{
+﻿@model MercuryHealth.Web.Models.PrivacyModel
+
+@{
     ViewData["Title"] = "Privacy Policy";
 }
 <h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+@* Check for Feature Flag *@
+<feature name="PrivacyBeta">
+    <p>Use this page to detail your site's privacy policy.</p>
+    <p>This is the new Beta privacy policy and here is my title: @Model.Name</p>
+</feature>
+
+@* Check for Feature Flag *@
+<feature name="PrivacyBeta" negate="true">
+    <p>Use this page to detail your site's privacy policy(Preview).</p>
+</feature>
