@@ -54,7 +54,7 @@ module webappmod './main-2-webapp.bicep' = {
      sqlAdministratorLogin: sqlAdministratorLogin
      sqlAdministratorLoginPassword: sqlAdministratorLoginPassword
      //configStoreEndpoint: configstoremod.outputs.configStoreEndpoint
-     configStoreConnection: configstoremod.outputs.configStoreConnection
+     configStoreConnectionString: configstoremod.outputs.configStoreConnectionString
      appInsightsInstrumentationKey: appinsightsmod.outputs.appInsightsInstrumentationKey
      appInsightsConnectionString: appinsightsmod.outputs.appInsightsConnectionString
      defaultTags: defaultTags

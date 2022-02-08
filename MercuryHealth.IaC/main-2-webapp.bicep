@@ -9,7 +9,10 @@ param sqlAdministratorLoginPassword string
 param webAppPlanName string
 param webSiteName string
 //param configStoreEndpoint string
-param configStoreConnection string
+
+@secure()
+param configStoreConnectionString string
+
 param appInsightsInstrumentationKey string
 param appInsightsConnectionString string
 param defaultTags object
@@ -76,7 +79,7 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-02-01' = {
   properties: {
     'ConnectionStrings:DefaultConnection': 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
     'ApimSubscriptionKey': 'e2d1cf7c...for APIM - TBD'
-    'ConnectionStrings:AppConfig': configStoreConnection //configStoreEndpoint
+    'ConnectionStrings:AppConfig': configStoreConnectionString //configStoreEndpoint
     'Environment': 'Prod'
     'WEBSITE_RUN_FROM_PACKAGE': '1'
     'APPINSIGHTS_INSTRUMENTATIONKEY': appInsightsInstrumentationKey
