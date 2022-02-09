@@ -281,6 +281,7 @@ jobs:
 
     - name: Annotate deployment
       uses: wictorwilen/application-insights-action@v1
+      continue-on-error: true
       id: annotation
       with:
         applicationId: ${{ secrets.AppInsightsApplicationID }}
@@ -288,7 +289,7 @@ jobs:
         releaseName: ${{ github.event_name }}
         message: ${{ github.event.head_commit.message }}
         actor: ${{ github.actor }}
-        Continue-on-error: true
+        continue-on-error: true
     
     - name: Azure logout
       run: |
@@ -362,3 +363,27 @@ jobs:
         run: |
           az logout
         
+###################################################################
+# CD Stage - Production                        #
+###################################################################
+  Production_Stage_Application:
+    if: contains(github.event_name, 'push')
+
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+
+    needs: [LoadTesting_Stage_Application]
+    environment: Production
+    steps:
+      - name: Checkout GitHub Actions 
+        uses: actions/checkout@v2
+          
+      - name: Login to Azure
+        uses: azure/login@v1
+        continue-on-error: false
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+      - name: 'Deploy to Production'
+        run: echo 'Deploy to Production'
+      
