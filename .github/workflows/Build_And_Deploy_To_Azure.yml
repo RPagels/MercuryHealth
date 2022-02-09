@@ -146,7 +146,7 @@ jobs:
 # CD Stage - Infrastructure                                       #
 ###################################################################
   Deploy_Stage_IaC:
-    if: contains(github.event_name, 'push')
+#    if: contains(github.event_name, 'push')
 
     name: Deploy Infrastructure
     runs-on: ubuntu-latest
