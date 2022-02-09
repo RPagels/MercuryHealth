@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
-	<ProjectReference Include="..\MercuryHealth.Web\MercuryHealth.Web.csproj" />
+	<!--<ProjectReference Include="..\MercuryHealth.Web\MercuryHealth.Web.csproj" />-->
   </ItemGroup>
 
 </Project>
