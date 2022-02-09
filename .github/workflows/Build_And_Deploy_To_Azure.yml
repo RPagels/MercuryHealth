@@ -288,6 +288,7 @@ jobs:
         releaseName: ${{ github.event_name }}
         message: ${{ github.event.head_commit.message }}
         actor: ${{ github.actor }}
+        Continue-on-error: true
     
     - name: Azure logout
       run: |
