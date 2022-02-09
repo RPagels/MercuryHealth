@@ -123,10 +123,10 @@ module functionappmod './main-6-funcapp.bicep' = {
 //}
 
 // Create APIM.  NOTE: MUST MOVE THIS. APIM + Azure KeyVault, needs to be in it's own RG + Pipeline
-module apiservicesmod './main-7-apimanagement.bicep' = {
-  name: 'apiservicesdeploy'
-  params: {
-    apiServiceName: apiServiceName
-    defaultTags: defaultTags
-  }
-}
+//module apiservicesmod './main-7-apimanagement.bicep' = {
+//  name: 'apiservicesdeploy'
+//  params: {
+//    apiServiceName: apiServiceName
+//    defaultTags: defaultTags
+//  }
+//}
