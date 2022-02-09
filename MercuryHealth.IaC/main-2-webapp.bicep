@@ -76,6 +76,7 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-02-01' = {
     'APPINSIGHTS_PROFILERFEATURE_VERSION': '1.0.0'
     'APPINSIGHTS_SNAPSHOTFEATURE_VERSION': '1.0.0'
     'APPLICATIONINSIGHTS_CONNECTION_STRING': appInsightsConnectionString
+    'Debug ONLY': 'resourceGroup().id=${resourceGroup().id}, resourceGroup().name=${resourceGroup().name}'
     type: 'SQLAzure'
   }
   dependsOn: [
@@ -160,7 +161,7 @@ resource webAppPortalName_environments 'Microsoft.Web/sites/slots@2020-06-01' = 
 // Works!!!
 // MercuryHealth-rg - appInsights-4vwxkvpofrtbq
 resource standardWebTestPageHome  'Microsoft.Insights/webtests@2020-10-05-preview' = {
-  name: 'appInsights-PageHome'
+  name: 'appInsights-Page Home'
   location: 'eastus'
   tags: {
     // Error: A single 'hidden-link' tag pointing to an existing AI component is required. Found none.

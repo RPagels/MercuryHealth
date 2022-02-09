@@ -11,16 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 //Retrieve the Connection String from the secrets manager 
 var connectionString = builder.Configuration.GetConnectionString("AppConfig");
 
-//builder.Host.ConfigureAppConfiguration(builder =>
-//{
-//    //Connect to your App Config Store using the connection string
-//    builder.AddAzureAppConfiguration(connectionString);
-
-//});
-
 builder.Host.ConfigureAppConfiguration(builder =>
 {
-    //Connect to your App Config Store using the connection string
+    //Connect to your App Config Store & Load Configurations using the connection string
     builder.AddAzureAppConfiguration(options =>
     {
         options.Connect(connectionString)
@@ -38,39 +31,6 @@ builder.Host.ConfigureAppConfiguration(builder =>
         });
     });
 });
-
-
-// ////////////////////////////////////////////////////
-// Load configuration from Azure App Configuration
-//builder.Configuration.AddAzureAppConfiguration(options =>
-//{
-//    //options.Connect(Environment.GetEnvironmentVariable("AppConfig"))
-//    options.Connect(connectionString)
-//           // Load all keys that start with `WebDemo:` and have no label
-//           //.Select("WebDemo:*")
-//           .Select("*:*")
-//           // Configure to reload configuration if the registered key 'WebDemo:Sentinel' is modified.
-//           // Use the default cache expiration of 30 seconds. It can be overriden via AzureAppConfigurationRefreshOptions.SetCacheExpiration.
-//           .ConfigureRefresh(refreshOptions =>
-//           {
-//               refreshOptions.Register("Settings:EnableMetricsDashboard", refreshAll: true);
-//           })
-//           // Load all feature flags with no label. To load specific feature flags and labels, set via FeatureFlagOptions.Select.
-//           // Use the default cache expiration of 30 seconds. It can be overriden via FeatureFlagOptions.CacheExpirationInterval.
-//           //.UseFeatureFlags();
-//           .UseFeatureFlags(featureFlagOptions =>
-//            {
-//                featureFlagOptions.CacheExpirationInterval = TimeSpan.FromSeconds(20);
-//            })
-
-//            .ConfigureRefresh(refresh =>
-//            {
-//                        // Set Cache timeout for one value only
-//                        refresh.Register("Settings:EnableMetricsDashboard").SetCacheExpiration(TimeSpan.FromSeconds(10));
-//            });
-
-//});
-// ////////////////////////////////////////////////////////////
 
 
 // Add services to the container.
@@ -94,6 +54,10 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
 
 //builder.Services.AddAzureAppConfiguration(builder.Configuration["AppConfig"]
+
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
