@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "1020507604904193651"
+      "templateHash": "348507454227490767"
     }
   },
   "parameters": {
@@ -67,8 +67,17 @@
           "webSiteName": {
             "value": "[variables('webSiteName')]"
           },
+          "resourceGroupName": {
+            "value": "[format('{0}-rg', resourceGroup().id)]"
+          },
+          "appInsightsName": {
+            "value": "[variables('appInsightsName')]"
+          },
           "location": {
             "value": "[parameters('location')]"
+          },
+          "configStoreConnection": {
+            "value": "[listKeys(resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName')), '2021-03-01-preview').value[0].connectionString]"
           },
           "sqlserverName": {
             "value": "[variables('sqlserverName')]"
@@ -84,9 +93,6 @@
           },
           "sqlAdministratorLoginPassword": {
             "value": "[parameters('sqlAdministratorLoginPassword')]"
-          },
-          "configStoreConnectionString": {
-            "value": "[format('{0}', listKeys(resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName')), '2021-03-01-preview').keys[0].value)]"
           },
           "appInsightsInstrumentationKey": {
             "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy'), '2020-06-01').outputs.appInsightsInstrumentationKey.value]"
@@ -105,7 +111,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "15597438958506150642"
+              "templateHash": "3377461106380203960"
             }
           },
           "parameters": {
@@ -138,8 +144,14 @@
             "webSiteName": {
               "type": "string"
             },
-            "configStoreConnectionString": {
-              "type": "secureString"
+            "resourceGroupName": {
+              "type": "string"
+            },
+            "appInsightsName": {
+              "type": "string"
+            },
+            "configStoreConnection": {
+              "type": "string"
             },
             "appInsightsInstrumentationKey": {
               "type": "string"
@@ -202,7 +214,7 @@
               "properties": {
                 "ConnectionStrings:DefaultConnection": "[format('Server=tcp:{0},1433;Initial Catalog={1};Persist Security Info=False;User Id={2}@{3};Password={4};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;', parameters('sqlserverfullyQualifiedDomainName'), parameters('sqlDBName'), parameters('sqlAdministratorLogin'), parameters('sqlserverName'), parameters('sqlAdministratorLoginPassword'))]",
                 "ApimSubscriptionKey": "e2d1cf7c...for APIM - TBD",
-                "ConnectionStrings:AppConfig": "[parameters('configStoreConnectionString')]",
+                "ConnectionStrings:AppConfig": "[parameters('configStoreConnection')]",
                 "Environment": "Prod",
                 "WEBSITE_RUN_FROM_PACKAGE": "1",
                 "APPINSIGHTS_INSTRUMENTATIONKEY": "[parameters('appInsightsInstrumentationKey')]",
@@ -240,11 +252,11 @@
               "name": "appInsights-PageHome",
               "location": "eastus",
               "tags": {
-                "hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/appInsights-4vwxkvpofrtbq": "Resource"
+                "[format('hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/{0}', parameters('appInsightsName'))]": "Resource"
               },
               "kind": "ping",
               "properties": {
-                "SyntheticMonitorId": "appInsights-4vwxkvpofrtbq",
+                "SyntheticMonitorId": "[parameters('appInsightsName')]",
                 "Name": "appInsights-Page Home",
                 "Description": null,
                 "Enabled": true,
@@ -271,7 +283,7 @@
                 ],
                 "Configuration": null,
                 "Request": {
-                  "RequestUrl": "https://website-4vwxkvpofrtbq-dev.azurewebsites.net/",
+                  "RequestUrl": "[format('https://{0}-dev.azurewebsites.net', parameters('webSiteName'))]",
                   "Headers": null,
                   "HttpVerb": "GET",
                   "RequestBody": null,
@@ -300,7 +312,7 @@
               },
               "kind": "ping",
               "properties": {
-                "SyntheticMonitorId": "appInsights-4vwxkvpofrtbq",
+                "SyntheticMonitorId": "[parameters('appInsightsInstrumentationKey')]",
                 "Name": "appInsights-Page Nutritions",
                 "Description": null,
                 "Enabled": true,
@@ -327,7 +339,7 @@
                 ],
                 "Configuration": null,
                 "Request": {
-                  "RequestUrl": "https://website-4vwxkvpofrtbq-dev.azurewebsites.net/Nutritions",
+                  "RequestUrl": "[format('https://{0}-dev.azurewebsites.net/Nutritions', parameters('webSiteName'))]",
                   "Headers": null,
                   "HttpVerb": "GET",
                   "RequestBody": null,
@@ -356,7 +368,7 @@
               },
               "kind": "ping",
               "properties": {
-                "SyntheticMonitorId": "appInsights-4vwxkvpofrtbq",
+                "SyntheticMonitorId": "[parameters('appInsightsName')]",
                 "Name": "appInsights-Page Exercises",
                 "Description": null,
                 "Enabled": true,
@@ -383,7 +395,7 @@
                 ],
                 "Configuration": null,
                 "Request": {
-                  "RequestUrl": "https://website-4vwxkvpofrtbq-dev.azurewebsites.net/Exercises",
+                  "RequestUrl": "[format('https://{0}-dev.azurewebsites.net/Exercises', parameters('webSiteName'))]",
                   "Headers": null,
                   "HttpVerb": "GET",
                   "RequestBody": null,
@@ -556,7 +568,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "6113625039538986440"
+              "templateHash": "4509541503385163739"
             }
           },
           "parameters": {
@@ -689,7 +701,13 @@
                 "[resourceId('Microsoft.AppConfiguration/configurationStores', parameters('configStoreName'))]"
               ]
             }
-          ]
+          ],
+          "outputs": {
+            "configStoreConnection": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.AppConfiguration/configurationStores', parameters('configStoreName'))).endpoint]"
+            }
+          }
         }
       }
     },

@@ -8,10 +8,13 @@ param sqlAdministratorLogin string
 param sqlAdministratorLoginPassword string
 param webAppPlanName string
 param webSiteName string
+param resourceGroupName string
+param appInsightsName string
+
 //param configStoreEndpoint string
 
-@secure()
-param configStoreConnectionString string
+//@secure()
+param configStoreConnection string
 
 param appInsightsInstrumentationKey string
 param appInsightsConnectionString string
@@ -61,25 +64,12 @@ resource appService 'Microsoft.Web/sites@2021-01-15' = {
   }
 }
 
-// resource webSiteConnectionStrings 'Microsoft.Web/sites/config@2021-01-15' = {
-//   name: '${webSiteName}/connectionstrings'
-//   properties: {
-//     DefaultConnection: {
-//       value: 'Data Source=tcp:${sqlserverName},1433;Initial Catalog=${sqlDBName};User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};'
-//       type: 'SQLAzure'
-//     }
-//   }
-//   dependsOn: [
-//     appService
-//   ]
-// }
-  
 resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-02-01' = {
   name: '${webSiteName}/appsettings'
   properties: {
     'ConnectionStrings:DefaultConnection': 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
     'ApimSubscriptionKey': 'e2d1cf7c...for APIM - TBD'
-    'ConnectionStrings:AppConfig': configStoreConnectionString //configStoreEndpoint
+    'ConnectionStrings:AppConfig': configStoreConnection
     'Environment': 'Prod'
     'WEBSITE_RUN_FROM_PACKAGE': '1'
     'APPINSIGHTS_INSTRUMENTATIONKEY': appInsightsInstrumentationKey
@@ -109,36 +99,77 @@ resource webAppPortalName_environments 'Microsoft.Web/sites/slots@2020-06-01' = 
   ]
 }]
 
-//  resource testName_resource 'Microsoft.Insights/webtests@2015-05-01' = {
-//   name: testName
-//   location: location
-//   // tags: {
-//   //   'hidden-link:${resourceId('microsoft.insights/components', componentName)}': 'Resource'
-//   // }
+// UPDATE THE Web Tests!!!
+// resourceGroup().id
+// appInsightsName
+//
+
+// Does not work!!!
+// resource standardWebTestPageHome  'Microsoft.Insights/webtests@2020-10-05-preview' = {
+//   name: 'appInsights-PageHome'
+//   location: 'eastus'
+//   tags: {
+//     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
+//   }
+//   kind: 'ping'
 //   properties: {
-//     SyntheticMonitorId: testName
-//     Name: testName
+//     SyntheticMonitorId: appInsightsName
+//     Name: 'appInsights-Page Home'
+//     Description: null
 //     Enabled: true
-//     Frequency: 300
-//     Timeout: 120
-//     Kind: 'ping'
-//     RetryEnabled: false
-//     Locations: testLocations
-//     Configuration: {
-//       WebTest: '<WebTest         Name="${testName}"         Id="00000000-0000-0000-0000-000000000000"         Enabled="True"         CssProjectStructure=""         CssIteration=""         Timeout="120"         WorkItemIds=""         xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010"         Description=""         CredentialUserName=""         CredentialPassword=""         PreAuthenticate="True"         Proxy="default"         StopOnError="False"         RecordedResultFile=""         ResultsLocale="">        <Items>        <Request         Method="GET"         Guid="a86e39d1-b852-55ed-a079-23844e235d01"         Version="1.1"         Url="${testEndpoint}"         ThinkTime="0"         Timeout="120"         ParseDependentRequests="False"         FollowRedirects="True"         RecordResult="True"         Cache="False"         ResponseTimeGoal="0"         Encoding="utf-8"         ExpectedHttpStatusCode="200"         ExpectedResponseUrl=""         ReportingName=""         IgnoreHttpStatusCode="False" />        </Items>        </WebTest>'
+//     Frequency: 900
+//     Timeout: 120 
+//     Kind: 'standard'
+//     RetryEnabled: true
+//     Locations: [
+//       {
+//         Id: 'emea-nl-ams-azr'
+//       }
+//       {
+//         Id: 'emea-ru-msa-edge'
+//       }
+//       {
+//         Id: 'apac-hk-hkn-azr'
+//       }
+//       {
+//         Id: 'latam-br-gru-edge'
+//       }
+//       {
+//         Id: 'emea-au-syd-edge'
+//       }
+//     ]
+//     Configuration: null
+//     Request: {
+//       RequestUrl: '${appService.properties.defaultHostName}' // 'https://website-4vwxkvpofrtbq-dev.azurewebsites.net/'
+//       Headers: null
+//       HttpVerb: 'GET'
+//       RequestBody: null
+//       ParseDependentRequests: false
+//       FollowRedirects: null
+//     }
+//     ValidationRules: {
+//       ExpectedHttpStatusCode: 200
+//       IgnoreHttpsStatusCode: false
+//       ContentValidation: null
+//       SSLCheck: true
+//       SSLCertRemainingLifetimeCheck: 7
 //     }
 //   }
 // }
 
+// Works!!!
+// MercuryHealth-rg - appInsights-4vwxkvpofrtbq
 resource standardWebTestPageHome  'Microsoft.Insights/webtests@2020-10-05-preview' = {
   name: 'appInsights-PageHome'
   location: 'eastus'
   tags: {
-    'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/appInsights-4vwxkvpofrtbq': 'Resource'
+    // Error: A single 'hidden-link' tag pointing to an existing AI component is required. Found none.
+    //'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/appInsights-4vwxkvpofrtbq': 'Resource'
+    'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
   }
   kind: 'ping'
   properties: {
-    SyntheticMonitorId: 'appInsights-4vwxkvpofrtbq'
+    SyntheticMonitorId: appInsightsName
     Name: 'appInsights-Page Home'
     Description: null
     Enabled: true
@@ -165,7 +196,7 @@ resource standardWebTestPageHome  'Microsoft.Insights/webtests@2020-10-05-previe
     ]
     Configuration: null
     Request: {
-      RequestUrl: 'https://website-4vwxkvpofrtbq-dev.azurewebsites.net/'
+      RequestUrl: 'https://${appService.name}-dev.azurewebsites.net'
       Headers: null
       HttpVerb: 'GET'
       RequestBody: null
@@ -180,9 +211,6 @@ resource standardWebTestPageHome  'Microsoft.Insights/webtests@2020-10-05-previe
       SSLCertRemainingLifetimeCheck: 7
     }
   }
-  dependsOn: [
-   appService
-  ]
 }
 
 resource standardWebTestPageNutritions  'Microsoft.Insights/webtests@2020-10-05-preview' = {
@@ -193,7 +221,7 @@ resource standardWebTestPageNutritions  'Microsoft.Insights/webtests@2020-10-05-
   }
   kind: 'ping'
   properties: {
-    SyntheticMonitorId: 'appInsights-4vwxkvpofrtbq'
+    SyntheticMonitorId: appInsightsInstrumentationKey // 'appInsights-4vwxkvpofrtbq'
     Name: 'appInsights-Page Nutritions'
     Description: null
     Enabled: true
@@ -220,7 +248,7 @@ resource standardWebTestPageNutritions  'Microsoft.Insights/webtests@2020-10-05-
     ]
     Configuration: null
     Request: {
-      RequestUrl: 'https://website-4vwxkvpofrtbq-dev.azurewebsites.net/Nutritions'
+      RequestUrl: 'https://${appService.name}-dev.azurewebsites.net/Nutritions' //'https://website-4vwxkvpofrtbq-dev.azurewebsites.net/Nutritions'
       Headers: null
       HttpVerb: 'GET'
       RequestBody: null
@@ -235,9 +263,6 @@ resource standardWebTestPageNutritions  'Microsoft.Insights/webtests@2020-10-05-
       SSLCertRemainingLifetimeCheck: 7
     }
   }
-  dependsOn: [
-   appService
-  ]
 }
 
 resource standardWebTestPageExercises  'Microsoft.Insights/webtests@2020-10-05-preview' = {
@@ -248,7 +273,7 @@ resource standardWebTestPageExercises  'Microsoft.Insights/webtests@2020-10-05-p
   }
   kind: 'ping'
   properties: {
-    SyntheticMonitorId: 'appInsights-4vwxkvpofrtbq'
+    SyntheticMonitorId: appInsightsName //'appInsights-4vwxkvpofrtbq'
     Name: 'appInsights-Page Exercises'
     Description: null
     Enabled: true
@@ -275,7 +300,7 @@ resource standardWebTestPageExercises  'Microsoft.Insights/webtests@2020-10-05-p
     ]
     Configuration: null
     Request: {
-      RequestUrl: 'https://website-4vwxkvpofrtbq-dev.azurewebsites.net/Exercises'
+      RequestUrl: 'https://${appService.name}-dev.azurewebsites.net/Exercises' //'https://website-4vwxkvpofrtbq-dev.azurewebsites.net/Exercises'
       Headers: null
       HttpVerb: 'GET'
       RequestBody: null
@@ -290,9 +315,6 @@ resource standardWebTestPageExercises  'Microsoft.Insights/webtests@2020-10-05-p
       SSLCertRemainingLifetimeCheck: 7
     }
   }
-  dependsOn: [
-   appService
-  ]
 }
 
 output webSiteName string = appService.name

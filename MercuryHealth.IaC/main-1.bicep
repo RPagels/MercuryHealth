@@ -18,7 +18,6 @@ param sqlAdministratorLoginPassword string
 // Variables
 var webAppPlanName = 'appPlan-${uniqueString(resourceGroup().id)}'
 var webSiteName = 'webSite-${uniqueString(resourceGroup().id)}'
-//var webSiteURL = 'https://mercuryhealth2019v3-dev.azurewebsites.net/'
 var sqlserverName = toLower('sqlServer-${uniqueString(resourceGroup().id)}')
 var sqlDBName = 'MercuryHealthDB'
 var configStoreName = 'appConfig-${uniqueString(resourceGroup().id)}'
@@ -36,15 +35,11 @@ var defaultTags = {
   'CreatedBy': createdBy
 }
 
-//resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-//  name: 'devopslab-demo'
-//  location: 'eastus'
-//}
-
+// Avoid outputs for secrets - Look up secrets dynamically
 resource config 'Microsoft.AppConfiguration/configurationStores@2021-03-01-preview' existing = {
   name: configStoreName
 }
-var configStoreConnectionString = '${listKeys(config.id, config.apiVersion).keys[0].value}'
+var configStoreConnectionString = listKeys(config.id, config.apiVersion).value[0].connectionString
 
 // Create Web App
 module webappmod './main-2-webapp.bicep' = {
@@ -52,17 +47,18 @@ module webappmod './main-2-webapp.bicep' = {
   params: {
     webAppPlanName: webAppPlanName
     webSiteName: webSiteName
-     location: location
-     sqlserverName: sqlserverName
-     sqlserverfullyQualifiedDomainName: sqldbmod.outputs.sqlserverfullyQualifiedDomainName
-     sqlDBName: sqlDBName
-     sqlAdministratorLogin: sqlAdministratorLogin
-     sqlAdministratorLoginPassword: sqlAdministratorLoginPassword
-     //configStoreEndpoint: configstoremod.outputs.configStoreEndpoint
-     configStoreConnectionString: configStoreConnectionString //configstoremod.outputs.configStoreConnectionString
-     appInsightsInstrumentationKey: appinsightsmod.outputs.appInsightsInstrumentationKey
-     appInsightsConnectionString: appinsightsmod.outputs.appInsightsConnectionString
-     defaultTags: defaultTags
+    resourceGroupName: '${resourceGroup().id}-rg'
+    appInsightsName: appInsightsName
+    location: location
+    configStoreConnection: configStoreConnectionString
+    sqlserverName: sqlserverName
+    sqlserverfullyQualifiedDomainName: sqldbmod.outputs.sqlserverfullyQualifiedDomainName
+    sqlDBName: sqlDBName
+    sqlAdministratorLogin: sqlAdministratorLogin
+    sqlAdministratorLoginPassword: sqlAdministratorLoginPassword
+    appInsightsInstrumentationKey: appinsightsmod.outputs.appInsightsInstrumentationKey
+    appInsightsConnectionString: appinsightsmod.outputs.appInsightsConnectionString
+    defaultTags: defaultTags
   }
 }
 
