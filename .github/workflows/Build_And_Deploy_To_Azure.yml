@@ -263,13 +263,12 @@ jobs:
     # Deploy Function Application
     - name: 'Deploy Function Application'
       uses: Azure/functions-action@v1
-      id: fa
       with:
         app-name: ${{ env.Function_AppName }}
         slot-name: 'Production'
         package: './MercuryHealth.FunctionApp'
         publish-profile: ${{ secrets.functionApp_4vwxkvpofrtbq_f993 }}
-
+        
     # Deploy APIs
     - name: 'Deploy APIs'
       run: echo 'Deploy APIs'
@@ -387,3 +386,5 @@ jobs:
       - name: 'Deploy to Production'
         run: echo 'Deploy to Production'
       
+
+
