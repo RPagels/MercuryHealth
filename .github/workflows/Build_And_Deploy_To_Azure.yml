@@ -268,7 +268,7 @@ jobs:
         app-name: ${{ env.Function_AppName }}
         slot-name: 'Production'
         package: './MercuryHealth.FunctionApp'
-        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_31EA46D328744ACA9B1525450ECD3D5B }}
+        publish-profile: ${{ secrets.functionApp_4vwxkvpofrtbq_f993 }}
 
     # Deploy APIs
     - name: 'Deploy APIs'
