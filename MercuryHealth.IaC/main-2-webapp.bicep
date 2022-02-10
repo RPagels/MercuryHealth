@@ -84,21 +84,21 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-02-01' = {
   ]
 }
 
-resource webAppPortalName_environments 'Microsoft.Web/sites/slots@2021-02-01' = [for item in environments: {
-  name: '${webSiteName}/${item}'
-  kind: 'app'
-  location: location
-  tags: defaultTags
-  // tags: {
-  //   displayName: 'WebAppSlots'
-  // }
-  properties: {
-    serverFarmId: appServicePlan.id
-  }
-  dependsOn: [
-    appService
-  ]
-}]
+// resource webAppPortalName_environments 'Microsoft.Web/sites/slots@2021-02-01' = [for item in environments: {
+//   name: '${webSiteName}/${item}'
+//   kind: 'app'
+//   location: location
+//   tags: defaultTags
+//   // tags: {
+//   //   displayName: 'WebAppSlots'
+//   // }
+//   properties: {
+//     serverFarmId: appServicePlan.id
+//   }
+//   dependsOn: [
+//     appService
+//   ]
+// }]
 
 // UPDATE THE Web Tests!!!
 // resourceGroup().id
