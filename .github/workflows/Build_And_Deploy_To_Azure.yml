@@ -265,7 +265,7 @@ jobs:
       uses: Azure/functions-action@v1
       with:
         app-name: ${{ env.Function_AppName }}
-        slot-name: 'Dev'
+        slot-name: 'production'
         package: './MercuryHealth.FunctionApp'
         publish-profile: ${{ secrets.functionApp_4vwxkvpofrtbq_f993 }}
         
