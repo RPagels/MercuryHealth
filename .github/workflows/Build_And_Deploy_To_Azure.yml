@@ -263,13 +263,12 @@ jobs:
     # Deploy Function Application
     - name: 'Deploy Function Application'
       uses: Azure/functions-action@v1
-      id: fa
       with:
         app-name: ${{ env.Function_AppName }}
-        slot-name: 'Production'
+        slot-name: 'production'
         package: './MercuryHealth.FunctionApp'
-        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_31EA46D328744ACA9B1525450ECD3D5B }}
-
+        publish-profile: ${{ secrets.functionApp_4vwxkvpofrtbq_f993 }}
+        
     # Deploy APIs
     - name: 'Deploy APIs'
       run: echo 'Deploy APIs'
@@ -386,4 +385,14 @@ jobs:
         
       - name: 'Deploy to Production'
         run: echo 'Deploy to Production'
-      
+      - name: 'Swap slots'
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            az webapp deployment slot swap \
+              -g ${{ env.Azure_Resource_Group }} \
+              -n ${{ env.Website_Name }} \
+              --slot dev \
+              --target-slot production      
+
+
