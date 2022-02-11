@@ -308,25 +308,42 @@ jobs:
       - name: Checkout GitHub Actions 
         uses: actions/checkout@v2
           
-      - name: Login to Azure
-        uses: azure/login@v1
-        continue-on-error: false
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+#      - name: Login to Azure
+#        uses: azure/login@v1
+#        continue-on-error: false
+#        with:
+#          creds: ${{ secrets.AZURE_CREDENTIALS }}
         
       - name: 'UI Testing with Playwright'
         run: echo 'UI Testing with Playwright'
-      
-#      - name: 'Azure Load Testing'
-#        uses: azure/load-testing@main
-#        with:
-#          loadTestConfigFile: 'SampleApp.yaml'
-#          loadTestResource: ${{ env.LOAD_TEST_RESOURCE }}
-#          resourceGroup: ${{ env.LOAD_TEST_RESOURCE_GROUP }}
 
-      - name: Azure logout
-        run: |
-          az logout
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.dotnet_version }}
+          
+      - name: Download Build Artifacts-Playwright Tests
+        uses: actions/download-artifact@v2
+        continue-on-error: false
+        with:
+          name: MercuryHealth.UITests
+          path: ${{ github.workspace }}/MercuryHealth.UITests
+
+      - name: Install Playwright dependencies
+        run: | 
+          cd testing
+          npm ci
+          npx playwright install-deps
+          npx playwright install
+          
+      - name: Run Playwright Tests        
+        continue-on-error: false
+        working-directory: testing
+        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj
+
+#      - name: Azure logout
+#        run: |
+#          az logout
           
 ###################################################################
 # CD Stage - Load and Performance Testing                         #
