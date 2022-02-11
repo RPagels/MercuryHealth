@@ -47,7 +47,7 @@ module webappmod './main-2-webapp.bicep' = {
   params: {
     webAppPlanName: webAppPlanName
     webSiteName: webSiteName
-    resourceGroupName: '${resourceGroup().id}-rg'
+    resourceGroupName: resourceGroup().name
     appInsightsName: appInsightsName
     location: location
     configStoreConnection: configStoreConnectionString

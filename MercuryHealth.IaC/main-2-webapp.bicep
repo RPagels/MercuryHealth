@@ -76,7 +76,7 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-02-01' = {
     'APPINSIGHTS_PROFILERFEATURE_VERSION': '1.0.0'
     'APPINSIGHTS_SNAPSHOTFEATURE_VERSION': '1.0.0'
     'APPLICATIONINSIGHTS_CONNECTION_STRING': appInsightsConnectionString
-    'Debug ONLY': 'resourceGroup().id=${resourceGroup().id}, resourceGroup().name=${resourceGroup().name}'
+    'Debug ONLY': 'appInsightsName=${appInsightsName}'
     type: 'SQLAzure'
   }
   dependsOn: [
@@ -165,8 +165,8 @@ resource standardWebTestPageHome  'Microsoft.Insights/webtests@2020-10-05-previe
   location: 'eastus'
   tags: {
     // Error: A single 'hidden-link' tag pointing to an existing AI component is required. Found none.
-    //'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/appInsights-4vwxkvpofrtbq': 'Resource'
-    'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
+    'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/appInsights-4vwxkvpofrtbq': 'Resource'
+    //'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
   }
   kind: 'ping'
   properties: {
@@ -197,7 +197,7 @@ resource standardWebTestPageHome  'Microsoft.Insights/webtests@2020-10-05-previe
     ]
     Configuration: null
     Request: {
-      RequestUrl: 'https://${appService.name}-dev.azurewebsites.net'
+      RequestUrl: 'https://${appService.name}.azurewebsites.net'
       Headers: null
       HttpVerb: 'GET'
       RequestBody: null
@@ -249,7 +249,7 @@ resource standardWebTestPageNutritions  'Microsoft.Insights/webtests@2020-10-05-
     ]
     Configuration: null
     Request: {
-      RequestUrl: 'https://${appService.name}-dev.azurewebsites.net/Nutritions' //'https://website-4vwxkvpofrtbq-dev.azurewebsites.net/Nutritions'
+      RequestUrl: 'https://${appService.name}.azurewebsites.net/Nutritions' //'https://website-4vwxkvpofrtbq-dev.azurewebsites.net/Nutritions'
       Headers: null
       HttpVerb: 'GET'
       RequestBody: null
@@ -301,7 +301,7 @@ resource standardWebTestPageExercises  'Microsoft.Insights/webtests@2020-10-05-p
     ]
     Configuration: null
     Request: {
-      RequestUrl: 'https://${appService.name}-dev.azurewebsites.net/Exercises' //'https://website-4vwxkvpofrtbq-dev.azurewebsites.net/Exercises'
+      RequestUrl: 'https://${appService.name}.azurewebsites.net/Exercises' //'https://website-4vwxkvpofrtbq-dev.azurewebsites.net/Exercises'
       Headers: null
       HttpVerb: 'GET'
       RequestBody: null
