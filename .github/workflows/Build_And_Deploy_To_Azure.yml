@@ -331,6 +331,7 @@ jobs:
 
       - name: Install Playwright dependencies
         run: | 
+          mkdir testing
           cd testing
           npm ci
           npx playwright install-deps
