@@ -335,7 +335,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Install Playwright
-        run: npx playwright install --with-deps
+        run: npx playwright install-deps
+
+      - name: Install Playwright
+        run: npx playwright install
+
       - name: Run Playwright Tests        
         continue-on-error: false
         working-directory: testing
