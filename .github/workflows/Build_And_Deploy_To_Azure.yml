@@ -306,25 +306,23 @@ jobs:
     needs: [Deploy_Stage_Application, Deploy_Stage_Database]
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
         with:
-          node-version: '14.x'
-            
-#      - name: Login to Azure
-#        uses: azure/login@v1
-#        continue-on-error: false
-#        with:
-#          creds: ${{ secrets.AZURE_CREDENTIALS }}
-        
-      - name: 'UI Testing with Playwright'
-        run: echo 'UI Testing with Playwright'
+          dotnet-version: ${{ env.dotnet_version }}
 
-#      - name: Setup .NET Core
-#        uses: actions/setup-dotnet@v1
-#        with:
-#          dotnet-version: ${{ env.dotnet_version }}
-          
+      - name: New Manifest for tool
+        run: dotnet custom tool-manifest
+        
+      - name: Install Playwright CLI
+        run: dotnet custom install Microsoft.Playwright.CLI
+        continue-on-error: true
+        
+      - name: Update Playwright Browsers
+        run: npx playwright install
+        shell: bash
+        continue-on-error: true
+
       - name: Download Build Artifacts-Playwright Tests
         uses: actions/download-artifact@v2
         continue-on-error: false
@@ -332,23 +330,16 @@ jobs:
           name: MercuryHealth.UITests
           path: ${{ github.workspace }}/MercuryHealth.UITests
 
-      - name: Install dependencies
-        run: npm ci
-      - name: Install Playwright
-        run: npx playwright install-deps
-
-      - name: Install Playwright
-        run: npx playwright install
-
-      - name: Run Playwright Tests        
-        continue-on-error: false
+      - name: A-Run Playwright Tests        
+        continue-on-error: true
         working-directory: testing
         run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj
 
-#      - name: Azure logout
-#        run: |
-#          az logout
-          
+      - name: B-Run Playwright Tests        
+        continue-on-error: true
+        working-directory: testing
+        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
+        
 ###################################################################
 # CD Stage - Load and Performance Testing                         #
 ###################################################################
