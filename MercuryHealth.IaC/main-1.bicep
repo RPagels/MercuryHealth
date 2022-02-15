@@ -1,4 +1,4 @@
-// Deploy Azure infrastructure for app + data + managed identity + monitoring
+// Deploy Azure infrastructure for app + data + monitoring
 
 //targetScope = 'subscription'
 // Region for all resources
@@ -8,8 +8,7 @@ param createdBy string = 'Randy Pagels'
 param costCenter string = '74f644d3e665'
 
 // Data params
-//param serverName string
-//param sqlDBName string = uniqueString('database-', resourceGroup().id)
+@secure()
 param sqlAdministratorLogin string
 
 @secure()
