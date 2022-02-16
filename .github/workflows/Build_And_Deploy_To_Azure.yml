@@ -311,11 +311,11 @@ jobs:
         with:
           dotnet-version: ${{ env.dotnet_version }}
 
-      - name: New Manifest for tool
-        run: dotnet custom tool-manifest
+#      - name: New Manifest for tool
+#        run: dotnet custom tool-manifest
         
       - name: Install Playwright CLI
-        run: dotnet custom install Microsoft.Playwright.CLI
+        run: dotnet custom install --global Microsoft.Playwright.CLI
         continue-on-error: true
         
       - name: Update Playwright Browsers
