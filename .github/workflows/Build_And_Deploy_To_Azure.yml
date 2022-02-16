@@ -332,12 +332,12 @@ jobs:
 
       - name: A-Run Playwright Tests        
         continue-on-error: true
-        working-directory: testing
+#        working-directory: testing
         run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj
 
       - name: B-Run Playwright Tests        
         continue-on-error: true
-        working-directory: testing
+#        working-directory: testing
         run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
         
 ###################################################################
