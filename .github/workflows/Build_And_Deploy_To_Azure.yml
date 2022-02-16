@@ -67,8 +67,8 @@ jobs:
           dotnet publish MercuryHealth.FunctionApp/MercuryHealth.FunctionApp.csproj --configuration ${{ env.buildConfiguration }} -o './functionapp'
           dotnet build MercuryHealth.API/MercuryHealth.API.csproj --configuration ${{ env.buildConfiguration }} --no-restore
           dotnet publish MercuryHealth.API/MercuryHealth.API.csproj --configuration ${{ env.buildConfiguration }} -o './api'
-          dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} --no-restore
-          dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './uitests'
+#          dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} --no-restore
+#          dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './uitests'
 
       - name: dotnet retore database
         run: dotnet restore MercuryHealth.Database/MercuryHealth.Database.csproj
@@ -342,18 +342,16 @@ jobs:
         run: |
           dotnet tool install -g Microsoft.Playwright.CLI
           npx playwright install-deps chromium
+
       # note this step is needed because the latest chromium is not being installed with the above commands
       - name: Ensure latest Chromium
         run: |
           npm i -D playwright
-      - name: Test
-        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj --no-build --verbosity normal
-      
-#      - name: A-Run Playwright Tests        
-#        continue-on-error: true
-#        working-directory: ${{ github.workspace }}/MercuryHealth.UITests
-#        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj
 
+      - name: Test
+#        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj --no-build --verbosity normal
+        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
+      
       - name: DLL-Run Playwright Tests        
         continue-on-error: true
         #working-directory: ${{ github.workspace }}/MercuryHealth.UITests
