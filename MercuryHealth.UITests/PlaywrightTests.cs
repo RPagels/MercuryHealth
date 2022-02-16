@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace MercuryHealth.UITests
 
 {
-    public class Tests
+    public class PlaywrightTests
     {
         [SetUp]
         public void Setup()
@@ -23,7 +23,7 @@ namespace MercuryHealth.UITests
         }
 
         string myPageTitle = "";
-        string pageURL = "https://website-4vwxkvpofrtbq-dev.azurewebsites.net/";
+        //string pageURL = "https://website-4vwxkvpofrtbq-dev.azurewebsites.net/";
 
         [Test]
         [Category("Playwright_Tests")]
@@ -37,14 +37,13 @@ namespace MercuryHealth.UITests
             //    Headless = false,
             //});
 
-            // comment goes here!!!  Test for GM!
-
             await using var browser = await playwright.Chromium.LaunchAsync();
             var context = await browser.NewContextAsync();
             var page = await context.NewPageAsync();
             page.SetDefaultTimeout(30000);
 
-            await page.GotoAsync(pageURL);
+            //await page.GotoAsync(pageURL);
+            await AppHelpers.VisitURL(page);
 
             // Click on the cookie policy acceptance button if it exists
             if ((await page.QuerySelectorAsync("#accept-policy close")) != null)
