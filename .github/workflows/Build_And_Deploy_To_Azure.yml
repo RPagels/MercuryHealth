@@ -305,23 +305,33 @@ jobs:
 
     needs: [Deploy_Stage_Application, Deploy_Stage_Database]
     timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+        os: [windows-latest, ubuntu-latest, macos-latest]
+        
     steps:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ env.dotnet_version }}
 
+      - name: Install prerequisites and download drivers
+        shell: bash
+        run: ./build.sh --download-driver
+        
 #      - name: New Manifest for tool
 #        run: dotnet custom tool-manifest
+
+#      - name: Install Playwright CLI
+#        run: dotnet custom install Microsoft.Playwright.CLI
+#        continue-on-error: false
         
-      - name: Install Playwright CLI
-        run: dotnet custom install --global Microsoft.Playwright.CLI
-        continue-on-error: false
-        
-      - name: Update Playwright Browsers
-        run: npx playwright install
-        shell: bash
-        continue-on-error: false
+#      - name: Update Playwright Browsers
+#        run: npx playwright install
+#        shell: bash
+#        continue-on-error: false
 
       - name: Download Build Artifacts-Playwright Tests
         uses: actions/download-artifact@v2
@@ -329,6 +339,9 @@ jobs:
         with:
           name: MercuryHealth.UITests
           path: ${{ github.workspace }}/MercuryHealth.UITests
+
+      - name: Installing Browsers and dependencies
+        run: dotnet run --project MercuryHealth.UITests/MercuryHealth.UITests.csproj -f ${{ env.dotnet_version }} -- install --with-deps ${{ matrix.browser }}
 
 #      - name: A-Run Playwright Tests        
 #        continue-on-error: true
@@ -341,6 +354,18 @@ jobs:
         #run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
         working-directory: ${{ github.workspace }}/MercuryHealth.UITests
         run: dotnet test MercuryHealth.UITests.dll
+
+      - name: Running tests
+        if: matrix.os != 'ubuntu-latest'
+        env:
+          BROWSER: ${{ matrix.browser }}
+        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj -c Debug -f ${{ env.dotnet_version }}
+      - name: Running tests (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        env:
+          BROWSER: ${{ matrix.browser }}
+        run: xvfb-run dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj -c Debug -f ${{ env.dotnet_version }}
+
 ###################################################################
 # CD Stage - Load and Performance Testing                         #
 ###################################################################
