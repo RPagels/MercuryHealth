@@ -330,14 +330,14 @@ jobs:
           name: MercuryHealth.UITests
           path: ${{ github.workspace }}/MercuryHealth.UITests
 
-      - name: A-Run Playwright Tests        
-        continue-on-error: true
-#        working-directory: testing
-        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj
+#      - name: A-Run Playwright Tests        
+#        continue-on-error: true
+#        working-directory: ${{ github.workspace }}/MercuryHealth.UITests
+#        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj
 
-      - name: B-Run Playwright Tests        
+      - name: Dll-Run Playwright Tests        
         continue-on-error: true
-#        working-directory: testing
+        working-directory: ${{ github.workspace }}/MercuryHealth.UITests
         run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
         
 ###################################################################
