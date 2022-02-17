@@ -349,13 +349,13 @@ jobs:
 #          npm i -D playwright
 
       - name: csproj-Run Playwright Tests
-        continue-on-error: true
+        continue-on-error: false
 #        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj --no-build --verbosity normal
 #        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
-        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj
+        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests
         
       - name: DLL-Run Playwright Tests        
-        continue-on-error: true
+        continue-on-error: false
         #working-directory: ${{ github.workspace }}/MercuryHealth.UITests
         #run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
         working-directory: ${{ github.workspace }}/MercuryHealth.UITests
