@@ -344,14 +344,16 @@ jobs:
           npx playwright install-deps chromium
 
       # note this step is needed because the latest chromium is not being installed with the above commands
-      - name: Ensure latest Chromium
-        run: |
-          npm i -D playwright
+#      - name: Ensure latest Chromium
+#        run: |
+#          npm i -D playwright
 
-      - name: Test
+      - name: csproj-Run Playwright Tests
+        continue-on-error: true
 #        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj --no-build --verbosity normal
-        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
-      
+#        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
+        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj
+        
       - name: DLL-Run Playwright Tests        
         continue-on-error: true
         #working-directory: ${{ github.workspace }}/MercuryHealth.UITests
