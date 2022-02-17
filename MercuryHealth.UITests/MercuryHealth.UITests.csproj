@@ -21,4 +21,10 @@
 		<PackageReference Include="Microsoft.Playwright.NUnit" Version="1.18.1" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Update="testsettings.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 </Project>

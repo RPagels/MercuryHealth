@@ -6,7 +6,6 @@
 
 param location string = resourceGroup().location
 param apiServiceName string
-//param apiServiceName string
 param defaultTags object
 
 @minLength(1)

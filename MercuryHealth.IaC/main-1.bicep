@@ -24,6 +24,7 @@ var appInsightsName = 'appInsights-${uniqueString(resourceGroup().id)}'
 var functionAppName = 'functionApp-${uniqueString(resourceGroup().id)}'
 var functionAppServiceName = 'functionAppservice-${uniqueString(resourceGroup().id)}'
 var apiServiceName = 'apiService-${uniqueString(resourceGroup().id)}'
+var loadTestsName = 'loadTests-${uniqueString(resourceGroup().id)}'
 //var keyvaultNamev2 = 'keyVault-${uniqueString(resourceGroup().id)}'
 
 // Tags
@@ -101,10 +102,20 @@ module appinsightsmod './main-4-appinsights.bicep' = {
 module functionappmod './main-6-funcapp.bicep' = {
   name: 'functionappdeploy'
   params: {
+    location: location
     appInsightsInstrumentationKey: appinsightsmod.outputs.appInsightsInstrumentationKey
     functionAppServiceName: functionAppServiceName
     functionAppName: functionAppName
     defaultTags: defaultTags
+  }
+}
+
+// Create Azure Load Tests
+module loadtestsmod 'main-9-loadtests.bicep' = {
+  name: loadTestsName
+  params: {
+    location: location
+    loadTestsName: loadTestsName
   }
 }
 
@@ -122,10 +133,11 @@ module functionappmod './main-6-funcapp.bicep' = {
 //}
 
 // Create APIM.  NOTE: MUST MOVE THIS. APIM + Azure KeyVault, needs to be in it's own RG + Pipeline
-//module apiservicesmod './main-7-apimanagement.bicep' = {
-//  name: 'apiservicesdeploy'
-//  params: {
-//    apiServiceName: apiServiceName
-//    defaultTags: defaultTags
-//  }
-//}
+module apiservicesmod './main-7-apimanagement.bicep' = {
+ name: apiServiceName
+ params: {
+   location: location
+   apiServiceName: apiServiceName
+   defaultTags: defaultTags
+ }
+}
