@@ -162,7 +162,7 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-02-01' = {
 // MercuryHealth-rg - appInsights-4vwxkvpofrtbq
 resource standardWebTestPageHome  'Microsoft.Insights/webtests@2020-10-05-preview' = {
   name: 'appInsights-Page Home'
-  location: 'eastus'
+  location: location
   tags: {
     // Error: A single 'hidden-link' tag pointing to an existing AI component is required. Found none.
     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/appInsights-4vwxkvpofrtbq': 'Resource'
@@ -216,7 +216,7 @@ resource standardWebTestPageHome  'Microsoft.Insights/webtests@2020-10-05-previe
 
 resource standardWebTestPageNutritions  'Microsoft.Insights/webtests@2020-10-05-preview' = {
   name: 'appInsights-Page Nutritions'
-  location: 'eastus'
+  location: location
   tags: {
     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/appInsights-4vwxkvpofrtbq': 'Resource'
   }
@@ -268,7 +268,7 @@ resource standardWebTestPageNutritions  'Microsoft.Insights/webtests@2020-10-05-
 
 resource standardWebTestPageExercises  'Microsoft.Insights/webtests@2020-10-05-preview' = {
   name: 'appInsights-Page Exercises'
-  location: 'eastus'
+  location: location
   tags: {
     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/appInsights-4vwxkvpofrtbq': 'Resource'
   }

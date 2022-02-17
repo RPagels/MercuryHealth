@@ -21,7 +21,7 @@ public class UpdateExerciseRecord
     //}
 
     [FunctionName("UpdateExerciseRecord")]
-    public async Task RunAsync([TimerTrigger("0 */10 * * * *")] TimerInfo myTimer, ILogger log)
+    public async Task RunAsync([TimerTrigger("0 */20 * * * *")] TimerInfo myTimer, ILogger log)
     {
 
         try

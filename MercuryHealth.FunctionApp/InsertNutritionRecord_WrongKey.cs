@@ -10,11 +10,11 @@ using Microsoft.Extensions.Logging;
 
 namespace MercuryHealth.FunctionApp;
 
-public class InsertExerciseRecord
+public class InsertNutritionRecord_WrongKey
 {
     private static string ApimSubscriptionKey = System.Environment.GetEnvironmentVariable("ApimSubscriptionKey");
 
-    [FunctionName("InsertExerciseRecord")]
+    [FunctionName("InsertNutritionRecord_WrongKey")]
     public async Task RunAsync([TimerTrigger("0 0 */12 * * *")] TimerInfo myTimer, ILogger log)
     {
         // Time Trigger Cheat Sheet: https://codehollow.com/2017/02/azure-functions-time-trigger-cron-cheat-sheet/
@@ -22,26 +22,29 @@ public class InsertExerciseRecord
         // 0 */5 * * * *	every 5 minutes
         // 0 0 */6 * * *	every 6 hours
 
-        //log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-
         var client = new HttpClient();
         var queryString = HttpUtility.ParseQueryString(string.Empty);
 
         // Request headers with APIM Key retrieved from Azure KeyVault
-        client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", ApimSubscriptionKey);
+        client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", ApimSubscriptionKey + "XYZ");
 
-        var uri = "https://rpagels-apim.azure-api.net/api/Exercises?" + queryString;
+        var uri = "https://rpagels-apim.azure-api.net/api/Nutritions?" + queryString;
 
         HttpResponseMessage response;
 
         string serializedObject = Newtonsoft.Json.JsonConvert.SerializeObject(new
         {
             id = "0",
-            name = "Running/Jogging",
-            description = "Build strong bones and improves cardiovascular.",
-            ExerciseTime = DateTime.Now,
-            musclesInvolved = "Legs",
-            equipment = "None"
+            description = "Kiwi",
+            quantity = "1",
+            mealTime = DateTime.Now,
+            tags = "API Update",
+            calories = "42",
+            proteinInGrams = "0.8",
+            fatInGrams = "0.4",
+            carbohydratesInGrams = "10",
+            sodiumInGrams = "2",
+            color = "Brown"
         });
 
         // Request body
