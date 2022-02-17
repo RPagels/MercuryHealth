@@ -31,7 +31,7 @@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.MusclesInvolved)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class = "col-sm-10" id="@Html.DisplayNameFor(model => model.MusclesInvolved)">
             @Html.DisplayFor(model => model.MusclesInvolved)
         </dd>
         <dt class = "col-sm-2">
@@ -44,5 +44,5 @@
 </div>
 <div>
     <a asp-action="Edit" id="button_edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" id="button_back">Back to List</a>
 </div>
