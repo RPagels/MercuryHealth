@@ -348,19 +348,15 @@ jobs:
 #        run: |
 #          npm i -D playwright
 
-      - name: csproj-Run Playwright Tests
-        continue-on-error: false
-#        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj --no-build --verbosity normal
-#        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
-        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests
+      - uses: microsoft/playwright-github-action@v1
+      - name: Run Playwright Tests
+        continue-on-error: true
+        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
         
-      - name: DLL-Run Playwright Tests        
+      - name: Run Playwright Tests
         continue-on-error: false
-        #working-directory: ${{ github.workspace }}/MercuryHealth.UITests
-        #run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
-        working-directory: ${{ github.workspace }}/MercuryHealth.UITests
-        run: dotnet test MercuryHealth.UITests.dll
-
+        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
+        
 ###################################################################
 # CD Stage - Load and Performance Testing                         #
 ###################################################################
