@@ -67,8 +67,8 @@ jobs:
           dotnet publish MercuryHealth.FunctionApp/MercuryHealth.FunctionApp.csproj --configuration ${{ env.buildConfiguration }} -o './functionapp'
           dotnet build MercuryHealth.API/MercuryHealth.API.csproj --configuration ${{ env.buildConfiguration }} --no-restore
           dotnet publish MercuryHealth.API/MercuryHealth.API.csproj --configuration ${{ env.buildConfiguration }} -o './api'
-          dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} --no-restore
-          dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './uitests'
+#          dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} --no-restore
+#          dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './uitests'
 
       - name: dotnet retore database
         run: dotnet restore MercuryHealth.Database/MercuryHealth.Database.csproj
@@ -305,23 +305,31 @@ jobs:
 
     needs: [Deploy_Stage_Application, Deploy_Stage_Database]
     timeout-minutes: 60
+        
     steps:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ env.dotnet_version }}
 
-#      - name: New Manifest for tool
-#        run: dotnet custom tool-manifest
+#      - uses: microsoft/playwright-github-action@v1
+#      - name: Install dependencies and run tests
+#       run: npm install && npm test
+
+#      - uses: actions/upload-artifact@v2
+#        if: ${{ always() }}
+#        with:
+#          name: test-artifacts
+#          path: path/to/artifacts
+    
+#      - name: Install Playwright CLI
+#        run: dotnet custom install Microsoft.Playwright.CLI
+#        continue-on-error: false
         
-      - name: Install Playwright CLI
-        run: dotnet custom install --global Microsoft.Playwright.CLI
-        continue-on-error: true
-        
-      - name: Update Playwright Browsers
-        run: npx playwright install
-        shell: bash
-        continue-on-error: true
+#      - name: Update Playwright Browsers
+#        run: npx playwright install
+#        shell: bash
+#        continue-on-error: false
 
       - name: Download Build Artifacts-Playwright Tests
         uses: actions/download-artifact@v2
@@ -330,16 +338,27 @@ jobs:
           name: MercuryHealth.UITests
           path: ${{ github.workspace }}/MercuryHealth.UITests
 
-      - name: A-Run Playwright Tests        
-        continue-on-error: true
-        working-directory: testing
-        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj
+      - name: Setup Playwright
+        run: |
+          dotnet tool install -g Microsoft.Playwright.CLI
+          npx playwright install-deps chromium
 
-      - name: B-Run Playwright Tests        
-        continue-on-error: true
-        working-directory: testing
+      # note this step is needed because the latest chromium is not being installed with the above commands
+      - name: Ensure latest Chromium
+        run: |
+          npm i -D playwright
+
+      - name: Test
+#        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj --no-build --verbosity normal
         run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
-        
+      
+      - name: DLL-Run Playwright Tests        
+        continue-on-error: true
+        #working-directory: ${{ github.workspace }}/MercuryHealth.UITests
+        #run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
+        working-directory: ${{ github.workspace }}/MercuryHealth.UITests
+        run: dotnet test MercuryHealth.UITests.dll
+
 ###################################################################
 # CD Stage - Load and Performance Testing                         #
 ###################################################################
