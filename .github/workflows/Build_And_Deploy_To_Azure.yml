@@ -323,7 +323,7 @@ jobs:
 
     # Identify any jobs that must complete successfully before this job will run.
     needs: [Deploy_Stage_Application, Deploy_Stage_Database]
-    timeout-minutes: 60
+    timeout-minutes: 10
         
     steps:
       - name: Setup .NET Core
@@ -366,7 +366,6 @@ jobs:
       - name: Run Playwright Tests
         continue-on-error: true
         run: |
-          $PLAYWRIGHT_BROWSERS_PATH=0
           dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
         
       # note this step is needed because the latest chromium is not being installed with the above commands
@@ -379,7 +378,8 @@ jobs:
         run: |
           chmod +x /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests/.playwright/node/linux/playwright.sh
           chmod +x /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests
-          xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- bash -c "ulimit -c unlimited && dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll -f net60 --logger \"trx\""
+          #xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- bash -c "ulimit -c unlimited && dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll -f net60 --logger \"trx\""
+          dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
 
   PlaywrightUITests_Stage_RunInContainer:
     if: contains(github.event_name, 'push')
