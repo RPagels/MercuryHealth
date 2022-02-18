@@ -358,20 +358,20 @@ jobs:
           name: MercuryHealth.UITests
           path: ${{ github.workspace }}/MercuryHealth.UITests
 
-      - name: Playwright Install
-        run: npx playwright install
-      - name: A-Playwright Tests
-        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --no-build --verbosity normal
-      
-#      - name: Setup Playwright
-#        run: |
-#          dotnet tool install -g Microsoft.Playwright.CLI
-#          npx playwright install-deps chromium
+      - name: Setup Playwright
+        run: |
+          dotnet tool install -g Microsoft.Playwright.CLI
+          npx playwright install-deps chromium
 
+#      - name: Playwright Install
+#        run: npx playwright install
+#      - name: A-Playwright Tests
+#        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --verbosity normal
+      
       - uses: microsoft/playwright-github-action@v1
       - name: B-Playwright Tests
         continue-on-error: true
-        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
+        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --verbosity normal
         
       # note this step is needed because the latest chromium is not being installed with the above commands
 #      - name: Ensure latest Chromium
