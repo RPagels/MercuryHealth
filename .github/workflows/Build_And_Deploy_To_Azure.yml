@@ -377,7 +377,8 @@ jobs:
       - name: Run Playwright tests (Linux)
         continue-on-error: true
         run: |
-          $PLAYWRIGHT_BROWSERS_PATH=0
+          chmod +x /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests/.playwright/node/linux/playwright.sh
+          chmod +x /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests
           xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- bash -c "ulimit -c unlimited && dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll -f net60 --logger \"trx\""
 
   PlaywrightUITests_Stage_RunInContainer:
