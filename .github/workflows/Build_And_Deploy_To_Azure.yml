@@ -357,31 +357,35 @@ jobs:
           name: MercuryHealth.UITests
           path: ${{ github.workspace }}/MercuryHealth.UITests
 
-      - name: Setup Playwright
-        run: |
-          dotnet tool install -g Microsoft.Playwright.CLI
-          npx playwright install-deps chromium
+      - name: Playwright Install
+        run: npx playwright install
+      - name: A-Playwright Tests
+        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --no-build --verbosity normal
+      
+#      - name: Setup Playwright
+#        run: |
+#          dotnet tool install -g Microsoft.Playwright.CLI
+#          npx playwright install-deps chromium
 
       - uses: microsoft/playwright-github-action@v1
-      - name: Run Playwright Tests
+      - name: B-Playwright Tests
         continue-on-error: true
-        run: |
-          dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
+        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
         
       # note this step is needed because the latest chromium is not being installed with the above commands
 #      - name: Ensure latest Chromium
 #        run: |
 #          npm i -D playwright
 
-      - name: Run Playwright tests (Linux)
-        continue-on-error: true
-        run: |
-          chmod -R 755 /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests
-          #chmod -R 755 /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests/.playwright/node/linux
-          #chmod +x /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests/.playwright/node/linux/playwright.sh
-          #chmod -R 755 /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests
-          #xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- bash -c "ulimit -c unlimited && dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll -f net60 --logger \"trx\""
-          dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
+#      - name: Run Playwright tests (Linux)
+#        continue-on-error: true
+#        run: |
+#          chmod -R 755 /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests
+#          #chmod -R 755 /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests/.playwright/node/linux
+#          #chmod +x /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests/.playwright/node/linux/playwright.sh
+#          #chmod -R 755 /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests
+#          #xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- bash -c "ulimit -c unlimited && dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll -f net60 --logger \"trx\""
+#          dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
 
   PlaywrightUITests_Stage_RunInContainer:
     if: contains(github.event_name, 'push')
@@ -396,10 +400,10 @@ jobs:
     
     steps:
     - uses: actions/checkout@v2
-    - run: printenv
+#    - run: printenv
     - run: echo "Demo - Add steps here..."
-    - run: sudo apt install docker-ce docker-ce-cli containerd.io
-    - run: sudo docker cp MercuryHealth.UITests.dll playwright:/MercuryHealth.UITests.dll
+#    - run: sudo apt install docker-ce docker-ce-cli containerd.io
+#    - run: sudo docker cp MercuryHealth.UITests.dll playwright:/MercuryHealth.UITests.dll
 
     - name: 2-Run Playwright Tests
       run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
