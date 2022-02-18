@@ -361,7 +361,7 @@ jobs:
       - name: Setup Playwright
         run: |
           dotnet tool install -g Microsoft.Playwright.CLI
-          npx playwright install-deps chromium
+#          npx playwright install-deps chromium
 
 #      - name: Playwright Install
 #        run: npx playwright install
