@@ -362,26 +362,23 @@ jobs:
           dotnet tool install -g Microsoft.Playwright.CLI
           npx playwright install-deps chromium
 
+      - uses: microsoft/playwright-github-action@v1
+      - name: Run Playwright Tests
+        continue-on-error: true
+        run: |
+          $PLAYWRIGHT_BROWSERS_PATH=0
+          dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
+        
       # note this step is needed because the latest chromium is not being installed with the above commands
 #      - name: Ensure latest Chromium
 #        run: |
 #          npm i -D playwright
 
       - name: Run Playwright tests (Linux)
-        #if: ${{ matrix.os == 'ubuntu-latest' }}
-        #env:
-        #  PRODUCT: ${{ matrix.product }}
+        continue-on-error: true
         run: |
-          xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- bash -c "ulimit -c unlimited && dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll -c Release -f net60 --logger \"trx\""
-
-      - uses: microsoft/playwright-github-action@v1
-      - name: Run Playwright Tests
-        continue-on-error: true
-        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
-        
-      - name: Run Playwright Tests
-        continue-on-error: true
-        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
+          $PLAYWRIGHT_BROWSERS_PATH=0
+          xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- bash -c "ulimit -c unlimited && dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll -f net60 --logger \"trx\""
 
   PlaywrightUITests_Stage_RunInContainer:
     if: contains(github.event_name, 'push')
