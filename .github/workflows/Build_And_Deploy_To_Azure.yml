@@ -117,8 +117,15 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: MercuryHealth.UITests
-          path: ${{ github.workspace }}/uitests
+          path: ${{ github.workspace }}/MercuryHealth.UITests/MercuryHealth.UITests.csproj
 
+      - name: Upload Build Artifacts-UI Tests
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: MercuryHealth.UITests
+          path: ${{ github.workspace }}/uitests
+          
       - name: Upload Infrastucture Files
         if: ${{ github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v2
