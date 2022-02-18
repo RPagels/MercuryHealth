@@ -2,28 +2,25 @@
 
 name: Build_And_Deploy_To_Azure
 
+###################################################################
 # Environment Variables
+###################################################################
 env:
   # Path to the solution file relative to the root of the project.
-  buildConfiguration: Release
-  buildPlatform: Any CPU
+  buildConfiguration: 'Release'
+  buildPlatform: 'Any CPU'
   dotnet_version: '6.x.x'
   AZURE_WEBAPP_PACKAGE_PATH: '.'
-#  ARM_FILE_PATH: 'MercuryHealthGroup.IaC'
-#  ARM_FILE_NAME: 'main-1'
   Azure_Resource_Group: 'MercuryHealth-rg'
-#  ARTIFACT_STAGING_PATH: '.'
-#  ARTIFACT_STAGING_FOLDER: 'bin/Website'
-#  SOLUTION_FILE_PATH: 'MercuryHealthGroup'
-#  SOLUTION: 'MercuryHealthGroup/MercuryHealthGroup.sln'
-#  UNIT_TESTS_STAGING_PATH: 'MercuryHealthGroup/MercuryHealthGroup.UnitTests/bin'
-#  UI_TESTS_STAGING_PATH: MercuryHealthGroup/MercuryHealthGroup.UITests/bin'
-  Website_Name: webSite-4vwxkvpofrtbq
-  Function_AppName: functionApp-4vwxkvpofrtbq
-  Hosting_Plan_Name: appPlan-4vwxkvpofrtbq
+  Website_Name: 'webSite-4vwxkvpofrtbq'
+  Function_AppName: 'functionApp-4vwxkvpofrtbq'
+  Hosting_Plan_Name: 'appPlan-4vwxkvpofrtbq'
+  loadTestConfigFile: 'LoadTest_HomePage.jmx'
 #  Deployment_Name: MercuryHealthGroup.${{ github.workflow }}.${{ github.run_number }}
 
-# Controls when the workflow will run
+###################################################################
+# Triggers - Controls when the action will run.
+###################################################################
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
@@ -37,7 +34,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 # This workflow contains a multiple jobs: "CI", "Dev", "QA", "Prod"
 ###################################################################
-# CI Stage                                                        #
+# CI Stage 
 ###################################################################
 jobs:
   Build_Stage_Application:
@@ -46,6 +43,9 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      ###########################################
+      # Build App
+      ###########################################
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
         uses: actions/checkout@v2
@@ -67,14 +67,15 @@ jobs:
           dotnet publish MercuryHealth.FunctionApp/MercuryHealth.FunctionApp.csproj --configuration ${{ env.buildConfiguration }} -o './functionapp'
           dotnet build MercuryHealth.API/MercuryHealth.API.csproj --configuration ${{ env.buildConfiguration }} --no-restore
           dotnet publish MercuryHealth.API/MercuryHealth.API.csproj --configuration ${{ env.buildConfiguration }} -o './api'
-#          dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} --no-restore
-#          dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './uitests'
 
       - name: dotnet retore database
         run: dotnet restore MercuryHealth.Database/MercuryHealth.Database.csproj
       - name: dotnet build database
         run: dotnet build MercuryHealth.Database/MercuryHealth.Database.csproj --configuration ${{ env.buildConfiguration }} --no-restore --output './database'
 
+      ###########################################
+      # Run Unit Tests
+      ###########################################
       - name: dotnet run unit tests
         run: dotnet test MercuryHealth.UnitTests/MercuryHealth.UnitTests.csproj
 
@@ -128,7 +129,9 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # Validate ARM Template
+      ###########################################
+      # Validate ARM Template using Bicep DSL
+      ###########################################
       - name: Validate Azure Bicep
         uses: Azure/arm-deploy@v1
         with:
@@ -146,11 +149,14 @@ jobs:
 # CD Stage - Infrastructure                                       #
 ###################################################################
   Deploy_Stage_IaC:
-#    if: contains(github.event_name, 'push')
+    if: contains(github.event_name, 'push')
 
     name: Deploy Infrastructure
+    
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
+    # Identify any jobs that must complete successfully before this job will run.
     needs: [Build_Stage_Application]
     steps:
     - name: Download Build Artifact-Infrastructure
@@ -166,7 +172,9 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
       
-# Deploy ARM Template
+      ###########################################
+      # Validate ARM Template using Bicep DSL
+      ###########################################
     - name: Deploy Infrastucture
       uses: azure/arm-deploy@v1
       with:
@@ -182,7 +190,7 @@ jobs:
         az logout
         
 ###################################################################
-# CD Stage - Database                                             #
+# CD Stage - Deploy the Database
 ###################################################################
   Deploy_Stage_Database:
     if: contains(github.event_name, 'push')
@@ -190,6 +198,7 @@ jobs:
     name: Deploy Database
     runs-on: windows-latest
 
+    # Identify any jobs that must complete successfully before this job will run.
     needs: [Deploy_Stage_IaC]
     steps:
 
@@ -223,15 +232,22 @@ jobs:
 # CD Stage - Application                                             #
 ###################################################################
   Deploy_Stage_Application:
-#  Dev:
     if: contains(github.event_name, 'push')
 
     name: Deploy Application
+    
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
+    # Identify any jobs that must complete successfully before this job will run.
     needs: [Deploy_Stage_IaC]
+    
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
 
+    ###########################################
+    # Download Artifacts
+    ###########################################
     - name: Download Build Artifacts-Function Application
       uses: actions/download-artifact@v2
       continue-on-error: false
@@ -267,7 +283,6 @@ jobs:
         app-name: ${{ env.Function_AppName }}
         slot-name: 'production'
         package: './MercuryHealth.FunctionApp'
-#        publish-profile: ${{ secrets.functionApp_4vwxkvpofrtbq_f993 }}
         
     # Deploy APIs
     - name: 'Deploy APIs'
@@ -278,6 +293,7 @@ jobs:
 #          slot-name: 'Dev'
 #          package: './MercuryHealth.API'
 
+    # Insert a deployment annotation into Application Insights
     - name: Annotate deployment
       uses: wictorwilen/application-insights-action@v1
       continue-on-error: true
@@ -300,9 +316,12 @@ jobs:
   UITesting_Stage_Application:
     if: contains(github.event_name, 'push')
 
-    name: UI Test Application
+    name: Playwright UI Testing
+    
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
+    # Identify any jobs that must complete successfully before this job will run.
     needs: [Deploy_Stage_Application, Deploy_Stage_Database]
     timeout-minutes: 60
         
@@ -310,8 +329,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 5.0.x
-          #dotnet-version: ${{ env.dotnet_version }}
+          dotnet-version: ${{ env.dotnet_version }}
 
 #      - uses: microsoft/playwright-github-action@v1
 #      - name: Install dependencies and run tests
@@ -349,13 +367,12 @@ jobs:
 #        run: |
 #          npm i -D playwright
 
-      - name: Run tests (Linux)
+      - name: Run Playwright tests (Linux)
         #if: ${{ matrix.os == 'ubuntu-latest' }}
         #env:
         #  PRODUCT: ${{ matrix.product }}
         run: |
           xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- bash -c "ulimit -c unlimited && dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll -c Release -f net60 --logger \"trx\""
-
 
       - uses: microsoft/playwright-github-action@v1
       - name: Run Playwright Tests
@@ -363,13 +380,13 @@ jobs:
         run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
         
       - name: Run Playwright Tests
-        continue-on-error: false
+        continue-on-error: true
         run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
 
   PlaywrightUITests_Stage_RunInContainer:
     if: contains(github.event_name, 'push')
 
-    name: PlaywrightUITests_Stage_RunInContainer
+    name: Playwright UI Testing (Container)
     runs-on: ubuntu-latest
 
     container: mcr.microsoft.com/playwright:focal
@@ -395,8 +412,11 @@ jobs:
     if: contains(github.event_name, 'push')
 
     name: Load Test Application
+    
+    # Identify any jobs that must complete successfully before this job will run.
     runs-on: ubuntu-latest
 
+    # Identify any jobs that must complete successfully before this job will run.
     needs: [UITesting_Stage_Application]
     steps:
       - name: Checkout GitHub Actions 
@@ -404,19 +424,19 @@ jobs:
           
       - name: Login to Azure
         uses: azure/login@v1
-        continue-on-error: false
+        continue-on-error: true
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
         
       - name: 'Azure Load Testing'
         run: echo 'Azure Load Testing'
       
-#      - name: 'Azure Load Testing'
-#        uses: azure/load-testing@main
-#        with:
-#          loadTestConfigFile: 'SampleApp.yaml'
+      - name: 'Azure Load Testing'
+        uses: azure/load-testing@main
+        with:
+          loadTestConfigFile: 'SampleApp.yaml'
 #          loadTestResource: ${{ env.LOAD_TEST_RESOURCE }}
-#          resourceGroup: ${{ env.LOAD_TEST_RESOURCE_GROUP }}
+          resourceGroup: ${{ env.Azure_Resource_Group }}
 
       - name: Azure logout
         run: |
@@ -429,8 +449,11 @@ jobs:
     if: contains(github.event_name, 'push')
 
     name: Deploy to Production
+    
+    # Identify any jobs that must complete successfully before this job will run.
     runs-on: ubuntu-latest
 
+    # Identify any jobs that must complete successfully before this job will run.
     needs: [LoadTesting_Stage_Application]
     environment: Production
     steps:
@@ -444,7 +467,8 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
         
       - name: 'Deploy to Production'
-        run: echo 'Deploy to Production'
+
+      # Swap deployment slots on App Service
       - name: 'Swap slots'
         uses: azure/CLI@v1
         with:
