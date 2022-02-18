@@ -370,6 +370,7 @@ jobs:
       - name: Install Playwright
         run: |
           dotnet tool install -g Microsoft.Playwright.CLI
+          cd ${{ github.workspace }}/MercuryHealth.UITests
           npx playwright install-deps chromium
 
       - name: A-Playwright Tests
