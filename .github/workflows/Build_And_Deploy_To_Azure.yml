@@ -41,6 +41,8 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
+    name: Build Application
+    
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       ###########################################
@@ -358,17 +360,14 @@ jobs:
           name: MercuryHealth.UITests
           path: ${{ github.workspace }}/MercuryHealth.UITests
 
-      - name: Setup Playwright
+      - name: Install Playwright
         run: |
           dotnet tool install -g Microsoft.Playwright.CLI
-          playwright install
-          install-deps chromium
-#          npx playwright install-deps chromium
+          npx playwright install-deps chromium
 
-#      - name: Playwright Install
-#        run: npx playwright install
-#      - name: A-Playwright Tests
-#        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --verbosity normal
+      - name: A-Playwright Tests
+        continue-on-error: true
+        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --verbosity normal
       
       - uses: microsoft/playwright-github-action@v1
       - name: B-Playwright Tests
