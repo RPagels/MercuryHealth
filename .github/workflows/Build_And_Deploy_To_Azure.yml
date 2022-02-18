@@ -466,10 +466,8 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
         
-      - name: 'Deploy to Production'
-
       # Swap deployment slots on App Service
-      - name: 'Swap slots'
+      - name: 'Swap slots to Production'
         uses: azure/CLI@v1
         with:
           inlineScript: |
