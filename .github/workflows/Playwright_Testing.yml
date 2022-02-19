@@ -49,8 +49,8 @@ jobs:
     - name: Install Playwright
       continue-on-error: true
       run: |
-        dotnet add package Microsoft.Playwright
-        dotnet build MercuryHealth.UnitTests/MercuryHealth.UnitTests.csproj
+        dotnet add MercuryHealth.UITests/MercuryHealth.UITests.csproj package Microsoft.Playwright
+        dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj
         dotnet tool install -g Microsoft.Playwright.CLI
         playwright install
 
@@ -66,4 +66,4 @@ jobs:
     # Run Playwright Tests
     ###########################################
     - name: Playwright Tests
-      run: dotnet test MercuryHealth.UnitTests/MercuryHealth.UnitTests.csproj
+      run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj
