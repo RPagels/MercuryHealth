@@ -361,12 +361,14 @@ jobs:
           dotnet build ${{ github.workspace }}/MercuryHealth.UITests/MercuryHealth.UITests.csproj
           dotnet tool install -g Microsoft.Playwright.CLI
           cd ${{ github.workspace }}/MercuryHealth.UITests
-          npx playwright install
+          npx playwright install chromium
           npx playwright install msedge-beta
+          #npx playwright install
+          #npx playwright install msedge-beta
 
-       # note this step is needed because the latest chromium is not being installed with the above commands
-      - name: Ensure latest Chromium Installed
-        run: npm i -D playwright
+#       # note this step is needed because the latest chromium is not being installed with the above commands
+#      - name: Ensure latest Chromium Installed
+#       run: npm i -D playwright
         
       - name: Playwright Tests 1
         continue-on-error: true
