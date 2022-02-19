@@ -369,7 +369,7 @@ jobs:
 
       - name: Install Playwright
         run: |
-          cd ${{ github.workspace }}/MercuryHealth.UITests
+          cd ${{ github.workspace }}\MercuryHealth.UITests
           dotnet tool install -g Microsoft.Playwright.CLI
           playwright install
 
