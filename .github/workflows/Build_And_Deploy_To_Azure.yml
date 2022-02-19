@@ -341,25 +341,6 @@ jobs:
         with:
           dotnet-version: ${{ env.dotnet_version }}
 
-#      - uses: microsoft/playwright-github-action@v1
-#      - name: Install dependencies and run tests
-#       run: npm install && npm test
-
-#      - uses: actions/upload-artifact@v2
-#        if: ${{ always() }}
-#        with:
-#          name: test-artifacts
-#          path: path/to/artifacts
-    
-#      - name: Install Playwright CLI
-#        run: dotnet custom install Microsoft.Playwright.CLI
-#        continue-on-error: false
-        
-#      - name: Update Playwright Browsers
-#        run: npx playwright install
-#        shell: bash
-#        continue-on-error: false
-
       - name: Download Build Artifacts-Playwright Tests
         uses: actions/download-artifact@v2
         continue-on-error: false
@@ -368,21 +349,17 @@ jobs:
           path: ${{ github.workspace }}/MercuryHealth.UITests
 
       - name: Install Playwright
+        continue-on-error: true
         run: |
-          cd ${{ github.workspace }}\MercuryHealth.UITests
           dotnet tool install -g Microsoft.Playwright.CLI
-          playwright install
+          cd ${{ github.workspace }}/MercuryHealth.UITests
+          npx playwright install-deps chromium
 
-      - name: A-Playwright Tests
+      - name: Playwright Tests
         continue-on-error: true
         run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --verbosity normal
       
-      - uses: microsoft/playwright-github-action@v1
-      - name: B-Playwright Tests
-        continue-on-error: true
-        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --verbosity normal
-        
-      # note this step is needed because the latest chromium is not being installed with the above commands
+       # note this step is needed because the latest chromium is not being installed with the above commands
 #      - name: Ensure latest Chromium
 #        run: |
 #          npm i -D playwright
