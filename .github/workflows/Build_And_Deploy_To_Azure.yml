@@ -354,7 +354,8 @@ jobs:
           dotnet .\bin\Debug\net6.0\Microsoft.Playwright.dll -- install
           #dotnet tool install -g Microsoft.Playwright.CLI
           cd ${{ github.workspace }}/MercuryHealth.UITests
-          npx playwright install-deps chromium
+          playwright install
+          #npx playwright install-deps chromium
 
       - name: Playwright Tests
         continue-on-error: false
