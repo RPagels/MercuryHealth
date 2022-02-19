@@ -328,8 +328,8 @@ jobs:
     name: Playwright UI Testing
     
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-    #runs-on: windows-latest
+    #runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     # Identify any jobs that must complete successfully before this job will run.
     needs: [Deploy_Stage_Application, Deploy_Stage_Database]
@@ -360,6 +360,7 @@ jobs:
           dotnet add ${{ github.workspace }}/MercuryHealth.UITests/MercuryHealth.UITests.csproj package Microsoft.Playwright
           dotnet build ${{ github.workspace }}/MercuryHealth.UITests/MercuryHealth.UITests.csproj
           dotnet tool install -g Microsoft.Playwright.CLI
+          cd ${{ github.workspace }}/MercuryHealth.UITests
           playwright install
         
       - name: Playwright Tests 1
