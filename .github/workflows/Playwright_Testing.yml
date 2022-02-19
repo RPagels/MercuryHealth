@@ -28,3 +28,24 @@ jobs:
     # Runs a single command using the runners shell
     - name: Send greeting
       run: echo "Hello ${{ github.event.inputs.name }}"
+
+    - name: Install Playwright
+      continue-on-error: true
+      run: |
+        cd ${{ github.workspace }}/MercuryHealth.UITests
+        dotnet tool install -g Microsoft.Playwright.CLI
+        playwright install
+
+     # note this step is needed because the latest chromium is not being installed with the above commands
+    - name: Ensure latest Chromium
+      run: npm i -D playwright
+      
+#    - name: Playwright Tests
+#      continue-on-error: true
+#      run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --verbosity normal
+
+    ###########################################
+    # Run Playwright Tests
+    ###########################################
+    - name: Playwright Tests
+      run: dotnet test MercuryHealth.UnitTests/MercuryHealth.UnitTests.csproj
