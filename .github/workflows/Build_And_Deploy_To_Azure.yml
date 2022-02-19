@@ -347,29 +347,41 @@ jobs:
           name: MercuryHealth.UITests
           path: ${{ github.workspace }}/MercuryHealth.UITests
 
+#      - name: Install Playwright
+#        continue-on-error: true
+#        run: |
+#          cd ${{ github.workspace }}/MercuryHealth.UITests
+#          dotnet tool install -g Microsoft.Playwright.CLI
+#          playwright install
+
       - name: Install Playwright
         continue-on-error: true
         run: |
-          cd ${{ github.workspace }}/MercuryHealth.UITests
+          dotnet add ${{ github.workspace }}/MercuryHealth.UITests/MercuryHealth.UITests.csproj package Microsoft.Playwright
+          dotnet build ${{ github.workspace }}/MercuryHealth.UITests/MercuryHealth.UITests.csproj
           dotnet tool install -g Microsoft.Playwright.CLI
           playwright install
-
-      - name: Playwright Tests
+        
+      - name: Playwright Tests 1
         continue-on-error: true
         run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --verbosity normal
-      
+
+      - name: Playwright Tests 2
+        continue-on-error: true
+        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj --verbosity normal
+        
        # note this step is needed because the latest chromium is not being installed with the above commands
       - name: Ensure latest Chromium
         run: npm i -D playwright
 
-      - name: Run Playwright tests (Linux)
-        continue-on-error: true
-        run: |
-          chmod -R 755 /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests
-          chmod -R 755 /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests/.playwright/node/linux
-          chmod +x /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests/.playwright/node/linux/playwright.sh
-          chmod -R 755 /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests
-          dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
+#      - name: Run Playwright tests (Linux)
+#        continue-on-error: true
+#        run: |
+#          chmod -R 755 /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests
+#          chmod -R 755 /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests/.playwright/node/linux
+#          chmod +x /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests/.playwright/node/linux/playwright.sh
+#          chmod -R 755 /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests
+#          dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
 #          #xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- bash -c "ulimit -c unlimited && dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll -f net60 --logger \"trx\""
 
 
