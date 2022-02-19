@@ -2,6 +2,12 @@
 
 name: Manual-Playwright Testing
 
+env:
+  # Path to the solution file relative to the root of the project.
+  buildConfiguration: 'Release'
+  buildPlatform: 'Any CPU'
+  dotnet_version: '6.x.x'
+  
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
 on:
@@ -25,14 +31,24 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ env.dotnet_version }}
+
     # Runs a single command using the runners shell
     - name: Send greeting
       run: echo "Hello ${{ github.event.inputs.name }}"
 
+#         cd ${{ github.workspace }}/MercuryHealth.UITests
+
     - name: Install Playwright
       continue-on-error: true
       run: |
-        cd ${{ github.workspace }}/MercuryHealth.UITests
         dotnet tool install -g Microsoft.Playwright.CLI
         playwright install
 
