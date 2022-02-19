@@ -343,28 +343,26 @@ jobs:
 
       - name: Download Build Artifacts-Playwright Tests
         uses: actions/download-artifact@v2
-        continue-on-error: false
         with:
           name: MercuryHealth.UITests
           path: ${{ github.workspace }}/MercuryHealth.UITests
 
       - name: Install Playwright
-        continue-on-error: false
+        continue-on-error: true
         run: |
           dotnet .\bin\Debug\net6.0\Microsoft.Playwright.dll -- install
           #dotnet tool install -g Microsoft.Playwright.CLI
           cd ${{ github.workspace }}/MercuryHealth.UITests
-          playwright install
+          npx playwright install
           #npx playwright install-deps chromium
 
       - name: Playwright Tests
-        continue-on-error: false
+        continue-on-error: true
         run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --verbosity normal
       
        # note this step is needed because the latest chromium is not being installed with the above commands
-#      - name: Ensure latest Chromium
-#        run: |
-#          npm i -D playwright
+      - name: Ensure latest Chromium
+        run: npm i -D playwright
 
 #      - name: Run Playwright tests (Linux)
 #        continue-on-error: true
