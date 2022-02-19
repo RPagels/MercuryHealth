@@ -352,8 +352,8 @@ jobs:
       - name: Install Playwright
         continue-on-error: true
         run: |
+          cd ${{ github.workspace }}/MercuryHealth.UITests
           dotnet tool install -g Microsoft.Playwright.CLI
-          #cd ${{ github.workspace }}/MercuryHealth.UITests
           playwright install
           #npx playwright install-deps chromium
 
