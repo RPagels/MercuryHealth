@@ -361,7 +361,12 @@ jobs:
           dotnet build ${{ github.workspace }}/MercuryHealth.UITests/MercuryHealth.UITests.csproj
           dotnet tool install -g Microsoft.Playwright.CLI
           cd ${{ github.workspace }}/MercuryHealth.UITests
-          playwright install
+          npx playwright install
+          npx playwright install msedge-beta
+
+       # note this step is needed because the latest chromium is not being installed with the above commands
+      - name: Ensure latest Chromium Installed
+        run: npm i -D playwright
         
       - name: Playwright Tests 1
         continue-on-error: true
@@ -371,10 +376,6 @@ jobs:
         continue-on-error: true
         run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj --verbosity normal
         
-       # note this step is needed because the latest chromium is not being installed with the above commands
-      - name: Ensure latest Chromium
-        run: npm i -D playwright
-
 #      - name: Run Playwright tests (Linux)
 #        continue-on-error: true
 #        run: |
@@ -385,30 +386,7 @@ jobs:
 #          dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
 #          #xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- bash -c "ulimit -c unlimited && dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll -f net60 --logger \"trx\""
 
-
-  PlaywrightUITests_Stage_RunInContainer:
-    if: contains(github.event_name, 'push')
-
-    name: Playwright UI Testing (Container)
-    runs-on: ubuntu-latest
-
-    container: mcr.microsoft.com/playwright:focal
-
-    needs: [Deploy_Stage_Application, Deploy_Stage_Database]
-    timeout-minutes: 60
-    
-    steps:
-    - uses: actions/checkout@v2
-#    - run: printenv
-    - run: echo "Demo - Add steps here..."
-#    - run: sudo apt install docker-ce docker-ce-cli containerd.io
-#    - run: sudo docker cp MercuryHealth.UITests.dll playwright:/MercuryHealth.UITests.dll
-
-    - name: 2-Run Playwright Tests
-      run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
-      continue-on-error: true
-  
-###################################################################
+##################################################################
 # CD Stage - Load and Performance Testing                         #
 ###################################################################
   LoadTesting_Stage_Application:
