@@ -49,7 +49,7 @@ jobs:
     - name: Install Playwright
       continue-on-error: true
       run: |
-        dotnet add package Microsoft.Playwright MercuryHealth.UnitTests/MercuryHealth.UnitTests.csproj
+        dotnet add package Microsoft.Playwright
         dotnet build MercuryHealth.UnitTests/MercuryHealth.UnitTests.csproj
         dotnet tool install -g Microsoft.Playwright.CLI
         playwright install
