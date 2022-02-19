@@ -347,15 +347,12 @@ jobs:
           name: MercuryHealth.UITests
           path: ${{ github.workspace }}/MercuryHealth.UITests
 
-#dotnet .\bin\Debug\net6.0\Microsoft.Playwright.dll -- install
-          
       - name: Install Playwright
         continue-on-error: true
         run: |
           cd ${{ github.workspace }}/MercuryHealth.UITests
           dotnet tool install -g Microsoft.Playwright.CLI
           playwright install
-          #npx playwright install-deps chromium
 
       - name: Playwright Tests
         continue-on-error: true
@@ -365,15 +362,16 @@ jobs:
       - name: Ensure latest Chromium
         run: npm i -D playwright
 
-#      - name: Run Playwright tests (Linux)
-#        continue-on-error: true
-#        run: |
-#          chmod -R 755 /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests
-#          #chmod -R 755 /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests/.playwright/node/linux
-#          #chmod +x /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests/.playwright/node/linux/playwright.sh
-#          #chmod -R 755 /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests
+      - name: Run Playwright tests (Linux)
+        continue-on-error: true
+        run: |
+          chmod -R 755 /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests
+          chmod -R 755 /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests/.playwright/node/linux
+          chmod +x /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests/.playwright/node/linux/playwright.sh
+          chmod -R 755 /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests
+          dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
 #          #xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- bash -c "ulimit -c unlimited && dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll -f net60 --logger \"trx\""
-#          dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
+
 
   PlaywrightUITests_Stage_RunInContainer:
     if: contains(github.event_name, 'push')
