@@ -450,7 +450,7 @@ namespace MercuryHealth.UITests
 
         [Test]
         [Category("Playwright_Tests")]
-        public async Task Verify_PlaywrightThemeChanged()
+        public async Task Verify_PlaywrightPageTitle()
         {
             using var playwright = await Playwright.CreateAsync();
             await using var browser = await playwright.Chromium.LaunchAsync();
@@ -459,7 +459,7 @@ namespace MercuryHealth.UITests
             await page.GotoAsync("https://playwright.dev/dotnet");
 
             myPageTitle = await page.TitleAsync();
-            Assert.AreEqual("Home Page - Mercury Health", myPageTitle);
+            Assert.AreEqual("Fast and reliable end-to-end testing for modern web apps | Playwright .NET", myPageTitle);
 
             //await page.WaitForLoadStateAsync(state: LoadState.DOMContentLoaded);
 
