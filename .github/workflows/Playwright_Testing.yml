@@ -51,6 +51,6 @@ jobs:
     ###########################################
     - name: Playwright Tests
       run: |
-        dotnet build ${{ github.workspace }}/MercuryHealth.UITests/MercuryHealth.UITests.csproj
+        dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj
         dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
       #run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj
