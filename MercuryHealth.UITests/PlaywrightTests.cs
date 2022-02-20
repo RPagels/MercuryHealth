@@ -27,7 +27,7 @@ namespace MercuryHealth.UITests
         }
 
         [Test]
-        [Category("Playwright_Tests_Chromium")]
+        [Category("Playwright_Tests")]
         public void Playwright_Dummy()
         {
             Assert.Pass();
