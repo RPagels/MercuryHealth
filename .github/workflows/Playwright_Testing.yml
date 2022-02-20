@@ -41,16 +41,16 @@ jobs:
         dotnet-version: ${{ env.dotnet_version }}
 
     # Runs a single command using the runners shell
-    - name: Send greeting
-      run: echo "Hello ${{ github.event.inputs.name }}"
+#    - name: Send greeting
+#      run: echo "Hello ${{ github.event.inputs.name }}"
 
 #         cd ${{ github.workspace }}/MercuryHealth.UITests
 
-#    - name: Install Playwright
-#      continue-on-error: true
-#      run: |
-#        dotnet add MercuryHealth.UITests/MercuryHealth.UITests.csproj package Microsoft.Playwright
-#        dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj
+    - name: Install Playwright
+      continue-on-error: true
+      run: |
+        dotnet add MercuryHealth.UITests/MercuryHealth.UITests.csproj package Microsoft.Playwright
+        dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj
 ##        dotnet tool install -g Microsoft.Playwright.CLI
 ##        npx playwright install chromium
 
