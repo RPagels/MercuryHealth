@@ -50,4 +50,5 @@ jobs:
     # Run Playwright Tests
     ###########################################
     - name: Playwright Tests
-      run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj
+      run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
+      #run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj
