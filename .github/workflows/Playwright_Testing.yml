@@ -49,9 +49,19 @@ jobs:
     ###########################################
     # Run Playwright Tests
     ###########################################
-    - name: Playwright Tests
+    - name: Playwright Tests with DLL
       run: |
-       dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} --no-restore
+       dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }}
        dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './MercuryHealth.UITests'
-       dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
-      #run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj
+       dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --verbosity normal --filter TestCategory=Playwright_Tests_Chromium
+
+    ###########################################
+    # Run Playwright Tests
+    ###########################################
+    - name: Playwright Tests with CSProj
+      run: |
+       dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj --filter TestCategory=Playwright_Tests_Chromium
+       #dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }}
+       #dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './MercuryHealth.UITests'
+
+      
