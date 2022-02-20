@@ -145,6 +145,8 @@ namespace MercuryHealth.UITests
 
             // Click #button_details_25
             await page.ClickAsync("#button_details_25");
+            myPageTitle = await page.TitleAsync();
+            Assert.AreEqual("Details - Mercury Health", myPageTitle);
 
             // Take screenshot & Add as Test Attachment
             await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "nutrition_details_25.png"), await page.ScreenshotAsync());
@@ -162,31 +164,33 @@ namespace MercuryHealth.UITests
             await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "Item-Description.png"), await page.ScreenshotAsync());
             TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "Item-Description.png"), "Item-Description.png");
 
-            Random rnd = new Random();
-            if (rnd.Next(1, 2) == 1) // creates a number between 1 and 2
-            {
-                Assert.AreEqual("Banana", myDescription, "Expected title to be 'Banana'");
-            }
-            else
-            {
-                Assert.AreEqual("Strawberry", myDescription, "Expected title to be 'Strawberry'");
-            }
+            // Randomize a failure
+            //Random rnd = new Random();
+            //if (rnd.Next(1, 2) == 1) // creates a number between 1 and 2
+            //{
+            //    Assert.AreEqual("Banana", myDescription, "Expected title to be 'Banana'");
+            //}
+            //else
+            //{
+            //    Assert.AreEqual("Strawberry", myDescription, "Expected title to be 'Strawberry'");
+            //}
 
-            // Assert that field is Banana!!!
-            //Assert.AreEqual("Banana", myDescription);
+            // Assert that field
+            Assert.AreEqual("Banana", myDescription);
 
-            // Click text=Back to List
-            await page.ClickAsync("text=Back to List");
+            //// Click text=Back to List
+            ////await page.ClickAsync("text=Back to List");
+            //await page.ClickAsync("#button_back");
 
-            // Click #button_edit_25
-            await page.ClickAsync("#button_edit_25");
-            Assert.AreEqual(pageURL + "Nutritions/Edit/25", page.Url);
+            //// Click #button_edit_25
+            //await page.ClickAsync("#button_edit_25");
+            //Assert.AreEqual(pageURL + "Nutritions/Edit/25", page.Url);
 
-            // Click input[name="Tags"]
-            await page.FillAsync("input[name=\"Tags\"]", "Playwright Testing");
+            //// Click input[name="Tags"]
+            //await page.FillAsync("input[name=\"Tags\"]", "Playwright is Fun");
 
-            // Click text=Save
-            await page.ClickAsync("text=Save");
+            //// Click text=Save
+            //await page.ClickAsync("text=Save");
 
             // Click text=Home
             await page.ClickAsync("text=Home");
@@ -255,12 +259,25 @@ namespace MercuryHealth.UITests
             await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "nutrition_editcheck_25.png"), await page.ScreenshotAsync());
             TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "nutrition_editcheck_25.png"), "nutrition_editcheck_25.png");
 
-            // Assert that field is Banana!!!
+            // Assert that field
             Assert.AreEqual("Playwright is Fun", myDescription);
+
+            // Click text=Back to List
+            //await page.ClickAsync("text=Back to List");
+            await page.ClickAsync("#button_back");
+
+            // Click #button_edit_25
+            await page.ClickAsync("#button_edit_25");
+            Assert.AreEqual(pageURL + "Nutritions/Edit/25", page.Url);
+
+            // Click input[name="Tags"]
+            await page.FillAsync("input[name=\"Tags\"]", "fruit, snack");
+
+            // Click text=Save
+            await page.ClickAsync("text=Save");
 
             // Click text=Home
             await page.ClickAsync("text=Home");
-
         }
 
         [Test]
@@ -339,6 +356,8 @@ namespace MercuryHealth.UITests
 
             // Click #button_details_25
             await page.ClickAsync("#button_details_25");
+            myPageTitle = await page.TitleAsync();
+            Assert.AreEqual("Details - Mercury Health", myPageTitle);
 
             // Take screenshot & Add as Test Attachment
             await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "exercises_details_25.png"), await page.ScreenshotAsync());
@@ -361,7 +380,8 @@ namespace MercuryHealth.UITests
             Assert.AreEqual("Legs", myDescription);
 
             // Click text=Back to List
-            await page.ClickAsync("text=Back to List");
+            //await page.ClickAsync("text=Back to List");
+            await page.ClickAsync("#button_back");
 
             // Click #button_edit_25
             await page.ClickAsync("#button_edit_25");
@@ -412,6 +432,8 @@ namespace MercuryHealth.UITests
 
             // Click #button_edit_25
             await page.ClickAsync("#button_edit_25");
+            myPageTitle = await page.TitleAsync();
+            Assert.AreEqual("Edit - Mercury Health", myPageTitle);
 
             // Take screenshot & Add as Test Attachment
             await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "exercises_edit_25.png"), await page.ScreenshotAsync());
@@ -440,8 +462,20 @@ namespace MercuryHealth.UITests
             await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "exercises_editcheck_25.png"), await page.ScreenshotAsync());
             TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "exercises_editcheck_25.png"), "exercises_editcheck_25.png");
 
-            // Assert that field is Banana!!!
+            // Assert that field
             Assert.AreEqual("Playwright is Fun", myDescription);
+
+            await page.ClickAsync("#button_back");
+
+            // Click #button_edit_25
+            await page.ClickAsync("#button_edit_25");
+            Assert.AreEqual(pageURL + "Exercises/Edit/25", page.Url);
+
+            // Click input[name="MusclesInvolved"]
+            await page.FillAsync("input[name=\"MusclesInvolved\"]", "Legs");
+
+            // Click text=Save
+            await page.ClickAsync("text=Save");
 
             // Click text=Home
             await page.ClickAsync("text=Home");
