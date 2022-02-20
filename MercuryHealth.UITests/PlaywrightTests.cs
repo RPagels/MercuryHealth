@@ -19,7 +19,7 @@ namespace MercuryHealth.UITests
             // you can specify the list of browsers you want to install among: chromium, chrome,
             // chrome-beta, msedge, msedge-beta, msedge-dev, firefox, and webkit.
             // var exitCode = Microsoft.Playwright.Program.Main(new[] { "install", "webkit", "chrome" });
-            var exitCode = Microsoft.Playwright.Program.Main(new[] { "install", "chromium", "msedge" });
+            var exitCode = Microsoft.Playwright.Program.Main(new[] { "install", "chromium", "msedge", "firefox" });
             if (exitCode != 0)
             {
                 throw new Exception($"Playwright exited with code {exitCode}");
@@ -514,7 +514,7 @@ namespace MercuryHealth.UITests
          }
 
         [Test]
-        [Category("Playwright_Google_Chromium")]
+        [Category("Playwright_Tests_Chromium")]
         public async Task Verify_Google()
         {
             using var playwright = await Playwright.CreateAsync();
@@ -529,11 +529,11 @@ namespace MercuryHealth.UITests
         }
 
         [Test]
-        [Category("Playwright_Tests_Chromium")]
+        [Category("Playwright_Tests_FireFox")]
         public async Task Verify_BingOnFirefox()
         {
             using var playwright = await Playwright.CreateAsync();
-            await using var browser = await playwright.Firefox.LaunchAsync();
+            await using var browser = await playwright.Chromium.LaunchAsync();
             var page = await browser.NewPageAsync();
             page.SetDefaultTimeout(30000);
             await page.GotoAsync("https://www.bing.com");
@@ -544,7 +544,7 @@ namespace MercuryHealth.UITests
         }
 
         [Test]
-        [Category("Playwright_Google_Chromium")]
+        [Category("Playwright_Tests_FireFox")]
         public async Task Verify_GoogleOnFirefox()
         {
             using var playwright = await Playwright.CreateAsync();
@@ -557,7 +557,6 @@ namespace MercuryHealth.UITests
             Assert.AreEqual("Google", myPageTitle);
 
         }
-
     }
 }
 
