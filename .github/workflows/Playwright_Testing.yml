@@ -58,10 +58,15 @@ jobs:
     ###########################################
     # Run Playwright Tests
     ###########################################
-    - name: Playwright Tests with CSProj
+    - name: Playwright Tests (Chromium) with CSProj
       run: |
        dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj --filter TestCategory=Playwright_Tests_Chromium
-       #dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }}
-       #dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './MercuryHealth.UITests'
+
+    ###########################################
+    # Run Playwright Tests
+    ###########################################
+    - name: Playwright Tests (FireFox) with CSProj
+      run: |
+       dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj --filter TestCategory=Playwright_Tests_FireFox
 
       
