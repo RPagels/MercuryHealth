@@ -51,19 +51,19 @@ jobs:
       run: |
         dotnet add MercuryHealth.UITests/MercuryHealth.UITests.csproj package Microsoft.Playwright
         dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj
-        dotnet tool install -g Microsoft.Playwright.CLI
-        npx playwright install chromium
+#        dotnet tool install -g Microsoft.Playwright.CLI
+#        npx playwright install chromium
 
      # note this step is needed because the latest chromium is not being installed with the above commands
 #    - name: Ensure latest Chromium
 #      run: npm i -D playwright
       
-    - name: Playwright Tests A
-      continue-on-error: true
-      run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --verbosity normal
+#    - name: Playwright Tests A
+#      continue-on-error: true
+#      run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --verbosity normal
 
     ###########################################
     # Run Playwright Tests
     ###########################################
-    - name: Playwright Tests B
+    - name: Playwright Tests
       run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj
