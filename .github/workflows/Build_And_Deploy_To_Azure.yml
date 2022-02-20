@@ -15,7 +15,8 @@ env:
   Website_Name: 'webSite-4vwxkvpofrtbq'
   Function_AppName: 'functionApp-4vwxkvpofrtbq'
   Hosting_Plan_Name: 'appPlan-4vwxkvpofrtbq'
-  loadTestConfigFile: 'LoadTest_HomePage.jmx'
+  Load_Test_ConfigFile: 'LoadTest_HomePage.jmx'
+  Load_Test_Resource: 'loadTests-4vwxkvpofrtbq'
 #  Deployment_Name: MercuryHealthGroup.${{ github.workflow }}.${{ github.run_number }}
 
 ###################################################################
@@ -363,13 +364,13 @@ jobs:
 #        run: |
 #          dotnet build ${{ github.workspace }}/MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }}
           
-      - name: Playwright Tests using DLL
+      - name: Playwright Tests
         continue-on-error: false
         run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --filter TestCategory=Playwright_Tests_Chromium -l "console;verbosity=normal"
 
-      - name: Playwright Tests using CSProj
-        continue-on-error: false
-        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj --filter TestCategory=Playwright_Tests_Chromium -l "console;verbosity=normal"
+#      - name: Playwright Tests using CSProj
+#        continue-on-error: false
+#        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj --filter TestCategory=Playwright_Tests_Chromium -l "console;verbosity=normal"
 
 ###################################################################
 # CD Stage - UI Testing                         
@@ -414,13 +415,13 @@ jobs:
 #        run: |
 #          dotnet build ${{ github.workspace }}/MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }}
           
-      - name: Playwright Tests using DLL
+      - name: Playwright Tests
         continue-on-error: false
         run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --filter TestCategory=Playwright_Tests_FireFox -l "console;verbosity=normal"
 
-      - name: Playwright Tests using CSProj
-        continue-on-error: false
-        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj --filter TestCategory=Playwright_Tests_FireFox -l "console;verbosity=normal"
+#      - name: Playwright Tests using CSProj
+#        continue-on-error: false
+#        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj --filter TestCategory=Playwright_Tests_FireFox -l "console;verbosity=normal"
    
 ##################################################################
 # CD Stage - Load and Performance Testing                         #
@@ -451,8 +452,8 @@ jobs:
       - name: 'Azure Load Testing'
         uses: azure/load-testing@main
         with:
-          loadTestConfigFile: 'SampleApp.yaml'
-#          loadTestResource: ${{ env.LOAD_TEST_RESOURCE }}
+          Load_Test_ConfigFile: 'SampleApp.yaml'
+          loadTestResource: ${{ env.Load_Test_Resource }}
           resourceGroup: ${{ env.Azure_Resource_Group }}
 
       - name: Azure logout
