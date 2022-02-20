@@ -112,6 +112,7 @@ jobs:
           name: MercuryHealth.API
           path: ${{ github.workspace }}/api
 
+# Questionable...needed???
       - name: Upload Build Artifacts-UI Tests
         if: ${{ github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v2
@@ -322,13 +323,12 @@ jobs:
 ###################################################################
 # CD Stage - UI Testing                         
 ###################################################################
-  UITesting_Stage_Application:
+  UITesting_Stage_ApplicationOnChromium:
     if: contains(github.event_name, 'push')
 
-    name: Playwright UI Testing
+    name: Playwright UI Testing on Chromium
     
     # The type of runner that the job will run on
-    #runs-on: ubuntu-latest
     runs-on: windows-latest
 
     # Identify any jobs that must complete successfully before this job will run.
@@ -336,11 +336,12 @@ jobs:
     timeout-minutes: 10
         
     steps:
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: ${{ env.dotnet_version }}
+#      - name: Setup .NET Core
+#        uses: actions/setup-dotnet@v1
+#        with:
+#          dotnet-version: ${{ env.dotnet_version }}
 
+      # Download Artifacts under $GITHUB_WORKSPACE, so your job can access it
       - name: Download Build Artifacts-Playwright Tests
         uses: actions/download-artifact@v2
         with:
@@ -350,44 +351,77 @@ jobs:
 #      - name: Install Playwright
 #        continue-on-error: true
 #        run: |
-#          cd ${{ github.workspace }}/MercuryHealth.UITests
+#          dotnet add ${{ github.workspace }}/MercuryHealth.UITests/MercuryHealth.UITests.csproj package Microsoft.Playwright
+#          dotnet build ${{ github.workspace }}/MercuryHealth.UITests/MercuryHealth.UITests.csproj
 #          dotnet tool install -g Microsoft.Playwright.CLI
-#          playwright install
+#          cd ${{ github.workspace }}/MercuryHealth.UITests
+#          #npx playwright install chromium
+#          #npx playwright install msedge-beta
 
-      - name: Install Playwright
-        continue-on-error: true
-        run: |
-          dotnet add ${{ github.workspace }}/MercuryHealth.UITests/MercuryHealth.UITests.csproj package Microsoft.Playwright
-          dotnet build ${{ github.workspace }}/MercuryHealth.UITests/MercuryHealth.UITests.csproj
-          dotnet tool install -g Microsoft.Playwright.CLI
-          cd ${{ github.workspace }}/MercuryHealth.UITests
-          npx playwright install chromium
-          npx playwright install msedge-beta
-          #npx playwright install
-          #npx playwright install msedge-beta
+#      - name: Build Playwright Project
+#        continue-on-error: false
+#        run: |
+#          dotnet build ${{ github.workspace }}/MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }}
+          
+      - name: Playwright Tests using DLL
+        continue-on-error: false
+        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --filter TestCategory=Playwright_Tests_Chromium #--verbosity normal
 
-       # note this step is needed because the latest chromium is not being installed with the above commands
-#      - name: Ensure latest Chromium Installed
-#        run: npm i -D playwright
+      - name: Playwright Tests using CSProj
+        continue-on-error: false
+        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj --filter TestCategory=Playwright_Tests_Chromium
+
+###################################################################
+# CD Stage - UI Testing                         
+###################################################################
+  UITesting_Stage_ApplicationOnFireFox:
+    if: contains(github.event_name, 'push')
+
+    name: Playwright UI Testing on FireFox
+    
+    # The type of runner that the job will run on
+    runs-on: windows-latest
+
+    # Identify any jobs that must complete successfully before this job will run.
+    needs: [Deploy_Stage_Application, Deploy_Stage_Database]
+    timeout-minutes: 10
         
-      - name: Playwright Tests
-        continue-on-error: true
-        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --verbosity normal
+    steps:
+#      - name: Setup .NET Core
+#        uses: actions/setup-dotnet@v1
+#        with:
+#          dotnet-version: ${{ env.dotnet_version }}
 
-#      - name: Playwright Tests 2
-#        continue-on-error: true
-#        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj --verbosity normal
-        
-#      - name: Run Playwright tests (Linux)
+      # Download Artifacts under $GITHUB_WORKSPACE, so your job can access it
+      - name: Download Build Artifacts-Playwright Tests
+        uses: actions/download-artifact@v2
+        with:
+          name: MercuryHealth.UITests
+          path: ${{ github.workspace }}/MercuryHealth.UITests
+
+#      - name: Install Playwright
 #        continue-on-error: true
 #        run: |
-#          chmod -R 755 /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests
-#          chmod -R 755 /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests/.playwright/node/linux
-#          chmod +x /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests/.playwright/node/linux/playwright.sh
-#          chmod -R 755 /home/runner/work/MercuryHealth/MercuryHealth/MercuryHealth.UITests
-#          dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
-#          #xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- bash -c "ulimit -c unlimited && dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll -f net60 --logger \"trx\""
+#          dotnet add ${{ github.workspace }}/MercuryHealth.UITests/MercuryHealth.UITests.csproj package Microsoft.Playwright
+#          dotnet build ${{ github.workspace }}/MercuryHealth.UITests/MercuryHealth.UITests.csproj
+#          dotnet tool install -g Microsoft.Playwright.CLI
+#          cd ${{ github.workspace }}/MercuryHealth.UITests
+#          #npx playwright install chromium
+#          #npx playwright install msedge-beta
 
+#      - name: Build Playwright Project
+#        continue-on-error: false
+#        run: |
+#          dotnet build ${{ github.workspace }}/MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }}
+          
+      - name: Playwright Tests using DLL
+        continue-on-error: false
+        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --filter TestCategory=Playwright_Tests_FireFox #--verbosity normal
+
+      - name: Playwright Tests using CSProj
+        continue-on-error: false
+        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj --filter TestCategory=Playwright_Tests_FireFox
+   
 ##################################################################
 # CD Stage - Load and Performance Testing                         #
 ###################################################################
@@ -400,7 +434,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # Identify any jobs that must complete successfully before this job will run.
-    needs: [UITesting_Stage_Application]
+    needs: [UITesting_Stage_ApplicationOnChromium, UITesting_Stage_ApplicationOnFireFox]
     steps:
       - name: Checkout GitHub Actions 
         uses: actions/checkout@v2
