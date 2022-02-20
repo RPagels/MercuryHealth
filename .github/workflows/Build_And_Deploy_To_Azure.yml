@@ -367,16 +367,16 @@ jobs:
           #npx playwright install msedge-beta
 
        # note this step is needed because the latest chromium is not being installed with the above commands
-      - name: Ensure latest Chromium Installed
-        run: npm i -D playwright
+#      - name: Ensure latest Chromium Installed
+#        run: npm i -D playwright
         
-      - name: Playwright Tests 1
+      - name: Playwright Tests
         continue-on-error: true
         run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --verbosity normal
 
-      - name: Playwright Tests 2
-        continue-on-error: true
-        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj --verbosity normal
+#      - name: Playwright Tests 2
+#        continue-on-error: true
+#        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj --verbosity normal
         
 #      - name: Run Playwright tests (Linux)
 #        continue-on-error: true
