@@ -15,6 +15,11 @@ namespace MercuryHealth.UITests
         [SetUp]
         public void Setup()
         {
+            var exitCode = Microsoft.Playwright.Program.Main(new[] { "install" });
+            if (exitCode != 0)
+            {
+                throw new Exception($"Playwright exited with code {exitCode}");
+            }
         }
 
         [Test]
