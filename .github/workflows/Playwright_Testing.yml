@@ -51,6 +51,7 @@ jobs:
     ###########################################
     - name: Playwright Tests
       run: |
-        dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj
-        dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
+       dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} --no-restore
+       dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './MercuryHealth.UITests'
+       dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll
       #run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj
