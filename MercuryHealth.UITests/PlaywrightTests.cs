@@ -12,8 +12,8 @@ namespace MercuryHealth.UITests
     [Parallelizable(ParallelScope.Self)]
     public class PlaywrightTests
     {
-        [SetUp]
-        public void Setup()
+        [OneTimeSetUp]
+        public void Init()
         {
             // The following line installs the default browsers. If you only need a subset of browsers,
             // you can specify the list of browsers you want to install among: chromium, chrome,
@@ -24,6 +24,21 @@ namespace MercuryHealth.UITests
             {
                 throw new Exception($"Playwright exited with code {exitCode}");
             }
+        }
+
+        [SetUp]
+        //[OneTimeSetUp]
+        public void Setup()
+        {
+            // The following line installs the default browsers. If you only need a subset of browsers,
+            // you can specify the list of browsers you want to install among: chromium, chrome,
+            // chrome-beta, msedge, msedge-beta, msedge-dev, firefox, and webkit.
+            // var exitCode = Microsoft.Playwright.Program.Main(new[] { "install", "webkit", "chrome" });
+            //var exitCode = Microsoft.Playwright.Program.Main(new[] { "install", "chromium", "msedge", "firefox" });
+            //if (exitCode != 0)
+            //{
+            //    throw new Exception($"Playwright exited with code {exitCode}");
+            //}
         }
 
         [Test]
