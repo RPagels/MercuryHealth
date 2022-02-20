@@ -28,12 +28,12 @@
 	</ItemGroup>
 
 
-	<Target Name="PublishPlaywrightFiles" AfterTargets="Publish">
+	<!--<Target Name="PublishPlaywrightFiles" AfterTargets="Publish">
 		<Message Text="Publishing Playwright files from $(OutDir).playwright\ to $(PublishDir).playwright\" />
 		<ItemGroup>
 			<PlaywrightFiles Include="$(OutDir).playwright\**\*" />
 		</ItemGroup>
 		<Copy SourceFiles="@(PlaywrightFiles)" DestinationFiles="@(PlaywrightFiles->'$(PublishDir).playwright\%(RecursiveDir)%(Filename)%(Extension)')" />
-	</Target>
+	</Target>-->
 
 </Project>

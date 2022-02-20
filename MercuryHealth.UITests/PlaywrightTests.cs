@@ -15,7 +15,11 @@ namespace MercuryHealth.UITests
         [SetUp]
         public void Setup()
         {
-            var exitCode = Microsoft.Playwright.Program.Main(new[] { "install" });
+            // The following line installs the default browsers. If you only need a subset of browsers,
+            // you can specify the list of browsers you want to install among: chromium, chrome,
+            // chrome-beta, msedge, msedge-beta, msedge-dev, firefox, and webkit.
+            // var exitCode = Microsoft.Playwright.Program.Main(new[] { "install", "webkit", "chrome" });
+            var exitCode = Microsoft.Playwright.Program.Main(new[] { "install", "chromium", "msedge" });
             if (exitCode != 0)
             {
                 throw new Exception($"Playwright exited with code {exitCode}");
@@ -23,7 +27,7 @@ namespace MercuryHealth.UITests
         }
 
         [Test]
-        [Category("Playwright_Tests")]
+        [Category("Playwright_Tests_Chromium")]
         public void Playwright_Dummy()
         {
             Assert.Pass();
@@ -35,7 +39,7 @@ namespace MercuryHealth.UITests
 
 
         [Test]
-        [Category("Playwright_Tests")]
+        [Category("Playwright_Tests_Chromium")]
         public async Task Verify_NavToHome()
         {
             // Go to home page
@@ -70,7 +74,7 @@ namespace MercuryHealth.UITests
         }
 
         [Test]
-        [Category("Playwright_Tests")]
+        [Category("Playwright_Tests_Chromium")]
         public async Task Verify_NavToNutrition()
         {
             // Go to home page
@@ -112,7 +116,7 @@ namespace MercuryHealth.UITests
         }
 
         [Test]
-        [Category("Playwright_Tests")]
+        [Category("Playwright_Tests_Chromium")]
         public async Task Verify_NavToNutritionDetail()
         {
             // Go to home page
@@ -178,27 +182,13 @@ namespace MercuryHealth.UITests
             // Assert that field
             Assert.AreEqual("Banana", myDescription);
 
-            //// Click text=Back to List
-            ////await page.ClickAsync("text=Back to List");
-            //await page.ClickAsync("#button_back");
-
-            //// Click #button_edit_25
-            //await page.ClickAsync("#button_edit_25");
-            //Assert.AreEqual(pageURL + "Nutritions/Edit/25", page.Url);
-
-            //// Click input[name="Tags"]
-            //await page.FillAsync("input[name=\"Tags\"]", "Playwright is Fun");
-
-            //// Click text=Save
-            //await page.ClickAsync("text=Save");
-
             // Click text=Home
             await page.ClickAsync("text=Home");
 
         }
 
         [Test]
-        [Category("Playwright_Tests")]
+        [Category("Playwright_Tests_Chromium")]
         public async Task Verify_NavToNutritionEdit()
         {
             // Go to home page
@@ -281,7 +271,7 @@ namespace MercuryHealth.UITests
         }
 
         [Test]
-        [Category("Playwright_Tests")]
+        [Category("Playwright_Tests_Chromium")]
         public async Task Verify_NavToExercises()
         {
             // Go to home page
@@ -323,7 +313,7 @@ namespace MercuryHealth.UITests
         }
 
         [Test]
-        [Category("Playwright_Tests")]
+        [Category("Playwright_Tests_Chromium")]
         public async Task Verify_NavToExercisesDetail()
         {
             // Go to home page
@@ -399,7 +389,7 @@ namespace MercuryHealth.UITests
         }
 
         [Test]
-        [Category("Playwright_Tests")]
+        [Category("Playwright_Tests_Chromium")]
         public async Task Verify_NavToExercisesEdit()
         {
             // Go to home page
@@ -483,7 +473,7 @@ namespace MercuryHealth.UITests
         }
 
         [Test]
-        [Category("Playwright_Tests")]
+        [Category("Playwright_Tests_Chromium")]
         public async Task Verify_PlaywrightPageTitle()
         {
             using var playwright = await Playwright.CreateAsync();
@@ -509,7 +499,7 @@ namespace MercuryHealth.UITests
         }
 
         [Test]
-        [Category("Playwright_Tests")]
+        [Category("Playwright_Tests_Chromium")]
         public async Task Verify_Bing()
         {
             using var playwright = await Playwright.CreateAsync();
@@ -524,8 +514,38 @@ namespace MercuryHealth.UITests
          }
 
         [Test]
-        [Category("Playwright_Google")]
+        [Category("Playwright_Google_Chromium")]
         public async Task Verify_Google()
+        {
+            using var playwright = await Playwright.CreateAsync();
+            await using var browser = await playwright.Chromium.LaunchAsync();
+            var page = await browser.NewPageAsync();
+            page.SetDefaultTimeout(30000);
+            await page.GotoAsync("https://www.google.com");
+
+            myPageTitle = await page.TitleAsync();
+            Assert.AreEqual("Google", myPageTitle);
+
+        }
+
+        [Test]
+        [Category("Playwright_Tests_Chromium")]
+        public async Task Verify_BingOnFirefox()
+        {
+            using var playwright = await Playwright.CreateAsync();
+            await using var browser = await playwright.Firefox.LaunchAsync();
+            var page = await browser.NewPageAsync();
+            page.SetDefaultTimeout(30000);
+            await page.GotoAsync("https://www.bing.com");
+
+            myPageTitle = await page.TitleAsync();
+            Assert.AreEqual("Bing", myPageTitle);
+
+        }
+
+        [Test]
+        [Category("Playwright_Google_Chromium")]
+        public async Task Verify_GoogleOnFirefox()
         {
             using var playwright = await Playwright.CreateAsync();
             await using var browser = await playwright.Chromium.LaunchAsync();
