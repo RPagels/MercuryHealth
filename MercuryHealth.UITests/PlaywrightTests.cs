@@ -504,33 +504,6 @@ namespace MercuryHealth.UITests
 
         }
 
-        [Test]
-        [Category("Playwright_Tests")]
-        public async Task Verify_PlaywrightThemeChanged()
-        {
-            using var playwright = await Playwright.CreateAsync();
-            await using var browser = await playwright.Chromium.LaunchAsync();
-            var page = await browser.NewPageAsync();
-            page.SetDefaultTimeout(30000);
-            await page.GotoAsync("https://playwright.dev/dotnet");
-
-            myPageTitle = await page.TitleAsync();
-            Assert.AreEqual("Home Page - Mercury Health", myPageTitle);
-
-            //await page.WaitForLoadStateAsync(state: LoadState.DOMContentLoaded);
-
-            //var currentTheme = await page.GetAttributeAsync("html", "data-theme");
-            //await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "before-theme-change.png"), await page.ScreenshotAsync());
-            //await page.ClickAsync("[class='react-toggle-track']");
-            //var changedTheme = await page.GetAttributeAsync("html", "data-theme");
-            //Assert.AreNotEqual(currentTheme, changedTheme, $"Theme did not change");
-            //await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "after-theme-change.png"), await page.ScreenshotAsync());
-
-            //TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "before-theme-change.png"), "before-theme-change.png");
-            //TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "after-theme-change.png"), "after-theme-change.png");
-        }
-
-
     }
 }
 
