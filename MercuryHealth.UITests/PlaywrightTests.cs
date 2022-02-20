@@ -357,7 +357,8 @@ namespace MercuryHealth.UITests
             TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "Item-Description.png"), "Item-Description.png");
 
             // Assert that field is API Update!!!
-            Assert.AreEqual("API Update", myDescription);
+            //Assert.AreEqual("API Update", myDescription);
+            Assert.AreEqual("Legs", myDescription);
 
             // Click text=Back to List
             await page.ClickAsync("text=Back to List");
