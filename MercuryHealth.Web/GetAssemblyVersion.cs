@@ -10,6 +10,8 @@ public class MyAppVersion
         AssemblyInformationalVersionAttribute versionAttribute = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
         string assemblyVersion = versionAttribute.InformationalVersion;
 
+        //string assemblyVersion = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
+
         return assemblyVersion;
     }
 
