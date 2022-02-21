@@ -466,7 +466,7 @@ jobs:
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
         with:
-          loadTestConfigFile: ${{ github.workspace }}/${{ env.Load_Test_ConfigFile }}
+          loadTestConfigFile: './MercuryHealth.LoadTests/${{ env.Load_Test_ConfigFile }}'
           loadTestResource: ${{ env.Load_Test_Resource }}
           resourceGroup: ${{ env.Azure_Resource_Group }}
 
