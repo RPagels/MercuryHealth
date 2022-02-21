@@ -58,9 +58,9 @@ jobs:
         with:
           dotnet-version: ${{ env.dotnet_version }}
 
-      - name: Generate Build Number
+      - name: GenerateVersionNumber
         uses: Azure/powershell@v1
-        id: finalBuildVersion
+        id: buildNumber
         with:
           # Specify the Az PowerShell script here.
           inlineScript: ./GenerateVersionNumber.ps1
@@ -73,7 +73,7 @@ jobs:
       - name: dotnet build unit test and publish
         run: |
           dotnet restore
-          dotnet build MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} --no-restore /p:Version="1.2.3.4" /p:FileVersion=${{ steps.GenerateVersionNumber.outputs.finalBuildVersion}}
+          dotnet build MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} --no-restore /p:Version="${{ steps.GenerateVersionNumber.outputs.buildNumber}} /p:FileVersion=${{ steps.GenerateVersionNumber.outputs.buildNumber}}
           dotnet publish MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} -o './website'
           dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} --no-restore
           dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './uitests'
