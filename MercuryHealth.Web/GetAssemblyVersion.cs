@@ -21,8 +21,8 @@ public class MyAppVersion
         //AssemblyInformationalVersionAttribute versionAttribute = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
         //string myAssemblyVersion = versionAttribute.InformationalVersion;
 
-        //string myAssemblyVersion = GetAssemblyVersion();
-        string assemblyVersion = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
+        string assemblyVersion = GetAssemblyVersion();
+        //string assemblyVersion = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
 
         // Split Major.Minor.Build.Revision
         string[] myVersion = assemblyVersion.Split('.');
