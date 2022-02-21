@@ -21,11 +21,11 @@ public class MyAppVersion
         //AssemblyInformationalVersionAttribute versionAttribute = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
         //string myAssemblyVersion = versionAttribute.InformationalVersion;
 
-        string assemblyVersion = GetAssemblyVersion();
+        string myassemblyVersion = GetAssemblyVersion();
         //string assemblyVersion = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
 
         // Split Major.Minor.Build.Revision
-        string[] myVersion = assemblyVersion.Split('.');
+        string[] myVersion = myassemblyVersion.Split('.');
 
         // Base date that build revision number is generated from
         DateTime baseDate = new DateTime(2022, 1, 1, 0, 0, 0);
