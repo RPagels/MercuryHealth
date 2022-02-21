@@ -1,0 +1,16 @@
+version: v0.1
+testName: LoadTest_HomePage
+testPlan: LoadTest_HomePage.jmx
+description: Load test website home page
+engineInstances: 1
+#configurationFiles:
+#  - 'SampleData.csv'
+failureCriteria:
+  - avg(response_time_ms) > 300
+  - percentage(error) > 50
+env:
+  - name: my-variable
+    value: my-value
+#secrets:
+#  - name: my-secret
+#    value: https://akv-contoso.vault.azure.net/secrets/MySecret
