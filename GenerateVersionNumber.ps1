@@ -29,10 +29,10 @@ $revisionNumber = [math]::Round((New-TimeSpan -Start $StartDate -End $EndDate).T
 #Final version number
 Write-Host "Major.Minor.Build.Revision"
 $finalBuildVersion = "$($spliteVersion[0]).$($spliteVersion[1]).$($buildNumber).$($revisionNumber)"
-#$finalBuildVersionTemp = "$($spliteVersionTemp[0]).$($spliteVersionTemp[1]).$($buildNumber).$($revisionNumber)"
 
 Write-Host "Final build number: " $finalBuildVersion
-#Write-Host "Final build number: " $finalBuildVersionTemp
+
+echo “::set-output name=finalBuildVersion::$finalBuildVersion“
 
 #Writing final version number back to Azure DevOps variable
 Write-Host "##vso[task.setvariable variable=buildNumber]$finalBuildVersion"
