@@ -6,29 +6,26 @@ public class MyAppVersion
 {
     public static string GetAssemblyVersion()
     {
-        Assembly assembly = Assembly.GetEntryAssembly();
-        AssemblyInformationalVersionAttribute versionAttribute = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
-        string assemblyVersion = versionAttribute.InformationalVersion;
+        //Assembly assembly = Assembly.GetEntryAssembly();
+        //AssemblyInformationalVersionAttribute versionAttribute = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+        //string assemblyVersion = versionAttribute.InformationalVersion;
 
-        //string assemblyVersion = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
+       string assemblyVersion = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
 
         return assemblyVersion;
     }
 
     public static string GetDateTimeFromVersion()
     {
-        Assembly assembly = Assembly.GetEntryAssembly();
-        AssemblyInformationalVersionAttribute versionAttribute = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
-        string myAssemblyVersion = versionAttribute.InformationalVersion;
-        //string myAssemblyVersion = GetAssemblyVersion();
+        //Assembly assembly = Assembly.GetEntryAssembly();
+        //AssemblyInformationalVersionAttribute versionAttribute = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+        //string myAssemblyVersion = versionAttribute.InformationalVersion;
 
-        if (myAssemblyVersion == "1.1.0")
-        {
-            myAssemblyVersion = "1.1.0.0";
-        }
+        //string myAssemblyVersion = GetAssemblyVersion();
+        string assemblyVersion = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
 
         // Split Major.Minor.Build.Revision
-        string[] myVersion = myAssemblyVersion.Split('.');
+        string[] myVersion = assemblyVersion.Split('.');
 
         // Base date that build revision number is generated from
         DateTime baseDate = new DateTime(2022, 1, 1, 0, 0, 0);
