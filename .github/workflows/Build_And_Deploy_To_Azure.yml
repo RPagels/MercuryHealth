@@ -69,11 +69,12 @@ jobs:
           # Select the value of the ErrorActionPreference variable for executing the script. Options: stop, continue, silentlyContinue. Default is Stop.
           errorActionPreference: continue
     
+      # /p:Version=${{ steps.GenerateVersionNumber.outputs.buildNumber}} /p:FileVersion=${{ steps.GenerateVersionNumber.outputs.buildNumber}}
       # Run dotnet build and publish
       - name: dotnet build unit test and publish
         run: |
           dotnet restore
-          dotnet build MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} --no-restore /p:Version=${{ steps.GenerateVersionNumber.outputs.buildNumber}} /p:FileVersion=${{ steps.GenerateVersionNumber.outputs.buildNumber}}
+          dotnet build MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} --no-restore /p:Version='1.2.3.4' /p:FileVersion='1.2.3.4'
           dotnet publish MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} -o './website'
           dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} --no-restore
           dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './uitests'
