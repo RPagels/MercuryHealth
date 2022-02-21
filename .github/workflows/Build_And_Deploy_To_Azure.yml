@@ -466,7 +466,7 @@ jobs:
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
         with:
-          loadTestConfigFile: './MercuryHealth.LoadTests/${{ env.Load_Test_ConfigFile }}'
+          loadTestConfigFile: './MercuryHealth.LoadTests/LoadTest_HomePage_Config.yaml'
           loadTestResource: ${{ env.Load_Test_Resource }}
           resourceGroup: ${{ env.Azure_Resource_Group }}
 
