@@ -15,8 +15,8 @@ Write-Host "Initial Version from *.csproj file:" $initialVersion
 $spliteVersion = $initialVersion.split(".")
 Write-Host "Split Version: " $spliteVersion
 
-#Get the build number (number of days since January 1, 2020)
-$baseDate = [datetime]"01/01/2020"
+#Get the build number (number of days since January 1, 2022)
+$baseDate = [datetime]"01/01/2022"
 $currentDate = $(Get-Date)
 $interval = (NEW-TIMESPAN -Start $baseDate -End $currentDate)
 $buildNumber = $interval.Days
@@ -32,7 +32,8 @@ $finalBuildVersion = "$($spliteVersion[0]).$($spliteVersion[1]).$($buildNumber).
 
 Write-Host "Final build number: " $finalBuildVersion
 
-echo “::set-output name=finalBuildVersion::$finalBuildVersion“
+#Writing final version number back to pipeline
+echo “::set-output name=buildNumber::$finalBuildVersion“
 
 #Writing final version number back to Azure DevOps variable
-Write-Host "##vso[task.setvariable variable=buildNumber]$finalBuildVersion"
+#Write-Host "##vso[task.setvariable variable=buildNumber]$finalBuildVersion"
