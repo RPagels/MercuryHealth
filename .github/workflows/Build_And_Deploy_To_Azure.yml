@@ -15,7 +15,7 @@ env:
   Website_Name: 'webSite-4vwxkvpofrtbq'
   Function_AppName: 'functionApp-4vwxkvpofrtbq'
   Hosting_Plan_Name: 'appPlan-4vwxkvpofrtbq'
-  Load_Test_ConfigFile: 'LoadTest_HomePage.jmx'
+  Load_Test_ConfigFile: 'LoadTest_HomePage_Config.yaml'
   Load_Test_Resource: 'loadTests-4vwxkvpofrtbq'
 #  Deployment_Name: MercuryHealthGroup.${{ github.workflow }}.${{ github.run_number }}
 
@@ -114,12 +114,12 @@ jobs:
           path: ${{ github.workspace }}/api
 
 # Questionable...needed???
-      - name: Upload Build Artifacts-UI Tests
-        if: ${{ github.event_name != 'pull_request' }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: MercuryHealth.UITests
-          path: ${{ github.workspace }}/MercuryHealth.UITests/MercuryHealth.UITests.csproj
+#      - name: Upload Build Artifacts-UI Tests
+#        if: ${{ github.event_name != 'pull_request' }}
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: MercuryHealth.UITests
+#          path: ${{ github.workspace }}/MercuryHealth.UITests/MercuryHealth.UITests.csproj
 
       - name: Upload Build Artifacts-UI Tests
         if: ${{ github.event_name != 'pull_request' }}
@@ -135,6 +135,13 @@ jobs:
           name: MercuryHealth.IaC
           path: ${{ github.workspace }}/MercuryHealth.IaC/*
 
+      - name: Upload Load Test Files
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: MercuryHealth.LoadTests
+          path: ${{ github.workspace }}/MercuryHealth.LoadTests/*
+          
       - name: "Azure login"
         uses: azure/login@v1
         with:
@@ -439,6 +446,13 @@ jobs:
     steps:
       - name: Checkout GitHub Actions 
         uses: actions/checkout@v2
+
+      # Download Artifacts under $GITHUB_WORKSPACE, so your job can access it
+      - name: Download Build Artifacts-Load Tests
+        uses: actions/download-artifact@v2
+        with:
+          name: MercuryHealth.LoadTests
+          path: ${{ github.workspace }}/MercuryHealth.LoadTests
           
       - name: Login to Azure
         uses: azure/login@v1
