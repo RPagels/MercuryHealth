@@ -442,7 +442,7 @@ jobs:
           
       - name: Login to Azure
         uses: azure/login@v1
-        continue-on-error: true
+        continue-on-error: false
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
         
@@ -450,7 +450,7 @@ jobs:
         run: echo 'Azure Load Testing'
       
       - name: 'Azure Load Testing'
-        uses: azure/load-testing@main
+        uses: azure/load-testing@v1
         with:
           loadTestConfigFile: ${{ env.Load_Test_ConfigFile }}
           loadTestResource: ${{ env.Load_Test_Resource }}
