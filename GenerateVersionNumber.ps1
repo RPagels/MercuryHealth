@@ -33,6 +33,7 @@ $finalBuildVersion = "$($spliteVersion[0]).$($spliteVersion[1]).$($buildNumber).
 Write-Host "Final build number: " $finalBuildVersion
 
 #Writing final version number back to pipeline
+# Yes there are!!!
 echo “::set-output name=buildNumber::$finalBuildVersion“
 
 #Writing final version number back to Azure DevOps variable
