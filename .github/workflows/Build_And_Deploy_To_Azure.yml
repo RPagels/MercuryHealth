@@ -73,8 +73,8 @@ jobs:
       - name: dotnet build unit test and publish
         run: |
           dotnet restore
-          dotnet build MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} --no-restore /p:Version="1.2.3.4" /p:FileVersion=${{ steps.GenerateVersionNumber.outputs.finalBuildVersion}}
-          dotnet publish MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} -o './website'
+          dotnet build MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} --no-restore /p:Version="${{ steps.GenerateVersionNumber.outputs.finalBuildVersion}} /p:FileVersion=${{ steps.GenerateVersionNumber.outputs.finalBuildVersion}}
+          dotnet publish MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} -o './website' /p:Version="${{ steps.GenerateVersionNumber.outputs.finalBuildVersion}} /p:FileVersion=${{ steps.GenerateVersionNumber.outputs.finalBuildVersion}}
           dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} --no-restore
           dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './uitests'
           dotnet build MercuryHealth.FunctionApp/MercuryHealth.FunctionApp.csproj --configuration ${{ env.buildConfiguration }} --no-restore
