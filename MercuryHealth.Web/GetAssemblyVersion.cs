@@ -6,13 +6,24 @@ public class MyAppVersion
 {
     public static string GetAssemblyVersion()
     {
-        //return GetType().Assembly.GetName().Version.ToString();
-        return Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
+        Assembly assembly = Assembly.GetEntryAssembly();
+        AssemblyInformationalVersionAttribute versionAttribute = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+        string assemblyVersion = versionAttribute.InformationalVersion;
+
+        return assemblyVersion;
     }
 
     public static string GetDateTimeFromVersion()
     {
-        string myAssemblyVersion = GetAssemblyVersion();
+        Assembly assembly = Assembly.GetEntryAssembly();
+        AssemblyInformationalVersionAttribute versionAttribute = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+        string myAssemblyVersion = versionAttribute.InformationalVersion;
+        //string myAssemblyVersion = GetAssemblyVersion();
+
+        if (myAssemblyVersion == "1.1.0")
+        {
+            myAssemblyVersion = "1.1.0.0";
+        }
 
         // Split Major.Minor.Build.Revision
         string[] myVersion = myAssemblyVersion.Split('.');
