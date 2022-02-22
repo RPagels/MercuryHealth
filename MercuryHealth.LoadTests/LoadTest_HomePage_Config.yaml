@@ -4,7 +4,7 @@ testPlan: LoadTest_HomePage.jmx
 description: Load test website home page
 engineInstances: 1
 configurationFiles:
-  - 'SampleData.csv'
+  - 'SampleData-Nutrition.csv'
 failureCriteria:
   - avg(response_time_ms) > 300
   - percentage(error) > 50
@@ -13,4 +13,4 @@ env:
     value: my-value
 secrets:
   - name: my-secret
-    value: https://akv-contoso.vault.azure.net/secrets/MySecret
+    value: https://MercuryHealth.vault.azure.net/secrets/MySecret

@@ -1,0 +1,4 @@
+Id,Description,Quantity,MealTime,Tags,Calories,ProteininGrams,FatInGrams,CarbohydratesInGrams,SodiumInGrams,MemberProfile_Id,Color
+1,Cheeseburger,1,2/22/202022,"lunch, junky",1215,3.2,12.8,27,33,,
+2,Fries,1,2/22/202022,"lunch, junky",321,0.12,4.2,12,21,,
+3,Beta Food,1,2/22/202022,"dinner, demo",10,10,10,10,10,,
