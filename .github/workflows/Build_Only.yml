@@ -7,7 +7,7 @@ env:
   # Path to the solution file relative to the root of the project.
   buildConfiguration: 'Release'
   buildPlatform: 'Any CPU'
-  buildAssemblyVersion: '1.1.0.909'
+  #buildAssemblyVersion: '1.1.0.909'
   dotnet_version: '6.x.x'
   AZURE_WEBAPP_PACKAGE_PATH: '.'
   Azure_Resource_Group: 'MercuryHealth-rg'
@@ -42,7 +42,9 @@ jobs:
     runs-on: ubuntu-latest
 
     name: Build Application
-    
+    env:
+      buildAssemblyVersion: '1.1.0.909'
+  
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       ###########################################
