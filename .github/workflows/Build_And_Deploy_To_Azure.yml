@@ -483,6 +483,8 @@ jobs:
           loadTestResource: ${{ env.Load_Test_Resource }}
           resourceGroup: ${{ env.Azure_Resource_Group }}
 
+# Test
+
       - name: Azure logout
         run: |
           az logout
