@@ -8,7 +8,7 @@ Write-Host "Generating Build Number"
 #$spliteVersionTemp = $initialVersion.split(".") #ERROR: Method invocation failed because [System.Version] does not contain a method named 'split'.
 #Write-Host "Split Version Test Only: " $spliteVersionTemp
 
-$initialVersion ="1.0.0.0"
+$initialVersion ="1.3.0.0"
 
 Write-Host "Initial Version from *.csproj file:" $initialVersion
 
@@ -34,7 +34,11 @@ Write-Host "Final build number: " $finalBuildVersion
 
 #Writing final version number back to pipeline
 # Yes there are!!!
-echo “::set-output name=buildNumber::$finalBuildVersion“
+echo “::set-output name=buildAssemblyVersion::$finalBuildVersion“
+
+echo "buildAssemblyVersion=$finalBuildVersion" >> $GITHUB_ENV
+echo "$Env:buildAssemblyVersion=$finalBuildVersion" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+$Env:buildAssemblyVersion = $finalBuildVersion
 
 #Writing final version number back to Azure DevOps variable
 #Write-Host "##vso[task.setvariable variable=buildNumber]$finalBuildVersion"
