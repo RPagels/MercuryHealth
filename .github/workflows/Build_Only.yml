@@ -68,13 +68,20 @@ jobs:
           # Select the value of the ErrorActionPreference variable for executing the script. Options: stop, continue, silentlyContinue. Default is Stop.
           errorActionPreference: continue
     
-      # /p:Version=${{ steps.GenerateVersionNumber.outputs.buildNumber}} /p:FileVersion=${{ steps.GenerateVersionNumber.outputs.buildNumber}}
-      # Run dotnet build and publish
+# /p:Version=${{ steps.GenerateVersionNumber.outputs.buildNumber}} /p:FileVersion=${{ steps.GenerateVersionNumber.outputs.buildNumber}}
+#/p:Version="1.2.3.4" /p:FileVersion="${{ env.buildAssemblyVersion }}"
+     # Run dotnet build and publish
       - name: dotnet build unit test and publish
         run: |
           dotnet restore
-          dotnet build MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} --no-restore #/p:Version="1.2.3.4" /p:FileVersion="${{ env.buildAssemblyVersion }}"
-          dotnet publish MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} -o './website' /p:FileVersion="${{ env.buildAssemblyVersion }}" /p:Version="${{ env.buildAssemblyVersion }}"
+          dotnet build MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} --no-restore
+          dotnet publish MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} -o './websitetest1' /p:FileVersion="${{ env.buildAssemblyVersion }}" /p:Version="${{ env.buildAssemblyVersion }}"
+
+      - name: dotnet build unit test and publish
+        run: |
+          dotnet restore
+          dotnet build MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} --no-restore
+          dotnet publish MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} -o './websitetest2' /p:Version=${{ steps.GenerateVersionNumber.outputs.buildNumber}} /p:FileVersion=${{ steps.GenerateVersionNumber.outputs.buildNumber}}
 
       ###########################################
       # Upload Artifacts
@@ -83,5 +90,15 @@ jobs:
         if: ${{ github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v2
         with:
-          name: MercuryHealth.Website
-          path: ${{ github.workspace }}/website
+          name: MercuryHealth.Websitetest1
+          path: ${{ github.workspace }}/websitetest1
+
+      ###########################################
+      # Upload Artifacts
+      ###########################################
+      - name: Upload Build Artifacts-Website
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: MercuryHealth.Websitetest2
+          path: ${{ github.workspace }}/websitetest2
