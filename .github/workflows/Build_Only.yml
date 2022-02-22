@@ -1,4 +1,4 @@
-name: Build_And_Deploy_To_Azure
+name: Build_Only
 
 ###################################################################
 # Environment Variables
@@ -7,7 +7,7 @@ env:
   # Path to the solution file relative to the root of the project.
   buildConfiguration: 'Release'
   buildPlatform: 'Any CPU'
-  buildAssemblyVersion: '1.2.3.4'
+  buildAssemblyVersion: '1.1.0.909'
   dotnet_version: '6.x.x'
   AZURE_WEBAPP_PACKAGE_PATH: '.'
   Azure_Resource_Group: 'MercuryHealth-rg'
@@ -73,8 +73,8 @@ jobs:
       - name: dotnet build unit test and publish
         run: |
           dotnet restore
-          dotnet build MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} --no-restore /p:Version="1.2.3.4" /p:FileVersion="${{ env.buildAssemblyVersion }}"
-          dotnet publish MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} -o './website' /p:FileVersion="${{ env.buildAssemblyVersion }}"
+          dotnet build MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} --no-restore #/p:Version="1.2.3.4" /p:FileVersion="${{ env.buildAssemblyVersion }}"
+          dotnet publish MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} -o './website' /p:FileVersion="${{ env.buildAssemblyVersion }}" /p:Version="${{ env.buildAssemblyVersion }}"
 
       ###########################################
       # Upload Artifacts
