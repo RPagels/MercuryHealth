@@ -68,12 +68,13 @@ jobs:
           # Select the value of the ErrorActionPreference variable for executing the script. Options: stop, continue, silentlyContinue. Default is Stop.
           errorActionPreference: continue
 
+# echo "buildAssemblyVersion=$version" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
       - name: Get Build Version
         run: |
           Import-Module ./GenerateVersionNumber.ps1
           Write-Host $Env:buildAssemblyVersion
           $version = GenerateVersionNumber -VersionString $Env:GITHUB_REF
-          echo "buildAssemblyVersion=$version" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+          echo "buildAssemblyVersion=$version" | "buildAssemblyVersion" >> $env:GITHUB_ENV
         shell: pwsh
       
 # /p:Version=${{ steps.GenerateVersionNumber.outputs.buildNumber}} /p:FileVersion=${{ steps.GenerateVersionNumber.outputs.buildNumber}}
