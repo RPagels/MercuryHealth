@@ -72,8 +72,9 @@ jobs:
       - name: Get Build Version
         shell: pwsh
         run: |
-          ./GenerateVersionNumber.ps1 -Path /tmp/samplemodule
-          echo "buildAssemblyVersion=5.5.5.5" >> $GITHUB_ENV
+          ./GenerateVersionNumber.ps1
+          echo ::set-env name=buildAssemblyVersion::GenerateVersionNumber
+          #echo "buildAssemblyVersion=5.5.5.5" >> $GITHUB_ENV
           #Publish-Module -Path /tmp/samplemodule -buildAssemblyVersion $env:GITHUB_ENV -Verbose
        
 
