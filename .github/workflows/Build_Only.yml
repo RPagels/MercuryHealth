@@ -69,13 +69,13 @@ jobs:
           errorActionPreference: continue
 
 # echo "buildAssemblyVersion=$version" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
-      - name: Get Build Version
-        run: |
-          Import-Module ./GenerateVersionNumber.ps1
-          Write-Host $Env:buildAssemblyVersion
-          $version = GenerateVersionNumber -VersionString $Env:GITHUB_REF
-          echo "buildAssemblyVersion=$version" | "buildAssemblyVersion" >> $env:GITHUB_ENV
-        shell: pwsh
+#      - name: Get Build Version
+#        run: |
+#          Import-Module ./GenerateVersionNumber.ps1
+#          Write-Host $Env:buildAssemblyVersion
+#          $buildAssemblyVersion = GenerateVersionNumber -VersionString $Env:GITHUB_REF
+#          echo "buildAssemblyVersion" >> $env:GITHUB_ENV
+#        shell: pwsh
       
 # /p:Version=${{ steps.GenerateVersionNumber.outputs.buildNumber}} /p:FileVersion=${{ steps.GenerateVersionNumber.outputs.buildNumber}}
 #/p:Version="1.2.3.4" /p:FileVersion="${{ env.buildAssemblyVersion }}"
