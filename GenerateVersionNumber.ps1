@@ -34,9 +34,10 @@ Write-Host "Final build number: " $finalBuildVersion
 
 #Writing final version number back to pipeline
 # Yes there are!!!
-echo “::set-output name=buildAssemblyVersion::$finalBuildVersion“
-
-$Env:buildAssemblyVersion = $finalBuildVersion
+#echo “::set-output name=buildAssemblyVersion::$finalBuildVersion“
+#$Env:buildAssemblyVersion = $finalBuildVersion
+echo "buildAssemblyVersion=$finalBuildVersion" >> $GITHUB_ENV
+echo "$Env:buildAssemblyVersion=$finalBuildVersion" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
 
 #Writing final version number back to Azure DevOps variable
 #Write-Host "##vso[task.setvariable variable=buildNumber]$finalBuildVersion"
