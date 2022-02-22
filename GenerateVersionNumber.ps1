@@ -8,7 +8,7 @@ Write-Host "Generating Build Number"
 #$spliteVersionTemp = $initialVersion.split(".") #ERROR: Method invocation failed because [System.Version] does not contain a method named 'split'.
 #Write-Host "Split Version Test Only: " $spliteVersionTemp
 
-$initialVersion ="1.0.0.0"
+$initialVersion ="1.3.0.0"
 
 Write-Host "Initial Version from *.csproj file:" $initialVersion
 
