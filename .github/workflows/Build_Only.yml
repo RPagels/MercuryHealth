@@ -59,30 +59,20 @@ jobs:
         with:
           dotnet-version: ${{ env.dotnet_version }}
 
-      - name: Generate Version Number
+      - name: Generate Version Number 1
         uses: Azure/powershell@v1
         id: buildNumber
         with:
-          # Specify the Az PowerShell script here.
           inlineScript: ./GenerateVersionNumber.ps1
-          # Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".
           azPSVersion: latest
-          # Select the value of the ErrorActionPreference variable for executing the script. Options: stop, continue, silentlyContinue. Default is Stop.
           errorActionPreference: continue
 
-# echo "buildAssemblyVersion=$version" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
-      - name: Get Build Version
+      - name: Generate Version Number 2
         shell: pwsh
         id: GenerateVersionNumber
         run: |
           ./GenerateVersionNumber.ps1
           echo "buildAssemblyVersion=${{ env.buildAssemblyVersion }}.${{ steps.GenerateVersionNumber.outputs.result }}" >> $GITHUB_ENV
-          #echo "buildAssemblyVersion=${{ env.buildAssemblyVersion }}.${{ github.run_number }}" >> $GITHUB_ENV
-          #echo "${{ steps.GenerateVersionNumber.outputs.result }}"
-          #echo ::set-env name=buildAssemblyVersion::GenerateVersionNumber
-          #echo "buildAssemblyVersion=5.5.5.5" >> $GITHUB_ENV
-          #Publish-Module -Path /tmp/samplemodule -buildAssemblyVersion $env:GITHUB_ENV -Verbose
-       
 
 # echo "buildAssemblyVersion=$version" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
 #      - name: Get Build Version
