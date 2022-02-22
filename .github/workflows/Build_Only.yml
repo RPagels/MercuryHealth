@@ -69,6 +69,13 @@ jobs:
           errorActionPreference: continue
 
 # echo "buildAssemblyVersion=$version" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+      - name: Get Build Version
+        run: |
+          Import-Module ./GenerateVersionNumber.ps1
+          echo "buildAssemblyVersion" >> $env:GITHUB_ENV
+        shell: pwsh
+
+# echo "buildAssemblyVersion=$version" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
 #      - name: Get Build Version
 #        run: |
 #          Import-Module ./GenerateVersionNumber.ps1
@@ -84,13 +91,7 @@ jobs:
         run: |
           dotnet restore
           dotnet build MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} --no-restore
-          dotnet publish MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} -o './websitetest1' /p:FileVersion="${{ env.buildAssemblyVersion }}" /p:Version="${{ env.buildAssemblyVersion }}"
-
-      - name: dotnet build unit test and publish
-        run: |
-          dotnet restore
-          dotnet build MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} --no-restore
-          dotnet publish MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} -o './websitetest2' /p:Version=${{ env.buildAssemblyVersion}} /p:FileVersion=${{ steps.GenerateVersionNumber.outputs.buildNumber}}
+          dotnet publish MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} -o './website' /p:FileVersion="${{ env.buildAssemblyVersion }}" /p:Version="${{ env.buildAssemblyVersion }}" /p:AssemblyVersion="${{ env.buildAssemblyVersion }}"
 
       ###########################################
       # Upload Artifacts
@@ -100,14 +101,5 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: MercuryHealth.Websitetest1
-          path: ${{ github.workspace }}/websitetest1
+          path: ${{ github.workspace }}/website
 
-      ###########################################
-      # Upload Artifacts
-      ###########################################
-      - name: Upload Build Artifacts-Website
-        if: ${{ github.event_name != 'pull_request' }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: MercuryHealth.Websitetest2
-          path: ${{ github.workspace }}/websitetest2
