@@ -25,7 +25,7 @@ var functionAppName = 'functionApp-${uniqueString(resourceGroup().id)}'
 var functionAppServiceName = 'functionAppservice-${uniqueString(resourceGroup().id)}'
 var apiServiceName = 'apiService-${uniqueString(resourceGroup().id)}'
 var loadTestsName = 'loadTests-${uniqueString(resourceGroup().id)}'
-//var keyvaultNamev2 = 'keyVault-${uniqueString(resourceGroup().id)}'
+var keyvaultName = 'keyVault-${uniqueString(resourceGroup().id)}'
 
 // Tags
 var defaultTags = {
@@ -111,7 +111,7 @@ module functionappmod './main-6-funcapp.bicep' = {
 }
 
 // Create Azure Load Tests
-module loadtestsmod 'main-9-loadtests.bicep' = {
+module loadtestsmod './main-9-loadtests.bicep' = {
   name: loadTestsName
   params: {
     location: location
@@ -120,17 +120,19 @@ module loadtestsmod 'main-9-loadtests.bicep' = {
 }
 
 // Create Azure KeyVault
-//module keyvault 'main-8-keyvault.bicep' = {
-//  name: 'keyvaultdeploy'
-//  params: {
-//    vaultName: keyvaultNamev2
-//    sqlserverName: sqlserverName
-//    sqlDBName: sqlDBName
-//    sqlAdministratorLogin: sqlAdministratorLogin
-//    sqlAdministratorLoginPassword: sqlAdministratorLoginPassword
-//  }
-
-//}
+module keyvault './main-8-keyvault.bicep' = {
+ name: keyvaultName
+ params: {
+   location: location
+   vaultName: keyvaultName
+   sqlserverName: sqlserverName
+   sqlDBName: sqlDBName
+   sqlAdministratorLogin: sqlAdministratorLogin
+   sqlAdministratorLoginPassword: sqlAdministratorLoginPassword
+   configStoreConnection: configStoreConnectionString
+   appInsightsInstrumentationKey: appinsightsmod.outputs.appInsightsInstrumentationKey
+   }
+}
 
 // Create APIM.  NOTE: MUST MOVE THIS. APIM + Azure KeyVault, needs to be in it's own RG + Pipeline
 //module apiservicesmod './main-7-apimanagement.bicep' = {

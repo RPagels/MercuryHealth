@@ -6,6 +6,11 @@ param sqlAdministratorLoginPassword string
 param vaultName string
 param sku string = 'Standard'
 param tenant string = '72f988bf-86f1-41af-91ab-2d7cd011db47' // replace with your tenantId
+param appInsightsInstrumentationKey string
+
+//@secure()
+param configStoreConnection string
+
 param accessPolicies array = [
   {
     tenantId: tenant
@@ -60,21 +65,20 @@ param softDeleteRetentionInDays int = 90
 
 param keyName string = 'prodKey'
 param secretName1 string = 'AppConfigReadOnlyKey'
-param secretValue1 string = 'Endpoint=https://mercuryhealth2019v3-appconfiguration.azconfig.io;Id=6O6i-l6-s0:Na+J3RiqRJqXCoq6SYV8;Secret=bZvOhXBtNwTIBw8ApU5NsuS8VvXKY9Q9wcS2ak+3qG4='
+param secretValue1 string = configStoreConnection
 param secretName2 string = 'DBAdmin'
-param secretValue2 string = 'AzureAdmin'
+param secretValue2 string = sqlAdministratorLogin
 param secretName3 string = 'DBPassword'
-param secretValue3 string = 'Password.1.!!@1'
+param secretValue3 string = sqlAdministratorLoginPassword
 param secretName4 string = 'DBConnectionString'
-//param secretValue4 string = 'Server=tcp:mercuryhealth-server.database.windows.net,1433;Initial Catalog=mercuryhealth-database;Persist Security Info=False;User ID=AzureAdmin;Password=Password.1.!!@1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
 param secretValue4 string = 'Data Source=tcp:${sqlserverName},1433;Initial Catalog=${sqlDBName};User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};'
 
 param secretName5 string = 'FunctionKeyQualityGate'
-param secretValue5 string = 'bjMDi4HXhhXOq19ugz/YviYZqjk8xbIkCaho35cwad5IR5VDfLfRgA=='
+param secretValue5 string = 'TBD'
 param secretName6 string = 'AppInsightsAPIKey2'
-param secretValue6 string = 'eb1d121x55kdyeogtx8477fb1p1mwd3pfe6j7y0c'
+param secretValue6 string = 'TBD'
 param secretName7 string = 'AppInsightsAppID'
-param secretValue7 string = '447e0642-841c-4206-8dff-e25876f043e0'
+param secretValue7 string = appInsightsInstrumentationKey
 
 param networkAcls object = {
   ipRules: []
