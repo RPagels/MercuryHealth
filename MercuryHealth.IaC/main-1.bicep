@@ -120,15 +120,15 @@ module loadtestsmod 'main-9-loadtests.bicep' = {
 }
 
 // Create Azure KeyVault
-//module keyvault 'main-8-keyvault.bicep' = {
-//  name: 'keyvaultdeploy'
-//  params: {
-//    vaultName: keyvaultNamev2
-//    sqlserverName: sqlserverName
-//    sqlDBName: sqlDBName
-//    sqlAdministratorLogin: sqlAdministratorLogin
-//    sqlAdministratorLoginPassword: sqlAdministratorLoginPassword
-//  }
+module keyvault 'main-8-keyvault.bicep' = {
+  name: 'keyvaultdeploy'
+  params: {
+    vaultName: keyvaultNamev2
+    sqlserverName: sqlserverName
+    sqlDBName: sqlDBName
+    sqlAdministratorLogin: sqlAdministratorLogin
+    sqlAdministratorLoginPassword: sqlAdministratorLoginPassword
+ }
 
 //}
 
