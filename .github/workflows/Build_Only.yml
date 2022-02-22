@@ -73,7 +73,8 @@ jobs:
         shell: pwsh
         run: |
           ./GenerateVersionNumber.ps1 -Path /tmp/samplemodule
-          Publish-Module -Path /tmp/samplemodule -buildAssemblyVersion $env:GITHUB_ENV -Verbose
+          echo "buildAssemblyVersion=5.5.5.5" >> $GITHUB_ENV
+          #Publish-Module -Path /tmp/samplemodule -buildAssemblyVersion $env:GITHUB_ENV -Verbose
        
 
 # echo "buildAssemblyVersion=$version" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
