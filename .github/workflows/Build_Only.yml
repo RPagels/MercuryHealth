@@ -67,7 +67,15 @@ jobs:
           azPSVersion: latest
           # Select the value of the ErrorActionPreference variable for executing the script. Options: stop, continue, silentlyContinue. Default is Stop.
           errorActionPreference: continue
-    
+
+      - name: Get Build Version
+        run: |
+          Import-Module .\build\GenerateVersionNumber.ps1
+          Write-Host $Env:buildAssemblyVersion
+          $version = finalBuildVersion -VersionString $Env:buildAssemblyVersion
+          echo "BUILD_VERSION=$version" | Out-File -FilePath $Env:buildAssemblyVersion -Encoding utf-8 -Append
+        shell: pwsh
+      
 # /p:Version=${{ steps.GenerateVersionNumber.outputs.buildNumber}} /p:FileVersion=${{ steps.GenerateVersionNumber.outputs.buildNumber}}
 #/p:Version="1.2.3.4" /p:FileVersion="${{ env.buildAssemblyVersion }}"
      # Run dotnet build and publish
@@ -81,7 +89,7 @@ jobs:
         run: |
           dotnet restore
           dotnet build MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} --no-restore
-          dotnet publish MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} -o './websitetest2' /p:Version=${{ steps.GenerateVersionNumber.outputs.buildNumber}} /p:FileVersion=${{ steps.GenerateVersionNumber.outputs.buildNumber}}
+          dotnet publish MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} -o './websitetest2' /p:Version=${{ env.buildAssemblyVersion}} /p:FileVersion=${{ steps.GenerateVersionNumber.outputs.buildNumber}}
 
       ###########################################
       # Upload Artifacts
