@@ -1,10 +1,9 @@
 # Mercury Health
 
-# Mission
+# Introduction
 The mission of Mercury Health is to help you improve your longevity and your quality of life through healthy activity.
 https://status.dev.azure.com/
 
-# Introduction
 The amazing Mercury Health development team has embraced a DevOps approach and is using continuous integration for builds and unit tests. If everything passes they use release management for continuous deployment that deploys to various environments and runs UI automation and load tests from coast to coast.
 
 # Build & Deploy Status
