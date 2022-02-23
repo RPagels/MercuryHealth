@@ -59,17 +59,7 @@ jobs:
         with:
           dotnet-version: ${{ env.dotnet_version }}
 
-#      - name: GenerateVersionNumber
-#        uses: Azure/powershell@v1
-#        id: buildNumber
-#        with:
-#          # Specify the Az PowerShell script here.
-#          inlineScript: ./GenerateVersionNumber.ps1
-#          # Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".
-#          azPSVersion: latest
-#          # Select the value of the ErrorActionPreference variable for executing the script. Options: stop, continue, silentlyContinue. Default is Stop.
-#          errorActionPreference: continue
-
+      # Generate Build Assembly Version based on Date/Time
       - name: Generate Build Assembly Version
         uses: Azure/powershell@v1
         id: setBuildNumber
@@ -78,7 +68,7 @@ jobs:
         with:
           inlineScript: ./GenerateVersionNumber.ps1
           # Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".
-          azPSVersion: '3.1.0'
+          azPSVersion: '3.4.0'
           # Select the value of the ErrorActionPreference variable for executing the script. Options: stop, continue, silentlyContinue. Default is Stop.
           errorActionPreference: continue
           
