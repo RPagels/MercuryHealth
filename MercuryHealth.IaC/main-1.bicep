@@ -21,6 +21,7 @@ var sqlserverName = toLower('sqlServer-${uniqueString(resourceGroup().id)}')
 var sqlDBName = 'MercuryHealthDB'
 var configStoreName = 'appConfig-${uniqueString(resourceGroup().id)}'
 var appInsightsName = 'appInsights-${uniqueString(resourceGroup().id)}'
+var appInsightsAlertName = 'appInsights-${uniqueString(resourceGroup().id)}'
 var functionAppName = 'functionApp-${uniqueString(resourceGroup().id)}'
 var functionAppServiceName = 'functionAppservice-${uniqueString(resourceGroup().id)}'
 var apiServiceName = 'apiService-${uniqueString(resourceGroup().id)}'
@@ -91,10 +92,9 @@ module appinsightsmod './main-4-appinsights.bicep' = {
   name: 'appinsightsdeploy'
   params: {
     location: location
-    //webSiteName: webSiteName
     appInsightsName: appInsightsName
-    //testEndpoint: webSiteURL
     defaultTags: defaultTags
+    appInsightsAlertName: appInsightsAlertName
   }
 }
 

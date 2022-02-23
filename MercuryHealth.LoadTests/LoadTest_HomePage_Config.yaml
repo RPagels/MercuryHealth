@@ -1,13 +1,13 @@
 version: v0.1
-testName: LoadTest_HomePage
+testName: Home_Page_Tests
 testPlan: LoadTest_HomePage.jmx
 description: Load test website home page
 engineInstances: 1
 configurationFiles:
   - 'SampleData-Nutrition.csv'
 failureCriteria:
-  - avg(response_time_ms) > 300
-  - percentage(error) > 50
+  - avg(response_time_ms) > 500
+  - percentage(error) > 75
 #env:
 #  - name: my-variable
 #    value: my-value

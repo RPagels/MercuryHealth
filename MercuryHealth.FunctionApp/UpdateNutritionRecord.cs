@@ -37,7 +37,9 @@ public class UpdateNutritionRecord
             client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", ApimSubscriptionKey);
 
             // Hard code record # 25
-            var uri = "https://rpagels-apim.azure-api.net/api/Nutritions/25";
+            // Eable once API;s work!!!
+            // var uri = "https://rpagels-apim.azure-api.net/api/Nutritions/25";
+            var uri = "https://website-4vwxkvpofrtbq-dev.azurewebsites.net/Nutritions/Edit/25";
 
             var response = await client.GetAsync(uri);
             response.EnsureSuccessStatusCode();
