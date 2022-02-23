@@ -34,9 +34,8 @@ Write-Host "Final build number: " $finalBuildVersion
 
 #Writing final version number back to pipeline
 # Yes there are!!!
-#echo “::set-output name=buildAssemblyVersion::$finalBuildVersion“
-
-echo ::set-output name=BuildNumber::$( $finalBuildVersion)
+echo “::set-output name=BuildNumber::$finalBuildVersion“
+#echo ::set-output name=BuildNumber::$( $finalBuildVersion)
 
 #echo "buildAssemblyVersion=$finalBuildVersion" >> $GITHUB_ENV
 #echo "$Env:buildAssemblyVersion=$finalBuildVersion" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
