@@ -27,7 +27,10 @@ resource metricAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
     severity: 0
     enabled: true
     scopes: [
-      AppInsights_webSiteName.properties.InstrumentationKey
+      AppInsights_webSiteName.id
+      // ERROR during Deployment
+      // "Property id 'b7e034a7-df34-4fef-a6ea-28136655e0a7' at path 'properties.scopes[0]' is invalid. Expect fully qualified resource Id that start with '/subscriptions/***subscriptionId***' or '/providers/***resourceProviderNamespace***/'
+
     ]
     evaluationFrequency: 'PT1M'
     windowSize: 'PT5M'

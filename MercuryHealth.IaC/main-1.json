@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "16109646424278625707"
+      "templateHash": "13650321538728306513"
     }
   },
   "parameters": {
@@ -726,7 +726,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "7770348097036834786"
+              "templateHash": "16941149627434984896"
             }
           },
           "parameters": {
@@ -767,7 +767,7 @@
                 "severity": 0,
                 "enabled": true,
                 "scopes": [
-                  "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName'))).InstrumentationKey]"
+                  "[resourceId('Microsoft.Insights/components', parameters('appInsightsName'))]"
                 ],
                 "evaluationFrequency": "PT1M",
                 "windowSize": "PT5M",
