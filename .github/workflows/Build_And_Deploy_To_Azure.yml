@@ -280,12 +280,12 @@ jobs:
     ###########################################
     # Download Artifacts
     ###########################################
-    - name: Download Build Artifacts-Function Application
-      uses: actions/download-artifact@v2
-      continue-on-error: false
-      with:
-        name: MercuryHealth.FunctionApp
-        path: ${{ github.workspace }}/MercuryHealth.FunctionApp
+#    - name: Download Build Artifacts-Function Application
+#      uses: actions/download-artifact@v2
+#      continue-on-error: false
+#      with:
+#        name: MercuryHealth.FunctionApp
+#        path: ${{ github.workspace }}/MercuryHealth.FunctionApp
 
     - name: Download Build Artifacts-Website Applicationn
       uses: actions/download-artifact@v2
@@ -309,12 +309,12 @@ jobs:
           package: './MercuryHealth.Website'
           
     # Deploy Function Application
-    - name: 'Deploy Function Application'
-      uses: Azure/functions-action@v1
-      with:
-        app-name: ${{ env.Function_AppName }}
-        slot-name: 'production'
-        package: './MercuryHealth.FunctionApp'
+#    - name: 'Deploy Function Application'
+#      uses: Azure/functions-action@v1
+#      with:
+#        app-name: ${{ env.Function_AppName }}
+#        slot-name: 'production'
+#        package: './MercuryHealth.FunctionApp'
         
     # Deploy APIs
     - name: 'Deploy APIs'
@@ -328,7 +328,7 @@ jobs:
     # Insert a deployment annotation into Application Insights
     - name: Annotate deployment
       uses: wictorwilen/application-insights-action@v1
-      continue-on-error: true
+      continue-on-error: false
       id: annotation
       with:
         applicationId: ${{ secrets.AppInsightsApplicationID }}
@@ -336,8 +336,61 @@ jobs:
         releaseName: ${{ github.event_name }}
         message: ${{ github.event.head_commit.message }}
         actor: ${{ github.actor }}
-        continue-on-error: true
     
+    - name: Azure logout
+      run: |
+        az logout
+
+###################################################################
+# CD Stage - Functions                                             #
+###################################################################
+  Deploy_Stage_Functions:
+    if: contains(github.event_name, 'push')
+
+    name: Deploy Functions
+    
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Identify any jobs that must complete successfully before this job will run.
+    needs: [Deploy_Stage_IaC]
+    
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+
+    ###########################################
+    # Download Artifacts
+    ###########################################
+    - name: Download Build Artifacts-Function Application
+      uses: actions/download-artifact@v2
+      continue-on-error: false
+      with:
+        name: MercuryHealth.FunctionApp
+        path: ${{ github.workspace }}/MercuryHealth.FunctionApp
+
+    - name: Login to Azure
+      uses: azure/login@v1
+      continue-on-error: false
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    # Deploy Function Application
+#    - name: 'Deploy Function Application'
+#      uses: Azure/functions-action@v1
+#      with:
+#        app-name: ${{ env.Function_AppName }}
+#        slot-name: 'production'
+#        package: './MercuryHealth.FunctionApp'
+        
+    # Deploy APIs
+    - name: 'Deploy APIs'
+      run: echo 'Deploy APIs'
+#      uses: azure/webapps-deploy@v2
+#      with:
+#          app-name: ${{ env.Website_Name }}
+#          slot-name: 'Dev'
+#          package: './MercuryHealth.API'
+
     - name: Azure logout
       run: |
         az logout
@@ -354,7 +407,7 @@ jobs:
     runs-on: windows-latest
 
     # Identify any jobs that must complete successfully before this job will run.
-    needs: [Deploy_Stage_Application, Deploy_Stage_Database]
+    needs: [Deploy_Stage_Application, Deploy_Stage_Database, Deploy_Stage_Functions]
     timeout-minutes: 10
         
     steps:
@@ -381,7 +434,7 @@ jobs:
     runs-on: windows-latest
 
     # Identify any jobs that must complete successfully before this job will run.
-    needs: [Deploy_Stage_Application, Deploy_Stage_Database]
+    needs: [Deploy_Stage_Application, Deploy_Stage_Database, Deploy_Stage_Functions]
     timeout-minutes: 10
         
     steps:
@@ -426,8 +479,8 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
         
-      - name: 'Azure Load Testing'
-        run: echo 'Azure Load Testing'
+#      - name: 'Azure Load Testing'
+#        run: echo 'Azure Load Testing'
       
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
@@ -435,8 +488,6 @@ jobs:
           loadTestConfigFile: './MercuryHealth.LoadTests/LoadTest_HomePage_Config.yaml'
           loadTestResource: ${{ env.Load_Test_Resource }}
           resourceGroup: ${{ env.Azure_Resource_Group }}
-
-# Test
 
       - name: Azure logout
         run: |
