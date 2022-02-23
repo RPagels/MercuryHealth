@@ -61,18 +61,19 @@ jobs:
 
       - name: Generate Version Number 1
         uses: Azure/powershell@v1
-        id: buildNumber
+        id: setBuildNumber
+        env:
+          POWERSHELL_TELEMETRY_OPTOUT: 1
         with:
           inlineScript: ./GenerateVersionNumber.ps1
-          azPSVersion: latest
-          errorActionPreference: continue
+          azPSVersion: '3.1.0'
 
-      - name: Generate Version Number 2
-        shell: pwsh
-        id: GenerateVersionNumber
-        run: |
-          ./GenerateVersionNumber.ps1
-          echo "buildAssemblyVersion=${{ env.buildAssemblyVersion }}.${{ steps.GenerateVersionNumber.outputs.result }}" >> $GITHUB_ENV
+#      - name: Generate Version Number 2
+#        shell: pwsh
+#        id: GenerateVersionNumber
+#        run: |
+#          ./GenerateVersionNumber.ps1
+#          echo "buildAssemblyVersion=${{ env.buildAssemblyVersion }}.${{ steps.GenerateVersionNumber.outputs.result }}" >> $GITHUB_ENV
 
 # echo "buildAssemblyVersion=$version" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
 #      - name: Get Build Version
@@ -90,7 +91,7 @@ jobs:
         run: |
           dotnet restore
           dotnet build MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} --no-restore
-          dotnet publish MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} -o './website' /p:FileVersion="${{ env.buildAssemblyVersion }}" /p:Version="${{ env.buildAssemblyVersion }}" /p:AssemblyVersion="${{ env.buildAssemblyVersion }}"
+          dotnet publish MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} -o './website' /p:FileVersion=${{ steps.setBuildNumber.outputs.BuildNumber}}
 
       ###########################################
       # Upload Artifacts
