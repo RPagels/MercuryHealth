@@ -75,15 +75,6 @@ jobs:
 #          ./GenerateVersionNumber.ps1
 #          echo "buildAssemblyVersion=${{ env.buildAssemblyVersion }}.${{ steps.GenerateVersionNumber.outputs.result }}" >> $GITHUB_ENV
 
-# echo "buildAssemblyVersion=$version" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
-#      - name: Get Build Version
-#        run: |
-#          Import-Module ./GenerateVersionNumber.ps1
-#          Write-Host $Env:buildAssemblyVersion
-#          $buildAssemblyVersion = GenerateVersionNumber -VersionString $Env:GITHUB_REF
-#          echo "buildAssemblyVersion" >> $env:GITHUB_ENV
-#        shell: pwsh
-      
 # /p:Version=${{ steps.GenerateVersionNumber.outputs.buildNumber}} /p:FileVersion=${{ steps.GenerateVersionNumber.outputs.buildNumber}}
 #/p:Version="1.2.3.4" /p:FileVersion="${{ env.buildAssemblyVersion }}"
      # Run dotnet build and publish
@@ -91,7 +82,7 @@ jobs:
         run: |
           dotnet restore
           dotnet build MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} --no-restore
-          dotnet publish MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} -o './website' /p:FileVersion=${{ steps.setBuildNumber.outputs.BuildNumber}}
+          dotnet publish MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} -o './website' /p:FileVersion="${{ steps.setBuildNumber.outputs.BuildNumber}}"
 
       ###########################################
       # Upload Artifacts
