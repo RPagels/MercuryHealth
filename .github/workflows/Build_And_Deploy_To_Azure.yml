@@ -309,12 +309,12 @@ jobs:
           package: './MercuryHealth.Website'
           
     # Deploy Function Application
-    - name: 'Deploy Function Application'
-      uses: Azure/functions-action@v1
-      with:
-        app-name: ${{ env.Function_AppName }}
-        slot-name: 'production'
-        package: './MercuryHealth.FunctionApp'
+#    - name: 'Deploy Function Application'
+#      uses: Azure/functions-action@v1
+#      with:
+#        app-name: ${{ env.Function_AppName }}
+#        slot-name: 'production'
+#        package: './MercuryHealth.FunctionApp'
         
     # Deploy APIs
     - name: 'Deploy APIs'
