@@ -14,3 +14,4 @@ failureCriteria:
 #secrets:
 #  - name: my-secret
 #    value: https://MercuryHealth.vault.azure.net/secrets/MySecret
+#
