@@ -29,7 +29,7 @@ namespace MercuryHealth.Web.Controllers
         {
             // Todo: Chris & Randy Stuff to do next!
             //
-            // Mock setup for Config
+            // Mock setup for Config and so forth and so on...
             // 
             ViewData["myEnvironment"] = Configuration["Environment"];
 
