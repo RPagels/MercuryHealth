@@ -8,9 +8,9 @@ configurationFiles:
 failureCriteria:
   - avg(response_time_ms) > 300
   - percentage(error) > 50
-env:
-  - name: my-variable
-    value: my-value
-secrets:
-  - name: my-secret
-    value: https://MercuryHealth.vault.azure.net/secrets/MySecret
+#env:
+#  - name: my-variable
+#    value: my-value
+#secrets:
+#  - name: my-secret
+#    value: https://MercuryHealth.vault.azure.net/secrets/MySecret
