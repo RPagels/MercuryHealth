@@ -59,24 +59,35 @@ jobs:
         with:
           dotnet-version: ${{ env.dotnet_version }}
 
-      - name: GenerateVersionNumber
+#      - name: GenerateVersionNumber
+#        uses: Azure/powershell@v1
+#        id: buildNumber
+#        with:
+#          # Specify the Az PowerShell script here.
+#          inlineScript: ./GenerateVersionNumber.ps1
+#          # Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".
+#          azPSVersion: latest
+#          # Select the value of the ErrorActionPreference variable for executing the script. Options: stop, continue, silentlyContinue. Default is Stop.
+#          errorActionPreference: continue
+
+      - name: Generate Build Assembly Version
         uses: Azure/powershell@v1
-        id: buildNumber
+        id: setBuildNumber
+        env:
+          POWERSHELL_TELEMETRY_OPTOUT: 1
         with:
-          # Specify the Az PowerShell script here.
           inlineScript: ./GenerateVersionNumber.ps1
           # Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".
-          azPSVersion: latest
+          azPSVersion: '3.1.0'
           # Select the value of the ErrorActionPreference variable for executing the script. Options: stop, continue, silentlyContinue. Default is Stop.
           errorActionPreference: continue
-    
-      # /p:Version=${{ steps.GenerateVersionNumber.outputs.buildNumber}} /p:FileVersion=${{ steps.GenerateVersionNumber.outputs.buildNumber}}
+          
       # Run dotnet build and publish
       - name: dotnet build unit test and publish
         run: |
           dotnet restore
-          dotnet build MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} --no-restore /p:Version="1.2.3.4" /p:FileVersion=${{ env.buildAssemblyVersion }}
-          dotnet publish MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} -o './website'
+          dotnet build MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} --no-restore
+          dotnet publish MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} -o './website' /p:FileVersion="${{ steps.setBuildNumber.outputs.BuildNumber }}" /p:Version="${{ steps.setBuildNumber.outputs.BuildNumber }}" /p:AssemblyVersion="${{ steps.setBuildNumber.outputs.BuildNumber }}"
           dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} --no-restore
           dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './uitests'
           dotnet build MercuryHealth.FunctionApp/MercuryHealth.FunctionApp.csproj --configuration ${{ env.buildConfiguration }} --no-restore
