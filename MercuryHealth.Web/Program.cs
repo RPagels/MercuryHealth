@@ -23,7 +23,7 @@ builder.Host.ConfigureAppConfiguration(builder =>
          {
              refreshOptions.Register("MercuryHealth:Settings:Sentinel", refreshAll: true).SetCacheExpiration(TimeSpan.FromSeconds(10));
              // Set Cache timeout for one value only
-             //refresh.Register("Settings:EnableMetricsDashboard").SetCacheExpiration(TimeSpan.FromSeconds(10));
+             //refresh.Register("Settings:MetricsDashboard").SetCacheExpiration(TimeSpan.FromSeconds(10));
          })
         
         // Use Feature Flags

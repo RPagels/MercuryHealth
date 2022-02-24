@@ -4,7 +4,7 @@
     {
         PrivacyBeta,
         CaptureNutritionColor,
-        EnableCognitiveServices,
-        EnableMetricsDashboard
+        CognitiveServices,
+        MetricsDashboard
     }
 }

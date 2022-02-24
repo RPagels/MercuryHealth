@@ -24,23 +24,23 @@ param featureFlagKey1 string = 'PrivacyBeta'
 param featureFlagLabel1 string = 'Privacy'
 var featureFlagValue1 = {
   id: featureFlagKey1
-  description: 'New Privacy Page.'
+  description: 'Beta Privacy Page.'
   enabled: true
 }
 
-param featureFlagKey2 string = 'EnableMetricsDashboard'
-param featureFlagLabel2 string = 'Metrics'
+param featureFlagKey2 string = 'MetricsDashboard'
+param featureFlagLabel2 string = 'Metrics Dashboard'
 var featureFlagValue2 = {
   id: featureFlagKey2
-  description: 'EnableMetricsDashboard with label.'
+  description: 'Metrics Dashboard.'
   enabled: false
 }
 
-param featureFlagKey3 string = 'EnableCognitiveServices'
+param featureFlagKey3 string = 'CognitiveServices'
 param featureFlagLabel3 string = 'Cognitive Services'
 var featureFlagValue3 = {
   id: featureFlagKey3
-  description: 'Enable Cognitive Services.'
+  description: 'Cognitive Services.'
   enabled: false
 }
 
@@ -52,7 +52,8 @@ var featureFlagValue4 = {
   enabled: false
 }
 
-param contentType string = 'application/vnd.microsoft.appconfig.ff+json;charset=utf-8'
+@description('Specifies the content type of the key-value resources. For feature flag, the value should be application/vnd.microsoft.appconfig.ff+json;charset=utf-8. For Key Value reference, the value should be application/vnd.microsoft.appconfig.keyvaultref+json;charset=utf-8. Otherwise, it\'s optional.')
+param contentType string = 'the-content-type'
 
 // AppConfiguration configuration Store
 resource config 'Microsoft.AppConfiguration/configurationStores@2021-03-01-preview' = {
@@ -109,6 +110,7 @@ resource configStoreName_appconfig_featureflag_1 'Microsoft.AppConfiguration/con
   properties: {
     value: string(featureFlagValue1)
     contentType: contentType
+    tags: defaultTags
   }
 }
 

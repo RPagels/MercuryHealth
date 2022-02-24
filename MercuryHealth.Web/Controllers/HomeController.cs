@@ -72,7 +72,7 @@ namespace MercuryHealth.Web.Controllers
 
         // Check for Feature Flag
         // If Feature Flag is disabled, the entire method is disabled.
-        [FeatureGate(MyFeatureFlags.EnableMetricsDashboard)]
+        [FeatureGate(MyFeatureFlags.MetricsDashboard)]
         public IActionResult Metrics()
         {
             return View();
