@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "12109456390720899390"
+      "templateHash": "10527082805279653586"
     }
   },
   "parameters": {
@@ -553,7 +553,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "4509541503385163739"
+              "templateHash": "13014988485602149685"
             }
           },
           "parameters": {
@@ -567,25 +567,39 @@
             "defaultTags": {
               "type": "object"
             },
+            "keyValueNames": {
+              "type": "array",
+              "defaultValue": [
+                "MercuryHealth:Settings:FontSize",
+                "EMercuryHealth:Settings:Sentinel"
+              ]
+            },
+            "keyValueValues": {
+              "type": "array",
+              "defaultValue": [
+                "14",
+                "1"
+              ]
+            },
             "featureFlagKey1": {
               "type": "string",
               "defaultValue": "PrivacyBeta"
             },
             "featureFlagLabel1": {
               "type": "string",
-              "defaultValue": "Privacy"
+              "defaultValue": "Privacy Page"
             },
             "featureFlagKey2": {
               "type": "string",
-              "defaultValue": "EnableMetricsDashboard"
+              "defaultValue": "MetricsDashboard"
             },
             "featureFlagLabel2": {
               "type": "string",
-              "defaultValue": "Metrics"
+              "defaultValue": "Metrics Dashboard"
             },
             "featureFlagKey3": {
               "type": "string",
-              "defaultValue": "EnableCognitiveServices"
+              "defaultValue": "CognitiveServices"
             },
             "featureFlagLabel3": {
               "type": "string",
@@ -601,24 +615,27 @@
             },
             "contentType": {
               "type": "string",
-              "defaultValue": "application/vnd.microsoft.appconfig.ff+json;charset=utf-8"
+              "defaultValue": "the-content-type",
+              "metadata": {
+                "description": "Specifies the content type of the key-value resources. For feature flag, the value should be application/vnd.microsoft.appconfig.ff+json;charset=utf-8. For Key Value reference, the value should be application/vnd.microsoft.appconfig.keyvaultref+json;charset=utf-8. Otherwise, it's optional."
+              }
             }
           },
           "functions": [],
           "variables": {
             "featureFlagValue1": {
               "id": "[parameters('featureFlagKey1')]",
-              "description": "New Privacy Page.",
+              "description": "Beta Privacy Page.",
               "enabled": true
             },
             "featureFlagValue2": {
               "id": "[parameters('featureFlagKey2')]",
-              "description": "EnableMetricsDashboard with label.",
+              "description": "Metrics Dashboard.",
               "enabled": false
             },
             "featureFlagValue3": {
               "id": "[parameters('featureFlagKey3')]",
-              "description": "Enable Cognitive Services.",
+              "description": "Cognitive Services.",
               "enabled": false
             },
             "featureFlagValue4": {
@@ -637,6 +654,23 @@
               "sku": {
                 "name": "Standard"
               }
+            },
+            {
+              "copy": {
+                "name": "configStoreName_keyValueNames",
+                "count": "[length(parameters('keyValueNames'))]"
+              },
+              "type": "Microsoft.AppConfiguration/configurationStores/keyValues",
+              "apiVersion": "2021-10-01-preview",
+              "name": "[format('{0}/{1}', parameters('configStoreName'), parameters('keyValueNames')[copyIndex()])]",
+              "properties": {
+                "value": "[parameters('keyValueValues')[copyIndex()]]",
+                "contentType": "[parameters('contentType')]",
+                "tags": "[parameters('defaultTags')]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.AppConfiguration/configurationStores', parameters('configStoreName'))]"
+              ]
             },
             {
               "type": "Microsoft.AppConfiguration/configurationStores/keyValues",

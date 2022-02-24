@@ -3,25 +3,19 @@ param location string = resourceGroup().location
 param defaultTags object
 
 // Specifies the names of the key-value resources. 
-// param keyValueNames array = [
-//   'PrivacyBeta$myLabel'
-//   'EnableMetricsDashboard$myLabel'
-//   'EnableCognitiveServices$myLabel'
-//   'CaptureNutritionColor$myLabel'
-// ]
+param keyValueNames array = [
+  'MercuryHealth:Settings:FontSize'
+  'EMercuryHealth:Settings:Sentinel'
+]
 
-//
-
-// // Specifies the values of the key-value resources. It's optional
-// param keyValueValues array = [
-//   'New Privacy Page with label'
-//   'EnableMetricsDashboard with label'
-//   'EnableCognitiveServices with label'
-//   'CaptureNutritionColor with label'
-// ]
+// Specifies the values of the key-value resources. It's optional
+param keyValueValues array = [
+  '14'
+  '1'
+]
 
 param featureFlagKey1 string = 'PrivacyBeta'
-param featureFlagLabel1 string = 'Privacy'
+param featureFlagLabel1 string = 'Privacy Page'
 var featureFlagValue1 = {
   id: featureFlagKey1
   description: 'Beta Privacy Page.'
@@ -53,7 +47,7 @@ var featureFlagValue4 = {
 }
 
 @description('Specifies the content type of the key-value resources. For feature flag, the value should be application/vnd.microsoft.appconfig.ff+json;charset=utf-8. For Key Value reference, the value should be application/vnd.microsoft.appconfig.keyvaultref+json;charset=utf-8. Otherwise, it\'s optional.')
-param contentType string = 'the-content-type'
+param contentType string = 'application/vnd.microsoft.appconfig.ff+json;charset=utf-8'
 
 // AppConfiguration configuration Store
 resource config 'Microsoft.AppConfiguration/configurationStores@2021-03-01-preview' = {
@@ -64,6 +58,15 @@ resource config 'Microsoft.AppConfiguration/configurationStores@2021-03-01-previ
     name: 'Standard'
   }
 }
+
+resource configStoreName_keyValueNames 'Microsoft.AppConfiguration/configurationStores/keyValues@2021-10-01-preview' = [for (item, i) in keyValueNames: {
+  name: '${config.name}/${item}'
+  properties: {
+    value: keyValueValues[i]
+    contentType: contentType
+    tags: defaultTags
+  }
+}]
 
 // Todo: Must add "key-value" pairs under Configuration Explorer
 // MercuryHealth:Settings:FontSize = 14
@@ -110,7 +113,6 @@ resource configStoreName_appconfig_featureflag_1 'Microsoft.AppConfiguration/con
   properties: {
     value: string(featureFlagValue1)
     contentType: contentType
-    tags: defaultTags
   }
 }
 
