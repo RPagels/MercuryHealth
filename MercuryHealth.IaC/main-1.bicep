@@ -21,7 +21,7 @@ var sqlserverName = toLower('sqlServer-${uniqueString(resourceGroup().id)}')
 var sqlDBName = 'MercuryHealthDB'
 var configStoreName = 'appConfig-${uniqueString(resourceGroup().id)}'
 var appInsightsName = 'appInsights-${uniqueString(resourceGroup().id)}'
-var appInsightsAlertName = 'appInsights-${uniqueString(resourceGroup().id)}'
+var appInsightsAlertName = 'ResponseTime-${uniqueString(resourceGroup().id)}'
 var functionAppName = 'functionApp-${uniqueString(resourceGroup().id)}'
 var functionAppServiceName = 'functionAppservice-${uniqueString(resourceGroup().id)}'
 var apiServiceName = 'apiService-${uniqueString(resourceGroup().id)}'
@@ -30,9 +30,9 @@ var keyvaultName = 'keyVault-${uniqueString(resourceGroup().id)}'
 
 // Tags
 var defaultTags = {
-  'environment': environment
-  'application': webSiteName
-  'costcenter': costCenter
+  'Env': environment
+  'App': 'Mercury Health'
+  'CostCenter': costCenter
   'CreatedBy': createdBy
 }
 
@@ -116,6 +116,7 @@ module loadtestsmod './main-9-loadtests.bicep' = {
   params: {
     location: location
     loadTestsName: loadTestsName
+    defaultTags: defaultTags
   }
 }
 

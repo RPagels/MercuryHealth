@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "13650321538728306513"
+      "templateHash": "12109456390720899390"
     }
   },
   "parameters": {
@@ -40,16 +40,16 @@
     "sqlDBName": "MercuryHealthDB",
     "configStoreName": "[format('appConfig-{0}', uniqueString(resourceGroup().id))]",
     "appInsightsName": "[format('appInsights-{0}', uniqueString(resourceGroup().id))]",
-    "appInsightsAlertName": "[format('appInsights-{0}', uniqueString(resourceGroup().id))]",
+    "appInsightsAlertName": "[format('ResponseTime-{0}', uniqueString(resourceGroup().id))]",
     "functionAppName": "[format('functionApp-{0}', uniqueString(resourceGroup().id))]",
     "functionAppServiceName": "[format('functionAppservice-{0}', uniqueString(resourceGroup().id))]",
     "apiServiceName": "[format('apiService-{0}', uniqueString(resourceGroup().id))]",
     "loadTestsName": "[format('loadTests-{0}', uniqueString(resourceGroup().id))]",
     "keyvaultName": "[format('keyVault-{0}', uniqueString(resourceGroup().id))]",
     "defaultTags": {
-      "environment": "[parameters('environment')]",
-      "application": "[variables('webSiteName')]",
-      "costcenter": "[parameters('costCenter')]",
+      "Env": "[parameters('environment')]",
+      "App": "Mercury Health",
+      "CostCenter": "[parameters('costCenter')]",
       "CreatedBy": "[parameters('createdBy')]"
     }
   },
@@ -726,7 +726,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "16941149627434984896"
+              "templateHash": "4274692521051161787"
             }
           },
           "parameters": {
@@ -778,7 +778,7 @@
                       "name": "1st criterion",
                       "metricName": "requests/duration",
                       "operator": "GreaterThan",
-                      "threshold": 60,
+                      "threshold": 100,
                       "timeAggregation": "Average",
                       "criterionType": "StaticThresholdCriterion"
                     }
@@ -1133,6 +1133,9 @@
           },
           "loadTestsName": {
             "value": "[variables('loadTestsName')]"
+          },
+          "defaultTags": {
+            "value": "[variables('defaultTags')]"
           }
         },
         "template": {
@@ -1142,7 +1145,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "6091963389755137304"
+              "templateHash": "6313404639602617321"
             }
           },
           "parameters": {
@@ -1152,6 +1155,9 @@
             },
             "loadTestsName": {
               "type": "string"
+            },
+            "defaultTags": {
+              "type": "object"
             }
           },
           "functions": [],
@@ -1161,6 +1167,7 @@
               "apiVersion": "2021-12-01-preview",
               "name": "[parameters('loadTestsName')]",
               "location": "[parameters('location')]",
+              "tags": "[parameters('defaultTags')]",
               "properties": {
                 "description": "Azure Load Testing Service"
               }
