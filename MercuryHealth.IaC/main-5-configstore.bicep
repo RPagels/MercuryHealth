@@ -3,16 +3,27 @@ param location string = resourceGroup().location
 param defaultTags object
 
 // Specifies the names of the key-value resources. 
-param keyValueNames array = [
+param ConfigkeyValueNames array = [
   'MercuryHealth:Settings:FontSize'
   'EMercuryHealth:Settings:Sentinel'
 ]
 
 // Specifies the values of the key-value resources. It's optional
-param keyValueValues array = [
+param ConfigkeyValueValues array = [
   '14'
   '1'
 ]
+
+// param FeatureFlagkeyValueNames array [
+
+// ]
+
+// param FeatureFlagkeyValueKeys array [
+
+// ]
+// param FeatureFlagkeyValueNames array [
+
+// ]
 
 param featureFlagKey1 string = 'PrivacyBeta'
 param featureFlagLabel1 string = 'Privacy Page'
@@ -59,10 +70,10 @@ resource config 'Microsoft.AppConfiguration/configurationStores@2021-03-01-previ
   }
 }
 
-resource configStoreName_keyValueNames 'Microsoft.AppConfiguration/configurationStores/keyValues@2021-10-01-preview' = [for (item, i) in keyValueNames: {
+resource configStoreName_keyValueNames 'Microsoft.AppConfiguration/configurationStores/keyValues@2021-10-01-preview' = [for (item, i) in ConfigkeyValueNames: {
   name: '${config.name}/${item}'
   properties: {
-    value: keyValueValues[i]
+    value: ConfigkeyValueValues[i]
     contentType: contentType
     tags: defaultTags
   }
@@ -102,6 +113,16 @@ resource configStoreName_keyValueNames 'Microsoft.AppConfiguration/configuration
 //   name: '${config.name}/${keyValueNames[3]}'
 //   properties: {
 //     value: keyValueValues[3]
+//     contentType: contentType
+//   }
+// }
+
+// AppConfiguration Feature Flag Store
+// resource configStoreName_appconfig_featureflags 'Microsoft.AppConfiguration/configurationStores/keyValues@2020-07-01-preview' = [for (item, i) in FeatureFlagkeyValueNames: {
+//   parent: config
+//   name: '.appconfig.featureflag~2F${featureFlagKey1}$${featureFlagLabel1}'
+//   properties: {
+//     value: string(featureFlagValue1)
 //     contentType: contentType
 //   }
 // }
