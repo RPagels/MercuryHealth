@@ -5,6 +5,8 @@ using Microsoft.FeatureManagement;
 using Microsoft.Extensions.Azure;
 using NuGet.Configuration;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
+using Microsoft.FeatureManagement.FeatureFilters;
+using MercuryHealth.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,20 +19,19 @@ builder.Host.ConfigureAppConfiguration(builder =>
     builder.AddAzureAppConfiguration(options =>
     {
         options.Connect(connectionString)
-        // Load all keys that start with `WebDemo:` and have no label
-        //.Select("WebDemo:*")
         .ConfigureRefresh(refreshOptions =>
          {
              refreshOptions.Register("MercuryHealth:Settings:Sentinel", refreshAll: true).SetCacheExpiration(TimeSpan.FromSeconds(10));
+
              // Set Cache timeout for one value only
              //refresh.Register("Settings:MetricsDashboard").SetCacheExpiration(TimeSpan.FromSeconds(10));
-         })
-        
+         });
+
         // Use Feature Flags
-        .UseFeatureFlags(featureFlagOptions =>
-        {
-            featureFlagOptions.CacheExpirationInterval = TimeSpan.FromSeconds(15);
-        });
+        //.UseFeatureFlags(featureFlagOptions =>
+        //{
+        //    featureFlagOptions.CacheExpirationInterval = TimeSpan.FromSeconds(15);
+        //});
     });
 });
 
@@ -39,8 +40,10 @@ builder.Host.ConfigureAppConfiguration(builder =>
 builder.Services.AddRazorPages();
 
 // Add Azure App Configuration and feature management services to the container.
-builder.Services.AddAzureAppConfiguration()
-                .AddFeatureManagement();
+builder.Services.AddFeatureManagement()
+                .UseDisabledFeaturesHandler(new CustomDisabledFeatureHandler())
+                .AddFeatureFilter<PercentageFilter>()
+                .AddFeatureFilter<TimeWindowFilter>();
 
 // Bind configuration to the Settings object
 builder.Services.Configure<Settings>(builder.Configuration.GetSection("MercuryHealth:Settings"));
@@ -54,8 +57,6 @@ builder.Services.AddControllersWithViews();
 
 // Add Azure Application Insights services to the container
 builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
-
-//builder.Services.AddAzureAppConfiguration(builder.Configuration["AppConfig"]
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -72,7 +73,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 // Use Azure App Configuration middleware for dynamic configuration refresh.
-app.UseAzureAppConfiguration();
+//app.UseAzureAppConfiguration();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

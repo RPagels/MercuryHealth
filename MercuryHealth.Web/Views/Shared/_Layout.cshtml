@@ -28,23 +28,24 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" id="menu_exercises" asp-area="" asp-controller="Exercises" asp-action="Index">Exercises</a>
                         </li>
-
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" id="menu_privacy" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
                         @* Check for Feature Flag  *@
+@*                        <feature name="@nameof(FeatureFlags.MetricsDashboard)">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" id="menu_metrics" asp-area="" asp-controller="Home" asp-action="Metrics">Metrics(Preview)</a>
+                            </li>
+                        </feature>*@
                         <feature name="MetricsDashboard">
                             <li class="nav-item">
                                 <a class="nav-link text-dark" id="menu_metrics" asp-area="" asp-controller="Home" asp-action="Metrics">Metrics(Preview)</a>
                             </li>
                         </feature>
-
                         @* Check for Feature Flag  *@
                         <feature name="PrivacyBeta">
                             <li class="nav-item">
                                 <a class="nav-link text-dark" id="menu_privacy" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy(Preview)</a>
-                            </li>
-                        </feature>
-                        <feature name="PrivacyBeta" negate="true">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" id="menu_privacy" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                             </li>
                         </feature>
                     </ul>

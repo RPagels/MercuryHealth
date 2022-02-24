@@ -5,7 +5,7 @@ param defaultTags object
 // Specifies the names of the key-value resources. 
 param ConfigkeyValueNames array = [
   'MercuryHealth:Settings:FontSize'
-  'EMercuryHealth:Settings:Sentinel'
+  'MercuryHealth:Settings:Sentinel'
 ]
 
 // Specifies the values of the key-value resources. It's optional
