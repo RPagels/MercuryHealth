@@ -17,8 +17,6 @@ namespace MercuryHealth.Web.Controllers
 
         //        public HomeController(ILogger<HomeController> logger)
         public HomeController(MercuryHealthWebContext context, IConfiguration config, IFeatureManagerSnapshot featureManager)
-        //public HomeController(MercuryHealthWebContext context, IConfiguration config)
-
         {
             _featureManager = featureManager;
             _context = context;

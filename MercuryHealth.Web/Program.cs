@@ -21,13 +21,15 @@ builder.Host.ConfigureAppConfiguration(builder =>
         //.Select("WebDemo:*")
         .ConfigureRefresh(refreshOptions =>
          {
-             refreshOptions.Register("Settings:EnableMetricsDashboard", refreshAll: true);
+             refreshOptions.Register("MercuryHealth:Settings:Sentinel", refreshAll: true).SetCacheExpiration(TimeSpan.FromSeconds(10));
              // Set Cache timeout for one value only
              //refresh.Register("Settings:EnableMetricsDashboard").SetCacheExpiration(TimeSpan.FromSeconds(10));
          })
+        
+        // Use Feature Flags
         .UseFeatureFlags(featureFlagOptions =>
         {
-            featureFlagOptions.CacheExpirationInterval = TimeSpan.FromSeconds(20);
+            featureFlagOptions.CacheExpirationInterval = TimeSpan.FromSeconds(15);
         });
     });
 });

@@ -1,4 +1,6 @@
-﻿@model IEnumerable<MercuryHealth.Web.Models.Exercises>
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@model IEnumerable<MercuryHealth.Web.Models.Exercises>
 
 @{
     ViewData["Title"] = "Exercises";
@@ -9,7 +11,7 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table"  style="font-size: 14px;">
+<table class="table"  style="font-size: @Configuration["MercuryHealth:Settings:FontSize"]px;">
     <thead>
         <tr>
             <th>

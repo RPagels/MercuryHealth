@@ -64,6 +64,11 @@ resource config 'Microsoft.AppConfiguration/configurationStores@2021-03-01-previ
   }
 }
 
+// Todo: Must add "key-value" pairs under Configuration Explorer
+// MercuryHealth:Settings:FontSize = 14
+// MercuryHealth:Settings:Sentinel = 1
+
+
 // // AppConfiguration Key 1
 // resource key1 'Microsoft.AppConfiguration/configurationStores/keyValues@2021-03-01-preview' = {
 //   name: '${config.name}/${keyValueNames[0]}'
