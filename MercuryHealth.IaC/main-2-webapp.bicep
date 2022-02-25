@@ -67,7 +67,7 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-02-01' = {
     'APPINSIGHTS_PROFILERFEATURE_VERSION': '1.0.0'
     'APPINSIGHTS_SNAPSHOTFEATURE_VERSION': '1.0.0'
     'APPLICATIONINSIGHTS_CONNECTION_STRING': appInsightsConnectionString
-    'Debug ONLY': 'appInsightsName=${appInsightsName}'
+    'Debug ONLY': 'webSiteURL=${webSiteURL}'
     type: 'SQLAzure'
   }
   dependsOn: [
@@ -132,7 +132,7 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-02-01' = {
 //     ]
 //     Configuration: null
 //     Request: {
-//       RequestUrl: '${appService.properties.defaultHostName}' // 'https://website-4vwxkvpofrtbq-dev.azurewebsites.net/'
+//       RequestUrl: '${appService.properties.defaultHostName}'
 //       Headers: null
 //       HttpVerb: 'GET'
 //       RequestBody: null
@@ -240,7 +240,7 @@ resource standardWebTestPageNutritions  'Microsoft.Insights/webtests@2020-10-05-
     ]
     Configuration: null
     Request: {
-      RequestUrl: 'https://${appService.name}.azurewebsites.net/Nutritions' //'https://website-4vwxkvpofrtbq-dev.azurewebsites.net/Nutritions'
+      RequestUrl: 'https://${appService.name}.azurewebsites.net/Nutritions'
       Headers: null
       HttpVerb: 'GET'
       RequestBody: null
@@ -292,7 +292,7 @@ resource standardWebTestPageExercises  'Microsoft.Insights/webtests@2020-10-05-p
     ]
     Configuration: null
     Request: {
-      RequestUrl: 'https://${appService.name}.azurewebsites.net/Exercises' //'https://website-4vwxkvpofrtbq-dev.azurewebsites.net/Exercises'
+      RequestUrl: 'https://${appService.name}.azurewebsites.net/Exercises'
       Headers: null
       HttpVerb: 'GET'
       RequestBody: null
@@ -350,7 +350,7 @@ resource standardWebTestPageHomeDev  'Microsoft.Insights/webtests@2020-10-05-pre
     ]
     Configuration: null
     Request: {
-      RequestUrl: 'https://${appService.name}-dev.azurewebsites.net'
+      RequestUrl: 'https://${webSiteURL}-dev.azurewebsites.net'
       Headers: null
       HttpVerb: 'GET'
       RequestBody: null
@@ -375,7 +375,7 @@ resource standardWebTestPageNutritionsDev  'Microsoft.Insights/webtests@2020-10-
   }
   kind: 'ping'
   properties: {
-    SyntheticMonitorId: appInsightsInstrumentationKey // 'appInsights-4vwxkvpofrtbq'
+    SyntheticMonitorId: appInsightsInstrumentationKey
     Name: 'Dev - Page Nutritions'
     Description: null
     Enabled: true
@@ -402,7 +402,7 @@ resource standardWebTestPageNutritionsDev  'Microsoft.Insights/webtests@2020-10-
     ]
     Configuration: null
     Request: {
-      RequestUrl: 'https://${appService.name}-dev.azurewebsites.net/Nutritions' //'https://website-4vwxkvpofrtbq-dev.azurewebsites.net/Nutritions'
+      RequestUrl: 'https://${appService.name}-dev.azurewebsites.net/Nutritions'
       Headers: null
       HttpVerb: 'GET'
       RequestBody: null
@@ -427,7 +427,7 @@ resource standardWebTestPageExercisesDev  'Microsoft.Insights/webtests@2020-10-0
   }
   kind: 'ping'
   properties: {
-    SyntheticMonitorId: appInsightsName //'appInsights-4vwxkvpofrtbq'
+    SyntheticMonitorId: appInsightsName
     Name: 'Dev - Page Exercises'
     Description: null
     Enabled: true
@@ -454,7 +454,7 @@ resource standardWebTestPageExercisesDev  'Microsoft.Insights/webtests@2020-10-0
     ]
     Configuration: null
     Request: {
-      RequestUrl: 'https://${appService.name}-dev.azurewebsites.net/Exercises' //'https://website-4vwxkvpofrtbq-dev.azurewebsites.net/Exercises'
+      RequestUrl: 'https://${appService.name}-dev.azurewebsites.net/Exercises'
       Headers: null
       HttpVerb: 'GET'
       RequestBody: null
