@@ -62,7 +62,7 @@ namespace MercuryHealth.Web.Controllers
         {
             if (await _featureManager.IsEnabledAsync("PrivacyBeta"))
             {
-                return View(new PrivacyModel { Name = "Privacy Beta" });
+                return View(new PrivacyModel { Name = "Privacy Beta set in Controller" });
             }
             else
             {

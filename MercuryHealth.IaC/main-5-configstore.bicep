@@ -33,6 +33,7 @@ var featureFlagValue1 = {
   enabled: true
 }
 
+// Add Microsoft.Percentage
 param featureFlagKey2 string = 'MetricsDashboard'
 param featureFlagLabel2 string = 'Metrics Dashboard'
 var featureFlagValue2 = {

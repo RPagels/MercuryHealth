@@ -13,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 //Retrieve the Connection String from the secrets manager 
 var connectionString = builder.Configuration.GetConnectionString("AppConfig");
 
+// Add Azure App Configuration/Feature management services to the container.
 builder.Host.ConfigureAppConfiguration(builder =>
 {
     //Connect to your App Config Store & Load Configurations using the connection string
@@ -27,23 +28,19 @@ builder.Host.ConfigureAppConfiguration(builder =>
              //refresh.Register("Settings:MetricsDashboard").SetCacheExpiration(TimeSpan.FromSeconds(10));
          });
 
-        // Use Feature Flags
-        //.UseFeatureFlags(featureFlagOptions =>
-        //{
-        //    featureFlagOptions.CacheExpirationInterval = TimeSpan.FromSeconds(15);
-        //});
     });
+
 });
 
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 
-// Add Azure App Configuration and feature management services to the container.
+// Add Azure App Configuration/Feature management services to the container.
 builder.Services.AddFeatureManagement()
                 .UseDisabledFeaturesHandler(new CustomDisabledFeatureHandler())
-                .AddFeatureFilter<PercentageFilter>()
-                .AddFeatureFilter<TimeWindowFilter>();
+                .AddFeatureFilter<PercentageFilter>();
+                //.AddFeatureFilter<TimeWindowFilter>();
 
 // Bind configuration to the Settings object
 builder.Services.Configure<Settings>(builder.Configuration.GetSection("MercuryHealth:Settings"));
