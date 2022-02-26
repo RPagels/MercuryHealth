@@ -214,9 +214,10 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
       
       ###########################################
-      # Validate ARM Template using Bicep DSL
+      # Deploy ARM Template using Bicep DSL
       ###########################################
     - name: Deploy Infrastucture
+      id: Infra
       uses: azure/arm-deploy@v1
       with:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
@@ -311,7 +312,6 @@ jobs:
 
     # Deploy Application
     - name: 'Deploy Website Application'
-      id: Infra
       uses: azure/webapps-deploy@v2
       with:
           app-name: ${{ env.Website_Name }}
