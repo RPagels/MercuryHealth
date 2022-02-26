@@ -351,10 +351,10 @@ jobs:
         inlineScript: |
           az config set extension.use_dynamic_install=yes_without_prompt
           result=$(az monitor app-insights api-key create \
-                      --api-key ${{ steps.Infra.outputs.releaseAnnotationId }} \
+                      --api-key ${{ env.releaseAnnotationId }} \
                       --write-properties WriteAnnotations \
                       -g ${{ env.Azure_Resource_GroupName }} \
-                      --app ${{ steps.Infra.outputs.appInsightsAppId }} \
+                      --app ${{ env.appInsightsAppId }} \
                       --query "apiKey" --output tsv)
           echo "::set-output name=apiKey::$result"
     
@@ -369,7 +369,7 @@ jobs:
       continue-on-error: false
       id: annotation
       with:
-        applicationId: ${{ steps.Infra.outputs.applicationInsightsApiAppId }}
+        applicationId: ${{ env.appInsightsAppId }} # steps.Infra.outputs.applicationInsightsApiAppId
         apiKey: ${{ steps.AIKeyGen.outputs.apiKey }}
         releaseName: ${{ github.event_name }}
         message: ${{ github.event.head_commit.message }}
