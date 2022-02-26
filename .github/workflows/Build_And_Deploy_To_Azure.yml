@@ -12,7 +12,8 @@ env:
   buildAssemblyVersion: '1.2.3.4'
   dotnet_version: '6.x.x'
   AZURE_WEBAPP_PACKAGE_PATH: '.'
-  Azure_Resource_Group: 'MercuryHealth-rg'
+  Azure_Resource_GroupName: 'MercuryHealth-rg'
+  Azure_Resource_GroupLocation: 'eastus'
   Website_Name: 'webSite-4vwxkvpofrtbq'
   Function_AppName: 'functionApp-4vwxkvpofrtbq'
   Hosting_Plan_Name: 'appPlan-4vwxkvpofrtbq'
@@ -161,13 +162,21 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - name: Ensure Resource Group Exists
+        if: contains(github.event_name, 'push')
+        uses: Azure/CLI@v1
+        with:
+          inlineScript: |
+            #!/bin/bash
+            az group create --name ${{ env.Azure_Resource_GroupName }} --location ${{ env.Azure_Resource_GroupLocation }}
+
       ###########################################
       # Validate ARM Template using Bicep DSL
       ###########################################
       - name: Validate Azure Bicep
         uses: Azure/arm-deploy@v1
         with:
-          resourceGroupName: ${{ env.Azure_Resource_Group }}
+          resourceGroupName: ${{ env.Azure_Resource_GroupName }}
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           template: ${{ github.workspace }}/MercuryHealth.IaC/main-1.bicep
           parameters: ${{ github.workspace }}/MercuryHealth.IaC/main-1.params.json sqlAdministratorLogin=${{ secrets.SQL_DB_LOGIN }} sqlAdministratorLoginPassword=${{ secrets.SQL_DB_PASSWORD }}
@@ -205,13 +214,14 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
       
       ###########################################
-      # Validate ARM Template using Bicep DSL
+      # Deploy ARM Template using Bicep DSL
       ###########################################
     - name: Deploy Infrastucture
+      id: Infra
       uses: azure/arm-deploy@v1
       with:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
-        resourceGroupName: ${{ env.Azure_Resource_Group }}
+        resourceGroupName: ${{ env.Azure_Resource_GroupName }}
         template: ./MercuryHealth.IaC/main-1.bicep
         parameters: ./MercuryHealth.IaC/main-1.params.json sqlAdministratorLogin=${{ secrets.SQL_DB_LOGIN }} sqlAdministratorLoginPassword=${{ secrets.SQL_DB_PASSWORD }}
         deploymentMode: Incremental
@@ -325,18 +335,54 @@ jobs:
 #          slot-name: 'Dev'
 #          package: './MercuryHealth.API'
 
+    - name: Generate Temporary API Key For App Insights
+      id: AIKeyGen
+      if: contains(github.event_name, 'push')
+      uses: Azure/CLI@v1
+      with:
+        inlineScript: |
+          az config set extension.use_dynamic_install=yes_without_prompt
+          result=$(az monitor app-insights api-key create \
+                      --api-key ${{ steps.Infra.outputs.releaseAnnotationId }} \
+                      --write-properties WriteAnnotations \
+                      -g ${{ env.Azure_Resource_GroupName }} \
+                      --app ${{ steps.Infra.outputs.applicationInsightsApplicationId }} \
+                      --query "apiKey" --output tsv)
+          echo "::set-output name=aiKey::$result"
+    
+    - name: Consume Temporary AI Key For App Insights
+      if: contains(github.event_name, 'push')
+      run: |
+        echo ${{ steps.AIKeyGen.outputs.aiKey }}
+        
     # Insert a deployment annotation into Application Insights
     - name: Annotate deployment
       uses: wictorwilen/application-insights-action@v1
       continue-on-error: false
       id: annotation
       with:
-        applicationId: ${{ secrets.AppInsightsApplicationID }}
-        apiKey: ${{secrets.AppInsightsDeployAnnotationAPIKey}}
+        applicationId: ${{ steps.Infra.outputs.applicationInsightsApiAppId }}
+        apiKey: ${{ steps.AIKeyGen.outputs.aiKey }}
         releaseName: ${{ github.event_name }}
         message: ${{ github.event.head_commit.message }}
         actor: ${{ github.actor }}
-    
+        #applicationId: ${{ secrets.AppInsightsApplicationID }}
+        #apiKey: ${{secrets.AppInsightsDeployAnnotationAPIKey}}
+        #releaseName: ${{ github.event_name }}
+        #message: ${{ github.event.head_commit.message }}
+        #actor: ${{ github.actor }}
+
+    - name: Remove Temporary API Key For App Insights
+      if: contains(github.event_name, 'push')
+      uses: Azure/CLI@v1
+      with:
+        inlineScript: |
+          az config set extension.use_dynamic_install=yes_without_prompt
+          az monitor app-insights api-key delete \
+                      --api-key ${{ steps.Infra.outputs.releaseAnnotationId }} \
+                      -g ${{ env.Azure_Resource_GroupName }} \
+                      --app ${{ steps.Infra.outputs.applicationInsightsApplicationId }} 
+
     - name: Azure logout
       run: |
         az logout
@@ -487,7 +533,7 @@ jobs:
         with:
           loadTestConfigFile: './MercuryHealth.LoadTests/LoadTest_HomePage_Config.yaml'
           loadTestResource: ${{ env.Load_Test_Resource }}
-          resourceGroup: ${{ env.Azure_Resource_Group }}
+          resourceGroup: ${{ env.Azure_Resource_GroupName }}
 
       - name: Azure logout
         run: |
@@ -523,7 +569,7 @@ jobs:
         with:
           inlineScript: |
             az webapp deployment slot swap \
-              -g ${{ env.Azure_Resource_Group }} \
+              -g ${{ env.Azure_Resource_GroupName }} \
               -n ${{ env.Website_Name }} \
               --slot dev \
               --target-slot production      
