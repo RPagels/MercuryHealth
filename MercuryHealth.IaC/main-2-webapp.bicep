@@ -67,7 +67,8 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-02-01' = {
     'APPINSIGHTS_PROFILERFEATURE_VERSION': '1.0.0'
     'APPINSIGHTS_SNAPSHOTFEATURE_VERSION': '1.0.0'
     'APPLICATIONINSIGHTS_CONNECTION_STRING': appInsightsConnectionString
-    'Debug ONLY': 'webSiteURL=${webSiteURL}'
+    'Debug ONLY1': 'appService.name=${appService.name}'
+    'Debug ONLY2': 'appService.properties.defaultHostName=${appService.properties.defaultHostName}'
     type: 'SQLAzure'
   }
   dependsOn: [
@@ -350,7 +351,7 @@ resource standardWebTestPageHomeDev  'Microsoft.Insights/webtests@2020-10-05-pre
     ]
     Configuration: null
     Request: {
-      RequestUrl: 'https://${webSiteURL}-dev.azurewebsites.net'
+      RequestUrl: 'https://${appService.properties.defaultHostName}-dev.azurewebsites.net'
       Headers: null
       HttpVerb: 'GET'
       RequestBody: null
@@ -471,5 +472,5 @@ resource standardWebTestPageExercisesDev  'Microsoft.Insights/webtests@2020-10-0
   }
 }
 
-output webSiteName string = appService.name
-output webSiteURL string = appService.properties.defaultHostName
+//output webSiteName string = appService.name
+//output webSiteURL string = appService.properties.defaultHostName
