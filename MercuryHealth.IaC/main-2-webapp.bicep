@@ -110,7 +110,7 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-02-01' = {
 //     Name: 'appInsights-Page Home'
 //     Description: null
 //     Enabled: true
-//     Frequency: 900
+//     Frequency: 300
 //     Timeout: 120 
 //     Kind: 'standard'
 //     RetryEnabled: true
@@ -150,6 +150,10 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-02-01' = {
 //   }
 // }
 
+
+// Location population tags
+// https://docs.microsoft.com/en-us/azure/azure-monitor/app/monitor-web-app-availability
+
 // Works!!!
 // MercuryHealth-rg - appInsights-4vwxkvpofrtbq
 resource standardWebTestPageHome  'Microsoft.Insights/webtests@2020-10-05-preview' = {
@@ -166,30 +170,30 @@ resource standardWebTestPageHome  'Microsoft.Insights/webtests@2020-10-05-previe
     Name: 'Prod - Page Home'
     Description: null
     Enabled: true
-    Frequency: 900
+    Frequency: 300
     Timeout: 120 
     Kind: 'standard'
     RetryEnabled: true
     Locations: [
       {
-        Id: 'emea-nl-ams-azr'
+        Id: 'us-va-ash-azr'  // East US
       }
       {
-        Id: 'emea-ru-msa-edge'
+        Id: 'us-fl-mia-edge' // Central US
       }
       {
-        Id: 'apac-hk-hkn-azr'
+        Id: 'us-ca-sjc-azr' // West US
       }
       {
-        Id: 'latam-br-gru-edge'
+        Id: 'emea-au-syd-edge' // Austrailia East
       }
       {
-        Id: 'emea-au-syd-edge'
+        Id: 'apac-jp-kaw-edge' // Japan East
       }
     ]
     Configuration: null
     Request: {
-      RequestUrl: 'https://${appService.name}.azurewebsites.net'
+      RequestUrl: 'https://${appService.name}.azurewebsites.net/'
       Headers: null
       HttpVerb: 'GET'
       RequestBody: null
@@ -218,30 +222,30 @@ resource standardWebTestPageNutritions  'Microsoft.Insights/webtests@2020-10-05-
     Name: 'Prod - Page Nutritions'
     Description: null
     Enabled: true
-    Frequency: 900
+    Frequency: 300
     Timeout: 120 
     Kind: 'standard'
     RetryEnabled: true
     Locations: [
       {
-        Id: 'emea-nl-ams-azr'
+        Id: 'us-va-ash-azr'  // East US
       }
       {
-        Id: 'emea-ru-msa-edge'
+        Id: 'us-fl-mia-edge' // Central US
       }
       {
-        Id: 'apac-hk-hkn-azr'
+        Id: 'us-ca-sjc-azr' // West US
       }
       {
-        Id: 'latam-br-gru-edge'
+        Id: 'emea-au-syd-edge' // Austrailia East
       }
       {
-        Id: 'emea-au-syd-edge'
+        Id: 'apac-jp-kaw-edge' // Japan East
       }
     ]
     Configuration: null
     Request: {
-      RequestUrl: 'https://${appService.name}.azurewebsites.net/Nutritions'
+      RequestUrl: 'https://${appService.name}.azurewebsites.net/Nutritions/'
       Headers: null
       HttpVerb: 'GET'
       RequestBody: null
@@ -270,30 +274,30 @@ resource standardWebTestPageExercises  'Microsoft.Insights/webtests@2020-10-05-p
     Name: 'Prod - Page Exercises'
     Description: null
     Enabled: true
-    Frequency: 900
+    Frequency: 300
     Timeout: 120 
     Kind: 'standard'
     RetryEnabled: true
     Locations: [
       {
-        Id: 'emea-nl-ams-azr'
+        Id: 'us-va-ash-azr'  // East US
       }
       {
-        Id: 'emea-ru-msa-edge'
+        Id: 'us-fl-mia-edge' // Central US
       }
       {
-        Id: 'apac-hk-hkn-azr'
+        Id: 'us-ca-sjc-azr' // West US
       }
       {
-        Id: 'latam-br-gru-edge'
+        Id: 'emea-au-syd-edge' // Austrailia East
       }
       {
-        Id: 'emea-au-syd-edge'
+        Id: 'apac-jp-kaw-edge' // Japan East
       }
     ]
     Configuration: null
     Request: {
-      RequestUrl: 'https://${appService.name}.azurewebsites.net/Exercises'
+      RequestUrl: 'https://${appService.name}.azurewebsites.net/Exercises/'
       Headers: null
       HttpVerb: 'GET'
       RequestBody: null
@@ -328,30 +332,30 @@ resource standardWebTestPageHomeDev  'Microsoft.Insights/webtests@2020-10-05-pre
     Name: 'Dev - Page Home'
     Description: null
     Enabled: true
-    Frequency: 900
+    Frequency: 300
     Timeout: 120 
     Kind: 'standard'
     RetryEnabled: true
     Locations: [
       {
-        Id: 'emea-nl-ams-azr'
+        Id: 'us-va-ash-azr'  // East US
       }
       {
-        Id: 'emea-ru-msa-edge'
+        Id: 'us-fl-mia-edge' // Central US
       }
       {
-        Id: 'apac-hk-hkn-azr'
+        Id: 'us-ca-sjc-azr' // West US
       }
       {
-        Id: 'latam-br-gru-edge'
+        Id: 'emea-au-syd-edge' // Austrailia East
       }
       {
-        Id: 'emea-au-syd-edge'
+        Id: 'apac-jp-kaw-edge' // Japan East
       }
     ]
     Configuration: null
     Request: {
-      RequestUrl: 'https://${appService.properties.defaultHostName}-dev.azurewebsites.net'
+      RequestUrl: 'https://${appService.name}-dev.azurewebsites.net/'
       Headers: null
       HttpVerb: 'GET'
       RequestBody: null
@@ -380,30 +384,30 @@ resource standardWebTestPageNutritionsDev  'Microsoft.Insights/webtests@2020-10-
     Name: 'Dev - Page Nutritions'
     Description: null
     Enabled: true
-    Frequency: 900
+    Frequency: 300
     Timeout: 120 
     Kind: 'standard'
     RetryEnabled: true
     Locations: [
       {
-        Id: 'emea-nl-ams-azr'
+        Id: 'us-va-ash-azr'  // East US
       }
       {
-        Id: 'emea-ru-msa-edge'
+        Id: 'us-fl-mia-edge' // Central US
       }
       {
-        Id: 'apac-hk-hkn-azr'
+        Id: 'us-ca-sjc-azr' // West US
       }
       {
-        Id: 'latam-br-gru-edge'
+        Id: 'emea-au-syd-edge' // Austrailia East
       }
       {
-        Id: 'emea-au-syd-edge'
+        Id: 'apac-jp-kaw-edge' // Japan East
       }
     ]
     Configuration: null
     Request: {
-      RequestUrl: 'https://${appService.name}-dev.azurewebsites.net/Nutritions'
+      RequestUrl: 'https://${appService.name}-dev.azurewebsites.net/Nutritions/'
       Headers: null
       HttpVerb: 'GET'
       RequestBody: null
@@ -432,30 +436,30 @@ resource standardWebTestPageExercisesDev  'Microsoft.Insights/webtests@2020-10-0
     Name: 'Dev - Page Exercises'
     Description: null
     Enabled: true
-    Frequency: 900
+    Frequency: 300
     Timeout: 120 
     Kind: 'standard'
     RetryEnabled: true
     Locations: [
       {
-        Id: 'emea-nl-ams-azr'
+        Id: 'us-va-ash-azr'  // East US
       }
       {
-        Id: 'emea-ru-msa-edge'
+        Id: 'us-fl-mia-edge' // Central US
       }
       {
-        Id: 'apac-hk-hkn-azr'
+        Id: 'us-ca-sjc-azr' // West US
       }
       {
-        Id: 'latam-br-gru-edge'
+        Id: 'emea-au-syd-edge' // Austrailia East
       }
       {
-        Id: 'emea-au-syd-edge'
+        Id: 'apac-jp-kaw-edge' // Japan East
       }
     ]
     Configuration: null
     Request: {
-      RequestUrl: 'https://${appService.name}-dev.azurewebsites.net/Exercises'
+      RequestUrl: 'https://${appService.name}-dev.azurewebsites.net/Exercises/'
       Headers: null
       HttpVerb: 'GET'
       RequestBody: null
