@@ -345,12 +345,12 @@ jobs:
           result=$(az monitor app-insights api-key create \
                       --api-key ${{ steps.Infra.outputs.releaseAnnotationId }} \
                       --write-properties WriteAnnotations \
-                      -g ${{ env.RESOURCE_GROUP_NAME }} \
+                      -g ${{ env.Azure_Resource_GroupName }} \
                       --app ${{ steps.Infra.outputs.applicationInsightsApplicationId }} \
                       --query "apiKey" --output tsv)
           echo "::set-output name=aiKey::$result"
     
-    - name: Consume Temporary API Key For App Insights
+    - name: Consume Temporary AI Key For App Insights
       if: contains(github.event_name, 'push')
       run: |
         echo ${{ steps.AIKeyGen.outputs.aiKey }}
