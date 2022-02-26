@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "16647454837996552665"
+      "templateHash": "6614682963071022480"
     }
   },
   "parameters": {
@@ -114,7 +114,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "17875249412374530390"
+              "templateHash": "16560225014090644583"
             }
           },
           "parameters": {
@@ -227,342 +227,6 @@
                 "Debug ONLY1": "[format('appService.name={0}', parameters('webSiteName'))]",
                 "Debug ONLY2": "[format('appService.properties.defaultHostName={0}', reference(resourceId('Microsoft.Web/sites', parameters('webSiteName'))).defaultHostName)]",
                 "type": "SQLAzure"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('webSiteName'))]"
-              ]
-            },
-            {
-              "type": "Microsoft.Insights/webtests",
-              "apiVersion": "2020-10-05-preview",
-              "name": "Prod - Page Home",
-              "location": "[parameters('location')]",
-              "tags": {
-                "[format('hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/{0}/providers/microsoft.insights/components/appInsights-4vwxkvpofrtbq', parameters('resourceGroupName'))]": "Resource"
-              },
-              "kind": "ping",
-              "properties": {
-                "SyntheticMonitorId": "[parameters('appInsightsName')]",
-                "Name": "Prod - Page Home",
-                "Description": null,
-                "Enabled": true,
-                "Frequency": 300,
-                "Timeout": 120,
-                "Kind": "standard",
-                "RetryEnabled": true,
-                "Locations": [
-                  {
-                    "Id": "us-va-ash-azr"
-                  },
-                  {
-                    "Id": "us-fl-mia-edge"
-                  },
-                  {
-                    "Id": "us-ca-sjc-azr"
-                  },
-                  {
-                    "Id": "emea-au-syd-edge"
-                  },
-                  {
-                    "Id": "apac-jp-kaw-edge"
-                  }
-                ],
-                "Configuration": null,
-                "Request": {
-                  "RequestUrl": "[format('https://{0}.azurewebsites.net/', parameters('webSiteName'))]",
-                  "Headers": null,
-                  "HttpVerb": "GET",
-                  "RequestBody": null,
-                  "ParseDependentRequests": false,
-                  "FollowRedirects": null
-                },
-                "ValidationRules": {
-                  "ExpectedHttpStatusCode": 200,
-                  "IgnoreHttpsStatusCode": false,
-                  "ContentValidation": null,
-                  "SSLCheck": true,
-                  "SSLCertRemainingLifetimeCheck": 7
-                }
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('webSiteName'))]"
-              ]
-            },
-            {
-              "type": "Microsoft.Insights/webtests",
-              "apiVersion": "2020-10-05-preview",
-              "name": "Prod - Page Nutritions",
-              "location": "[parameters('location')]",
-              "tags": {
-                "hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/appInsights-4vwxkvpofrtbq": "Resource"
-              },
-              "kind": "ping",
-              "properties": {
-                "SyntheticMonitorId": "[parameters('appInsightsInstrumentationKey')]",
-                "Name": "Prod - Page Nutritions",
-                "Description": null,
-                "Enabled": true,
-                "Frequency": 300,
-                "Timeout": 120,
-                "Kind": "standard",
-                "RetryEnabled": true,
-                "Locations": [
-                  {
-                    "Id": "us-va-ash-azr"
-                  },
-                  {
-                    "Id": "us-fl-mia-edge"
-                  },
-                  {
-                    "Id": "us-ca-sjc-azr"
-                  },
-                  {
-                    "Id": "emea-au-syd-edge"
-                  },
-                  {
-                    "Id": "apac-jp-kaw-edge"
-                  }
-                ],
-                "Configuration": null,
-                "Request": {
-                  "RequestUrl": "[format('https://{0}.azurewebsites.net/Nutritions/', parameters('webSiteName'))]",
-                  "Headers": null,
-                  "HttpVerb": "GET",
-                  "RequestBody": null,
-                  "ParseDependentRequests": false,
-                  "FollowRedirects": null
-                },
-                "ValidationRules": {
-                  "ExpectedHttpStatusCode": 200,
-                  "IgnoreHttpsStatusCode": false,
-                  "ContentValidation": null,
-                  "SSLCheck": true,
-                  "SSLCertRemainingLifetimeCheck": 7
-                }
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('webSiteName'))]"
-              ]
-            },
-            {
-              "type": "Microsoft.Insights/webtests",
-              "apiVersion": "2020-10-05-preview",
-              "name": "Prod - Page Exercises",
-              "location": "[parameters('location')]",
-              "tags": {
-                "hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/appInsights-4vwxkvpofrtbq": "Resource"
-              },
-              "kind": "ping",
-              "properties": {
-                "SyntheticMonitorId": "[parameters('appInsightsName')]",
-                "Name": "Prod - Page Exercises",
-                "Description": null,
-                "Enabled": true,
-                "Frequency": 300,
-                "Timeout": 120,
-                "Kind": "standard",
-                "RetryEnabled": true,
-                "Locations": [
-                  {
-                    "Id": "us-va-ash-azr"
-                  },
-                  {
-                    "Id": "us-fl-mia-edge"
-                  },
-                  {
-                    "Id": "us-ca-sjc-azr"
-                  },
-                  {
-                    "Id": "emea-au-syd-edge"
-                  },
-                  {
-                    "Id": "apac-jp-kaw-edge"
-                  }
-                ],
-                "Configuration": null,
-                "Request": {
-                  "RequestUrl": "[format('https://{0}.azurewebsites.net/Exercises/', parameters('webSiteName'))]",
-                  "Headers": null,
-                  "HttpVerb": "GET",
-                  "RequestBody": null,
-                  "ParseDependentRequests": false,
-                  "FollowRedirects": null
-                },
-                "ValidationRules": {
-                  "ExpectedHttpStatusCode": 200,
-                  "IgnoreHttpsStatusCode": false,
-                  "ContentValidation": null,
-                  "SSLCheck": true,
-                  "SSLCertRemainingLifetimeCheck": 7
-                }
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('webSiteName'))]"
-              ]
-            },
-            {
-              "type": "Microsoft.Insights/webtests",
-              "apiVersion": "2020-10-05-preview",
-              "name": "Dev - Page Home",
-              "location": "[parameters('location')]",
-              "tags": {
-                "[format('hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/{0}/providers/microsoft.insights/components/appInsights-4vwxkvpofrtbq', parameters('resourceGroupName'))]": "Resource"
-              },
-              "kind": "ping",
-              "properties": {
-                "SyntheticMonitorId": "[parameters('appInsightsName')]",
-                "Name": "Dev - Page Home",
-                "Description": null,
-                "Enabled": true,
-                "Frequency": 300,
-                "Timeout": 120,
-                "Kind": "standard",
-                "RetryEnabled": true,
-                "Locations": [
-                  {
-                    "Id": "us-va-ash-azr"
-                  },
-                  {
-                    "Id": "us-fl-mia-edge"
-                  },
-                  {
-                    "Id": "us-ca-sjc-azr"
-                  },
-                  {
-                    "Id": "emea-au-syd-edge"
-                  },
-                  {
-                    "Id": "apac-jp-kaw-edge"
-                  }
-                ],
-                "Configuration": null,
-                "Request": {
-                  "RequestUrl": "[format('https://{0}-dev.azurewebsites.net/', parameters('webSiteName'))]",
-                  "Headers": null,
-                  "HttpVerb": "GET",
-                  "RequestBody": null,
-                  "ParseDependentRequests": false,
-                  "FollowRedirects": null
-                },
-                "ValidationRules": {
-                  "ExpectedHttpStatusCode": 200,
-                  "IgnoreHttpsStatusCode": false,
-                  "ContentValidation": null,
-                  "SSLCheck": true,
-                  "SSLCertRemainingLifetimeCheck": 7
-                }
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('webSiteName'))]"
-              ]
-            },
-            {
-              "type": "Microsoft.Insights/webtests",
-              "apiVersion": "2020-10-05-preview",
-              "name": "Dev - Page Nutritions",
-              "location": "[parameters('location')]",
-              "tags": {
-                "hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/appInsights-4vwxkvpofrtbq": "Resource"
-              },
-              "kind": "ping",
-              "properties": {
-                "SyntheticMonitorId": "[parameters('appInsightsInstrumentationKey')]",
-                "Name": "Dev - Page Nutritions",
-                "Description": null,
-                "Enabled": true,
-                "Frequency": 300,
-                "Timeout": 120,
-                "Kind": "standard",
-                "RetryEnabled": true,
-                "Locations": [
-                  {
-                    "Id": "us-va-ash-azr"
-                  },
-                  {
-                    "Id": "us-fl-mia-edge"
-                  },
-                  {
-                    "Id": "us-ca-sjc-azr"
-                  },
-                  {
-                    "Id": "emea-au-syd-edge"
-                  },
-                  {
-                    "Id": "apac-jp-kaw-edge"
-                  }
-                ],
-                "Configuration": null,
-                "Request": {
-                  "RequestUrl": "[format('https://{0}-dev.azurewebsites.net/Nutritions/', parameters('webSiteName'))]",
-                  "Headers": null,
-                  "HttpVerb": "GET",
-                  "RequestBody": null,
-                  "ParseDependentRequests": false,
-                  "FollowRedirects": null
-                },
-                "ValidationRules": {
-                  "ExpectedHttpStatusCode": 200,
-                  "IgnoreHttpsStatusCode": false,
-                  "ContentValidation": null,
-                  "SSLCheck": true,
-                  "SSLCertRemainingLifetimeCheck": 7
-                }
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('webSiteName'))]"
-              ]
-            },
-            {
-              "type": "Microsoft.Insights/webtests",
-              "apiVersion": "2020-10-05-preview",
-              "name": "Dev - Page Exercises",
-              "location": "[parameters('location')]",
-              "tags": {
-                "hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/appInsights-4vwxkvpofrtbq": "Resource"
-              },
-              "kind": "ping",
-              "properties": {
-                "SyntheticMonitorId": "[parameters('appInsightsName')]",
-                "Name": "Dev - Page Exercises",
-                "Description": null,
-                "Enabled": true,
-                "Frequency": 300,
-                "Timeout": 120,
-                "Kind": "standard",
-                "RetryEnabled": true,
-                "Locations": [
-                  {
-                    "Id": "us-va-ash-azr"
-                  },
-                  {
-                    "Id": "us-fl-mia-edge"
-                  },
-                  {
-                    "Id": "us-ca-sjc-azr"
-                  },
-                  {
-                    "Id": "emea-au-syd-edge"
-                  },
-                  {
-                    "Id": "apac-jp-kaw-edge"
-                  }
-                ],
-                "Configuration": null,
-                "Request": {
-                  "RequestUrl": "[format('https://{0}-dev.azurewebsites.net/Exercises/', parameters('webSiteName'))]",
-                  "Headers": null,
-                  "HttpVerb": "GET",
-                  "RequestBody": null,
-                  "ParseDependentRequests": false,
-                  "FollowRedirects": null
-                },
-                "ValidationRules": {
-                  "ExpectedHttpStatusCode": 200,
-                  "IgnoreHttpsStatusCode": false,
-                  "ContentValidation": null,
-                  "SSLCheck": true,
-                  "SSLCertRemainingLifetimeCheck": 7
-                }
               },
               "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', parameters('webSiteName'))]"
@@ -919,7 +583,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "4274692521051161787"
+              "templateHash": "8634454045235725459"
             }
           },
           "parameters": {
@@ -1014,6 +678,14 @@
             "appInsightsConnectionString": {
               "type": "string",
               "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName'))).ConnectionString]"
+            },
+            "applicationInsightsApplicationId": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName'))).ApplicationId]"
+            },
+            "applicationInsightsApiAppId": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName'))).AppId]"
             }
           }
         }

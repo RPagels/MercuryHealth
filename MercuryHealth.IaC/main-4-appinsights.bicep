@@ -5,14 +5,10 @@ param appInsightsAlertName string
 param defaultTags object
 
 // Application Insights
-resource AppInsights_webSiteName 'Microsoft.Insights/components@2020-02-02' = {
+resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
   name: appInsightsName
   location: location
   tags: defaultTags
-  // tags: {
-  //   'hidden-link:${webSiteName}': 'Resource'
-  //   displayName: 'AppInsightsComponent'
-  // }
   kind: 'web'
   properties: {
     Application_Type: 'web'
@@ -27,7 +23,7 @@ resource metricAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
     severity: 0
     enabled: true
     scopes: [
-      AppInsights_webSiteName.id
+      applicationInsights.id
       // ERROR during Deployment
       // "Property id 'b7e034a7-df34-4fef-a6ea-28136655e0a7' at path 'properties.scopes[0]' is invalid. Expect fully qualified resource Id that start with '/subscriptions/***subscriptionId***' or '/providers/***resourceProviderNamespace***/'
 
@@ -71,5 +67,8 @@ resource emailActionGroup 'microsoft.insights/actionGroups@2019-06-01' = {
   }
 }
 
-output appInsightsInstrumentationKey string = AppInsights_webSiteName.properties.InstrumentationKey
-output appInsightsConnectionString string = AppInsights_webSiteName.properties.ConnectionString
+output appInsightsInstrumentationKey string = applicationInsights.properties.InstrumentationKey
+output appInsightsConnectionString string = applicationInsights.properties.ConnectionString
+
+output applicationInsightsApplicationId string = applicationInsights.properties.ApplicationId
+output applicationInsightsApiAppId string = applicationInsights.properties.AppId
