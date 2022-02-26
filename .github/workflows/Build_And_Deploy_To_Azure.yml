@@ -19,7 +19,8 @@ env:
   Hosting_Plan_Name: 'appPlan-4vwxkvpofrtbq'
   Load_Test_ConfigFile: 'LoadTest_HomePage_Config.yaml'
   Load_Test_Resource: 'loadTests-4vwxkvpofrtbq'
-  #appInsightsAppId: 'appInsightsAppId='
+  appInsightsAppId: ''
+  releaseAnnotationId: ''
   
 #  Deployment_Name: MercuryHealthGroup.${{ github.workflow }}.${{ github.run_number }}
 
@@ -218,7 +219,7 @@ jobs:
       ###########################################
       # Deploy ARM Template using Bicep DSL
       ###########################################
-    - name: Deploy Infrastucture
+    - name: Infra
       id: Infra
       uses: azure/arm-deploy@v1
       with:
@@ -231,8 +232,9 @@ jobs:
 
     - name: Save Application Insights Id to Environment Variable
       run: |
-        echo "appInsightsAppId=${{ steps.Infra.outputs.applicationInsightsApplicationId }}" >> $GITHUB_ENV
-        echo "releaseAnnotationId=$${{ steps.Infra.outputs.releaseAnnotationId }}" >> $GITHUB_ENV
+        echo "appInsightsAppId= ${{ steps.Infra.outputs.applicationInsightsApplicationId }}" >> $GITHUB_ENV
+        echo "releaseAnnotationId= ${{ steps.Infra.outputs.releaseAnnotationId }}" >> $GITHUB_ENV
+        
     - name: Azure logout
       run: |
         az logout
