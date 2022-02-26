@@ -76,59 +76,59 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-02-01' = {
 
 // Works!!!
 // MercuryHealth-rg - appInsights-4vwxkvpofrtbq
-// resource standardWebTestPageHome  'Microsoft.Insights/webtests@2020-10-05-preview' = {
-//   name: 'Prod - Page Home'
-//   location: location
-//   tags: {
-//     // Error: A single 'hidden-link' tag pointing to an existing AI component is required. Found none.
-//     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/appInsights-4vwxkvpofrtbq': 'Resource'
-//     //'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
-//   }
-//   kind: 'ping'
-//   properties: {
-//     SyntheticMonitorId: appInsightsName
-//     Name: 'Prod - Page Home'
-//     Description: null
-//     Enabled: true
-//     Frequency: 300
-//     Timeout: 120 
-//     Kind: 'standard'
-//     RetryEnabled: true
-//     Locations: [
-//       {
-//         Id: 'us-va-ash-azr'  // East US
-//       }
-//       {
-//         Id: 'us-fl-mia-edge' // Central US
-//       }
-//       {
-//         Id: 'us-ca-sjc-azr' // West US
-//       }
-//       {
-//         Id: 'emea-au-syd-edge' // Austrailia East
-//       }
-//       {
-//         Id: 'apac-jp-kaw-edge' // Japan East
-//       }
-//     ]
-//     Configuration: null
-//     Request: {
-//       RequestUrl: 'https://${appService.name}.azurewebsites.net/'
-//       Headers: null
-//       HttpVerb: 'GET'
-//       RequestBody: null
-//       ParseDependentRequests: false
-//       FollowRedirects: null
-//     }
-//     ValidationRules: {
-//       ExpectedHttpStatusCode: 200
-//       IgnoreHttpsStatusCode: false
-//       ContentValidation: null
-//       SSLCheck: true
-//       SSLCertRemainingLifetimeCheck: 7
-//     }
-//   }
-// }
+resource standardWebTestPageHome  'Microsoft.Insights/webtests@2020-10-05-preview' = {
+  name: 'Prod - Page Home'
+  location: location
+  tags: {
+    // Error: A single 'hidden-link' tag pointing to an existing AI component is required. Found none.
+    'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/appInsights-4vwxkvpofrtbq': 'Resource'
+    //'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
+  }
+  kind: 'ping'
+  properties: {
+    SyntheticMonitorId: appInsightsName
+    Name: 'Prod - Page Home'
+    Description: null
+    Enabled: true
+    Frequency: 300
+    Timeout: 120 
+    Kind: 'standard'
+    RetryEnabled: true
+    Locations: [
+      {
+        Id: 'us-va-ash-azr'  // East US
+      }
+      {
+        Id: 'us-fl-mia-edge' // Central US
+      }
+      {
+        Id: 'us-ca-sjc-azr' // West US
+      }
+      {
+        Id: 'emea-au-syd-edge' // Austrailia East
+      }
+      {
+        Id: 'apac-jp-kaw-edge' // Japan East
+      }
+    ]
+    Configuration: null
+    Request: {
+      RequestUrl: 'https://${appService.name}.azurewebsites.net/'
+      Headers: null
+      HttpVerb: 'GET'
+      RequestBody: null
+      ParseDependentRequests: false
+      FollowRedirects: null
+    }
+    ValidationRules: {
+      ExpectedHttpStatusCode: 200
+      IgnoreHttpsStatusCode: false
+      ContentValidation: null
+      SSLCheck: true
+      SSLCertRemainingLifetimeCheck: 7
+    }
+  }
+}
 
 // resource standardWebTestPageNutritions  'Microsoft.Insights/webtests@2020-10-05-preview' = {
 //   name: 'Prod - Page Nutritions'

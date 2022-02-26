@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "6614682963071022480"
+      "templateHash": "12817960789493898948"
     }
   },
   "parameters": {
@@ -114,7 +114,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "16560225014090644583"
+              "templateHash": "16399005826856405254"
             }
           },
           "parameters": {
@@ -227,6 +227,62 @@
                 "Debug ONLY1": "[format('appService.name={0}', parameters('webSiteName'))]",
                 "Debug ONLY2": "[format('appService.properties.defaultHostName={0}', reference(resourceId('Microsoft.Web/sites', parameters('webSiteName'))).defaultHostName)]",
                 "type": "SQLAzure"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('webSiteName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Insights/webtests",
+              "apiVersion": "2020-10-05-preview",
+              "name": "Prod - Page Home",
+              "location": "[parameters('location')]",
+              "tags": {
+                "[format('hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/{0}/providers/microsoft.insights/components/appInsights-4vwxkvpofrtbq', parameters('resourceGroupName'))]": "Resource"
+              },
+              "kind": "ping",
+              "properties": {
+                "SyntheticMonitorId": "[parameters('appInsightsName')]",
+                "Name": "Prod - Page Home",
+                "Description": null,
+                "Enabled": true,
+                "Frequency": 300,
+                "Timeout": 120,
+                "Kind": "standard",
+                "RetryEnabled": true,
+                "Locations": [
+                  {
+                    "Id": "us-va-ash-azr"
+                  },
+                  {
+                    "Id": "us-fl-mia-edge"
+                  },
+                  {
+                    "Id": "us-ca-sjc-azr"
+                  },
+                  {
+                    "Id": "emea-au-syd-edge"
+                  },
+                  {
+                    "Id": "apac-jp-kaw-edge"
+                  }
+                ],
+                "Configuration": null,
+                "Request": {
+                  "RequestUrl": "[format('https://{0}.azurewebsites.net/', parameters('webSiteName'))]",
+                  "Headers": null,
+                  "HttpVerb": "GET",
+                  "RequestBody": null,
+                  "ParseDependentRequests": false,
+                  "FollowRedirects": null
+                },
+                "ValidationRules": {
+                  "ExpectedHttpStatusCode": 200,
+                  "IgnoreHttpsStatusCode": false,
+                  "ContentValidation": null,
+                  "SSLCheck": true,
+                  "SSLCertRemainingLifetimeCheck": 7
+                }
               },
               "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', parameters('webSiteName'))]"
@@ -583,7 +639,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "8634454045235725459"
+              "templateHash": "2507478572774339982"
             }
           },
           "parameters": {
@@ -599,6 +655,10 @@
             },
             "defaultTags": {
               "type": "object"
+            },
+            "releaseAnnotationGuid": {
+              "type": "string",
+              "defaultValue": "[newGuid()]"
             }
           },
           "functions": [],
@@ -686,6 +746,10 @@
             "applicationInsightsApiAppId": {
               "type": "string",
               "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName'))).AppId]"
+            },
+            "releaseAnnotationId": {
+              "type": "string",
+              "value": "[parameters('releaseAnnotationGuid')]"
             }
           }
         }
@@ -1383,6 +1447,97 @@
       "dependsOn": [
         "[resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')]"
       ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('apiServiceName')]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "apiServiceName": {
+            "value": "[variables('apiServiceName')]"
+          },
+          "defaultTags": {
+            "value": "[variables('defaultTags')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.4.1008.15138",
+              "templateHash": "11457682879082975626"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string",
+              "defaultValue": "[resourceGroup().location]"
+            },
+            "apiServiceName": {
+              "type": "string"
+            },
+            "defaultTags": {
+              "type": "object"
+            },
+            "publisherEmail": {
+              "type": "string",
+              "defaultValue": "rpagels@microsoft.com",
+              "minLength": 1
+            },
+            "publisherName": {
+              "type": "string",
+              "defaultValue": "Randy Pagels",
+              "minLength": 1
+            },
+            "sku": {
+              "type": "string",
+              "defaultValue": "Consumption",
+              "allowedValues": [
+                "Consumption",
+                "Developer",
+                "Basic",
+                "Standard",
+                "Premium"
+              ]
+            },
+            "skuCount": {
+              "type": "int",
+              "defaultValue": 0
+            }
+          },
+          "functions": [],
+          "resources": [
+            {
+              "type": "Microsoft.ApiManagement/service",
+              "apiVersion": "2020-12-01",
+              "name": "[parameters('apiServiceName')]",
+              "location": "[parameters('location')]",
+              "tags": "[parameters('defaultTags')]",
+              "sku": {
+                "name": "[parameters('sku')]",
+                "capacity": "[parameters('skuCount')]"
+              },
+              "properties": {
+                "publisherEmail": "[parameters('publisherEmail')]",
+                "publisherName": "[parameters('publisherName')]"
+              },
+              "identity": {
+                "type": "SystemAssigned"
+              }
+            }
+          ]
+        }
+      }
     }
   ]
 }

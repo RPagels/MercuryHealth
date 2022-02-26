@@ -136,11 +136,11 @@ module keyvault './main-8-keyvault.bicep' = {
 }
 
 // Create APIM.  NOTE: MUST MOVE THIS. APIM + Azure KeyVault, needs to be in it's own RG + Pipeline
-//module apiservicesmod './main-7-apimanagement.bicep' = {
-// name: apiServiceName
-// params: {
-//   location: location
-//   apiServiceName: apiServiceName
-//   defaultTags: defaultTags
-// }
-//}
+module apiservicesmod './main-7-apimanagement.bicep' = {
+name: apiServiceName
+params: {
+  location: location
+  apiServiceName: apiServiceName
+  defaultTags: defaultTags
+}
+}
