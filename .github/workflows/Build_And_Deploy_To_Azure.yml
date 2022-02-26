@@ -19,6 +19,9 @@ env:
   Hosting_Plan_Name: 'appPlan-4vwxkvpofrtbq'
   Load_Test_ConfigFile: 'LoadTest_HomePage_Config.yaml'
   Load_Test_Resource: 'loadTests-4vwxkvpofrtbq'
+  appInsightsAppId: 'appInsightsAppId='
+  appInsightsApiId: 'appInsightsApiId='
+  
 #  Deployment_Name: MercuryHealthGroup.${{ github.workflow }}.${{ github.run_number }}
 
 ###################################################################
@@ -227,6 +230,11 @@ jobs:
         deploymentMode: Incremental
         failOnStdErr: false
 
+    - name: Save output keys to Environment Variables
+      run: |
+        echo "appInsightsAppId=${{ steps.Infra.outputs.applicationInsightsApplicationId }}" >> $GITHUB_ENV
+        echo "appInsightsApiId=${{ steps.Infra.outputs.applicationInsightsApiAppId }}" >> $GITHUB_ENV
+        
     - name: Azure logout
       run: |
         az logout
