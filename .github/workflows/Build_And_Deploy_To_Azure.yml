@@ -199,9 +199,13 @@ jobs:
     
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
+    outputs:
+      output1: ${{ steps.Infra.outputs.appInsightsAppId }}
+      output2: ${{ steps.Infra.outputs.releaseAnnotationId }}
+    
     # Identify any jobs that must complete successfully before this job will run.
     needs: [Build_Stage_Application]
+    
     steps:
     - name: Download Build Artifact-Infrastructure
       uses: actions/download-artifact@v2
@@ -228,20 +232,11 @@ jobs:
         mkdir -p target/bicep
         bicep build ./MercuryHealth.IaC/main-1.bicep --outdir ./MercuryHealth.IaC
 
-#    - name: Infra
-#      id: Infra
-#      if: ${{ env.SHOULD_DEPLOY == 'true' }}
-#      uses: azure/arm-deploy@v1
-#      with:
-#        resourceGroupName: ${{ env.Azure_Resource_GroupName }}
-#        template: ./MercuryHealth.IaC/main-1.json
-#        parameters: ./MercuryHealth.IaC/main-1.params.json sqlAdministratorLogin=${{ secrets.SQL_DB_LOGIN }} sqlAdministratorLoginPassword=${{ secrets.SQL_DB_PASSWORD }}
-#        deploymentMode: Incremental
         
       ###########################################
       # Deploy ARM Template using Bicep DSL
       ###########################################
-    - name: Infra
+    - name: Infrastructure
       id: Infra
       uses: azure/arm-deploy@v1
       with:
@@ -249,15 +244,18 @@ jobs:
         resourceGroupName: ${{ env.Azure_Resource_GroupName }}
         #template: ./MercuryHealth.IaC/main-1.bicep
         template: ./MercuryHealth.IaC/main-1.json
-        #parameters: ./MercuryHealth.IaC/main-1.params.json sqlAdministratorLogin=${{ secrets.SQL_DB_LOGIN }} sqlAdministratorLoginPassword=${{ secrets.SQL_DB_PASSWORD }}
+        parameters: ./MercuryHealth.IaC/main-1.params.json sqlAdministratorLogin=${{ secrets.SQL_DB_LOGIN }} sqlAdministratorLoginPassword=${{ secrets.SQL_DB_PASSWORD }}
         deploymentMode: Incremental
         failOnStdErr: false
 
     - name: Save Application Insights Id to Environment Variable
       run: |
-        echo "appInsightsAppId= ${{ steps.Infra.outputs.applicationInsightsApplicationId }}" >> $GITHUB_ENV
-        echo "releaseAnnotationId= ${{ steps.Infra.outputs.releaseAnnotationId }}" >> $GITHUB_ENV
-        
+        echo "::set-output name=appInsightsAppId::${{needs.Deploy_Stage_IaC.outputs.appInsightsAppId}}"
+        echo "::set-output name=releaseAnnotationId::${{needs.Deploy_Stage_IaC.outputs.releaseAnnotationId}}"
+        #echo "appInsightsAppId= ${{ steps.Infra.outputs.applicationInsightsApplicationId }}" >> $GITHUB_ENV
+        #echo "releaseAnnotationId= ${{ steps.Infra.outputs.releaseAnnotationId }}" >> $GITHUB_ENV 
+
+
     - name: Azure logout
       run: |
         az logout
