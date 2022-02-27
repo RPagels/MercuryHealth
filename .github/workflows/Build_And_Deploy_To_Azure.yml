@@ -215,7 +215,29 @@ jobs:
       continue-on-error: false
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-      
+
+    - name: Install Bicep
+      run: |
+        curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
+        chmod +x ./bicep
+        sudo mv ./bicep /usr/local/bin/bicep
+        bicep --help
+
+    - name: Generate ARM template
+      run: |
+        mkdir -p target/bicep
+        bicep build ./MercuryHealth.IaC/main-1.bicep --outdir ./MercuryHealth.IaC
+
+#    - name: Infra
+#      id: Infra
+#      if: ${{ env.SHOULD_DEPLOY == 'true' }}
+#      uses: azure/arm-deploy@v1
+#      with:
+#        resourceGroupName: ${{ env.Azure_Resource_GroupName }}
+#        template: ./MercuryHealth.IaC/main-1.json
+#        parameters: ./MercuryHealth.IaC/main-1.params.json sqlAdministratorLogin=${{ secrets.SQL_DB_LOGIN }} sqlAdministratorLoginPassword=${{ secrets.SQL_DB_PASSWORD }}
+#        deploymentMode: Incremental
+        
       ###########################################
       # Deploy ARM Template using Bicep DSL
       ###########################################
@@ -226,6 +248,7 @@ jobs:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: ${{ env.Azure_Resource_GroupName }}
         template: ./MercuryHealth.IaC/main-1.bicep
+        #template: ./MercuryHealth.IaC/main-1.json
         parameters: ./MercuryHealth.IaC/main-1.params.json sqlAdministratorLogin=${{ secrets.SQL_DB_LOGIN }} sqlAdministratorLoginPassword=${{ secrets.SQL_DB_PASSWORD }}
         deploymentMode: Incremental
         failOnStdErr: false
