@@ -250,8 +250,10 @@ jobs:
 
     - name: Save Application Insights Id to Environment Variable
       run: |
-        echo "::set-output name=appInsightsAppId::${{needs.Deploy_Stage_IaC.outputs.appInsightsAppId}}"
-        echo "::set-output name=releaseAnnotationId::${{needs.Deploy_Stage_IaC.outputs.releaseAnnotationId}}"
+        echo 'appInsightsAppId = ${{needs.Deploy_Stage_IaC.outputs.output1}}'
+        echo 'releaseAnnotationId = ${{needs.Deploy_Stage_IaC.outputs.output2}}'
+        echo "::set-output name=appInsightsAppId::${{needs.Deploy_Stage_IaC.outputs.output1}}"
+        echo "::set-output name=releaseAnnotationId::${{needs.Deploy_Stage_IaC.outputs.output2}}"
         #echo "appInsightsAppId= ${{ steps.Infra.outputs.applicationInsightsApplicationId }}" >> $GITHUB_ENV
         #echo "releaseAnnotationId= ${{ steps.Infra.outputs.releaseAnnotationId }}" >> $GITHUB_ENV 
 
