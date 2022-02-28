@@ -19,11 +19,10 @@ param appInsightsConnectionString string
 param defaultTags object
 
 // Varabiles
-var standardPlanMaxAdditionalSlots = 3
+var standardPlanMaxAdditionalSlots = 2
 param environments array = [
-  'Dev'
-  'QA'
-  'UAT'
+  'dev'
+  'qa'
 ]
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2021-01-15' = {
@@ -71,6 +70,17 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-02-01' = {
   }
 }
 
+resource webAppPortalName_environments 'Microsoft.Web/sites/slots@2021-03-01' = [for item in environments: {
+  name: '${webSiteName}/${item}'
+  kind: 'app'
+  location: location
+  tags: {
+    displayName: 'WebAppSlots'
+  }
+  properties: {
+    serverFarmId: appServicePlan.id
+  }
+}]
 
 // Location population tags
 // https://docs.microsoft.com/en-us/azure/azure-monitor/app/monitor-web-app-availability

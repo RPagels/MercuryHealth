@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "2767447354687229145"
+      "templateHash": "16448294567947954152"
     }
   },
   "parameters": {
@@ -114,7 +114,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "11414044790586993525"
+              "templateHash": "7771540320043381439"
             }
           },
           "parameters": {
@@ -231,6 +231,26 @@
               },
               "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', parameters('webSiteName'))]"
+              ]
+            },
+            {
+              "copy": {
+                "name": "webAppPortalName_environments",
+                "count": "[length(parameters('environments'))]"
+              },
+              "type": "Microsoft.Web/sites/slots",
+              "apiVersion": "2021-03-01",
+              "name": "[format('{0}/{1}', parameters('webSiteName'), parameters('environments')[copyIndex()])]",
+              "kind": "app",
+              "location": "[parameters('location')]",
+              "tags": {
+                "displayName": "WebAppSlots"
+              },
+              "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('webAppPlanName'))]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('webAppPlanName'))]"
               ]
             },
             {
