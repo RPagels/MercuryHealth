@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "3820287725933963430"
+      "templateHash": "2767447354687229145"
     }
   },
   "parameters": {
@@ -54,15 +54,6 @@
     }
   },
   "resources": [
-    {
-      "type": "Microsoft.Authorization/locks",
-      "apiVersion": "2020-05-01",
-      "name": "DontDeleteMe",
-      "properties": {
-        "level": "CanNotDelete",
-        "notes": "Prevent deletion of the resource group"
-      }
-    },
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2020-06-01",
@@ -123,7 +114,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "16399005826856405254"
+              "templateHash": "11414044790586993525"
             }
           },
           "parameters": {
@@ -235,6 +226,7 @@
                 "APPLICATIONINSIGHTS_CONNECTION_STRING": "[parameters('appInsightsConnectionString')]",
                 "Debug ONLY1": "[format('appService.name={0}', parameters('webSiteName'))]",
                 "Debug ONLY2": "[format('appService.properties.defaultHostName={0}', reference(resourceId('Microsoft.Web/sites', parameters('webSiteName'))).defaultHostName)]",
+                "Debug ONLY3": "[format('appInsightsName={0}', parameters('appInsightsName'))]",
                 "type": "SQLAzure"
               },
               "dependsOn": [
@@ -247,7 +239,7 @@
               "name": "Prod - Page Home",
               "location": "[parameters('location')]",
               "tags": {
-                "[format('hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/{0}/providers/microsoft.insights/components/appInsights-4vwxkvpofrtbq', parameters('resourceGroupName'))]": "Resource"
+                "[format('hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/{0}/providers/microsoft.insights/components/{1}', parameters('resourceGroupName'), parameters('appInsightsName'))]": "Resource"
               },
               "kind": "ping",
               "properties": {
