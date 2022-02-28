@@ -66,6 +66,7 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-02-01' = {
     'APPLICATIONINSIGHTS_CONNECTION_STRING': appInsightsConnectionString
     'Debug ONLY1': 'appService.name=${appService.name}'
     'Debug ONLY2': 'appService.properties.defaultHostName=${appService.properties.defaultHostName}'
+    'Debug ONLY3': 'appInsightsName=${appInsightsName}'
     type: 'SQLAzure'
   }
 }
@@ -75,14 +76,14 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-02-01' = {
 // https://docs.microsoft.com/en-us/azure/azure-monitor/app/monitor-web-app-availability
 
 // Works!!!
-// MercuryHealth-rg - appInsights-4vwxkvpofrtbq
+// MercuryHealth-rg - appi-btocbms4557so
 resource standardWebTestPageHome  'Microsoft.Insights/webtests@2020-10-05-preview' = {
   name: 'Prod - Page Home'
   location: location
   tags: {
+    'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
     // Error: A single 'hidden-link' tag pointing to an existing AI component is required. Found none.
-    'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/appInsights-4vwxkvpofrtbq': 'Resource'
-    //'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
+    //'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/appi-btocbms4557so': 'Resource'
   }
   kind: 'ping'
   properties: {
@@ -134,11 +135,11 @@ resource standardWebTestPageHome  'Microsoft.Insights/webtests@2020-10-05-previe
 //   name: 'Prod - Page Nutritions'
 //   location: location
 //   tags: {
-//     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/appInsights-4vwxkvpofrtbq': 'Resource'
+//     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/appi-btocbms4557so': 'Resource'
 //   }
 //   kind: 'ping'
 //   properties: {
-//     SyntheticMonitorId: appInsightsInstrumentationKey // 'appInsights-4vwxkvpofrtbq'
+//     SyntheticMonitorId: appInsightsInstrumentationKey // 'appi-btocbms4557so'
 //     Name: 'Prod - Page Nutritions'
 //     Description: null
 //     Enabled: true
@@ -186,11 +187,11 @@ resource standardWebTestPageHome  'Microsoft.Insights/webtests@2020-10-05-previe
 //   name: 'Prod - Page Exercises'
 //   location: location
 //   tags: {
-//     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/appInsights-4vwxkvpofrtbq': 'Resource'
+//     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/appi-btocbms4557so': 'Resource'
 //   }
 //   kind: 'ping'
 //   properties: {
-//     SyntheticMonitorId: appInsightsName //'appInsights-4vwxkvpofrtbq'
+//     SyntheticMonitorId: appInsightsName //'appi-btocbms4557so'
 //     Name: 'Prod - Page Exercises'
 //     Description: null
 //     Enabled: true
@@ -243,7 +244,7 @@ resource standardWebTestPageHome  'Microsoft.Insights/webtests@2020-10-05-previe
 //   location: location
 //   tags: {
 //     // Error: A single 'hidden-link' tag pointing to an existing AI component is required. Found none.
-//     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/appInsights-4vwxkvpofrtbq': 'Resource'
+//     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/appi-btocbms4557so': 'Resource'
 //     //'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
 //   }
 //   kind: 'ping'
@@ -296,7 +297,7 @@ resource standardWebTestPageHome  'Microsoft.Insights/webtests@2020-10-05-previe
 //   name: 'Dev - Page Nutritions'
 //   location: location
 //   tags: {
-//     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/appInsights-4vwxkvpofrtbq': 'Resource'
+//     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/appi-btocbms4557so': 'Resource'
 //   }
 //   kind: 'ping'
 //   properties: {
@@ -348,7 +349,7 @@ resource standardWebTestPageHome  'Microsoft.Insights/webtests@2020-10-05-previe
 //   name: 'Dev - Page Exercises'
 //   location: location
 //   tags: {
-//     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/appInsights-4vwxkvpofrtbq': 'Resource'
+//     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/appi-btocbms4557so': 'Resource'
 //   }
 //   kind: 'ping'
 //   properties: {

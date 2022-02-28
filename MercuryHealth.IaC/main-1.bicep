@@ -37,9 +37,14 @@ var defaultTags = {
   'CreatedBy': createdBy
 }
 
+// Ask Kyle! Error during initial deployment.
+//
+// The Resource 'Microsoft.AppConfiguration/configurationStores/appcs-btocbms4557so' under resource group 'rg-MercuryHealth' was not found.
+//
 // Avoid outputs for secrets - Look up secrets dynamically
 resource config 'Microsoft.AppConfiguration/configurationStores@2021-03-01-preview' existing = {
   name: configStoreName
+dependson: [apiServiceName]
 }
 var configStoreConnectionString = listKeys(config.id, config.apiVersion).value[0].connectionString
 
