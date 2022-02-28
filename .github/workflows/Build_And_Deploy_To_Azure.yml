@@ -1,5 +1,4 @@
 # This is a basic workflow to help you get started with Actions
-#
 
 name: Build_And_Deploy_To_Azure
 
@@ -164,12 +163,14 @@ jobs:
           inlineScript: |
             az group create --name ${{ env.Azure_Resource_GroupName }} --location ${{ env.Azure_Resource_GroupLocation }}
 
+      # Ask Kyle! The client 'x' with object id 'x' does not have authorization to perform action!
       - name: Ensure Resource Group is Locked
         if: contains(github.event_name, 'push')
         uses: Azure/CLI@v1
+        continue-on-error: true
         with:
           inlineScript: |
-            az group lock create --lock-type ReadOnly -n "DontDeleteMe" -g ${{ env.Azure_Resource_GroupName }} -n "Prevent deletion of the resource group"
+            az group lock create --lock-type ReadOnly -n 'DontDeleteMe' -g ${{ env.Azure_Resource_GroupName }} -n 'Prevent deletion of the resource group'
             
       ###########################################
       # Validate ARM Template using Bicep DSL
