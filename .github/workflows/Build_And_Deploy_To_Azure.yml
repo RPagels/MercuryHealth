@@ -285,7 +285,8 @@ jobs:
       uses: azure/login@v1
       continue-on-error: false
       with:
-        creds: ${{ secrets.AZURE_SQL_CREDENTIALS }}
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        #creds: ${{ secrets.AZURE_SQL_CREDENTIALS }}
     
     # Deploy Database *.dacpac file - Requires windows-latest runner!!!
     - name: 'Deploy the database to Azure'
