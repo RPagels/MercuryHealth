@@ -15,18 +15,19 @@ param sqlAdministratorLogin string
 param sqlAdministratorLoginPassword string
 
 // Variables
-var webAppPlanName = 'appPlan-${uniqueString(resourceGroup().id)}'
-var webSiteName = 'webSite-${uniqueString(resourceGroup().id)}'
-var sqlserverName = toLower('sqlServer-${uniqueString(resourceGroup().id)}')
-var sqlDBName = 'MercuryHealthDB'
-var configStoreName = 'appConfig-${uniqueString(resourceGroup().id)}'
-var appInsightsName = 'appInsights-${uniqueString(resourceGroup().id)}'
+// https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations
+var webAppPlanName = 'plan-${uniqueString(resourceGroup().id)}'
+var webSiteName = 'app-${uniqueString(resourceGroup().id)}'
+var sqlserverName = toLower('sql-${uniqueString(resourceGroup().id)}')
+var sqlDBName = toLower('sqldb-${uniqueString(resourceGroup().id)}')
+var configStoreName = 'appcs-${uniqueString(resourceGroup().id)}'
+var appInsightsName = 'appi-${uniqueString(resourceGroup().id)}'
 var appInsightsAlertName = 'ResponseTime-${uniqueString(resourceGroup().id)}'
-var functionAppName = 'functionApp-${uniqueString(resourceGroup().id)}'
-var functionAppServiceName = 'functionAppservice-${uniqueString(resourceGroup().id)}'
-var apiServiceName = 'apiService-${uniqueString(resourceGroup().id)}'
-var loadTestsName = 'loadTests-${uniqueString(resourceGroup().id)}'
-var keyvaultName = 'keyVault-${uniqueString(resourceGroup().id)}'
+var functionAppName = 'func-${uniqueString(resourceGroup().id)}'
+var functionAppServiceName = 'funcplan-${uniqueString(resourceGroup().id)}'
+var apiServiceName = 'apim-${uniqueString(resourceGroup().id)}'
+var loadTestsName = 'loadtests-${uniqueString(resourceGroup().id)}'
+var keyvaultName = 'kv-${uniqueString(resourceGroup().id)}'
 
 // Tags
 var defaultTags = {
@@ -41,6 +42,15 @@ resource config 'Microsoft.AppConfiguration/configurationStores@2021-03-01-previ
   name: configStoreName
 }
 var configStoreConnectionString = listKeys(config.id, config.apiVersion).value[0].connectionString
+
+// Lock Resoure Group
+resource dontDeleteLock 'Microsoft.Authorization/locks@2020-05-01' = {
+  name: 'DontDeleteMe'
+  properties: {
+    level: 'CanNotDelete'
+    notes: 'Prevent deletion of the resource group'
+  }
+}
 
 // Create Web App
 module webappmod './main-2-webapp.bicep' = {
