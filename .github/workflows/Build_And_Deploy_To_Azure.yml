@@ -1,4 +1,5 @@
 # This is a basic workflow to help you get started with Actions
+#
 
 name: Build_And_Deploy_To_Azure
 
@@ -12,17 +13,16 @@ env:
   buildAssemblyVersion: '1.2.3.4'
   dotnet_version: '6.x.x'
   AZURE_WEBAPP_PACKAGE_PATH: '.'
-  Azure_Resource_GroupName: 'MercuryHealth-rg'
+  Azure_Resource_GroupName: 'rg-MercuryHealth'
   Azure_Resource_GroupLocation: 'eastus'
-  Website_Name: 'webSite-4vwxkvpofrtbq'
-  Function_AppName: 'functionApp-4vwxkvpofrtbq'
-  Hosting_Plan_Name: 'appPlan-4vwxkvpofrtbq'
-  Load_Test_ConfigFile: 'LoadTest_HomePage_Config.yaml'
+  Website_Name: 'app-4vwxkvpofrtbq'
+  Function_AppName: 'func-4vwxkvpofrtbq'
+  Hosting_Plan_Name: 'plan-4vwxkvpofrtbq'
   Load_Test_Resource: 'loadTests-4vwxkvpofrtbq'
-  appInsightsAppId: ''
-  releaseAnnotationId: ''
-  
-#  Deployment_Name: MercuryHealthGroup.${{ github.workflow }}.${{ github.run_number }}
+  Load_Test_ConfigFile: 'LoadTest_HomePage_Config.yaml'
+  #appInsightsAppId: ''
+  #releaseAnnotationId: ''
+  #Deployment_Name: MercuryHealthGroup.${{ github.workflow }}.${{ github.run_number }}
 
 ###################################################################
 # Triggers - Controls when the action will run.
@@ -131,14 +131,6 @@ jobs:
           name: MercuryHealth.API
           path: ${{ github.workspace }}/api
 
-# Questionable...needed???
-#      - name: Upload Build Artifacts-UI Tests
-#        if: ${{ github.event_name != 'pull_request' }}
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: MercuryHealth.UITests
-#          path: ${{ github.workspace }}/MercuryHealth.UITests/MercuryHealth.UITests.csproj
-
       - name: Upload Build Artifacts-UI Tests
         if: ${{ github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v2
@@ -170,9 +162,15 @@ jobs:
         uses: Azure/CLI@v1
         with:
           inlineScript: |
-            #!/bin/bash
             az group create --name ${{ env.Azure_Resource_GroupName }} --location ${{ env.Azure_Resource_GroupLocation }}
 
+      - name: Ensure Resource Group is Locked
+        if: contains(github.event_name, 'push')
+        uses: Azure/CLI@v1
+        with:
+          inlineScript: |
+            az group lock create --lock-type ReadOnly -n "DontDeleteMe" -g ${{ env.Azure_Resource_GroupName }} -n "Prevent deletion of the resource group"
+            
       ###########################################
       # Validate ARM Template using Bicep DSL
       ###########################################
@@ -199,9 +197,13 @@ jobs:
     
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
+    outputs:
+      output1: ${{ steps.Infra.outputs.appInsightsAppId }}
+      output2: ${{ steps.Infra.outputs.releaseAnnotationId }}
+    
     # Identify any jobs that must complete successfully before this job will run.
     needs: [Build_Stage_Application]
+    
     steps:
     - name: Download Build Artifact-Infrastructure
       uses: actions/download-artifact@v2
@@ -215,13 +217,27 @@ jobs:
       continue-on-error: false
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-      
+
+#    - name: Install Bicep
+#      run: |
+#        curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
+#        chmod +x ./bicep
+#        sudo mv ./bicep /usr/local/bin/bicep
+#        bicep --help
+
+#    - name: Generate ARM template
+#      run: |
+#        mkdir -p target/bicep
+#        bicep build ./MercuryHealth.IaC/main-1.bicep --outdir ./MercuryHealth.IaC
+
+        
       ###########################################
       # Deploy ARM Template using Bicep DSL
       ###########################################
-    - name: Infra
+    - name: Infrastructure
       id: Infra
       uses: azure/arm-deploy@v1
+      continue-on-error: false
       with:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: ${{ env.Azure_Resource_GroupName }}
@@ -230,11 +246,15 @@ jobs:
         deploymentMode: Incremental
         failOnStdErr: false
 
-    - name: Save Application Insights Id to Environment Variable
-      run: |
-        echo "appInsightsAppId= ${{ steps.Infra.outputs.applicationInsightsApplicationId }}" >> $GITHUB_ENV
-        echo "releaseAnnotationId= ${{ steps.Infra.outputs.releaseAnnotationId }}" >> $GITHUB_ENV
-        
+#    - name: Save Application Insights Id to Environment Variable
+#      run: |
+#        echo 'appInsightsAppId1 = ${{steps.Infra.outputs.releaseAnnotationId}}'
+#        echo 'releaseAnnotationId1 = ${{steps.Infra.outputs.applicationInsightsApplicationId}}'
+#        echo "::set-output name=appInsightsAppId2::${{steps.Infra.outputs.releaseAnnotationId}}"
+#        echo "::set-output name=releaseAnnotationId2::${{steps.Infra.outputs.applicationInsightsApplicationId}}"
+#        echo "appInsightsAppId3= ${{ steps.Infra.outputs.applicationInsightsApplicationId }}" >> $GITHUB_ENV
+#        echo "releaseAnnotationId3= ${{ steps.Infra.outputs.releaseAnnotationId }}" >> $GITHUB_ENV 
+
     - name: Azure logout
       run: |
         az logout
@@ -343,25 +363,25 @@ jobs:
 #          slot-name: 'Dev'
 #          package: './MercuryHealth.API'
 
-    - name: Generate Temporary API Key For App Insights
-      id: AIKeyGen
-      if: contains(github.event_name, 'push')
-      uses: Azure/CLI@v1
-      with:
-        inlineScript: |
-          az config set extension.use_dynamic_install=yes_without_prompt
-          result=$(az monitor app-insights api-key create \
-                      --api-key ${{ steps.Infra.outputs.releaseAnnotationId }} \
-                      --write-properties WriteAnnotations \
-                      -g ${{ env.Azure_Resource_GroupName }} \
-                      --app ${{ steps.Infra.outputs.appInsightsAppId }} \
-                      --query "apiKey" --output tsv)
-          echo "::set-output name=apiKey::$result"
+#    - name: Generate Temporary API Key For App Insights
+#      id: AIKeyGen
+#      if: contains(github.event_name, 'push')
+#      uses: Azure/CLI@v1
+#      with:
+#        inlineScript: |
+#          az config set extension.use_dynamic_install=yes_without_prompt
+#          result=$(az monitor app-insights api-key create \
+#                      --api-key ${{ env.releaseAnnotationId }} \
+#                      --write-properties WriteAnnotations \
+#                      -g ${{ env.Azure_Resource_GroupName }} \
+#                      --app ${{ env.appInsightsAppId }} \
+#                      --query "apiKey" --output tsv)
+#          echo "::set-output name=apiKey::$result"
     
-    - name: Consume Temporary AI Key For App Insights
-      if: contains(github.event_name, 'push')
-      run: |
-        echo ${{ steps.AIKeyGen.outputs.aiKey }}
+#    - name: Consume Temporary AI Key For App Insights
+#      if: contains(github.event_name, 'push')
+#      run: |
+#        echo ${{ steps.AIKeyGen.outputs.aiKey }}
         
     # Insert a deployment annotation into Application Insights
     - name: Annotate deployment
@@ -369,28 +389,37 @@ jobs:
       continue-on-error: false
       id: annotation
       with:
-        applicationId: ${{ steps.Infra.outputs.applicationInsightsApiAppId }}
-        apiKey: ${{ steps.AIKeyGen.outputs.apiKey }}
+        applicationId: ${{ secrets.AppInsightsApplicationID }}
+        apiKey: ${{secrets.AppInsightsDeployAnnotationAPIKey}}
         releaseName: ${{ github.event_name }}
         message: ${{ github.event.head_commit.message }}
         actor: ${{ github.actor }}
-        #applicationId: ${{ secrets.AppInsightsApplicationID }}
-        #apiKey: ${{secrets.AppInsightsDeployAnnotationAPIKey}}
+        #applicationId: ${{ env.appInsightsAppId }} # steps.Infra.outputs.applicationInsightsApiAppId
+        #apiKey: ${{ steps.AIKeyGen.outputs.apiKey }}
         #releaseName: ${{ github.event_name }}
         #message: ${{ github.event.head_commit.message }}
         #actor: ${{ github.actor }}
 
-    - name: Remove Temporary API Key For App Insights
-      if: contains(github.event_name, 'push')
-      uses: Azure/CLI@v1
-      with:
-        inlineScript: |
-          az config set extension.use_dynamic_install=yes_without_prompt
-          az monitor app-insights api-key delete \
-                      --api-key ${{ steps.Infra.outputs.releaseAnnotationId }} \
-                      -g ${{ env.Azure_Resource_GroupName }} \
-                      --app ${{ steps.Infra.outputs.applicationInsightsApplicationId }} 
+#    - name: Remove Temporary API Key For App Insights
+#      if: contains(github.event_name, 'push')
+#      uses: Azure/CLI@v1
+#      with:
+#        inlineScript: |
+#          az config set extension.use_dynamic_install=yes_without_prompt
+#          az monitor app-insights api-key delete \
+#                      --api-key ${{ steps.Infra.outputs.releaseAnnotationId }} \
+#                      -g ${{ env.Azure_Resource_GroupName }} \
+#                      --app ${{ steps.Infra.outputs.applicationInsightsApplicationId }} 
 
+    - name: Show Environment Variables
+      run: |
+        echo 'appInsightsAppId1 = ${{ env.appInsightsAppId1 }}'
+        echo 'releaseAnnotationId1 = ${{ env.releaseAnnotationId1 }}'
+        echo "appInsightsAppId2 = ${{ env.appInsightsAppId2 }}"
+        echo "releaseAnnotationId2 = ${{ env.releaseAnnotationId2 }}"
+        echo "appInsightsAppId3 = ${{ env.appInsightsAppId3 }}"
+        echo "releaseAnnotationId3 = ${{ env.releaseAnnotationId3 }}"
+        
     - name: Azure logout
       run: |
         az logout
