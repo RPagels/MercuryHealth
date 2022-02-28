@@ -63,8 +63,7 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-02-01' = {
     'APPINSIGHTS_PROFILERFEATURE_VERSION': '1.0.0'
     'APPINSIGHTS_SNAPSHOTFEATURE_VERSION': '1.0.0'
     'APPLICATIONINSIGHTS_CONNECTION_STRING': appInsightsConnectionString
-    'WebAppUrl': webSiteName
-    'WebAppUrlTest': 'https://${appService.name}-dev.azurewebsites.net/'
+    'WebAppUrl': 'https://${appService.name}-dev.azurewebsites.net/'
     'Debug ONLY1': 'appService.name=${appService.name}'
     'Debug ONLY2': 'appService.properties.defaultHostName=${appService.properties.defaultHostName}'
     'Debug ONLY3': 'appInsightsName=${appInsightsName}'
