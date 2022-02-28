@@ -44,13 +44,13 @@ resource config 'Microsoft.AppConfiguration/configurationStores@2021-03-01-previ
 var configStoreConnectionString = listKeys(config.id, config.apiVersion).value[0].connectionString
 
 // Lock Resoure Group
-resource dontDeleteLock 'Microsoft.Authorization/locks@2020-05-01' = {
-  name: 'DontDeleteMe'
-  properties: {
-    level: 'CanNotDelete'
-    notes: 'Prevent deletion of the resource group'
-  }
-}
+// resource dontDeleteLock 'Microsoft.Authorization/locks@2020-05-01' = {
+//   name: 'DontDeleteMe'
+//   properties: {
+//     level: 'CanNotDelete'
+//     notes: 'Prevent deletion of the resource group'
+//   }
+// }
 
 // Create Web App
 module webappmod './main-2-webapp.bicep' = {
