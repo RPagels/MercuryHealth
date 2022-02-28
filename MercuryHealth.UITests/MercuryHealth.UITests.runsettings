@@ -4,7 +4,7 @@
   <!-- Parameters used by tests at runtime -->
   <TestRunParameters>
     <Parameter name="browserType" value="chrome" />
-    <Parameter name="webAppUrl" value="https://website-4vwxkvpofrtbq-dev.azurewebsites.net/" />
+    <Parameter name="webAppUrl" value="https://app-btocbms4557so-dev.azurewebsites.net/" />
   </TestRunParameters>
 
 </RunSettings>
