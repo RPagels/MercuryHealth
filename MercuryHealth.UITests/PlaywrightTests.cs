@@ -13,6 +13,9 @@ namespace MercuryHealth.UITests
     [TestFixture]
     public class PlaywrightTests
     {
+
+        string pageURL = Environment.GetEnvironmentVariable("WebAppUrl");
+
         // Identify methods that are called once prior to executing any of the tests
         [OneTimeSetUp]
         public void Init()
@@ -44,8 +47,8 @@ namespace MercuryHealth.UITests
 
         string myPageTitle = "";
         //string pageURL = "https://website-4vwxkvpofrtbq-dev.azurewebsites.net/";
-        string pageURL = AppHelpers.GetURL();
-
+        //string pageURL = AppHelpers.GetURL();
+        //string pageURL = Environment.GetEnvironmentVariable("WebAppUrl");
 
         [Test]
         [Category("Playwright_Tests_Chromium")]

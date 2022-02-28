@@ -63,9 +63,12 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-02-01' = {
     'APPINSIGHTS_PROFILERFEATURE_VERSION': '1.0.0'
     'APPINSIGHTS_SNAPSHOTFEATURE_VERSION': '1.0.0'
     'APPLICATIONINSIGHTS_CONNECTION_STRING': appInsightsConnectionString
+    'WebAppUrl': webSiteName
+    'WebAppUrlTest': 'https://${appService.name}-dev.azurewebsites.net/'
     'Debug ONLY1': 'appService.name=${appService.name}'
     'Debug ONLY2': 'appService.properties.defaultHostName=${appService.properties.defaultHostName}'
     'Debug ONLY3': 'appInsightsName=${appInsightsName}'
+    'Debug ONLY4': 'webSiteName=${webSiteName}'
     type: 'SQLAzure'
   }
 }
@@ -249,59 +252,59 @@ resource standardWebTestPageHome  'Microsoft.Insights/webtests@2020-10-05-previe
 
 
 
-// resource standardWebTestPageHomeDev  'Microsoft.Insights/webtests@2020-10-05-preview' = {
-//   name: 'Dev - Page Home'
-//   location: location
-//   tags: {
-//     // Error: A single 'hidden-link' tag pointing to an existing AI component is required. Found none.
-//     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/appi-btocbms4557so': 'Resource'
-//     //'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
-//   }
-//   kind: 'ping'
-//   properties: {
-//     SyntheticMonitorId: appInsightsName
-//     Name: 'Dev - Page Home'
-//     Description: null
-//     Enabled: true
-//     Frequency: 300
-//     Timeout: 120 
-//     Kind: 'standard'
-//     RetryEnabled: true
-//     Locations: [
-//       {
-//         Id: 'us-va-ash-azr'  // East US
-//       }
-//       {
-//         Id: 'us-fl-mia-edge' // Central US
-//       }
-//       {
-//         Id: 'us-ca-sjc-azr' // West US
-//       }
-//       {
-//         Id: 'emea-au-syd-edge' // Austrailia East
-//       }
-//       {
-//         Id: 'apac-jp-kaw-edge' // Japan East
-//       }
-//     ]
-//     Configuration: null
-//     Request: {
-//       RequestUrl: 'https://${appService.name}-dev.azurewebsites.net/'
-//       Headers: null
-//       HttpVerb: 'GET'
-//       RequestBody: null
-//       ParseDependentRequests: false
-//       FollowRedirects: null
-//     }
-//     ValidationRules: {
-//       ExpectedHttpStatusCode: 200
-//       IgnoreHttpsStatusCode: false
-//       ContentValidation: null
-//       SSLCheck: true
-//       SSLCertRemainingLifetimeCheck: 7
-//     }
-//   }
-// }
+resource standardWebTestPageHomeDev  'Microsoft.Insights/webtests@2020-10-05-preview' = {
+  name: 'Dev - Page Home'
+  location: location
+  tags: {
+    'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
+    //'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/appi-btocbms4557so': 'Resource'
+    //'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
+  }
+  kind: 'ping'
+  properties: {
+    SyntheticMonitorId: appInsightsName
+    Name: 'Dev - Page Home'
+    Description: null
+    Enabled: true
+    Frequency: 300
+    Timeout: 120 
+    Kind: 'standard'
+    RetryEnabled: true
+    Locations: [
+      {
+        Id: 'us-va-ash-azr'  // East US
+      }
+      {
+        Id: 'us-fl-mia-edge' // Central US
+      }
+      {
+        Id: 'us-ca-sjc-azr' // West US
+      }
+      {
+        Id: 'emea-au-syd-edge' // Austrailia East
+      }
+      {
+        Id: 'apac-jp-kaw-edge' // Japan East
+      }
+    ]
+    Configuration: null
+    Request: {
+      RequestUrl: 'https://${appService.name}-dev.azurewebsites.net/'
+      Headers: null
+      HttpVerb: 'GET'
+      RequestBody: null
+      ParseDependentRequests: false
+      FollowRedirects: null
+    }
+    ValidationRules: {
+      ExpectedHttpStatusCode: 200
+      IgnoreHttpsStatusCode: false
+      ContentValidation: null
+      SSLCheck: true
+      SSLCertRemainingLifetimeCheck: 7
+    }
+  }
+}
 
 // resource standardWebTestPageNutritionsDev  'Microsoft.Insights/webtests@2020-10-05-preview' = {
 //   name: 'Dev - Page Nutritions'
