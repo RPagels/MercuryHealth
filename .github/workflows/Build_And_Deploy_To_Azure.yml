@@ -570,6 +570,7 @@ jobs:
       
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
+        continue-on-error: true
         with:
           loadTestConfigFile: './MercuryHealth.LoadTests/LoadTest_HomePage_Config.yaml'
           loadTestResource: ${{ env.Load_Test_Resource }}
