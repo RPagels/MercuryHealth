@@ -533,7 +533,7 @@ jobs:
 
       - name: Playwright Tests
         continue-on-error: false
-        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --filter TestCategory=Playwright_Tests_FireFox -l "console;verbosity=normal"
+        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --filter TestCategory=Playwright_Tests_FireFox -l "console;verbosity=normal" --settings MercuryHealth.UITests/MercuryHealth.UITests.runsettings
 
 ##################################################################
 # CD Stage - Load and Performance Testing                         #
@@ -570,6 +570,7 @@ jobs:
       
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
+        continue-on-error: true
         with:
           loadTestConfigFile: './MercuryHealth.LoadTests/LoadTest_HomePage_Config.yaml'
           loadTestResource: ${{ env.Load_Test_Resource }}
