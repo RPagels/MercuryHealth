@@ -533,7 +533,7 @@ jobs:
 
       - name: Playwright Tests
         continue-on-error: false
-        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --filter TestCategory=Playwright_Tests_FireFox -l "console;verbosity=normal"
+        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --filter TestCategory=Playwright_Tests_FireFox -l "console;verbosity=normal" --settings MercuryHealth.UITests/MercuryHealth.UITests.runsettings
 
 ##################################################################
 # CD Stage - Load and Performance Testing                         #
