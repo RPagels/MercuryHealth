@@ -13,8 +13,10 @@ namespace MercuryHealth.UITests
     [TestFixture]
     public class PlaywrightTests
     {
+        //string pageURL = System.Environment.GetEnvironmentVariable("WebAppUrl");
+        string pageURL = "https://app-btocbms4557so-dev.azurewebsites.net/";
 
-        string pageURL = Environment.GetEnvironmentVariable("WebAppUrl");
+        //string pageURL = Environment.GetEnvironmentVariable("WebAppUrl");
 
         // Identify methods that are called once prior to executing any of the tests
         [OneTimeSetUp]
@@ -35,7 +37,8 @@ namespace MercuryHealth.UITests
         //[OneTimeSetUp]
         public void Setup()
         {
-
+            //var webAppUrl = context.Properties["webAppUrl"].ToString();
+            //string pageURL = Environment.GetEnvironmentVariable("WebAppUrl");
         }
 
         [Test]
@@ -44,11 +47,15 @@ namespace MercuryHealth.UITests
         {
             Assert.Pass();
         }
+        
+        //private string pageURL;
 
         string myPageTitle = "";
         //string pageURL = "https://website-4vwxkvpofrtbq-dev.azurewebsites.net/";
         //string pageURL = AppHelpers.GetURL();
         //string pageURL = Environment.GetEnvironmentVariable("WebAppUrl");
+        //var url = Environment.GetEnvironmentVariable("WebAppUrl");
+        //string pageURL = TestContext.Properties["webAppUrl"];
 
         [Test]
         [Category("Playwright_Tests_Chromium")]
