@@ -60,16 +60,16 @@ namespace MercuryHealth.UITests
             Assert.AreEqual("http://localhost", webAppUrl);
         }
 
-        [Test]
-        [Category("Playwright_Tests_Chromium")]
-        public void FirstTestParameterIsReturned()
-        {
-            string parameterName = "WebAppUrl";
-            TestContext.Parameters.Exists(parameterName).Should()
-                .BeTrue("it has been set");
-            TestContext.Parameters.Get(parameterName).Should()
-                .BeEquivalentTo("true");
-        }
+        //[Test]
+        //[Category("Playwright_Tests_Chromium")]
+        //public void FirstTestParameterIsReturned()
+        //{
+        //    string parameterName = "WebAppUrl";
+        //    TestContext.Parameters.Exists(parameterName).Should()
+        //        .BeTrue("it has been set");
+        //    TestContext.Parameters.Get(parameterName).Should()
+        //        .BeEquivalentTo("true");
+        //}
 
         //private string pageURL;
 
