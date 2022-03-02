@@ -55,7 +55,8 @@ namespace MercuryHealth.UITests
             //string webAppUrl = TestContext.Parameters["WebAppUrl"];
             //Assert.AreEqual("http://localhost", webAppUrl);
 
-            var webAppUrl = TestContext.Parameters.Get("WebAppUrl", "http://localhost");
+            //var webAppUrl = TestContext.Parameters.Get("WebAppUrl", "http://localhost");
+            var webAppUrl = TestContext.Parameters.Get("WebAppUrl");
             Assert.AreEqual("http://localhost", webAppUrl);
         }
 
