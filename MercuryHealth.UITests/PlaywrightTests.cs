@@ -47,7 +47,18 @@ namespace MercuryHealth.UITests
         {
             Assert.Pass();
         }
-        
+
+        [Test]
+        [Category("Playwright_Tests_Chromium")]
+        public void VerifyWebAppUrlParameter()
+        {
+            //string webAppUrl = TestContext.Parameters["WebAppUrl"];
+            //Assert.AreEqual("http://localhost", webAppUrl);
+
+            var webAppUrl = TestContext.Parameters.Get("WebAppUrl", "http://localhost");
+            Assert.AreEqual("http://localhost", webAppUrl);
+        }
+
         //private string pageURL;
 
         string myPageTitle = "";

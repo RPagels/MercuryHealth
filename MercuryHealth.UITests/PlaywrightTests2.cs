@@ -9,7 +9,7 @@ using TestContext = NUnit.Framework.TestContext;
 
 namespace MercuryHealth.UITests
 {
-    [TestFixture]
+    //[TestFixture]
     [TestClass]
     public class PlaywrightTests2
     {
