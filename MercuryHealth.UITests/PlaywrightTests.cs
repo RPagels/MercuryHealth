@@ -14,7 +14,9 @@ namespace MercuryHealth.UITests
     public class PlaywrightTests
     {
         //string pageURL = System.Environment.GetEnvironmentVariable("WebAppUrl");
-        string pageURL = "https://app-btocbms4557so-dev.azurewebsites.net/";
+        //string pageURL = "https://app-btocbms4557so-dev.azurewebsites.net/";
+        string pageURL = "";
+        string myPageTitle = "";
 
         //string pageURL = Environment.GetEnvironmentVariable("WebAppUrl");
 
@@ -31,6 +33,8 @@ namespace MercuryHealth.UITests
             {
                 throw new Exception($"Playwright exited with code {exitCode}");
             }
+
+            pageURL = TestContext.Parameters.Get("WebAppUrl");
         }
 
         [SetUp]
@@ -56,8 +60,8 @@ namespace MercuryHealth.UITests
             //Assert.AreEqual("http://localhost", webAppUrl);
 
             //var webAppUrl = TestContext.Parameters.Get("WebAppUrl", "http://localhost");
-            var webAppUrl = TestContext.Parameters.Get("WebAppUrl");
-            Assert.AreEqual("http://localhost", webAppUrl);
+            //var webAppUrl = TestContext.Parameters.Get("WebAppUrl");
+            Assert.AreEqual("http://localhost", pageURL);
         }
 
         //[Test]
@@ -73,7 +77,7 @@ namespace MercuryHealth.UITests
 
         //private string pageURL;
 
-        string myPageTitle = "";
+        //string myPageTitle = "";
         //string pageURL = "https://website-4vwxkvpofrtbq-dev.azurewebsites.net/";
         //string pageURL = AppHelpers.GetURL();
         //string pageURL = Environment.GetEnvironmentVariable("WebAppUrl");

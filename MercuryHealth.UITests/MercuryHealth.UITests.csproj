@@ -21,12 +21,6 @@
 		<PackageReference Include="Microsoft.Playwright.NUnit" Version="1.18.0" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <None Update="testsettings.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	</ItemGroup>
-
 
 	<!--<Target Name="PublishPlaywrightFiles" AfterTargets="Publish">
 		<Message Text="Publishing Playwright files from $(OutDir).playwright\ to $(PublishDir).playwright\" />
