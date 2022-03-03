@@ -502,7 +502,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: MercuryHealth.UITests
-          path: ${{ github.workspace }}/MercuryHealth.UITests
+          path: ${{ github.workspace }}/MercuryHealth.UITests/*
 
       - name: Playwright Tests
         continue-on-error: false
