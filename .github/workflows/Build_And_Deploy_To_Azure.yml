@@ -136,7 +136,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: MercuryHealth.UITests
-          path: ${{ github.workspace }}/uitests
+          path: ${{ github.workspace }}/uitests/*
           
       - name: Upload Infrastucture Files
         if: ${{ github.event_name != 'pull_request' }}
