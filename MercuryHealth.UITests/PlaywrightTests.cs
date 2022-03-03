@@ -40,6 +40,8 @@ namespace MercuryHealth.UITests
         //[OneTimeSetUp]
         public void Setup()
         {
+            Console.WriteLine("pageURL = " + pageURL);
+
             //var webAppUrl = TestContext.Properties["webAppUrl"].ToString();
             //string pageURL = Environment.GetEnvironmentVariable("WebAppUrl");
             if (pageURL == null)
