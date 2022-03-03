@@ -15,7 +15,7 @@ namespace MercuryHealth.UITests
     {
         //string pageURL = System.Environment.GetEnvironmentVariable("WebAppUrl");
         //string pageURL = "https://app-btocbms4557so-dev.azurewebsites.net/";
-        string pageURL = TestContext.Parameters.Get("WebAppUrl");
+        string pageURL = "";
         string myPageTitle = "";
 
         //string pageURL = Environment.GetEnvironmentVariable("WebAppUrl");
@@ -34,13 +34,9 @@ namespace MercuryHealth.UITests
                 throw new Exception($"Playwright exited with code {exitCode}");
             }
 
-        }
+            pageURL = TestContext.Parameters.Get("webAppUrl");
 
-        [SetUp]
-        //[OneTimeSetUp]
-        public void Setup()
-        {
-            Console.WriteLine("pageURL = " + pageURL);
+            Console.WriteLine("pageURL >>> " + pageURL + " <<<");
 
             //var webAppUrl = TestContext.Properties["webAppUrl"].ToString();
             //string pageURL = Environment.GetEnvironmentVariable("WebAppUrl");
@@ -48,6 +44,21 @@ namespace MercuryHealth.UITests
             {
                 pageURL = "https://app-btocbms4557so-dev.azurewebsites.net/";
             }
+
+        }
+
+        [SetUp]
+        //[OneTimeSetUp]
+        public void Setup()
+        {
+            //Console.WriteLine("pageURL = " + pageURL);
+
+            ////var webAppUrl = TestContext.Properties["webAppUrl"].ToString();
+            ////string pageURL = Environment.GetEnvironmentVariable("WebAppUrl");
+            //if (pageURL == null)
+            //{
+            //    pageURL = "https://app-btocbms4557so-dev.azurewebsites.net/";
+            //}
         }
 
         [Test]
