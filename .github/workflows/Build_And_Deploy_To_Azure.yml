@@ -136,28 +136,23 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: MercuryHealth.UITests
-          path: ${{ github.workspace }}/uitests/*
+          path: | 
+            ${{ github.workspace }}/uitests/*.*
+            ${{ github.workspace }}/uitests/MercuryHealthTests.runsettings
           
       - name: Upload Infrastucture Files
         if: ${{ github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v2
         with:
           name: MercuryHealth.IaC
-          path: ${{ github.workspace }}/MercuryHealth.IaC
+          path: ${{ github.workspace }}/MercuryHealth.IaC/*.*
 
-      - name: Upload Infrastucture Files
-        if: ${{ github.event_name != 'pull_request' }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: MercuryHealth.IaC
-          path: ${{ github.workspace }}/MercuryHealth.IaC/MercuryHealthTests.runsettings
-          
       - name: Upload Load Test Files
         if: ${{ github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v2
         with:
           name: MercuryHealth.LoadTests
-          path: ${{ github.workspace }}/MercuryHealth.LoadTests/*
+          path: ${{ github.workspace }}/MercuryHealth.LoadTests/*.*
           
       - name: "Azure login"
         uses: azure/login@v1
