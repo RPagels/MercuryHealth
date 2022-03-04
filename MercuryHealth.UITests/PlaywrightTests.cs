@@ -13,12 +13,8 @@ namespace MercuryHealth.UITests
     [TestFixture]
     public class PlaywrightTests
     {
-        //string pageURL = System.Environment.GetEnvironmentVariable("WebAppUrl");
-        //string pageURL = "https://app-btocbms4557so-dev.azurewebsites.net/";
         string pageURL = "";
         string myPageTitle = "";
-
-        //string pageURL = Environment.GetEnvironmentVariable("WebAppUrl");
 
         // Identify methods that are called once prior to executing any of the tests
         [OneTimeSetUp]
@@ -34,35 +30,28 @@ namespace MercuryHealth.UITests
                 throw new Exception($"Playwright exited with code {exitCode}");
             }
 
+            // Set the page URL from .runsettings
             pageURL = TestContext.Parameters.Get("webAppUrl");
 
-            Console.WriteLine("pageURL >>> " + pageURL + " <<<");
+            Console.WriteLine("Debug-pageURL >>> " + pageURL + " <<<");
 
             //var webAppUrl = TestContext.Properties["webAppUrl"].ToString();
             //string pageURL = Environment.GetEnvironmentVariable("WebAppUrl");
-            if (pageURL == null)
-            {
-                pageURL = "https://app-btocbms4557so-dev.azurewebsites.net/";
-            }
-
-        }
-
-        [SetUp]
-        //[OneTimeSetUp]
-        public void Setup()
-        {
-            //Console.WriteLine("pageURL = " + pageURL);
-
-            ////var webAppUrl = TestContext.Properties["webAppUrl"].ToString();
-            ////string pageURL = Environment.GetEnvironmentVariable("WebAppUrl");
             //if (pageURL == null)
             //{
             //    pageURL = "https://app-btocbms4557so-dev.azurewebsites.net/";
             //}
+
+        }
+
+        [SetUp]
+        public void Setup()
+        {
+ 
         }
 
         [Test]
-        [Category("Playwright_Tests")]
+        [Category("Playwright_Tests_Chromium")]
         public void Playwright_Dummy()
         {
             Assert.Pass();
@@ -75,31 +64,10 @@ namespace MercuryHealth.UITests
             //string webAppUrl = TestContext.Parameters["WebAppUrl"];
             //Assert.AreEqual("http://localhost", webAppUrl);
 
-            //var webAppUrl = TestContext.Parameters.Get("WebAppUrl", "http://localhost");
             //var webAppUrl = TestContext.Parameters.Get("WebAppUrl");
             //Assert.AreEqual("http://localhost", pageURL);
             Assert.Pass();
         }
-
-        //[Test]
-        //[Category("Playwright_Tests_Chromium")]
-        //public void FirstTestParameterIsReturned()
-        //{
-        //    string parameterName = "WebAppUrl";
-        //    TestContext.Parameters.Exists(parameterName).Should()
-        //        .BeTrue("it has been set");
-        //    TestContext.Parameters.Get(parameterName).Should()
-        //        .BeEquivalentTo("true");
-        //}
-
-        //private string pageURL;
-
-        //string myPageTitle = "";
-        //string pageURL = "https://website-4vwxkvpofrtbq-dev.azurewebsites.net/";
-        //string pageURL = AppHelpers.GetURL();
-        //string pageURL = Environment.GetEnvironmentVariable("WebAppUrl");
-        //var url = Environment.GetEnvironmentVariable("WebAppUrl");
-        //string pageURL = TestContext.Properties["webAppUrl"];
 
         [Test]
         [Category("Playwright_Tests_Chromium")]
@@ -232,18 +200,18 @@ namespace MercuryHealth.UITests
             TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "Item-Description.png"), "Item-Description.png");
 
             // Randomize a failure
-            //Random rnd = new Random();
-            //if (rnd.Next(1, 2) == 1) // creates a number between 1 and 2
-            //{
-            //    Assert.AreEqual("Banana", myDescription, "Expected title to be 'Banana'");
-            //}
-            //else
-            //{
-            //    Assert.AreEqual("Strawberry", myDescription, "Expected title to be 'Strawberry'");
-            //}
+            Random rnd = new Random();
+            if (rnd.Next(1, 2) == 1) // creates a number between 1 and 2
+            {
+                Assert.AreEqual("Banana", myDescription, "Expected title to be 'Banana'");
+            }
+            else
+            {
+                Assert.AreEqual("Strawberry", myDescription, "Expected title to be 'Strawberry'");
+            }
 
             // Assert that field
-            Assert.AreEqual("Banana", myDescription);
+            //Assert.AreEqual("Banana", myDescription);
 
             // Click text=Home
             await page.ClickAsync("text=Home");
@@ -537,7 +505,7 @@ namespace MercuryHealth.UITests
 
         [Test]
         [Category("Playwright_Tests_Chromium")]
-        public async Task Verify_PlaywrightPageTitle()
+        public async Task Verify_PlaywrightPageTitleOnChromium()
         {
             using var playwright = await Playwright.CreateAsync();
             await using var browser = await playwright.Chromium.LaunchAsync();
@@ -548,22 +516,11 @@ namespace MercuryHealth.UITests
             myPageTitle = await page.TitleAsync();
             Assert.AreEqual("Fast and reliable end-to-end testing for modern web apps | Playwright .NET", myPageTitle);
 
-            //await page.WaitForLoadStateAsync(state: LoadState.DOMContentLoaded);
-
-            //var currentTheme = await page.GetAttributeAsync("html", "data-theme");
-            //await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "before-theme-change.png"), await page.ScreenshotAsync());
-            //await page.ClickAsync("[class='react-toggle-track']");
-            //var changedTheme = await page.GetAttributeAsync("html", "data-theme");
-            //Assert.AreNotEqual(currentTheme, changedTheme, $"Theme did not change");
-            //await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "after-theme-change.png"), await page.ScreenshotAsync());
-
-            //TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "before-theme-change.png"), "before-theme-change.png");
-            //TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "after-theme-change.png"), "after-theme-change.png");
         }
 
         [Test]
         [Category("Playwright_Tests_Chromium")]
-        public async Task Verify_Bing()
+        public async Task Verify_BingOnChromium()
         {
             using var playwright = await Playwright.CreateAsync();
             await using var browser = await playwright.Chromium.LaunchAsync();
@@ -578,7 +535,7 @@ namespace MercuryHealth.UITests
 
         [Test]
         [Category("Playwright_Tests_Chromium")]
-        public async Task Verify_Google()
+        public async Task Verify_GoogleOnChromium()
         {
             using var playwright = await Playwright.CreateAsync();
             await using var browser = await playwright.Chromium.LaunchAsync();
@@ -618,6 +575,21 @@ namespace MercuryHealth.UITests
 
             myPageTitle = await page.TitleAsync();
             Assert.AreEqual("Google", myPageTitle);
+
+        }
+
+        [Test]
+        [Category("Playwright_Tests_FireFox")]
+        public async Task Verify_PlaywrightPageTitleOnFirefox()
+        {
+            using var playwright = await Playwright.CreateAsync();
+            await using var browser = await playwright.Chromium.LaunchAsync();
+            var page = await browser.NewPageAsync();
+            page.SetDefaultTimeout(30000);
+            await page.GotoAsync("https://playwright.dev/dotnet");
+
+            myPageTitle = await page.TitleAsync();
+            Assert.AreEqual("Fast and reliable end-to-end testing for modern web apps | Playwright .NET", myPageTitle);
 
         }
     }

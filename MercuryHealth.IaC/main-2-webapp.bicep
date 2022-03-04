@@ -64,10 +64,6 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-02-01' = {
     'APPINSIGHTS_SNAPSHOTFEATURE_VERSION': '1.0.0'
     'APPLICATIONINSIGHTS_CONNECTION_STRING': appInsightsConnectionString
     'WebAppUrl': 'https://${appService.name}-dev.azurewebsites.net/'
-    'Debug ONLY1': 'appService.name=${appService.name}'
-    'Debug ONLY2': 'appService.properties.defaultHostName=${appService.properties.defaultHostName}'
-    'Debug ONLY3': 'appInsightsName=${appInsightsName}'
-    'Debug ONLY4': 'webSiteName=${webSiteName}'
     type: 'SQLAzure'
   }
 }
@@ -87,16 +83,12 @@ resource webAppPortalName_environments 'Microsoft.Web/sites/slots@2021-03-01' = 
 // Location population tags
 // https://docs.microsoft.com/en-us/azure/azure-monitor/app/monitor-web-app-availability
 
-// Works!!!
-// MercuryHealth-rg - appi-btocbms4557so
 resource standardWebTestPageHome  'Microsoft.Insights/webtests@2020-10-05-preview' = {
   name: 'Prod - Page Home'
   location: location
   tags: {
     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
-    // Error: A single 'hidden-link' tag pointing to an existing AI component is required. Found none.
-    //'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/appi-btocbms4557so': 'Resource'
-  }
+   }
   kind: 'ping'
   properties: {
     SyntheticMonitorId: appInsightsName
@@ -143,121 +135,115 @@ resource standardWebTestPageHome  'Microsoft.Insights/webtests@2020-10-05-previe
   }
 }
 
-// resource standardWebTestPageNutritions  'Microsoft.Insights/webtests@2020-10-05-preview' = {
-//   name: 'Prod - Page Nutritions'
-//   location: location
-//   tags: {
-//     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/appi-btocbms4557so': 'Resource'
-//   }
-//   kind: 'ping'
-//   properties: {
-//     SyntheticMonitorId: appInsightsInstrumentationKey // 'appi-btocbms4557so'
-//     Name: 'Prod - Page Nutritions'
-//     Description: null
-//     Enabled: true
-//     Frequency: 300
-//     Timeout: 120 
-//     Kind: 'standard'
-//     RetryEnabled: true
-//     Locations: [
-//       {
-//         Id: 'us-va-ash-azr'  // East US
-//       }
-//       {
-//         Id: 'us-fl-mia-edge' // Central US
-//       }
-//       {
-//         Id: 'us-ca-sjc-azr' // West US
-//       }
-//       {
-//         Id: 'emea-au-syd-edge' // Austrailia East
-//       }
-//       {
-//         Id: 'apac-jp-kaw-edge' // Japan East
-//       }
-//     ]
-//     Configuration: null
-//     Request: {
-//       RequestUrl: 'https://${appService.name}.azurewebsites.net/Nutritions/'
-//       Headers: null
-//       HttpVerb: 'GET'
-//       RequestBody: null
-//       ParseDependentRequests: false
-//       FollowRedirects: null
-//     }
-//     ValidationRules: {
-//       ExpectedHttpStatusCode: 200
-//       IgnoreHttpsStatusCode: false
-//       ContentValidation: null
-//       SSLCheck: true
-//       SSLCertRemainingLifetimeCheck: 7
-//     }
-//   }
-// }
+resource standardWebTestPageNutritions  'Microsoft.Insights/webtests@2020-10-05-preview' = {
+  name: 'Prod - Page Nutritions'
+  location: location
+  tags: {
+    'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
+  }
+  kind: 'ping'
+  properties: {
+    SyntheticMonitorId: appInsightsName
+    Name: 'Prod - Page Nutritions'
+    Description: null
+    Enabled: true
+    Frequency: 300
+    Timeout: 120 
+    Kind: 'standard'
+    RetryEnabled: true
+    Locations: [
+      {
+        Id: 'us-va-ash-azr'  // East US
+      }
+      {
+        Id: 'us-fl-mia-edge' // Central US
+      }
+      {
+        Id: 'us-ca-sjc-azr' // West US
+      }
+      {
+        Id: 'emea-au-syd-edge' // Austrailia East
+      }
+      {
+        Id: 'apac-jp-kaw-edge' // Japan East
+      }
+    ]
+    Configuration: null
+    Request: {
+      RequestUrl: 'https://${appService.name}.azurewebsites.net/Nutritions/'
+      Headers: null
+      HttpVerb: 'GET'
+      RequestBody: null
+      ParseDependentRequests: false
+      FollowRedirects: null
+    }
+    ValidationRules: {
+      ExpectedHttpStatusCode: 200
+      IgnoreHttpsStatusCode: false
+      ContentValidation: null
+      SSLCheck: true
+      SSLCertRemainingLifetimeCheck: 7
+    }
+  }
+}
 
-// resource standardWebTestPageExercises  'Microsoft.Insights/webtests@2020-10-05-preview' = {
-//   name: 'Prod - Page Exercises'
-//   location: location
-//   tags: {
-//     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/appi-btocbms4557so': 'Resource'
-//   }
-//   kind: 'ping'
-//   properties: {
-//     SyntheticMonitorId: appInsightsName //'appi-btocbms4557so'
-//     Name: 'Prod - Page Exercises'
-//     Description: null
-//     Enabled: true
-//     Frequency: 300
-//     Timeout: 120 
-//     Kind: 'standard'
-//     RetryEnabled: true
-//     Locations: [
-//       {
-//         Id: 'us-va-ash-azr'  // East US
-//       }
-//       {
-//         Id: 'us-fl-mia-edge' // Central US
-//       }
-//       {
-//         Id: 'us-ca-sjc-azr' // West US
-//       }
-//       {
-//         Id: 'emea-au-syd-edge' // Austrailia East
-//       }
-//       {
-//         Id: 'apac-jp-kaw-edge' // Japan East
-//       }
-//     ]
-//     Configuration: null
-//     Request: {
-//       RequestUrl: 'https://${appService.name}.azurewebsites.net/Exercises/'
-//       Headers: null
-//       HttpVerb: 'GET'
-//       RequestBody: null
-//       ParseDependentRequests: false
-//       FollowRedirects: null
-//     }
-//     ValidationRules: {
-//       ExpectedHttpStatusCode: 200
-//       IgnoreHttpsStatusCode: false
-//       ContentValidation: null
-//       SSLCheck: true
-//       SSLCertRemainingLifetimeCheck: 7
-//     }
-//   }
-// }
-
-
-
-
+resource standardWebTestPageExercises  'Microsoft.Insights/webtests@2020-10-05-preview' = {
+  name: 'Prod - Page Exercises'
+  location: location
+  tags: {
+     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
+  }
+  kind: 'ping'
+  properties: {
+    SyntheticMonitorId: appInsightsName
+    Name: 'Prod - Page Exercises'
+    Description: null
+    Enabled: true
+    Frequency: 300
+    Timeout: 120 
+    Kind: 'standard'
+    RetryEnabled: true
+    Locations: [
+      {
+        Id: 'us-va-ash-azr'  // East US
+      }
+      {
+        Id: 'us-fl-mia-edge' // Central US
+      }
+      {
+        Id: 'us-ca-sjc-azr' // West US
+      }
+      {
+        Id: 'emea-au-syd-edge' // Austrailia East
+      }
+      {
+        Id: 'apac-jp-kaw-edge' // Japan East
+      }
+    ]
+    Configuration: null
+    Request: {
+      RequestUrl: 'https://${appService.name}.azurewebsites.net/Exercises/'
+      Headers: null
+      HttpVerb: 'GET'
+      RequestBody: null
+      ParseDependentRequests: false
+      FollowRedirects: null
+    }
+    ValidationRules: {
+      ExpectedHttpStatusCode: 200
+      IgnoreHttpsStatusCode: false
+      ContentValidation: null
+      SSLCheck: true
+      SSLCertRemainingLifetimeCheck: 7
+    }
+  }
+}
 
 resource standardWebTestPageHomeDev  'Microsoft.Insights/webtests@2020-10-05-preview' = {
   name: 'Dev - Page Home'
   location: location
   tags: {
     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
-    //'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/appi-btocbms4557so': 'Resource'
-    //'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
   }
   kind: 'ping'
   properties: {
@@ -305,109 +291,109 @@ resource standardWebTestPageHomeDev  'Microsoft.Insights/webtests@2020-10-05-pre
   }
 }
 
-// resource standardWebTestPageNutritionsDev  'Microsoft.Insights/webtests@2020-10-05-preview' = {
-//   name: 'Dev - Page Nutritions'
-//   location: location
-//   tags: {
-//     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/appi-btocbms4557so': 'Resource'
-//   }
-//   kind: 'ping'
-//   properties: {
-//     SyntheticMonitorId: appInsightsInstrumentationKey
-//     Name: 'Dev - Page Nutritions'
-//     Description: null
-//     Enabled: true
-//     Frequency: 300
-//     Timeout: 120 
-//     Kind: 'standard'
-//     RetryEnabled: true
-//     Locations: [
-//       {
-//         Id: 'us-va-ash-azr'  // East US
-//       }
-//       {
-//         Id: 'us-fl-mia-edge' // Central US
-//       }
-//       {
-//         Id: 'us-ca-sjc-azr' // West US
-//       }
-//       {
-//         Id: 'emea-au-syd-edge' // Austrailia East
-//       }
-//       {
-//         Id: 'apac-jp-kaw-edge' // Japan East
-//       }
-//     ]
-//     Configuration: null
-//     Request: {
-//       RequestUrl: 'https://${appService.name}-dev.azurewebsites.net/Nutritions/'
-//       Headers: null
-//       HttpVerb: 'GET'
-//       RequestBody: null
-//       ParseDependentRequests: false
-//       FollowRedirects: null
-//     }
-//     ValidationRules: {
-//       ExpectedHttpStatusCode: 200
-//       IgnoreHttpsStatusCode: false
-//       ContentValidation: null
-//       SSLCheck: true
-//       SSLCertRemainingLifetimeCheck: 7
-//     }
-//   }
-// }
+resource standardWebTestPageNutritionsDev  'Microsoft.Insights/webtests@2020-10-05-preview' = {
+  name: 'Dev - Page Nutritions'
+  location: location
+  tags: {
+    'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
+  }
+  kind: 'ping'
+  properties: {
+    SyntheticMonitorId: appInsightsName
+    Name: 'Dev - Page Nutritions'
+    Description: null
+    Enabled: true
+    Frequency: 300
+    Timeout: 120 
+    Kind: 'standard'
+    RetryEnabled: true
+    Locations: [
+      {
+        Id: 'us-va-ash-azr'  // East US
+      }
+      {
+        Id: 'us-fl-mia-edge' // Central US
+      }
+      {
+        Id: 'us-ca-sjc-azr' // West US
+      }
+      {
+        Id: 'emea-au-syd-edge' // Austrailia East
+      }
+      {
+        Id: 'apac-jp-kaw-edge' // Japan East
+      }
+    ]
+    Configuration: null
+    Request: {
+      RequestUrl: 'https://${appService.name}-dev.azurewebsites.net/Nutritions/'
+      Headers: null
+      HttpVerb: 'GET'
+      RequestBody: null
+      ParseDependentRequests: false
+      FollowRedirects: null
+    }
+    ValidationRules: {
+      ExpectedHttpStatusCode: 200
+      IgnoreHttpsStatusCode: false
+      ContentValidation: null
+      SSLCheck: true
+      SSLCertRemainingLifetimeCheck: 7
+    }
+  }
+}
 
-// resource standardWebTestPageExercisesDev  'Microsoft.Insights/webtests@2020-10-05-preview' = {
-//   name: 'Dev - Page Exercises'
-//   location: location
-//   tags: {
-//     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/MercuryHealth-rg/providers/microsoft.insights/components/appi-btocbms4557so': 'Resource'
-//   }
-//   kind: 'ping'
-//   properties: {
-//     SyntheticMonitorId: appInsightsName
-//     Name: 'Dev - Page Exercises'
-//     Description: null
-//     Enabled: true
-//     Frequency: 300
-//     Timeout: 120 
-//     Kind: 'standard'
-//     RetryEnabled: true
-//     Locations: [
-//       {
-//         Id: 'us-va-ash-azr'  // East US
-//       }
-//       {
-//         Id: 'us-fl-mia-edge' // Central US
-//       }
-//       {
-//         Id: 'us-ca-sjc-azr' // West US
-//       }
-//       {
-//         Id: 'emea-au-syd-edge' // Austrailia East
-//       }
-//       {
-//         Id: 'apac-jp-kaw-edge' // Japan East
-//       }
-//     ]
-//     Configuration: null
-//     Request: {
-//       RequestUrl: 'https://${appService.name}-dev.azurewebsites.net/Exercises/'
-//       Headers: null
-//       HttpVerb: 'GET'
-//       RequestBody: null
-//       ParseDependentRequests: false
-//       FollowRedirects: null
-//     }
-//     ValidationRules: {
-//       ExpectedHttpStatusCode: 200
-//       IgnoreHttpsStatusCode: false
-//       ContentValidation: null
-//       SSLCheck: true
-//       SSLCertRemainingLifetimeCheck: 7
-//     }
-//   }
-// }
+resource standardWebTestPageExercisesDev  'Microsoft.Insights/webtests@2020-10-05-preview' = {
+  name: 'Dev - Page Exercises'
+  location: location
+  tags: {
+    'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
+  }
+  kind: 'ping'
+  properties: {
+    SyntheticMonitorId: appInsightsName
+    Name: 'Dev - Page Exercises'
+    Description: null
+    Enabled: true
+    Frequency: 300
+    Timeout: 120 
+    Kind: 'standard'
+    RetryEnabled: true
+    Locations: [
+      {
+        Id: 'us-va-ash-azr'  // East US
+      }
+      {
+        Id: 'us-fl-mia-edge' // Central US
+      }
+      {
+        Id: 'us-ca-sjc-azr' // West US
+      }
+      {
+        Id: 'emea-au-syd-edge' // Austrailia East
+      }
+      {
+        Id: 'apac-jp-kaw-edge' // Japan East
+      }
+    ]
+    Configuration: null
+    Request: {
+      RequestUrl: 'https://${appService.name}-dev.azurewebsites.net/Exercises/'
+      Headers: null
+      HttpVerb: 'GET'
+      RequestBody: null
+      ParseDependentRequests: false
+      FollowRedirects: null
+    }
+    ValidationRules: {
+      ExpectedHttpStatusCode: 200
+      IgnoreHttpsStatusCode: false
+      ContentValidation: null
+      SSLCheck: true
+      SSLCertRemainingLifetimeCheck: 7
+    }
+  }
+}
 
 //output webSiteName string = appService.name
 //output webSiteURL string = appService.properties.defaultHostName

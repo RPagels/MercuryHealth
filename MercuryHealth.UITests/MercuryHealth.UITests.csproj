@@ -22,13 +22,4 @@
 		<PackageReference Include="Microsoft.Playwright.NUnit" Version="1.18.0" />
 	</ItemGroup>
 
-
-	<!--<Target Name="PublishPlaywrightFiles" AfterTargets="Publish">
-		<Message Text="Publishing Playwright files from $(OutDir).playwright\ to $(PublishDir).playwright\" />
-		<ItemGroup>
-			<PlaywrightFiles Include="$(OutDir).playwright\**\*" />
-		</ItemGroup>
-		<Copy SourceFiles="@(PlaywrightFiles)" DestinationFiles="@(PlaywrightFiles->'$(PublishDir).playwright\%(RecursiveDir)%(Filename)%(Extension)')" />
-	</Target>-->
-
 </Project>
