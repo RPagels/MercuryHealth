@@ -136,21 +136,28 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: MercuryHealth.UITests
-          path: ${{ github.workspace }}/uitests/*
-          
+          path: ${{ github.workspace }}/uitests
+
+      - name: Upload Build Artifacts-UI Tests runsettings file
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: MercuryHealth.UITests
+          path: ${{ github.workspace }}/MercuryHealth.UITests/MercuryHealthTests.runsettings
+            
       - name: Upload Infrastucture Files
         if: ${{ github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v2
         with:
           name: MercuryHealth.IaC
-          path: ${{ github.workspace }}/MercuryHealth.IaC/*
+          path: ${{ github.workspace }}/MercuryHealth.IaC/*.*
 
       - name: Upload Load Test Files
         if: ${{ github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v2
         with:
           name: MercuryHealth.LoadTests
-          path: ${{ github.workspace }}/MercuryHealth.LoadTests/*
+          path: ${{ github.workspace }}/MercuryHealth.LoadTests/*.*
           
       - name: "Azure login"
         uses: azure/login@v1
@@ -565,10 +572,8 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
         
-#      - name: 'Azure Load Testing'
-#        run: echo 'Azure Load Testing'
-      
       - name: 'Azure Load Testing'
+#        run: echo 'Azure Load Testing'
         uses: azure/load-testing@v1
         continue-on-error: true
         with:
