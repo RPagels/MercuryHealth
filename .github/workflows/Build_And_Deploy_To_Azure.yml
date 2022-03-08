@@ -255,14 +255,23 @@ jobs:
         deploymentMode: Incremental
         failOnStdErr: false
 
-#    - name: Save Application Insights Id to Environment Variable
-#      run: |
-#        echo 'appInsightsAppId1 = ${{steps.Infra.outputs.releaseAnnotationId}}'
-#        echo 'releaseAnnotationId1 = ${{steps.Infra.outputs.applicationInsightsApplicationId}}'
-#        echo "::set-output name=appInsightsAppId2::${{steps.Infra.outputs.releaseAnnotationId}}"
-#        echo "::set-output name=releaseAnnotationId2::${{steps.Infra.outputs.applicationInsightsApplicationId}}"
-#        echo "appInsightsAppId3= ${{ steps.Infra.outputs.applicationInsightsApplicationId }}" >> $GITHUB_ENV
-#        echo "releaseAnnotationId3= ${{ steps.Infra.outputs.releaseAnnotationId }}" >> $GITHUB_ENV 
+    - name: Save Application Insights Id to Environment Variable
+      run: |
+        echo 'webSiteName = ${{steps.Infra.outputs.out_webSiteName}}'
+        echo 'sqlserverName = ${{steps.Infra.outputs.out_sqlserverName}}'
+        echo 'sqlDBName = ${{steps.Infra.outputs.out_sqlDBName}}'
+        echo 'configStoreName = ${{steps.Infra.outputs.out_configStoreName}}'
+        echo 'appInsightsName = ${{steps.Infra.outputs.out_appInsightsName}}'
+        echo 'apiServiceName = ${{steps.Infra.outputs.out_apiServiceName}}'
+        echo 'loadTestsName = ${{steps.Infra.outputs.out_loadTestsName}}'
+        echo 'keyvaultName = ${{steps.Infra.outputs.out_keyvaultName}}'
+        echo 'appInsightsAppId = ${{steps.Infra.outputs.out_releaseAnnotationId}}'
+        echo 'applicationInsightsApplicationId = ${{steps.Infra.outputs.out_applicationInsightsApplicationId}}'
+        echo ''
+        echo "::set-output name=appInsightsAppId2::${{steps.Infra.outputs.out_releaseAnnotationId}}"
+        echo "::set-output name=releaseAnnotationId2::${{steps.Infra.outputs.out_applicationInsightsApplicationId}}"
+        echo "appInsightsAppId3= ${{ steps.Infra.outputs.out_applicationInsightsApplicationId }}" >> $GITHUB_ENV
+        echo "releaseAnnotationId3= ${{ steps.Infra.outputs.out_releaseAnnotationId }}" >> $GITHUB_ENV 
 
     - name: Azure logout
       run: |
