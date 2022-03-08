@@ -69,9 +69,9 @@ resource emailActionGroup 'microsoft.insights/actionGroups@2019-06-01' = {
   }
 }
 
-output appInsightsInstrumentationKey string = applicationInsights.properties.InstrumentationKey
-output appInsightsConnectionString string = applicationInsights.properties.ConnectionString
+output out_appInsightsInstrumentationKey string = applicationInsights.properties.InstrumentationKey
+output out_appInsightsConnectionString string = applicationInsights.properties.ConnectionString
 
-output applicationInsightsApplicationId string = applicationInsights.properties.ApplicationId
-output applicationInsightsApiAppId string = applicationInsights.properties.AppId
-output releaseAnnotationId string = releaseAnnotationGuid
+output out_applicationInsightsApplicationId string = applicationInsights.properties.ApplicationId
+output out_applicationInsightsApiAppId string = applicationInsights.properties.AppId
+output out_releaseAnnotationId string = releaseAnnotationGuid

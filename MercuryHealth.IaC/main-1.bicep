@@ -72,8 +72,8 @@ module webappmod './main-2-webapp.bicep' = {
     sqlDBName: sqlDBName
     sqlAdministratorLogin: sqlAdministratorLogin
     sqlAdministratorLoginPassword: sqlAdministratorLoginPassword
-    appInsightsInstrumentationKey: appinsightsmod.outputs.appInsightsInstrumentationKey
-    appInsightsConnectionString: appinsightsmod.outputs.appInsightsConnectionString
+    appInsightsInstrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
+    appInsightsConnectionString: appinsightsmod.outputs.out_appInsightsConnectionString
     defaultTags: defaultTags
   }
 }
@@ -118,7 +118,7 @@ module functionappmod './main-6-funcapp.bicep' = {
   name: 'functionappdeploy'
   params: {
     location: location
-    appInsightsInstrumentationKey: appinsightsmod.outputs.appInsightsInstrumentationKey
+    appInsightsInstrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
     functionAppServiceName: functionAppServiceName
     functionAppName: functionAppName
     defaultTags: defaultTags
@@ -146,7 +146,7 @@ module keyvault './main-8-keyvault.bicep' = {
    sqlAdministratorLogin: sqlAdministratorLogin
    sqlAdministratorLoginPassword: sqlAdministratorLoginPassword
    configStoreConnection: configStoreConnectionString
-   appInsightsInstrumentationKey: appinsightsmod.outputs.appInsightsInstrumentationKey
+   appInsightsInstrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
    }
 }
 
@@ -159,3 +159,16 @@ params: {
   defaultTags: defaultTags
 }
 }
+
+output out_webSiteName string = webSiteName
+output out_sqlserverName string = sqlserverName
+output sqlDBName string = sqlDBName
+output out_configStoreName string = configStoreName
+output out_appInsightsName string = appInsightsName
+output out_functionAppName string = functionAppName
+output out_apiServiceName string = apiServiceName
+output out_loadTestsName string = loadTestsName
+output out_keyvaultName string = keyvaultName
+output out_releaseAnnotationId string = appinsightsmod.outputs.out_releaseAnnotationId
+output out_applicationInsightsApplicationId string = appinsightsmod.outputs.out_applicationInsightsApplicationId
+

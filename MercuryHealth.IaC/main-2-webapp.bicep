@@ -395,5 +395,5 @@ resource standardWebTestPageExercisesDev  'Microsoft.Insights/webtests@2020-10-0
   }
 }
 
-//output webSiteName string = appService.name
-//output webSiteURL string = appService.properties.defaultHostName
+output output_webSiteName string = appService.name
+output output_webSiteURL string = appService.properties.defaultHostName
