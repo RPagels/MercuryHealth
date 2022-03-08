@@ -162,7 +162,7 @@ params: {
 
 output out_webSiteName string = webSiteName
 output out_sqlserverName string = sqlserverName
-output sqlDBName string = sqlDBName
+output out_sqlDBName string = sqlDBName
 output out_configStoreName string = configStoreName
 output out_appInsightsName string = appInsightsName
 output out_functionAppName string = functionAppName
