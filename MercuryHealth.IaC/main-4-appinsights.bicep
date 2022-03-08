@@ -3,7 +3,7 @@ param location string = resourceGroup().location
 param appInsightsName string
 param appInsightsAlertName string
 param defaultTags object
-param releaseAnnotationGuid string = newGuid()
+//param releaseAnnotationGuid string = newGuid()
 //param releaseAnnotationDateStamp string = utcNow('yyyy-MM-ddTHH:mm:ss')
 
 // Application Insights
@@ -72,6 +72,6 @@ resource emailActionGroup 'microsoft.insights/actionGroups@2019-06-01' = {
 output out_appInsightsInstrumentationKey string = applicationInsights.properties.InstrumentationKey
 output out_appInsightsConnectionString string = applicationInsights.properties.ConnectionString
 
-output out_applicationInsightsApplicationId string = applicationInsights.properties.ApplicationId
-output out_applicationInsightsApiAppId string = applicationInsights.properties.AppId
-output out_releaseAnnotationId string = releaseAnnotationGuid
+output out_appInsightsApplicationId string = applicationInsights.properties.ApplicationId
+//output out_applicationInsightsApiAppId string = applicationInsights.properties.AppId
+//output out_releaseAnnotationId string = releaseAnnotationGuid

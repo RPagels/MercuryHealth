@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "6558999386603873381"
+      "templateHash": "8044474156049926447"
     }
   },
   "parameters": {
@@ -947,7 +947,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "405375022573674776"
+              "templateHash": "10711404217880396512"
             }
           },
           "parameters": {
@@ -963,10 +963,6 @@
             },
             "defaultTags": {
               "type": "object"
-            },
-            "releaseAnnotationGuid": {
-              "type": "string",
-              "defaultValue": "[newGuid()]"
             }
           },
           "functions": [],
@@ -1047,17 +1043,9 @@
               "type": "string",
               "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName'))).ConnectionString]"
             },
-            "out_applicationInsightsApplicationId": {
+            "out_appInsightsApplicationId": {
               "type": "string",
               "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName'))).ApplicationId]"
-            },
-            "out_applicationInsightsApiAppId": {
-              "type": "string",
-              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName'))).AppId]"
-            },
-            "out_releaseAnnotationId": {
-              "type": "string",
-              "value": "[parameters('releaseAnnotationGuid')]"
             }
           }
         }
@@ -1885,13 +1873,9 @@
       "type": "string",
       "value": "[variables('keyvaultName')]"
     },
-    "out_releaseAnnotationId": {
+    "out_appInsightsApplicationId": {
       "type": "string",
-      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy'), '2020-06-01').outputs.out_releaseAnnotationId.value]"
-    },
-    "out_applicationInsightsApplicationId": {
-      "type": "string",
-      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy'), '2020-06-01').outputs.out_applicationInsightsApplicationId.value]"
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy'), '2020-06-01').outputs.out_appInsightsApplicationId.value]"
     }
   }
 }
