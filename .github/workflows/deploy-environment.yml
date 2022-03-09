@@ -78,9 +78,9 @@ jobs:
         name: MercuryHealth.IaC
         path: ${{ github.workspace }}/MercuryHealth.IaC
 
-      ###########################################
-      # Validate ARM Template using Bicep DSL
-      ###########################################
+#      ###########################################
+#      # Validate ARM Template using Bicep DSL
+#      ###########################################
 #    - name: Validate Azure Bicep
 #      uses: azure/arm-deploy@v1
 #      continue-on-error: false
@@ -104,22 +104,22 @@ jobs:
         deploymentMode: Incremental
         failOnStdErr: false
 
-    - name: Save Application Insights Id to Environment Variable
-      run: |
-        echo 'webSiteName = ${{steps.Infra.outputs.out_webSiteName}}'
-        echo 'functionAppName = ${{steps.Infra.outputs.out_functionAppName}}'
-        echo 'sqlserverName = ${{steps.Infra.outputs.out_sqlserverName}}'
-        echo 'sqlDBName = ${{steps.Infra.outputs.out_sqlDBName}}'
-        echo 'sqlConnectionString = ${{steps.Infra.outputs.out_sqlConnectionString}}
-        echo 'configStoreName = ${{steps.Infra.outputs.out_configStoreName}}'
-        echo 'appInsightsName = ${{steps.Infra.outputs.out_appInsightsName}}'
-        echo 'apiServiceName = ${{steps.Infra.outputs.out_apiServiceName}}'
-        echo 'loadTestsName = ${{steps.Infra.outputs.out_loadTestsName}}'
-        echo 'keyvaultName = ${{steps.Infra.outputs.out_keyvaultName}}'
-        echo 'appInsightsApplicationId = ${{steps.Infra.outputs.out_appInsightsApplicationId}}'
-        echo ''
-        echo "::set-output name=appInsightsAppId2::${{steps.Infra.outputs.out_appInsightsApplicationId}}"
-        echo "appInsightsAppId3= ${{ steps.Infra.outputs.out_appInsightsApplicationId }}" >> $GITHUB_ENV
+#    - name: Save Application Insights Id to Environment Variable
+#      run: |
+#        echo 'webSiteName = ${{steps.Infra.outputs.out_webSiteName}}'
+#        echo 'functionAppName = ${{steps.Infra.outputs.out_functionAppName}}'
+#        echo 'sqlserverName = ${{steps.Infra.outputs.out_sqlserverName}}'
+#        echo 'sqlDBName = ${{steps.Infra.outputs.out_sqlDBName}}'
+#        echo 'sqlConnectionString = ${{steps.Infra.outputs.out_sqlConnectionString}}
+#        echo 'configStoreName = ${{steps.Infra.outputs.out_configStoreName}}'
+#        echo 'appInsightsName = ${{steps.Infra.outputs.out_appInsightsName}}'
+#        echo 'apiServiceName = ${{steps.Infra.outputs.out_apiServiceName}}'
+#        echo 'loadTestsName = ${{steps.Infra.outputs.out_loadTestsName}}'
+#        echo 'keyvaultName = ${{steps.Infra.outputs.out_keyvaultName}}'
+#        echo 'appInsightsApplicationId = ${{steps.Infra.outputs.out_appInsightsApplicationId}}'
+#        echo ''
+#        echo "::set-output name=appInsightsAppId2::${{steps.Infra.outputs.out_appInsightsApplicationId}}"
+#        echo "appInsightsAppId3= ${{ steps.Infra.outputs.out_appInsightsApplicationId }}" >> $GITHUB_ENV
 
     - name: Download Build Artifact-Database
       uses: actions/download-artifact@v2
@@ -165,7 +165,7 @@ jobs:
         slot-name: 'production'
         package: './MercuryHealth.FunctionApp'
 
-
+# --api-key ${{ steps.Infra.outputs.releaseAnnotationId }}
     - name: Generate Temporary API Key For App Insights
       id: AIKeyGen
       uses: Azure/CLI@v1
@@ -173,7 +173,7 @@ jobs:
         inlineScript: |
           az config set extension.use_dynamic_install=yes_without_prompt
           result=$(az monitor app-insights api-key create \
-                      --api-key ${{ steps.Infra.outputs.releaseAnnotationId }} \
+                      --api-key appdeploymentkey \
                       --write-properties WriteAnnotations \
                       -g ${{ env.Azure_Resource_GroupName }} \
                       --app ${{ steps.Infra.outputs.out_appInsightsApplicationId }} \
@@ -193,13 +193,14 @@ jobs:
         message: ${{ github.event.head_commit.message }}
         actor: ${{ github.actor }}
 
+# --api-key ${{ steps.Infra.outputs.releaseAnnotationId }}
     - name: Remove Temporary API Key For App Insights
       uses: Azure/CLI@v1
       with:
         inlineScript: |
           az config set extension.use_dynamic_install=yes_without_prompt
           az monitor app-insights api-key delete \
-                      --api-key ${{ steps.Infra.outputs.releaseAnnotationId }} \
+                      --api-key appdeploymentkey \
                       -g ${{ env.Azure_Resource_GroupName }} \
                       --app ${{ steps.Infra.outputs.out_appInsightsApplicationId }} 
 
