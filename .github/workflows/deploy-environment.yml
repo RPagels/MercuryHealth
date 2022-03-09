@@ -1,7 +1,5 @@
 name: Deployment Environment
 
-#
-
 on:
   workflow_call:
     inputs:
@@ -24,10 +22,16 @@ on:
       azure-credentials:
         description: 'Credentials used to log into Azure for deployment of resources'
         required: true
+      sql-db-server-name:
+        description: 'Credentials used to log into SQL for deployment of resources'
+        required: true
       sql-db-login:
         description: 'Credentials used to log into SQL for deployment of resources'
         required: true
       sql-db-password:
+        description: 'Credentials used to log into SQL for deployment of resources'
+        required: true
+      sql-connection-string:
         description: 'Credentials used to log into SQL for deployment of resources'
         required: true
 
@@ -49,9 +53,6 @@ jobs:
       with:
         creds: ${{ secrets.azure-credentials }}
 
-# ERROR!!!
-# The client '53173f83-e7b7-462c-9a4e-adb64374ebed' with object id '53173f83-e7b7-462c-9a4e-adb64374ebed' does not have authorization to perform action 'Microsoft.Resources/subscriptions/resourcegroups/write' over scope '/subscriptions/***/resourcegroups/rg-MercuryHealth-dev' or the scope is invalid. If access was recently granted, please refresh your credentials.
-#
     - name: Ensure Resource Group Exists
       uses: Azure/CLI@v1
       with:
@@ -59,6 +60,9 @@ jobs:
           #!/bin/bash
           az group create --name ${{ env.Azure_Resource_GroupName }} --location ${{ inputs.resource-group-location }}
 
+# ERROR!!!
+# The client '53173f83-e7b7-462c-9a4e-adb64374ebed' with object id '53173f83-e7b7-462c-9a4e-adb64374ebed' does not have authorization to perform action 'Microsoft.Resources/subscriptions/resourcegroups/write' over scope '/subscriptions/***/resourcegroups/rg-MercuryHealth-dev' or the scope is invalid. If access was recently granted, please refresh your credentials.
+#
 #    - name: Ensure Resource Group is Locked
 #      if: contains(github.event_name, 'push')
 #      uses: Azure/CLI@v1
@@ -77,15 +81,14 @@ jobs:
       ###########################################
       # Validate ARM Template using Bicep DSL
       ###########################################
-    - name: Validate Azure Bicep
-      uses: azure/arm-deploy@v1
-      continue-on-error: false
-      with:
-        #subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
-        resourceGroupName: ${{ env.Azure_Resource_GroupName }}
-        template: ./MercuryHealth.IaC/main-1.bicep
-        parameters: ./MercuryHealth.IaC/main-1.params.json sqlAdministratorLogin=${{ secrets.sql-db-login }} sqlAdministratorLoginPassword=${{ secrets.sql-db-password }}
-        deploymentMode: Validate
+#    - name: Validate Azure Bicep
+#      uses: azure/arm-deploy@v1
+#      continue-on-error: false
+#      with:
+#        resourceGroupName: ${{ env.Azure_Resource_GroupName }}
+#        template: ./MercuryHealth.IaC/main-1.bicep
+#        parameters: ./MercuryHealth.IaC/main-1.params.json sqlAdministratorLogin=${{ secrets.sql-db-login }} sqlAdministratorLoginPassword=${{ secrets.sql-db-password }}
+#        deploymentMode: Validate
         
       ###########################################
       # Deploy ARM Template using Bicep DSL
@@ -95,7 +98,6 @@ jobs:
       uses: azure/arm-deploy@v1
       continue-on-error: false
       with:
-        #subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: ${{ env.Azure_Resource_GroupName }}
         template: ./MercuryHealth.IaC/main-1.bicep
         parameters: ./MercuryHealth.IaC/main-1.params.json sqlAdministratorLogin=${{ secrets.sql-db-login }} sqlAdministratorLoginPassword=${{ secrets.sql-db-password }}
@@ -105,8 +107,10 @@ jobs:
     - name: Save Application Insights Id to Environment Variable
       run: |
         echo 'webSiteName = ${{steps.Infra.outputs.out_webSiteName}}'
+        echo 'functionAppName = ${{steps.Infra.outputs.out_functionAppName}}'
         echo 'sqlserverName = ${{steps.Infra.outputs.out_sqlserverName}}'
         echo 'sqlDBName = ${{steps.Infra.outputs.out_sqlDBName}}'
+        echo 'sqlConnectionString = ${{steps.Infra.outputs.out_sqlConnectionString}}
         echo 'configStoreName = ${{steps.Infra.outputs.out_configStoreName}}'
         echo 'appInsightsName = ${{steps.Infra.outputs.out_appInsightsName}}'
         echo 'apiServiceName = ${{steps.Infra.outputs.out_apiServiceName}}'
@@ -128,9 +132,8 @@ jobs:
     - name: 'Deploy the database to Azure'
       uses: Azure/sql-action@v1.2
       with:
-        server-name: ${{ secrets.SQL_DB_Server_Name }}
-        
-        connection-string: ${{ secrets.SQL_DB_Connection_String }}
+        server-name: ${{ steps.Infra.outputs.out_sqlserverName }}
+        connection-string: ${{ secrets.sql-connection-string }}
         dacpac-package: './MercuryHealth.Database/MercuryHealth.Database.dacpac'
 
     - name: Download Build Artifacts-Website Applicationn
@@ -143,7 +146,7 @@ jobs:
     - name: 'Deploy Website Application'
       uses: azure/webapps-deploy@v2
       with:
-          app-name: ${{ env.Website_Name }}
+          app-name: ${{ steps.Infra.outputs.out_webSiteName }}
           #slot-name: 'Dev'
           package: './MercuryHealth.Website'
           
@@ -155,14 +158,12 @@ jobs:
         path: ${{ github.workspace }}/MercuryHealth.FunctionApp
 
     # Deploy Function Application
-#    - name: 'Deploy Function Application'
-#      uses: Azure/functions-action@v1
-#      with:
-#        app-name: ${{ env.Function_AppName }}
-#        slot-name: 'production'
-#        package: './MercuryHealth.FunctionApp'
-
-
+    - name: 'Deploy Function Application'
+      uses: Azure/functions-action@v1
+      with:
+        app-name: ${{ steps.Infra.outputs.out_functionAppName }}
+        slot-name: 'production'
+        package: './MercuryHealth.FunctionApp'
 
 
     - name: Generate Temporary API Key For App Insights
