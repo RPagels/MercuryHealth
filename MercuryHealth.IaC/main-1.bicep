@@ -37,15 +37,90 @@ var defaultTags = {
   'CreatedBy': createdBy
 }
 
-// Create Configuration Store
-module configstoremod './main-5-configstore.bicep' = {
-  name: 'configstoredeploy'
-  params: {
-    configStoreName: configStoreName
-    location: location
-    defaultTags: defaultTags
+////////////////////////////////////////
+// BEGIN - TESTING Config Store
+////////////////////////////////////////
+
+@description('Specifies the content type of the key-value resources. For feature flag, the value should be application/vnd.microsoft.appconfig.ff+json;charset=utf-8. For Key Value reference, the value should be application/vnd.microsoft.appconfig.keyvaultref+json;charset=utf-8. Otherwise, it\'s optional.')
+param contentType string = 'application/vnd.microsoft.appconfig.ff+json;charset=utf-8'
+
+// Specifies the names of the key-value resources. 
+param ConfigkeyValueNames array = [
+  'MercuryHealth:Settings:FontSize'
+  'MercuryHealth:Settings:Sentinel'
+]
+
+// Specifies the values of the key-value resources. It's optional
+param ConfigkeyKeyValues array = [
+  '14'
+  '1'
+]
+
+param FeatureFlagkeyValueNames array = [
+  'PrivacyBeta'
+  'MetricsDashboard'
+  'CognitiveServices'
+  'CaptureNutritionColor'
+]
+
+param FeatureFlagkeyValueLabels array = [
+  'Privacy Page'
+  'Metrics Dashboard'
+  'Cognitive Services'
+  'Capture Nutrition Color'
+]
+
+param FeatureFlagkeyValueKeys array = [
+  'true'
+  'true'
+  'true'
+  'true'
+]
+
+// Create AppConfiguration configuration Store
+resource config 'Microsoft.AppConfiguration/configurationStores@2021-03-01-preview' = {
+  name: configStoreName
+  location: location
+  tags: defaultTags
+  sku: {
+    name: 'Standard'
   }
 }
+
+// Loop through array and create Config Key Values
+resource configStoreName_keyValueNames 'Microsoft.AppConfiguration/configurationStores/keyValues@2021-10-01-preview' = [for (item, i) in ConfigkeyValueNames: {
+  name: '${config.name}/${item}' //'${config.name}/${item}'
+  properties: {
+    value: ConfigkeyKeyValues[i]
+    contentType: contentType
+    tags: defaultTags
+  }
+}]
+
+// Loop through array and create Feature Flags
+resource configStoreName_appconfig_featureflags 'Microsoft.AppConfiguration/configurationStores/keyValues@2020-07-01-preview' = [for (item, i) in FeatureFlagkeyValueNames: {
+  parent: config
+  name: '.appconfig.featureflag~2F${FeatureFlagkeyValueKeys[i]}$${FeatureFlagkeyValueLabels[i]}'
+  properties: {
+    value: string(FeatureFlagkeyValueKeys[i])
+    contentType: contentType
+  }
+}]
+
+
+////////////////////////////////////////
+// END - TESTING Config Store
+////////////////////////////////////////
+
+// Create Configuration Store Entries
+// module configstoremod './main-5-configstore.bicep' = {
+//   name: 'configstoredeploy'
+//   params: {
+//     configParent: config.id
+//     location: location
+//     defaultTags: defaultTags
+//   }
+// }
 
 // Ask Kyle! Error during initial deployment.
 // https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/existing-resource
@@ -53,9 +128,9 @@ module configstoremod './main-5-configstore.bicep' = {
 // The Resource 'Microsoft.AppConfiguration/configurationStores/appcs-btocbms4557so' under resource group 'rg-MercuryHealth' was not found.
 //
 // Avoid outputs for secrets - Look up secrets dynamically
-resource config 'Microsoft.AppConfiguration/configurationStores@2021-03-01-preview' existing = {
-  name: configStoreName
-}
+// resource config 'Microsoft.AppConfiguration/configurationStores@2021-03-01-preview' existing = {
+//   name: configStoreName
+// }
 var configStoreConnectionString = listKeys(config.id, config.apiVersion).value[0].connectionString
 
 // Lock Resoure Group
