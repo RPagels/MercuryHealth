@@ -169,6 +169,6 @@ output out_functionAppName string = functionAppName
 output out_apiServiceName string = apiServiceName
 output out_loadTestsName string = loadTestsName
 output out_keyvaultName string = keyvaultName
-output out_releaseAnnotationId string = appinsightsmod.outputs.out_releaseAnnotationId
-output out_applicationInsightsApplicationId string = appinsightsmod.outputs.out_applicationInsightsApplicationId
+//output out_releaseAnnotationId string = appinsightsmod.outputs.out_releaseAnnotationId
+output out_appInsightsApplicationId string = appinsightsmod.outputs.out_applicationInsightsApplicationId
 
