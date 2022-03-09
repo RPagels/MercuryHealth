@@ -27,12 +27,12 @@ resource sqlDB 'Microsoft.Sql/servers/databases@2021-02-01-preview' = {
   }
 }
 
-resource sqlserverName_AllowAllWindowsAzureIps 'Microsoft.Sql/servers/firewallRules@2021-02-01-preview' = {
-  name: '${sqlServer.name}/AllowAllWindowsAzureIps'
-  properties: {
-    endIpAddress: '0.0.0.0'
-    startIpAddress: '0.0.0.0'
-  }
-}
+// resource sqlserverName_AllowAllWindowsAzureIps 'Microsoft.Sql/servers/firewallRules@2021-02-01-preview' = {
+//   name: '${sqlServer.name}/AllowAllWindowsAzureIps'
+//   properties: {
+//     endIpAddress: '0.0.0.0'
+//     startIpAddress: '0.0.0.0'
+//   }
+// }
 
 output sqlserverfullyQualifiedDomainName string = sqlServer.properties.fullyQualifiedDomainName
