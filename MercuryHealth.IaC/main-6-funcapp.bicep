@@ -16,7 +16,8 @@ param defaultTags object
 // remove dashes for storage account name
 //var storageAccountName = format('{0}sta', replace(appNamePrefix, '-', ''))
 //var storageAccountName = replace(appNamePrefix, '-', '')
-var storageAccountName = uniqueString(resourceGroup().id)
+//var storageAccountName = uniqueString(resourceGroup().id)
+var storageAccountName = 'sta-uniqueString(resourceGroup().id)'
 
 // var appTags = {
 //   AppID: 'myfunc'
