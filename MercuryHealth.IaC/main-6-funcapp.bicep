@@ -17,7 +17,7 @@ param defaultTags object
 //var storageAccountName = format('{0}sta', replace(appNamePrefix, '-', ''))
 //var storageAccountName = replace(appNamePrefix, '-', '')
 //var storageAccountName = uniqueString(resourceGroup().id)
-var storageAccountName = 'stauniqueString(resourceGroup().id)'
+var storageAccountName = 'sta${uniqueString(resourceGroup().id)}'
 
 // var appTags = {
 //   AppID: 'myfunc'
@@ -25,7 +25,7 @@ var storageAccountName = 'stauniqueString(resourceGroup().id)'
 // }
 
 // Storage Account
-resource storageAccount 'Microsoft.Storage/storageAccounts@2019-04-01' = {
+resource storageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' = {
   name: storageAccountName
   location: location
   sku: {
