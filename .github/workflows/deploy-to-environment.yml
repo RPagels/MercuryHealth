@@ -25,7 +25,6 @@ on:
 
 jobs:
   deploy_to_environment:
-    if: contains(github.event_name, 'push')
     runs-on: ubuntu-latest
     env:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
@@ -37,13 +36,6 @@ jobs:
     # Identify any jobs that must complete successfully before this job will run.
     # needs: [Deploy_Stage_IaC]
     steps:
-
-    - name: Download Build Artifact-Database
-      uses: actions/download-artifact@v2
-      continue-on-error: false
-      with:
-        name: MercuryHealth.Database
-        path: ${{ github.workspace }}/MercuryHealth.Database
 
     - name: Login to Azure
       uses: azure/login@v1
@@ -89,6 +81,13 @@ jobs:
         echo "::set-output name=appInsightsAppId2::${{steps.Infra.outputs.out_appInsightsApplicationId}}"
         echo "appInsightsAppId3= ${{ steps.Infra.outputs.out_appInsightsApplicationId }}" >> $GITHUB_ENV
 
+    - name: Download Build Artifact-Database
+      uses: actions/download-artifact@v2
+      continue-on-error: false
+      with:
+        name: MercuryHealth.Database
+        path: ${{ github.workspace }}/MercuryHealth.Database
+        
     # Deploy Database *.dacpac file - Requires windows-latest runner!!!
     - name: 'Deploy the database to Azure'
       uses: Azure/sql-action@v1.2
@@ -105,7 +104,7 @@ jobs:
         name: MercuryHealth.Website
         path: ${{ github.workspace }}/MercuryHealth.Website
 
-   - name: 'Deploy Website Application'
+    - name: 'Deploy Website Application'
       uses: azure/webapps-deploy@v2
       with:
           app-name: ${{ env.Website_Name }}
