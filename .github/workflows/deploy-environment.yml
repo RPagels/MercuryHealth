@@ -68,6 +68,9 @@ jobs:
         name: MercuryHealth.IaC
         path: ${{ github.workspace }}/MercuryHealth.IaC
 
+    - name: Echo Stuff
+      run: echo 'sqlAdministratorLogin=${{ secrets.SQL_DB_LOGIN }} sqlAdministratorLoginPassword=${{ secrets.SQL_DB_PASSWORD }}'
+      
       ###########################################
       # Deploy ARM Template using Bicep DSL
       ###########################################
