@@ -164,4 +164,5 @@ jobs:
       azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
       sql-db-login: ${{ secrets.SQL_DB_LOGIN }}
       sql-db-password: ${{ secrets.SQL_DB_PASSWORD }}
-
+      sql-db-server-name: ${{ secrets.SQL_DB_Server_Name }}
+      sql-connection-string: ${{ secrets.SQL_DB_Connection_String }}
