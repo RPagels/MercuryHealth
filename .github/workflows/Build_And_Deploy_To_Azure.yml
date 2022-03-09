@@ -20,8 +20,10 @@ env:
   Hosting_Plan_Name: 'plan-btocbms4557so'
   Load_Test_Resource: 'loadTests-btocbms4557so'
   Load_Test_ConfigFile: 'LoadTest_HomePage_Config.yaml'
-  #appInsightsAppId: ''
-  #releaseAnnotationId: ''
+  appInsightsAppId2: ''
+#  releaseAnnotationId2: ''
+  appInsightsAppId3: ''
+#  releaseAnnotationId3: ''
   #Deployment_Name: MercuryHealthGroup.${{ github.workflow }}.${{ github.run_number }}
 
 ###################################################################
@@ -265,13 +267,10 @@ jobs:
         echo 'apiServiceName = ${{steps.Infra.outputs.out_apiServiceName}}'
         echo 'loadTestsName = ${{steps.Infra.outputs.out_loadTestsName}}'
         echo 'keyvaultName = ${{steps.Infra.outputs.out_keyvaultName}}'
-        echo 'appInsightsAppId = ${{steps.Infra.outputs.out_releaseAnnotationId}}'
-        echo 'applicationInsightsApplicationId = ${{steps.Infra.outputs.out_applicationInsightsApplicationId}}'
+        echo 'appInsightsApplicationId = ${{steps.Infra.outputs.out_appInsightsApplicationId}}'
         echo ''
-        echo "::set-output name=appInsightsAppId2::${{steps.Infra.outputs.out_releaseAnnotationId}}"
-        echo "::set-output name=releaseAnnotationId2::${{steps.Infra.outputs.out_applicationInsightsApplicationId}}"
-        echo "appInsightsAppId3= ${{ steps.Infra.outputs.out_applicationInsightsApplicationId }}" >> $GITHUB_ENV
-        echo "releaseAnnotationId3= ${{ steps.Infra.outputs.out_releaseAnnotationId }}" >> $GITHUB_ENV 
+        echo "::set-output name=appInsightsAppId2::${{steps.Infra.outputs.out_appInsightsApplicationId}}"
+        echo "appInsightsAppId3= ${{ steps.Infra.outputs.out_appInsightsApplicationId }}" >> $GITHUB_ENV
 
     - name: Azure logout
       run: |
