@@ -17,7 +17,7 @@ param defaultTags object
 //var storageAccountName = format('{0}sta', replace(appNamePrefix, '-', ''))
 //var storageAccountName = replace(appNamePrefix, '-', '')
 //var storageAccountName = uniqueString(resourceGroup().id)
-var storageAccountName = 'sta-uniqueString(resourceGroup().id)'
+var storageAccountName = 'stauniqueString(resourceGroup().id)'
 
 // var appTags = {
 //   AppID: 'myfunc'
