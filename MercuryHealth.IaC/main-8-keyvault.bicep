@@ -2,7 +2,10 @@ param location string = resourceGroup().location
 param sqlserverName string
 param sqlDBName string
 param sqlAdministratorLogin string
+
+@secure()
 param sqlAdministratorLoginPassword string
+
 param vaultName string
 param sku string = 'Standard'
 param tenant string = '72f988bf-86f1-41af-91ab-2d7cd011db47' // replace with your tenantId

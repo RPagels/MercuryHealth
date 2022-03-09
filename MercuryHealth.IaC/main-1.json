@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "8044474156049926447"
+      "templateHash": "16926149170449742404"
     }
   },
   "parameters": {
@@ -114,7 +114,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "8838186141332354402"
+              "templateHash": "8227454222931839543"
             }
           },
           "parameters": {
@@ -139,7 +139,7 @@
               "type": "string"
             },
             "sqlAdministratorLoginPassword": {
-              "type": "string"
+              "type": "secureString"
             },
             "webAppPlanName": {
               "type": "string"
@@ -947,7 +947,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "10711404217880396512"
+              "templateHash": "10721192655481643838"
             }
           },
           "parameters": {
@@ -1045,7 +1045,7 @@
             },
             "out_appInsightsApplicationId": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName'))).ApplicationId]"
+              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName'))).AppId]"
             }
           }
         }
@@ -1443,7 +1443,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "8610188001516904539"
+              "templateHash": "9152982929002923621"
             }
           },
           "parameters": {
@@ -1461,7 +1461,7 @@
               "type": "string"
             },
             "sqlAdministratorLoginPassword": {
-              "type": "string"
+              "type": "secureString"
             },
             "vaultName": {
               "type": "string"
@@ -1845,7 +1845,7 @@
       "type": "string",
       "value": "[variables('sqlserverName')]"
     },
-    "sqlDBName": {
+    "out_sqlDBName": {
       "type": "string",
       "value": "[variables('sqlDBName')]"
     },

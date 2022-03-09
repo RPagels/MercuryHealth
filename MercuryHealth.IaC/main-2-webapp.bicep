@@ -1,11 +1,14 @@
-param skuName string = 'S1'
+param skuName string = 'P1'
 //param skuCapacity int = 1
 param location string = resourceGroup().location
 param sqlserverName string
 param sqlserverfullyQualifiedDomainName string
 param sqlDBName string
 param sqlAdministratorLogin string
+
+@secure()
 param sqlAdministratorLoginPassword string
+
 param webAppPlanName string
 param webSiteName string
 param resourceGroupName string
@@ -19,11 +22,21 @@ param appInsightsConnectionString string
 param defaultTags object
 
 // Varabiles
-var standardPlanMaxAdditionalSlots = 2
-param environments array = [
-  'dev'
-  'qa'
-]
+// var standardPlanMaxAdditionalSlots = 2
+// param environments array = [
+//   'dev'
+//   'qa'
+// ]
+
+// resource appServicePlan 'Microsoft.Web/serverfarms@2021-01-15' = {
+//   name: webAppPlanName // app serivce plan name
+//   location: location // Azure Region
+//   tags: defaultTags
+//   properties: {}
+//   sku: {
+//     name: ((length(environments) <= standardPlanMaxAdditionalSlots) ? skuName : 'P1')
+//   }
+// }
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2021-01-15' = {
   name: webAppPlanName // app serivce plan name
@@ -31,13 +44,14 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2021-01-15' = {
   tags: defaultTags
   properties: {}
   sku: {
-    name: ((length(environments) <= standardPlanMaxAdditionalSlots) ? skuName : 'P1')
+    name: skuName
   }
 }
 
 resource appService 'Microsoft.Web/sites@2021-01-15' = {
   name: webSiteName // Globally unique app serivce name
   location: location
+  kind: 'app'
   identity: {
     type: 'SystemAssigned'
   }
@@ -68,17 +82,17 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-02-01' = {
   }
 }
 
-resource webAppPortalName_environments 'Microsoft.Web/sites/slots@2021-03-01' = [for item in environments: {
-  name: '${webSiteName}/${item}'
-  kind: 'app'
-  location: location
-  tags: {
-    displayName: 'WebAppSlots'
-  }
-  properties: {
-    serverFarmId: appServicePlan.id
-  }
-}]
+// resource webAppPortalName_environments 'Microsoft.Web/sites/slots@2021-03-01' = [for item in environments: {
+//   name: '${webSiteName}/${item}'
+//   kind: 'app'
+//   location: location
+//   tags: {
+//     displayName: 'WebAppSlots'
+//   }
+//   properties: {
+//     serverFarmId: appServicePlan.id
+//   }
+// }]
 
 // Location population tags
 // https://docs.microsoft.com/en-us/azure/azure-monitor/app/monitor-web-app-availability

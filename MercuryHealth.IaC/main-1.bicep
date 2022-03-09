@@ -37,6 +37,16 @@ var defaultTags = {
   'CreatedBy': createdBy
 }
 
+// Create Configuration Store
+module configstoremod './main-5-configstore.bicep' = {
+  name: 'configstoredeploy'
+  params: {
+    configStoreName: configStoreName
+    location: location
+    defaultTags: defaultTags
+  }
+}
+
 // Ask Kyle! Error during initial deployment.
 // https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/existing-resource
 //
@@ -88,16 +98,6 @@ module sqldbmod './main-3-sqldatabase.bicep' = {
     sqlDBName: sqlDBName
     administratorLogin: sqlAdministratorLogin
     administratorLoginPassword: sqlAdministratorLoginPassword
-    defaultTags: defaultTags
-  }
-}
-
-// Create Configuration Store
-module configstoremod './main-5-configstore.bicep' = {
-  name: 'configstoredeploy'
-  params: {
-    configStoreName: configStoreName
-    location: location
     defaultTags: defaultTags
   }
 }
