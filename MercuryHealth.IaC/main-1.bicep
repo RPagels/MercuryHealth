@@ -107,14 +107,24 @@ resource configStoreName_keyValueNames 'Microsoft.AppConfiguration/configuration
 //   }
 // }]
 
+// resource configStoreName_appconfig_featureflags 'Microsoft.AppConfiguration/configurationStores/keyValues@2021-10-01-preview' = [for (item, i) in FeatureFlagkeyValueNames: {
+//   parent: config
+//   name: '.appconfig.featureflag~2F${FeatureFlagkeyValueNames[i]}$${FeatureFlagkeyValueLabels[i]}'
+//   properties: {
+//     value: FeatureFlagkeyValueKeys[i]
+//     contentType: contentType
+//   }
+// }]
+
 resource configStoreName_appconfig_featureflags 'Microsoft.AppConfiguration/configurationStores/keyValues@2021-10-01-preview' = [for (item, i) in FeatureFlagkeyValueNames: {
   parent: config
-  name: '.appconfig.featureflag~2F${FeatureFlagkeyValueNames[i]}'
+  name: '.appconfig.featureflag~2F${FeatureFlagkeyValueNames[i]}$${FeatureFlagkeyValueLabels[i]}'
   properties: {
-    value: FeatureFlagkeyValueKeys[i]
+    value: FeatureFlagkeyValueNames[i]
     contentType: contentType
   }
 }]
+
 ////////////////////////////////////////
 // END - TESTING Config Store
 ////////////////////////////////////////
@@ -245,12 +255,11 @@ params: {
 output out_webSiteName string = webSiteName
 output out_sqlserverName string = sqlserverName
 output out_sqlDBName string = sqlDBName
-output out_sqlConnectionString string = 'Server=tcp:${sqldbmod.outputs.sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+//output out_sqlConnectionString string = 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
 output out_configStoreName string = configStoreName
 output out_appInsightsName string = appInsightsName
 output out_functionAppName string = functionAppName
 output out_apiServiceName string = apiServiceName
 output out_loadTestsName string = loadTestsName
 output out_keyvaultName string = keyvaultName
-//output out_releaseAnnotationId string = appinsightsmod.outputs.out_releaseAnnotationId
 output out_appInsightsApplicationId string = appinsightsmod.outputs.out_appInsightsApplicationId
