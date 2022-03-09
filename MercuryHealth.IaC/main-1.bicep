@@ -98,16 +98,23 @@ resource configStoreName_keyValueNames 'Microsoft.AppConfiguration/configuration
 }]
 
 // Loop through array and create Feature Flags
-resource configStoreName_appconfig_featureflags 'Microsoft.AppConfiguration/configurationStores/keyValues@2020-07-01-preview' = [for (item, i) in FeatureFlagkeyValueNames: {
+// resource configStoreName_appconfig_featureflags 'Microsoft.AppConfiguration/configurationStores/keyValues@2021-10-01-preview' = [for (item, i) in FeatureFlagkeyValueNames: {
+//   parent: config
+//   name: '.appconfig.featureflag~2F${FeatureFlagkeyValueNames[i]}$${FeatureFlagkeyValueLabels[i]}'
+//   properties: {
+//     value: FeatureFlagkeyValueKeys[i]
+//     contentType: contentType
+//   }
+// }]
+
+resource configStoreName_appconfig_featureflags 'Microsoft.AppConfiguration/configurationStores/keyValues@2021-10-01-preview' = [for (item, i) in FeatureFlagkeyValueNames: {
   parent: config
-  name: '.appconfig.featureflag~2F${FeatureFlagkeyValueKeys[i]}$${FeatureFlagkeyValueLabels[i]}'
+  name: '.appconfig.featureflag~2F${FeatureFlagkeyValueNames[i]}'
   properties: {
-    value: string(FeatureFlagkeyValueKeys[i])
+    value: FeatureFlagkeyValueKeys[i]
     contentType: contentType
   }
 }]
-
-
 ////////////////////////////////////////
 // END - TESTING Config Store
 ////////////////////////////////////////
