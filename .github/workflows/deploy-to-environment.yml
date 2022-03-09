@@ -59,6 +59,13 @@ jobs:
 #        inlineScript: |
 #          az group lock create --lock-type ReadOnly -n 'DontDeleteMe' -g ${{ env.Azure_Resource_GroupName }} -n 'Prevent deletion of the resource group'
 
+    - name: Download Build Artifact-Infrastructure
+      uses: actions/download-artifact@v2
+      continue-on-error: false
+      with:
+        name: MercuryHealth.IaC
+        path: ${{ github.workspace }}/MercuryHealth.IaC
+
       ###########################################
       # Deploy ARM Template using Bicep DSL
       ###########################################
