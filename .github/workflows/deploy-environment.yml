@@ -24,6 +24,12 @@ on:
       azure-credentials:
         description: 'Credentials used to log into Azure for deployment of resources'
         required: true
+      sql-db-login:
+        description: 'Credentials used to log into SQL for deployment of resources'
+        required: true
+      sql-db-password:
+        description: 'Credentials used to log into SQL for deployment of resources'
+        required: true
 
 jobs:
   deploy_to_environment:
@@ -68,9 +74,19 @@ jobs:
         name: MercuryHealth.IaC
         path: ${{ github.workspace }}/MercuryHealth.IaC
 
-    - name: Echo Stuff
-      run: echo 'sqlAdministratorLogin=${{ secrets.SQL_DB_LOGIN }} sqlAdministratorLoginPassword=${{ secrets.SQL_DB_PASSWORD }}'
-      
+      ###########################################
+      # Validate ARM Template using Bicep DSL
+      ###########################################
+    - name: Validate Azure Bicep
+      uses: azure/arm-deploy@v1
+      continue-on-error: false
+      with:
+        #subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+        resourceGroupName: ${{ env.Azure_Resource_GroupName }}
+        template: ./MercuryHealth.IaC/main-1.bicep
+        parameters: ./MercuryHealth.IaC/main-1.params.json sqlAdministratorLogin=${{ secrets.sql-db-login }} sqlAdministratorLoginPassword=${{ secrets.sql-db-password }}
+        deploymentMode: Validate
+        
       ###########################################
       # Deploy ARM Template using Bicep DSL
       ###########################################
@@ -82,7 +98,7 @@ jobs:
         #subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: ${{ env.Azure_Resource_GroupName }}
         template: ./MercuryHealth.IaC/main-1.bicep
-        parameters: ./MercuryHealth.IaC/main-1.params.json sqlAdministratorLogin=${{ secrets.SQL_DB_LOGIN }} sqlAdministratorLoginPassword=${{ secrets.SQL_DB_PASSWORD }}
+        parameters: ./MercuryHealth.IaC/main-1.params.json sqlAdministratorLogin=${{ secrets.sql-db-login }} sqlAdministratorLoginPassword=${{ secrets.sql-db-password }}
         deploymentMode: Incremental
         failOnStdErr: false
 
@@ -128,7 +144,7 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
           app-name: ${{ env.Website_Name }}
-          slot-name: 'Dev'
+          #slot-name: 'Dev'
           package: './MercuryHealth.Website'
           
     - name: Download Build Artifacts-Function Application
