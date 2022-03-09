@@ -1,5 +1,4 @@
 # This is a basic workflow to help you get started with Actions
-
 name: Deploy-Main
 
 ###################################################################
@@ -168,7 +167,7 @@ jobs:
   dev:
     if: contains(github.event_name, 'push')
     needs: Build_Application
-    uses: ./.github/workflows/deploy-to-environment.yml
+    uses: ./.github/workflows/deploy-environment.yml
     with:
       resource-group-base-name: 'rg-MercuryHealth'
       environment-suffix: 'dev'
