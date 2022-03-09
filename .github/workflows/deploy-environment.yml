@@ -40,6 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
+      Azure_ReleaseAnnotationName: 'temp-deployment'
 
     permissions:
       contents: read
@@ -173,7 +174,7 @@ jobs:
         inlineScript: |
           az config set extension.use_dynamic_install=yes_without_prompt
           result=$(az monitor app-insights api-key create \
-                      --api-key appdeploymentkey \
+                      --api-key ${{ env.Azure_ReleaseAnnotationName }} \
                       --write-properties WriteAnnotations \
                       -g ${{ env.Azure_Resource_GroupName }} \
                       --app ${{ steps.Infra.outputs.out_appInsightsApplicationId }} \
@@ -200,7 +201,7 @@ jobs:
         inlineScript: |
           az config set extension.use_dynamic_install=yes_without_prompt
           az monitor app-insights api-key delete \
-                      --api-key appdeploymentkey \
+                      --api-key ${{ env.Azure_ReleaseAnnotationName }} \
                       -g ${{ env.Azure_Resource_GroupName }} \
                       --app ${{ steps.Infra.outputs.out_appInsightsApplicationId }} 
 
