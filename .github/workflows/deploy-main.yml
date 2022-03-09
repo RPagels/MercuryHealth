@@ -170,7 +170,7 @@ jobs:
     uses: ./.github/workflows/deploy-environment.yml
     with:
       resource-group-base-name: 'rg-MercuryHealth'
-      environment-suffix: 'dev'
+      environment-suffix: 'dev-2'
       resource-group-location: 'eastus2'
     secrets:
       azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
