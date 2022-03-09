@@ -1,0 +1,169 @@
+name: DeploymentToEnvironment
+
+on:
+  workflow_call:
+    inputs:
+      resource-group-base-name:
+        description: 'Resource Group base name'
+        default: 'rg-dev-mercuryhealth'
+        required: false
+        type: string
+      environment-suffix:
+        description: 'The suffix to be used for the current environment'
+        default: 'dev'
+        required: false
+        type: string
+      resource-group-location:
+        description: 'Azure region for the deployed resources'
+        default: 'eastus'
+        required: false
+        type: string
+    secrets:
+      azure-credentials:
+        description: 'Credentials used to log into Azure for deployment of resources'
+        required: true
+
+jobs:
+  deploy_to_environment:
+    if: contains(github.event_name, 'push')
+    runs-on: ubuntu-latest
+    env:
+      Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
+
+    permissions:
+      contents: read
+      packages: write
+
+    # Identify any jobs that must complete successfully before this job will run.
+    needs: [Deploy_Stage_IaC]
+    steps:
+
+    - name: Download Build Artifact-Database
+      uses: actions/download-artifact@v2
+      continue-on-error: false
+      with:
+        name: MercuryHealth.Database
+        path: ${{ github.workspace }}/MercuryHealth.Database
+
+    - name: Login to Azure
+      uses: azure/login@v1
+      continue-on-error: false
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        #creds: ${{ secrets.AZURE_SQL_CREDENTIALS }}
+
+    - name: Ensure Resource Group Exists
+      uses: Azure/CLI@v1
+      with:
+        inlineScript: |
+          #!/bin/bash
+          az group create --name ${{ env.Azure_Resource_GroupName }} --location ${{ inputs.resource-group-location }}
+
+      ###########################################
+      # Deploy ARM Template using Bicep DSL
+      ###########################################
+    - name: Infrastructure
+      id: Infra
+      uses: azure/arm-deploy@v1
+      continue-on-error: false
+      with:
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+        resourceGroupName: ${{ env.Azure_Resource_GroupName }}
+        template: ./MercuryHealth.IaC/main-1.bicep
+        parameters: ./MercuryHealth.IaC/main-1.params.json sqlAdministratorLogin=${{ secrets.SQL_DB_LOGIN }} sqlAdministratorLoginPassword=${{ secrets.SQL_DB_PASSWORD }}
+        deploymentMode: Incremental
+        failOnStdErr: false
+
+    - name: Save Application Insights Id to Environment Variable
+      run: |
+        echo 'webSiteName = ${{steps.Infra.outputs.out_webSiteName}}'
+        echo 'sqlserverName = ${{steps.Infra.outputs.out_sqlserverName}}'
+        echo 'sqlDBName = ${{steps.Infra.outputs.out_sqlDBName}}'
+        echo 'configStoreName = ${{steps.Infra.outputs.out_configStoreName}}'
+        echo 'appInsightsName = ${{steps.Infra.outputs.out_appInsightsName}}'
+        echo 'apiServiceName = ${{steps.Infra.outputs.out_apiServiceName}}'
+        echo 'loadTestsName = ${{steps.Infra.outputs.out_loadTestsName}}'
+        echo 'keyvaultName = ${{steps.Infra.outputs.out_keyvaultName}}'
+        echo 'appInsightsApplicationId = ${{steps.Infra.outputs.out_appInsightsApplicationId}}'
+        echo ''
+        echo "::set-output name=appInsightsAppId2::${{steps.Infra.outputs.out_appInsightsApplicationId}}"
+        echo "appInsightsAppId3= ${{ steps.Infra.outputs.out_appInsightsApplicationId }}" >> $GITHUB_ENV
+
+    # Deploy Database *.dacpac file - Requires windows-latest runner!!!
+    - name: 'Deploy the database to Azure'
+      uses: Azure/sql-action@v1.2
+      with:
+        server-name: ${{ secrets.SQL_DB_Server_Name }}
+        
+        connection-string: ${{ secrets.SQL_DB_Connection_String }}
+        dacpac-package: './MercuryHealth.Database/MercuryHealth.Database.dacpac'
+
+    - name: Download Build Artifacts-Website Applicationn
+      uses: actions/download-artifact@v2
+      continue-on-error: false
+      with:
+        name: MercuryHealth.Website
+        path: ${{ github.workspace }}/MercuryHealth.Website
+
+   - name: 'Deploy Website Application'
+      uses: azure/webapps-deploy@v2
+      with:
+          app-name: ${{ env.Website_Name }}
+          slot-name: 'Dev'
+          package: './MercuryHealth.Website'
+          
+    - name: Download Build Artifacts-Function Application
+      uses: actions/download-artifact@v2
+      continue-on-error: false
+      with:
+        name: MercuryHealth.FunctionApp
+        path: ${{ github.workspace }}/MercuryHealth.FunctionApp
+
+    # Deploy Function Application
+#    - name: 'Deploy Function Application'
+#      uses: Azure/functions-action@v1
+#      with:
+#        app-name: ${{ env.Function_AppName }}
+#        slot-name: 'production'
+#        package: './MercuryHealth.FunctionApp'
+
+
+
+
+    - name: Generate Temporary API Key For App Insights
+      id: AIKeyGen
+      uses: Azure/CLI@v1
+      with:
+        inlineScript: |
+          az config set extension.use_dynamic_install=yes_without_prompt
+          result=$(az monitor app-insights api-key create \
+                      --api-key ${{ steps.Infra.outputs.releaseAnnotationId }} \
+                      --write-properties WriteAnnotations \
+                      -g ${{ env.Azure_Resource_GroupName }} \
+                      --app ${{ steps.Infra.outputs.out_appInsightsApplicationId }} \
+                      --query "apiKey" --output tsv)
+          echo "::set-output name=aiKey::$result"
+    
+    - name: Consume AI Key For App Insights
+      run: |
+        echo ${{ steps.AIKeyGen.outputs.aiKey }}
+    - name: Annotate deployment
+      uses: wictorwilen/application-insights-action@v1
+      id: annotation
+      with:
+        applicationId: ${{ steps.Infra.outputs.applicationInsightsApiAppId }}
+        apiKey: ${{ steps.AIKeyGen.outputs.aiKey }}
+        releaseName: ${{ github.event_name }}
+        message: ${{ github.event.head_commit.message }}
+        actor: ${{ github.actor }}
+
+    - name: Remove Temporary API Key For App Insights
+      uses: Azure/CLI@v1
+      with:
+        inlineScript: |
+          az config set extension.use_dynamic_install=yes_without_prompt
+          az monitor app-insights api-key delete \
+                      --api-key ${{ steps.Infra.outputs.releaseAnnotationId }} \
+                      -g ${{ env.Azure_Resource_GroupName }} \
+                      --app ${{ steps.Infra.outputs.out_appInsightsApplicationId }} 
+
