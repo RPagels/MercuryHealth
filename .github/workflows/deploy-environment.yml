@@ -24,10 +24,16 @@ on:
       azure-credentials:
         description: 'Credentials used to log into Azure for deployment of resources'
         required: true
+      sql-db-server-name:
+        description: 'Credentials used to log into SQL for deployment of resources'
+        required: true
       sql-db-login:
         description: 'Credentials used to log into SQL for deployment of resources'
         required: true
       sql-db-password:
+        description: 'Credentials used to log into SQL for deployment of resources'
+        required: true
+      sql-connection-string:
         description: 'Credentials used to log into SQL for deployment of resources'
         required: true
 
@@ -77,15 +83,14 @@ jobs:
       ###########################################
       # Validate ARM Template using Bicep DSL
       ###########################################
-    - name: Validate Azure Bicep
-      uses: azure/arm-deploy@v1
-      continue-on-error: false
-      with:
-        #subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
-        resourceGroupName: ${{ env.Azure_Resource_GroupName }}
-        template: ./MercuryHealth.IaC/main-1.bicep
-        parameters: ./MercuryHealth.IaC/main-1.params.json sqlAdministratorLogin=${{ secrets.sql-db-login }} sqlAdministratorLoginPassword=${{ secrets.sql-db-password }}
-        deploymentMode: Validate
+#    - name: Validate Azure Bicep
+#      uses: azure/arm-deploy@v1
+#      continue-on-error: false
+#      with:
+#        resourceGroupName: ${{ env.Azure_Resource_GroupName }}
+#        template: ./MercuryHealth.IaC/main-1.bicep
+#        parameters: ./MercuryHealth.IaC/main-1.params.json sqlAdministratorLogin=${{ secrets.sql-db-login }} sqlAdministratorLoginPassword=${{ secrets.sql-db-password }}
+#        deploymentMode: Validate
         
       ###########################################
       # Deploy ARM Template using Bicep DSL
@@ -95,7 +100,6 @@ jobs:
       uses: azure/arm-deploy@v1
       continue-on-error: false
       with:
-        #subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: ${{ env.Azure_Resource_GroupName }}
         template: ./MercuryHealth.IaC/main-1.bicep
         parameters: ./MercuryHealth.IaC/main-1.params.json sqlAdministratorLogin=${{ secrets.sql-db-login }} sqlAdministratorLoginPassword=${{ secrets.sql-db-password }}
@@ -128,9 +132,8 @@ jobs:
     - name: 'Deploy the database to Azure'
       uses: Azure/sql-action@v1.2
       with:
-        server-name: ${{ secrets.SQL_DB_Server_Name }}
-        
-        connection-string: ${{ secrets.SQL_DB_Connection_String }}
+        server-name: ${{ secrets.sql-db-server-name }}
+        connection-string: ${{ secrets.sql-connection-string }}
         dacpac-package: './MercuryHealth.Database/MercuryHealth.Database.dacpac'
 
     - name: Download Build Artifacts-Website Applicationn
