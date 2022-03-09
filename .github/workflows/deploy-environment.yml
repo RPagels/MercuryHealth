@@ -1,4 +1,4 @@
-name: DeploymentToEnvironment
+name: Deployment Environment
 
 on:
   workflow_call:
@@ -44,20 +44,20 @@ jobs:
 # ERROR!!!
 # The client '53173f83-e7b7-462c-9a4e-adb64374ebed' with object id '53173f83-e7b7-462c-9a4e-adb64374ebed' does not have authorization to perform action 'Microsoft.Resources/subscriptions/resourcegroups/write' over scope '/subscriptions/***/resourcegroups/rg-MercuryHealth-dev' or the scope is invalid. If access was recently granted, please refresh your credentials.
 #
-#    - name: Ensure Resource Group Exists
-#      uses: Azure/CLI@v1
-#      with:
-#        inlineScript: |
-#          #!/bin/bash
-#          az group create --name ${{ env.Azure_Resource_GroupName }} --location ${{ inputs.resource-group-location }}
+    - name: Ensure Resource Group Exists
+      uses: Azure/CLI@v1
+      with:
+        inlineScript: |
+          #!/bin/bash
+          az group create --name ${{ env.Azure_Resource_GroupName }} --location ${{ inputs.resource-group-location }}
 
-#    - name: Ensure Resource Group is Locked
-#      if: contains(github.event_name, 'push')
-#      uses: Azure/CLI@v1
-#      continue-on-error: true
-#      with:
-#        inlineScript: |
-#          az group lock create --lock-type ReadOnly -n 'DontDeleteMe' -g ${{ env.Azure_Resource_GroupName }} -n 'Prevent deletion of the resource group'
+    - name: Ensure Resource Group is Locked
+      if: contains(github.event_name, 'push')
+      uses: Azure/CLI@v1
+      continue-on-error: true
+      with:
+        inlineScript: |
+          az group lock create --lock-type ReadOnly -n 'DontDeleteMe' -g ${{ env.Azure_Resource_GroupName }} -n 'Prevent deletion of the resource group'
 
     - name: Download Build Artifact-Infrastructure
       uses: actions/download-artifact@v2
