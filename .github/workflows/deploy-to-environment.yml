@@ -41,6 +41,9 @@ jobs:
       with:
         creds: ${{ secrets.azure-credentials }}
 
+# ERROR!!!
+# The client '53173f83-e7b7-462c-9a4e-adb64374ebed' with object id '53173f83-e7b7-462c-9a4e-adb64374ebed' does not have authorization to perform action 'Microsoft.Resources/subscriptions/resourcegroups/write' over scope '/subscriptions/***/resourcegroups/rg-MercuryHealth-dev' or the scope is invalid. If access was recently granted, please refresh your credentials.
+#
     - name: Ensure Resource Group Exists
       uses: Azure/CLI@v1
       with:
