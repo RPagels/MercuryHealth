@@ -34,7 +34,6 @@ jobs:
       packages: write
 
     # Identify any jobs that must complete successfully before this job will run.
-    # needs: [Deploy_Stage_IaC]
     steps:
 
     - name: Login to Azure
@@ -42,7 +41,6 @@ jobs:
       continue-on-error: false
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-        #creds: ${{ secrets.AZURE_SQL_CREDENTIALS }}
 
     - name: Ensure Resource Group Exists
       uses: Azure/CLI@v1
