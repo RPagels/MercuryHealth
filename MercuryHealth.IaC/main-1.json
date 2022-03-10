@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "2652598122369652117"
+      "templateHash": "3935447755911958273"
     }
   },
   "parameters": {
@@ -138,7 +138,7 @@
       "apiVersion": "2021-10-01-preview",
       "name": "[format('{0}/{1}', variables('configStoreName'), format('.appconfig.featureflag~2F{0}${1}', parameters('FeatureFlagkeyValueNames')[copyIndex()], parameters('FeatureFlagkeyValueLabels')[copyIndex()]))]",
       "properties": {
-        "value": "[parameters('FeatureFlagkeyValueKeys')[copyIndex()]]",
+        "value": "[parameters('FeatureFlagkeyValueNames')[copyIndex()]]",
         "contentType": "[parameters('contentType')]"
       },
       "dependsOn": [
@@ -703,7 +703,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "13015881671528717901"
+              "templateHash": "9485810629597122545"
             }
           },
           "parameters": {
@@ -749,6 +749,18 @@
               "sku": {
                 "name": "Standard",
                 "tier": "Standard"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('sqlserverName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Sql/servers/firewallRules",
+              "apiVersion": "2021-02-01-preview",
+              "name": "[format('{0}/AllowAllWindowsAzureIps', parameters('sqlserverName'))]",
+              "properties": {
+                "endIpAddress": "0.0.0.0",
+                "startIpAddress": "0.0.0.0"
               },
               "dependsOn": [
                 "[resourceId('Microsoft.Sql/servers', parameters('sqlserverName'))]"
@@ -1696,6 +1708,10 @@
     "out_sqlDBName": {
       "type": "string",
       "value": "[variables('sqlDBName')]"
+    },
+    "out_sqlserverFQName": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'sqldbdeploy'), '2020-06-01').outputs.sqlserverfullyQualifiedDomainName.value]"
     },
     "out_configStoreName": {
       "type": "string",

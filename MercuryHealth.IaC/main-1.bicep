@@ -255,6 +255,7 @@ params: {
 output out_webSiteName string = webSiteName
 output out_sqlserverName string = sqlserverName
 output out_sqlDBName string = sqlDBName
+output out_sqlserverFQName string = sqldbmod.outputs.sqlserverfullyQualifiedDomainName
 //output out_sqlConnectionString string = 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
 output out_configStoreName string = configStoreName
 output out_appInsightsName string = appInsightsName
