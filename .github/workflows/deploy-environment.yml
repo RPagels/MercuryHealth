@@ -5,7 +5,7 @@ on:
     inputs:
       resource-group-base-name:
         description: 'Resource Group base name'
-        default: 'rg-dev-mercuryhealth'
+        default: 'rg-mercuryhealth-dev'
         required: true
         type: string
       environment-suffix:
@@ -36,6 +36,9 @@ on:
         required: true
 
 jobs:
+  ###################################################################
+  # Deployment Stage - Infrastructure / Application / Database      #
+  ###################################################################
   deploy_to_environment:
     runs-on: ubuntu-latest
     env:
@@ -210,3 +213,58 @@ jobs:
                       -g ${{ env.Azure_Resource_GroupName }} \
                       --app ${{ steps.Infra.outputs.out_appInsightsApplicationId }} 
 
+###################################################################
+# CD Stage - UI Testing                         
+###################################################################
+  UITesting_Stage_ApplicationOnChromium:
+    if: contains(github.event_name, 'push')
+
+    name: Playwright Tests on Chromium
+    
+    # The type of runner that the job will run on
+    runs-on: windows-latest
+
+    # Identify any jobs that must complete successfully before this job will run.
+    needs: [deploy_to_environment]
+    timeout-minutes: 10
+        
+    steps:
+      # Download Artifacts under $GITHUB_WORKSPACE, so your job can access it
+      - name: Download Build Artifacts-Playwright Tests
+        continue-on-error: false
+        uses: actions/download-artifact@v2
+        with:
+          name: MercuryHealth.UITests
+          path: ${{ github.workspace }}/MercuryHealth.UITests
+
+      - name: Playwright Tests
+        continue-on-error: false
+        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --filter TestCategory=Playwright_Tests_Chromium -l "console;verbosity=normal"  --settings MercuryHealth.UITests/MercuryHealthTests.runsettings
+
+###################################################################
+# CD Stage - UI Testing                         
+###################################################################
+  UITesting_Stage_ApplicationOnFireFox:
+    if: contains(github.event_name, 'push')
+
+    name: Playwright Tests on FireFox
+    
+    # The type of runner that the job will run on
+    runs-on: windows-latest
+
+    # Identify any jobs that must complete successfully before this job will run.
+    needs: [deploy_to_environment]
+    timeout-minutes: 10
+        
+    steps:
+      # Download Artifacts under $GITHUB_WORKSPACE, so your job can access it
+      - name: Download Build Artifacts-Playwright Tests
+        continue-on-error: false
+        uses: actions/download-artifact@v2
+        with:
+          name: MercuryHealth.UITests
+          path: ${{ github.workspace }}/MercuryHealth.UITests
+
+      - name: Playwright Tests
+        continue-on-error: false
+        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --filter TestCategory=Playwright_Tests_FireFox -l "console;verbosity=normal" --settings MercuryHealth.UITests/MercuryHealthTests.runsettings
