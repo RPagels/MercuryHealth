@@ -1,4 +1,4 @@
-param skuName string = 'P1'
+param skuName string = 'B1'
 //param skuCapacity int = 1
 param location string = resourceGroup().location
 param sqlserverName string
@@ -98,7 +98,7 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-02-01' = {
 // https://docs.microsoft.com/en-us/azure/azure-monitor/app/monitor-web-app-availability
 
 resource standardWebTestPageHome  'Microsoft.Insights/webtests@2020-10-05-preview' = {
-  name: 'Prod - Page Home'
+  name: 'Page Home'
   location: location
   tags: {
     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
@@ -106,7 +106,7 @@ resource standardWebTestPageHome  'Microsoft.Insights/webtests@2020-10-05-previe
   kind: 'ping'
   properties: {
     SyntheticMonitorId: appInsightsName
-    Name: 'Prod - Page Home'
+    Name: 'Page Home'
     Description: null
     Enabled: true
     Frequency: 300
@@ -150,7 +150,7 @@ resource standardWebTestPageHome  'Microsoft.Insights/webtests@2020-10-05-previe
 }
 
 resource standardWebTestPageNutritions  'Microsoft.Insights/webtests@2020-10-05-preview' = {
-  name: 'Prod - Page Nutritions'
+  name: 'Page Nutritions'
   location: location
   tags: {
     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
@@ -158,7 +158,7 @@ resource standardWebTestPageNutritions  'Microsoft.Insights/webtests@2020-10-05-
   kind: 'ping'
   properties: {
     SyntheticMonitorId: appInsightsName
-    Name: 'Prod - Page Nutritions'
+    Name: 'Page Nutritions'
     Description: null
     Enabled: true
     Frequency: 300
@@ -202,7 +202,7 @@ resource standardWebTestPageNutritions  'Microsoft.Insights/webtests@2020-10-05-
 }
 
 resource standardWebTestPageExercises  'Microsoft.Insights/webtests@2020-10-05-preview' = {
-  name: 'Prod - Page Exercises'
+  name: 'Page Exercises'
   location: location
   tags: {
      'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
@@ -210,7 +210,7 @@ resource standardWebTestPageExercises  'Microsoft.Insights/webtests@2020-10-05-p
   kind: 'ping'
   properties: {
     SyntheticMonitorId: appInsightsName
-    Name: 'Prod - Page Exercises'
+    Name: 'Page Exercises'
     Description: null
     Enabled: true
     Frequency: 300
@@ -253,161 +253,161 @@ resource standardWebTestPageExercises  'Microsoft.Insights/webtests@2020-10-05-p
   }
 }
 
-resource standardWebTestPageHomeDev  'Microsoft.Insights/webtests@2020-10-05-preview' = {
-  name: 'Dev - Page Home'
-  location: location
-  tags: {
-    'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
-  }
-  kind: 'ping'
-  properties: {
-    SyntheticMonitorId: appInsightsName
-    Name: 'Dev - Page Home'
-    Description: null
-    Enabled: true
-    Frequency: 300
-    Timeout: 120 
-    Kind: 'standard'
-    RetryEnabled: true
-    Locations: [
-      {
-        Id: 'us-va-ash-azr'  // East US
-      }
-      {
-        Id: 'us-fl-mia-edge' // Central US
-      }
-      {
-        Id: 'us-ca-sjc-azr' // West US
-      }
-      {
-        Id: 'emea-au-syd-edge' // Austrailia East
-      }
-      {
-        Id: 'apac-jp-kaw-edge' // Japan East
-      }
-    ]
-    Configuration: null
-    Request: {
-      RequestUrl: 'https://${appService.name}-dev.azurewebsites.net/'
-      Headers: null
-      HttpVerb: 'GET'
-      RequestBody: null
-      ParseDependentRequests: false
-      FollowRedirects: null
-    }
-    ValidationRules: {
-      ExpectedHttpStatusCode: 200
-      IgnoreHttpsStatusCode: false
-      ContentValidation: null
-      SSLCheck: true
-      SSLCertRemainingLifetimeCheck: 7
-    }
-  }
-}
+// resource standardWebTestPageHomeDev  'Microsoft.Insights/webtests@2020-10-05-preview' = {
+//   name: 'Dev - Page Home'
+//   location: location
+//   tags: {
+//     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
+//   }
+//   kind: 'ping'
+//   properties: {
+//     SyntheticMonitorId: appInsightsName
+//     Name: 'Dev - Page Home'
+//     Description: null
+//     Enabled: true
+//     Frequency: 300
+//     Timeout: 120 
+//     Kind: 'standard'
+//     RetryEnabled: true
+//     Locations: [
+//       {
+//         Id: 'us-va-ash-azr'  // East US
+//       }
+//       {
+//         Id: 'us-fl-mia-edge' // Central US
+//       }
+//       {
+//         Id: 'us-ca-sjc-azr' // West US
+//       }
+//       {
+//         Id: 'emea-au-syd-edge' // Austrailia East
+//       }
+//       {
+//         Id: 'apac-jp-kaw-edge' // Japan East
+//       }
+//     ]
+//     Configuration: null
+//     Request: {
+//       RequestUrl: 'https://${appService.name}-dev.azurewebsites.net/'
+//       Headers: null
+//       HttpVerb: 'GET'
+//       RequestBody: null
+//       ParseDependentRequests: false
+//       FollowRedirects: null
+//     }
+//     ValidationRules: {
+//       ExpectedHttpStatusCode: 200
+//       IgnoreHttpsStatusCode: false
+//       ContentValidation: null
+//       SSLCheck: true
+//       SSLCertRemainingLifetimeCheck: 7
+//     }
+//   }
+// }
 
-resource standardWebTestPageNutritionsDev  'Microsoft.Insights/webtests@2020-10-05-preview' = {
-  name: 'Dev - Page Nutritions'
-  location: location
-  tags: {
-    'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
-  }
-  kind: 'ping'
-  properties: {
-    SyntheticMonitorId: appInsightsName
-    Name: 'Dev - Page Nutritions'
-    Description: null
-    Enabled: true
-    Frequency: 300
-    Timeout: 120 
-    Kind: 'standard'
-    RetryEnabled: true
-    Locations: [
-      {
-        Id: 'us-va-ash-azr'  // East US
-      }
-      {
-        Id: 'us-fl-mia-edge' // Central US
-      }
-      {
-        Id: 'us-ca-sjc-azr' // West US
-      }
-      {
-        Id: 'emea-au-syd-edge' // Austrailia East
-      }
-      {
-        Id: 'apac-jp-kaw-edge' // Japan East
-      }
-    ]
-    Configuration: null
-    Request: {
-      RequestUrl: 'https://${appService.name}-dev.azurewebsites.net/Nutritions/'
-      Headers: null
-      HttpVerb: 'GET'
-      RequestBody: null
-      ParseDependentRequests: false
-      FollowRedirects: null
-    }
-    ValidationRules: {
-      ExpectedHttpStatusCode: 200
-      IgnoreHttpsStatusCode: false
-      ContentValidation: null
-      SSLCheck: true
-      SSLCertRemainingLifetimeCheck: 7
-    }
-  }
-}
+// resource standardWebTestPageNutritionsDev  'Microsoft.Insights/webtests@2020-10-05-preview' = {
+//   name: 'Dev - Page Nutritions'
+//   location: location
+//   tags: {
+//     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
+//   }
+//   kind: 'ping'
+//   properties: {
+//     SyntheticMonitorId: appInsightsName
+//     Name: 'Dev - Page Nutritions'
+//     Description: null
+//     Enabled: true
+//     Frequency: 300
+//     Timeout: 120 
+//     Kind: 'standard'
+//     RetryEnabled: true
+//     Locations: [
+//       {
+//         Id: 'us-va-ash-azr'  // East US
+//       }
+//       {
+//         Id: 'us-fl-mia-edge' // Central US
+//       }
+//       {
+//         Id: 'us-ca-sjc-azr' // West US
+//       }
+//       {
+//         Id: 'emea-au-syd-edge' // Austrailia East
+//       }
+//       {
+//         Id: 'apac-jp-kaw-edge' // Japan East
+//       }
+//     ]
+//     Configuration: null
+//     Request: {
+//       RequestUrl: 'https://${appService.name}-dev.azurewebsites.net/Nutritions/'
+//       Headers: null
+//       HttpVerb: 'GET'
+//       RequestBody: null
+//       ParseDependentRequests: false
+//       FollowRedirects: null
+//     }
+//     ValidationRules: {
+//       ExpectedHttpStatusCode: 200
+//       IgnoreHttpsStatusCode: false
+//       ContentValidation: null
+//       SSLCheck: true
+//       SSLCertRemainingLifetimeCheck: 7
+//     }
+//   }
+// }
 
-resource standardWebTestPageExercisesDev  'Microsoft.Insights/webtests@2020-10-05-preview' = {
-  name: 'Dev - Page Exercises'
-  location: location
-  tags: {
-    'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
-  }
-  kind: 'ping'
-  properties: {
-    SyntheticMonitorId: appInsightsName
-    Name: 'Dev - Page Exercises'
-    Description: null
-    Enabled: true
-    Frequency: 300
-    Timeout: 120 
-    Kind: 'standard'
-    RetryEnabled: true
-    Locations: [
-      {
-        Id: 'us-va-ash-azr'  // East US
-      }
-      {
-        Id: 'us-fl-mia-edge' // Central US
-      }
-      {
-        Id: 'us-ca-sjc-azr' // West US
-      }
-      {
-        Id: 'emea-au-syd-edge' // Austrailia East
-      }
-      {
-        Id: 'apac-jp-kaw-edge' // Japan East
-      }
-    ]
-    Configuration: null
-    Request: {
-      RequestUrl: 'https://${appService.name}-dev.azurewebsites.net/Exercises/'
-      Headers: null
-      HttpVerb: 'GET'
-      RequestBody: null
-      ParseDependentRequests: false
-      FollowRedirects: null
-    }
-    ValidationRules: {
-      ExpectedHttpStatusCode: 200
-      IgnoreHttpsStatusCode: false
-      ContentValidation: null
-      SSLCheck: true
-      SSLCertRemainingLifetimeCheck: 7
-    }
-  }
-}
+// resource standardWebTestPageExercisesDev  'Microsoft.Insights/webtests@2020-10-05-preview' = {
+//   name: 'Dev - Page Exercises'
+//   location: location
+//   tags: {
+//     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
+//   }
+//   kind: 'ping'
+//   properties: {
+//     SyntheticMonitorId: appInsightsName
+//     Name: 'Dev - Page Exercises'
+//     Description: null
+//     Enabled: true
+//     Frequency: 300
+//     Timeout: 120 
+//     Kind: 'standard'
+//     RetryEnabled: true
+//     Locations: [
+//       {
+//         Id: 'us-va-ash-azr'  // East US
+//       }
+//       {
+//         Id: 'us-fl-mia-edge' // Central US
+//       }
+//       {
+//         Id: 'us-ca-sjc-azr' // West US
+//       }
+//       {
+//         Id: 'emea-au-syd-edge' // Austrailia East
+//       }
+//       {
+//         Id: 'apac-jp-kaw-edge' // Japan East
+//       }
+//     ]
+//     Configuration: null
+//     Request: {
+//       RequestUrl: 'https://${appService.name}-dev.azurewebsites.net/Exercises/'
+//       Headers: null
+//       HttpVerb: 'GET'
+//       RequestBody: null
+//       ParseDependentRequests: false
+//       FollowRedirects: null
+//     }
+//     ValidationRules: {
+//       ExpectedHttpStatusCode: 200
+//       IgnoreHttpsStatusCode: false
+//       ContentValidation: null
+//       SSLCheck: true
+//       SSLCertRemainingLifetimeCheck: 7
+//     }
+//   }
+// }
 
 output output_webSiteName string = appService.name
 output output_webSiteURL string = appService.properties.defaultHostName

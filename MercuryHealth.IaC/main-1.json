@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "3935447755911958273"
+      "templateHash": "7684868303125154595"
     }
   },
   "parameters": {
@@ -24,6 +24,10 @@
     "costCenter": {
       "type": "string",
       "defaultValue": "74f644d3e665"
+    },
+    "releaseAnnotationGuid": {
+      "type": "string",
+      "defaultValue": "[newGuid()]"
     },
     "sqlAdministratorLogin": {
       "type": "secureString"
@@ -205,13 +209,13 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "1623432817036389843"
+              "templateHash": "1689260827745585533"
             }
           },
           "parameters": {
             "skuName": {
               "type": "string",
-              "defaultValue": "P1"
+              "defaultValue": "B1"
             },
             "location": {
               "type": "string",
@@ -315,7 +319,7 @@
             {
               "type": "Microsoft.Insights/webtests",
               "apiVersion": "2020-10-05-preview",
-              "name": "Prod - Page Home",
+              "name": "Page Home",
               "location": "[parameters('location')]",
               "tags": {
                 "[format('hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/{0}/providers/microsoft.insights/components/{1}', parameters('resourceGroupName'), parameters('appInsightsName'))]": "Resource"
@@ -323,7 +327,7 @@
               "kind": "ping",
               "properties": {
                 "SyntheticMonitorId": "[parameters('appInsightsName')]",
-                "Name": "Prod - Page Home",
+                "Name": "Page Home",
                 "Description": null,
                 "Enabled": true,
                 "Frequency": 300,
@@ -371,7 +375,7 @@
             {
               "type": "Microsoft.Insights/webtests",
               "apiVersion": "2020-10-05-preview",
-              "name": "Prod - Page Nutritions",
+              "name": "Page Nutritions",
               "location": "[parameters('location')]",
               "tags": {
                 "[format('hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/{0}/providers/microsoft.insights/components/{1}', parameters('resourceGroupName'), parameters('appInsightsName'))]": "Resource"
@@ -379,7 +383,7 @@
               "kind": "ping",
               "properties": {
                 "SyntheticMonitorId": "[parameters('appInsightsName')]",
-                "Name": "Prod - Page Nutritions",
+                "Name": "Page Nutritions",
                 "Description": null,
                 "Enabled": true,
                 "Frequency": 300,
@@ -427,7 +431,7 @@
             {
               "type": "Microsoft.Insights/webtests",
               "apiVersion": "2020-10-05-preview",
-              "name": "Prod - Page Exercises",
+              "name": "Page Exercises",
               "location": "[parameters('location')]",
               "tags": {
                 "[format('hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/{0}/providers/microsoft.insights/components/{1}', parameters('resourceGroupName'), parameters('appInsightsName'))]": "Resource"
@@ -435,7 +439,7 @@
               "kind": "ping",
               "properties": {
                 "SyntheticMonitorId": "[parameters('appInsightsName')]",
-                "Name": "Prod - Page Exercises",
+                "Name": "Page Exercises",
                 "Description": null,
                 "Enabled": true,
                 "Frequency": 300,
@@ -462,174 +466,6 @@
                 "Configuration": null,
                 "Request": {
                   "RequestUrl": "[format('https://{0}.azurewebsites.net/Exercises/', parameters('webSiteName'))]",
-                  "Headers": null,
-                  "HttpVerb": "GET",
-                  "RequestBody": null,
-                  "ParseDependentRequests": false,
-                  "FollowRedirects": null
-                },
-                "ValidationRules": {
-                  "ExpectedHttpStatusCode": 200,
-                  "IgnoreHttpsStatusCode": false,
-                  "ContentValidation": null,
-                  "SSLCheck": true,
-                  "SSLCertRemainingLifetimeCheck": 7
-                }
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('webSiteName'))]"
-              ]
-            },
-            {
-              "type": "Microsoft.Insights/webtests",
-              "apiVersion": "2020-10-05-preview",
-              "name": "Dev - Page Home",
-              "location": "[parameters('location')]",
-              "tags": {
-                "[format('hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/{0}/providers/microsoft.insights/components/{1}', parameters('resourceGroupName'), parameters('appInsightsName'))]": "Resource"
-              },
-              "kind": "ping",
-              "properties": {
-                "SyntheticMonitorId": "[parameters('appInsightsName')]",
-                "Name": "Dev - Page Home",
-                "Description": null,
-                "Enabled": true,
-                "Frequency": 300,
-                "Timeout": 120,
-                "Kind": "standard",
-                "RetryEnabled": true,
-                "Locations": [
-                  {
-                    "Id": "us-va-ash-azr"
-                  },
-                  {
-                    "Id": "us-fl-mia-edge"
-                  },
-                  {
-                    "Id": "us-ca-sjc-azr"
-                  },
-                  {
-                    "Id": "emea-au-syd-edge"
-                  },
-                  {
-                    "Id": "apac-jp-kaw-edge"
-                  }
-                ],
-                "Configuration": null,
-                "Request": {
-                  "RequestUrl": "[format('https://{0}-dev.azurewebsites.net/', parameters('webSiteName'))]",
-                  "Headers": null,
-                  "HttpVerb": "GET",
-                  "RequestBody": null,
-                  "ParseDependentRequests": false,
-                  "FollowRedirects": null
-                },
-                "ValidationRules": {
-                  "ExpectedHttpStatusCode": 200,
-                  "IgnoreHttpsStatusCode": false,
-                  "ContentValidation": null,
-                  "SSLCheck": true,
-                  "SSLCertRemainingLifetimeCheck": 7
-                }
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('webSiteName'))]"
-              ]
-            },
-            {
-              "type": "Microsoft.Insights/webtests",
-              "apiVersion": "2020-10-05-preview",
-              "name": "Dev - Page Nutritions",
-              "location": "[parameters('location')]",
-              "tags": {
-                "[format('hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/{0}/providers/microsoft.insights/components/{1}', parameters('resourceGroupName'), parameters('appInsightsName'))]": "Resource"
-              },
-              "kind": "ping",
-              "properties": {
-                "SyntheticMonitorId": "[parameters('appInsightsName')]",
-                "Name": "Dev - Page Nutritions",
-                "Description": null,
-                "Enabled": true,
-                "Frequency": 300,
-                "Timeout": 120,
-                "Kind": "standard",
-                "RetryEnabled": true,
-                "Locations": [
-                  {
-                    "Id": "us-va-ash-azr"
-                  },
-                  {
-                    "Id": "us-fl-mia-edge"
-                  },
-                  {
-                    "Id": "us-ca-sjc-azr"
-                  },
-                  {
-                    "Id": "emea-au-syd-edge"
-                  },
-                  {
-                    "Id": "apac-jp-kaw-edge"
-                  }
-                ],
-                "Configuration": null,
-                "Request": {
-                  "RequestUrl": "[format('https://{0}-dev.azurewebsites.net/Nutritions/', parameters('webSiteName'))]",
-                  "Headers": null,
-                  "HttpVerb": "GET",
-                  "RequestBody": null,
-                  "ParseDependentRequests": false,
-                  "FollowRedirects": null
-                },
-                "ValidationRules": {
-                  "ExpectedHttpStatusCode": 200,
-                  "IgnoreHttpsStatusCode": false,
-                  "ContentValidation": null,
-                  "SSLCheck": true,
-                  "SSLCertRemainingLifetimeCheck": 7
-                }
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('webSiteName'))]"
-              ]
-            },
-            {
-              "type": "Microsoft.Insights/webtests",
-              "apiVersion": "2020-10-05-preview",
-              "name": "Dev - Page Exercises",
-              "location": "[parameters('location')]",
-              "tags": {
-                "[format('hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/{0}/providers/microsoft.insights/components/{1}', parameters('resourceGroupName'), parameters('appInsightsName'))]": "Resource"
-              },
-              "kind": "ping",
-              "properties": {
-                "SyntheticMonitorId": "[parameters('appInsightsName')]",
-                "Name": "Dev - Page Exercises",
-                "Description": null,
-                "Enabled": true,
-                "Frequency": 300,
-                "Timeout": 120,
-                "Kind": "standard",
-                "RetryEnabled": true,
-                "Locations": [
-                  {
-                    "Id": "us-va-ash-azr"
-                  },
-                  {
-                    "Id": "us-fl-mia-edge"
-                  },
-                  {
-                    "Id": "us-ca-sjc-azr"
-                  },
-                  {
-                    "Id": "emea-au-syd-edge"
-                  },
-                  {
-                    "Id": "apac-jp-kaw-edge"
-                  }
-                ],
-                "Configuration": null,
-                "Request": {
-                  "RequestUrl": "[format('https://{0}-dev.azurewebsites.net/Exercises/', parameters('webSiteName'))]",
                   "Headers": null,
                   "HttpVerb": "GET",
                   "RequestBody": null,
@@ -806,7 +642,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "10721192655481643838"
+              "templateHash": "8001440945521567697"
             }
           },
           "parameters": {
@@ -903,6 +739,10 @@
               "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName'))).ConnectionString]"
             },
             "out_appInsightsApplicationId": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName'))).ApplicationId]"
+            },
+            "out_appInsightsAPIApplicationId": {
               "type": "string",
               "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName'))).AppId]"
             }
@@ -1740,6 +1580,14 @@
     "out_appInsightsApplicationId": {
       "type": "string",
       "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy'), '2020-06-01').outputs.out_appInsightsApplicationId.value]"
+    },
+    "out_appInsightsAPIApplicationId": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy'), '2020-06-01').outputs.out_appInsightsAPIApplicationId.value]"
+    },
+    "out_releaseAnnotationId": {
+      "type": "string",
+      "value": "[parameters('releaseAnnotationGuid')]"
     }
   }
 }

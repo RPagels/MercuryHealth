@@ -72,6 +72,7 @@ resource emailActionGroup 'microsoft.insights/actionGroups@2019-06-01' = {
 output out_appInsightsInstrumentationKey string = applicationInsights.properties.InstrumentationKey
 output out_appInsightsConnectionString string = applicationInsights.properties.ConnectionString
 
-output out_appInsightsApplicationId string = applicationInsights.properties.AppId
+output out_appInsightsApplicationId string = applicationInsights.properties.ApplicationId
+output out_appInsightsAPIApplicationId string = applicationInsights.properties.AppId
 //output out_applicationInsightsApiAppId string = applicationInsights.properties.AppId
 //output out_releaseAnnotationId string = releaseAnnotationGuid

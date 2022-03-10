@@ -6,6 +6,7 @@ param location string = resourceGroup().location
 param environment string = 'dev'
 param createdBy string = 'Randy Pagels'
 param costCenter string = '74f644d3e665'
+param releaseAnnotationGuid string = newGuid()
 
 // Data params
 @secure()
@@ -264,3 +265,5 @@ output out_apiServiceName string = apiServiceName
 output out_loadTestsName string = loadTestsName
 output out_keyvaultName string = keyvaultName
 output out_appInsightsApplicationId string = appinsightsmod.outputs.out_appInsightsApplicationId
+output out_appInsightsAPIApplicationId string = appinsightsmod.outputs.out_appInsightsAPIApplicationId
+output out_releaseAnnotationId string = releaseAnnotationGuid
