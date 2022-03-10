@@ -175,7 +175,7 @@ jobs:
         inlineScript: |
           az config set extension.use_dynamic_install=yes_without_prompt
           result=$(az monitor app-insights api-key create \
-                      --api-key ${{ steps.Infra.outputs.out_releaseAnnotationId }} \
+                      --api-key ${{ steps.Infra.outputs.out_releaseAnnotationGuidID }} \
                       --write-properties WriteAnnotations \
                       -g ${{ env.Azure_Resource_GroupName }} \
                       --app ${{ steps.Infra.outputs.out_appInsightsApplicationId }} \
@@ -184,7 +184,10 @@ jobs:
     
     - name: Consume AI Key For App Insights
       run: |
+        echo ${{ steps.Infra.outputs.out_releaseAnnotationGuidID }}
+        echo ${{ steps.Infra.outputs.out_appInsightsApplicationId }}
         echo ${{ steps.AIKeyGen.outputs.aiKey }}
+        
     - name: Annotate deployment
       uses: wictorwilen/application-insights-action@v1
       id: annotation
@@ -202,7 +205,7 @@ jobs:
         inlineScript: |
           az config set extension.use_dynamic_install=yes_without_prompt
           az monitor app-insights api-key delete \
-                      --api-key ${{ env.Azure_ReleaseAnnotationName }} \
+                      --api-key ${{ steps.Infra.outputs.out_releaseAnnotationGuidID }} \
                       -g ${{ env.Azure_Resource_GroupName }} \
                       --app ${{ steps.Infra.outputs.out_appInsightsApplicationId }} 
 
