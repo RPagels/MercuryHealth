@@ -105,8 +105,9 @@ jobs:
         deploymentMode: Incremental
         failOnStdErr: false
 
-#    - name: Save Application Insights Id to Environment Variable
-#      run: |
+    - name: Save Application Insights Id to Environment Variable
+      run: |
+         echo 'sqlserverFQName = ${{steps.Infra.outputs.out_sqlserverFQName}}'
 #        echo 'webSiteName = ${{steps.Infra.outputs.out_webSiteName}}'
 #        echo 'functionAppName = ${{steps.Infra.outputs.out_functionAppName}}'
 #        echo 'sqlserverName = ${{steps.Infra.outputs.out_sqlserverName}}'
@@ -133,7 +134,7 @@ jobs:
     - name: 'Deploy the database to Azure'
       uses: Azure/sql-action@v1.2
       with:
-        server-name: ${{ steps.Infra.outputs.out_sqlserverName }}
+        server-name: ${{ steps.Infra.outputs.out_sqlserverFQName }}
         connection-string: ${{ secrets.sql-connection-string }}
         dacpac-package: './MercuryHealth.Database/MercuryHealth.Database.dacpac'
 
