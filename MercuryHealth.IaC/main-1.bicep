@@ -266,4 +266,4 @@ output out_loadTestsName string = loadTestsName
 output out_keyvaultName string = keyvaultName
 output out_appInsightsApplicationId string = appinsightsmod.outputs.out_appInsightsApplicationId
 output out_appInsightsAPIApplicationId string = appinsightsmod.outputs.out_appInsightsAPIApplicationId
-output out_releaseAnnotationId string = releaseAnnotationGuid
+output out_releaseAnnotationGuidID string = releaseAnnotationGuid
