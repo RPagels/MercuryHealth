@@ -41,6 +41,7 @@ jobs:
   ###################################################################
   deploy_to_environment:
     runs-on: ubuntu-latest
+    name: Build Application
     env:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
       #Azure_ReleaseAnnotationName: 'temp-deployment'
@@ -278,6 +279,10 @@ jobs:
 
     name: Load Test Application
     
+    env:
+      load_Test_Resource: 'https://app-xibwnqufj5jam.azurewebsites.net'
+      load_Test_Resource2: ${{ steps.Infra.outputs.out_loadTestsName }}
+      
     # Identify any jobs that must complete successfully before this job will run.
     runs-on: ubuntu-latest
 
@@ -309,12 +314,13 @@ jobs:
       # JMX file uses  ${System.getenv("webAppUrl")}
 
 # loadTestResource: ${{ env.Load_Test_Resource }}
+# loadTestResource: ${{ steps.Infra.outputs.out_loadTestsName }}
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
         continue-on-error: true
         with:
           loadTestConfigFile: './MercuryHealth.LoadTests/LoadTest_HomePage_Config.yaml'
-          loadTestResource: ${{ steps.Infra.outputs.out_loadTestsName }}
+          loadTestResource: ${{ env.Load_Test_Resource }}
           resourceGroup: ${{ env.Azure_Resource_GroupName }}
 
       - name: Azure logout
@@ -322,19 +328,19 @@ jobs:
           az logout
           
 ###################################################################
-# CD Stage - Production                        #
+# CD Stage - Dev                        #
 ###################################################################
-  Production_Stage_Application:
+  Dev_Stage_Application:
     if: contains(github.event_name, 'push')
 
-    name: Deploy to Production
+    name: Deploy to Dev
     
     # Identify any jobs that must complete successfully before this job will run.
     runs-on: ubuntu-latest
 
     # Identify any jobs that must complete successfully before this job will run.
     needs: [UITesting_Stage_ApplicationOnChromium, UITesting_Stage_ApplicationOnFireFox]
-    environment: Production
+    environment: Dev
     steps:
       - name: Approve Dev Deployment
         run: |
