@@ -279,7 +279,7 @@ jobs:
     name: Load Test Application
     
     env:
-      load_Test_Resource: 'https://app-xibwnqufj5jam.azurewebsites.net'
+      load_Test_Resource: 'loadtests-xibwnqufj5jam'
       #load_Test_Resource2: '${{ steps.Infra.outputs.out_loadTestsName }}'
 
     # Identify any jobs that must complete successfully before this job will run.
