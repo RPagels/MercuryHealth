@@ -186,13 +186,14 @@ jobs:
       run: |
         echo 'out_releaseAnnotationGuidID=${{ steps.Infra.outputs.out_releaseAnnotationGuidID }}'
         echo 'out_appInsightsApplicationId=${{ steps.Infra.outputs.out_appInsightsApplicationId }}'
+        echo 'out_appInsightsAPIApplicationId=${{ steps.Infra.outputs.out_appInsightsAPIApplicationId }}'
         echo 'steps.AIKeyGen.outputs.aiKey=${{ steps.AIKeyGen.outputs.aiKey }}'
         
     - name: Annotate deployment
       uses: wictorwilen/application-insights-action@v1
       id: annotation
       with:
-        applicationId: ${{ steps.Infra.outputs.out_appInsightsApplicationId }}
+        applicationId: ${{ steps.Infra.outputs.out_appInsightsAPIApplicationId }}
         apiKey: ${{ steps.AIKeyGen.outputs.aiKey }}
         releaseName: ${{ github.event_name }}
         message: ${{ github.event.head_commit.message }}
@@ -207,5 +208,5 @@ jobs:
           az monitor app-insights api-key delete \
                       --api-key ${{ steps.Infra.outputs.out_releaseAnnotationGuidID }} \
                       -g ${{ env.Azure_Resource_GroupName }} \
-                      --app ${{ steps.Infra.outputs.out_appInsightsApplicationId }} 
+                      --app ${{ steps.Infra.outputs.out_appInsightsAPIApplicationId }} 
 
