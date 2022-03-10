@@ -208,5 +208,5 @@ jobs:
           az monitor app-insights api-key delete \
                       --api-key ${{ steps.Infra.outputs.out_releaseAnnotationGuidID }} \
                       -g ${{ env.Azure_Resource_GroupName }} \
-                      --app ${{ steps.Infra.outputs.out_appInsightsAPIApplicationId }} 
+                      --app ${{ steps.Infra.outputs.out_appInsightsApplicationId }} 
 
