@@ -280,6 +280,7 @@ jobs:
     
     env:
       load_Test_Resource: 'loadtests-xibwnqufj5jam'
+      Azure_Resource_GroupName: 
       #load_Test_Resource2: '${{ steps.Infra.outputs.out_loadTestsName }}'
 
     # Identify any jobs that must complete successfully before this job will run.
@@ -308,6 +309,8 @@ jobs:
         run: |
           echo '::set-output name=webAppUrl::${{ steps.Infra.outputs.out_webSiteName }}'
           echo 'webAppUrl= ${{ steps.Infra.outputs.out_webSiteName }}' >> $GITHUB_ENV
+          echo 'Load_Test_Resource=${{ env.Load_Test_Resource }}'
+          echo 'Azure_Resource_GroupName=${{ env.Azure_Resource_GroupName }}'
 
       # Use environment variables in Apache JMeter Load Tests - webAppUrl
       # JMX file uses  ${System.getenv("webAppUrl")}
