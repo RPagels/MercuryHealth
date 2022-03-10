@@ -175,7 +175,7 @@ jobs:
         inlineScript: |
           az config set extension.use_dynamic_install=yes_without_prompt
           result=$(az monitor app-insights api-key create \
-                      --api-key ${{ env.Azure_ReleaseAnnotationName }} \
+                      --api-key ${{ steps.Infra.outputs.out_releaseAnnotationId }} \
                       --write-properties WriteAnnotations \
                       -g ${{ env.Azure_Resource_GroupName }} \
                       --app ${{ steps.Infra.outputs.out_appInsightsApplicationId }} \
