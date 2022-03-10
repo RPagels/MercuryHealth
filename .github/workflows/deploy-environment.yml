@@ -282,7 +282,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # Identify any jobs that must complete successfully before this job will run.
-    needs: [UITesting_Stage_ApplicationOnChromium, UITesting_Stage_ApplicationOnFireFox]
+    needs: [deploy_to_environment]
     steps:
       - name: Checkout GitHub Actions 
         uses: actions/checkout@v2
@@ -333,7 +333,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # Identify any jobs that must complete successfully before this job will run.
-    needs: [LoadTesting_Stage_Application]
+    needs: [UITesting_Stage_ApplicationOnChromium, UITesting_Stage_ApplicationOnFireFox]
     environment: Production
     steps:
       - name: Approve Dev Deployment
