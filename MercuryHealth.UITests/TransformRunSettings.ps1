@@ -17,5 +17,7 @@ $Content = Get-Content .\MercuryHealth.UITests\MercuryHealthTests.runsettings
 $Content.replace(‘WebSiteUrlHere’,’$website_url’) | Set-Content .\MercuryHealth.UITests\MercuryHealthTests.runsettings
 Get-Content .\MercuryHealth.UITests\MercuryHealthTests.runsettings
 
+Write-Host "Website URL: " $Content
+
 Write-Host "End-Transforming Website URL"
 
