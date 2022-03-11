@@ -158,7 +158,7 @@ jobs:
     uses: ./.github/workflows/deploy-environment.yml
     with:
       resource-group-base-name: 'rg-MercuryHealth'
-      environment-suffix: 'dev-4'
+      environment-suffix: 'dev'
       resource-group-location: 'eastus2'
     secrets:
       azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
@@ -166,3 +166,18 @@ jobs:
       sql-db-password: ${{ secrets.SQL_DB_PASSWORD }}
       sql-db-server-name: ${{ secrets.SQL_DB_Server_Name }}
       sql-connection-string: ${{ secrets.SQL_DB_Connection_String }}
+
+  qa:
+      if: contains(github.event_name, 'push')
+      needs: Build_Application
+      uses: ./.github/workflows/deploy-environment.yml
+      with:
+        resource-group-base-name: 'rg-MercuryHealth'
+        environment-suffix: 'qa'
+        resource-group-location: 'eastus2'
+      secrets:
+        azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+        sql-db-login: ${{ secrets.SQL_DB_LOGIN }}
+        sql-db-password: ${{ secrets.SQL_DB_PASSWORD }}
+        sql-db-server-name: ${{ secrets.SQL_DB_Server_Name }}
+        sql-connection-string: ${{ secrets.SQL_DB_Connection_String }}
