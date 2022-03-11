@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "7684868303125154595"
+      "templateHash": "1682891192020789137"
     }
   },
   "parameters": {
@@ -1069,7 +1069,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "6313404639602617321"
+              "templateHash": "15346588832622405727"
             }
           },
           "parameters": {
@@ -1082,9 +1082,16 @@
             },
             "defaultTags": {
               "type": "object"
+            },
+            "principalId": {
+              "type": "string",
+              "defaultValue": "rpagels@microsoft.com"
             }
           },
           "functions": [],
+          "variables": {
+            "roleName": "Load Test Contributor"
+          },
           "resources": [
             {
               "type": "Microsoft.LoadTestService/loadTests",
@@ -1095,6 +1102,37 @@
               "properties": {
                 "description": "Azure Load Testing Service"
               }
+            },
+            {
+              "type": "Microsoft.Authorization/roleDefinitions",
+              "apiVersion": "2018-01-01-preview",
+              "name": "[guid(variables('roleName'))]",
+              "properties": {
+                "roleName": "[variables('roleName')]",
+                "description": "Azure Load Testing role",
+                "permissions": [
+                  {
+                    "actions": [
+                      "*/write"
+                    ]
+                  }
+                ],
+                "assignableScopes": [
+                  "[subscription().id]"
+                ]
+              }
+            },
+            {
+              "type": "Microsoft.Authorization/roleAssignments",
+              "apiVersion": "2020-04-01-preview",
+              "name": "[guid(variables('roleName'), parameters('principalId'), subscription().subscriptionId)]",
+              "properties": {
+                "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', guid(variables('roleName')))]",
+                "principalId": "[parameters('principalId')]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Authorization/roleDefinitions', guid(variables('roleName')))]"
+              ]
             }
           ]
         }
@@ -1585,7 +1623,7 @@
       "type": "string",
       "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy'), '2020-06-01').outputs.out_appInsightsAPIApplicationId.value]"
     },
-    "out_releaseAnnotationId": {
+    "out_releaseAnnotationGuidID": {
       "type": "string",
       "value": "[parameters('releaseAnnotationGuid')]"
     }
