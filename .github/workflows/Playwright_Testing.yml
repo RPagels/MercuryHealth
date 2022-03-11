@@ -47,11 +47,24 @@ jobs:
 #        dotnet add MercuryHealth.UITests/MercuryHealth.UITests.csproj package Microsoft.Playwright
 #        dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj
 
-    - uses: actions/checkout@v1
+#    - uses: actions/checkout@v1
+#    - name: Update Runsettings with Website URL
+#      run: MercuryHealth.UITests/TransformRunSettings.ps1 -website_url 'XYZ'
+#      shell: pwsh
+
+    # Update Runsettings with Website URL
     - name: Update Runsettings with Website URL
-      run: MercuryHealth.UITests/TransformRunSettings.ps1 -website_url 'XYZ'
-      shell: pwsh
-      
+      uses: Azure/powershell@v1
+      id: setWebsiteUrl
+      env:
+        POWERSHELL_TELEMETRY_OPTOUT: 1
+      with:
+        inlineScript: MercuryHealth.UITests/TransformRunSettings.ps1 -website_url 'XYZ'
+        # Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".
+        azPSVersion: latest
+        # Select the value of the ErrorActionPreference variable for executing the script. Options: stop, continue, silentlyContinue. Default is Stop.
+        errorActionPreference: continue
+          
     ###########################################
     # Run Playwright Tests
     ###########################################
