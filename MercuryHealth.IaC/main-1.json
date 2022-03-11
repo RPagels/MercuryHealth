@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "3611755689762450052"
+      "templateHash": "9218479543958369202"
     }
   },
   "parameters": {
@@ -19,7 +19,7 @@
     },
     "createdBy": {
       "type": "string",
-      "defaultValue": "[resourceGroup().managedBy]"
+      "defaultValue": "Randy Pagels"
     },
     "costCenter": {
       "type": "string",

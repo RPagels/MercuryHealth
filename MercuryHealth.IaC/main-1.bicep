@@ -4,7 +4,7 @@
 // Region for all resources
 param location string = resourceGroup().location
 param environment string = 'dev'
-param createdBy string = resourceGroup().managedBy //'Randy Pagels'
+param createdBy string = 'Randy Pagels' // resourceGroup().managedBy
 param costCenter string = '74f644d3e665'
 param releaseAnnotationGuid string = newGuid()
 
