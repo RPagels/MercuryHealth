@@ -75,7 +75,7 @@ jobs:
       continue-on-error: true
       with:
         inlineScript: |
-          az group lock delete --lock-type ReadOnly -n 'DontDeleteMe' -g ${{ env.Azure_Resource_GroupName }} -n 'Prevent deletion of the resource group'
+          az group lock delete --lock-type ReadOnly -name DontDeleteMe -g ${{ env.Azure_Resource_GroupName }}
 
     - name: Download Build Artifact-Infrastructure
       uses: actions/download-artifact@v2
@@ -116,7 +116,7 @@ jobs:
       continue-on-error: true
       with:
         inlineScript: |
-          az group lock create --lock-type ReadOnly -n 'DontDeleteMe' -g ${{ env.Azure_Resource_GroupName }} -n 'Prevent deletion of the resource group'
+          az group lock create --lock-type ReadOnly -name DontDeleteMe -g ${{ env.Azure_Resource_GroupName }} -n 'Prevent deletion of the resource group'
 
     - name: Save Application Insights Id to Environment Variable
       run: |
