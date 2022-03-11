@@ -15,9 +15,7 @@ Write-Host "Start-Transforming Website URL"
 #Get the runsettings file
 $Content = Get-Content .\MercuryHealth.UITests\MercuryHealthTests.runsettings
 $Content.replace(‘WebSiteUrlHere’,’$website_url’) | Set-Content .\MercuryHealth.UITests\MercuryHealthTests.runsettings
-$Get-Content .\MercuryHealth.UITests\MercuryHealthTests.runsettings
+Get-Content .\MercuryHealth.UITests\MercuryHealthTests.runsettings
 
 Write-Host "End-Transforming Website URL"
-© 2022 GitHub, Inc.
-Terms
-Privacy
+
