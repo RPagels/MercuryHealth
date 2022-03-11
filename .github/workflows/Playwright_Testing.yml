@@ -7,7 +7,8 @@ env:
   buildConfiguration: 'Release'
   buildPlatform: 'Any CPU'
   dotnet_version: '6.x.x'
-  new_website_url: 'https://app-xibwnqufj5jam.azurewebsites.net/'  #rg-MercuryHealth-dev-4
+  new_website_url: 'https://randypagels.azurewebsites.net/' 
+  #'https://app-xibwnqufj5jam.azurewebsites.net/'  #rg-MercuryHealth-dev-4
   
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
