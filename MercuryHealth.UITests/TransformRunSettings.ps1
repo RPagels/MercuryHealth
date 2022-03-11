@@ -9,11 +9,7 @@ $Content = Get-Content .\MercuryHealth.UITests\MercuryHealthTests.runsettings
 
 Write-Host "Replace Text in runsettings file"
 # Replace Text
-$Content.replace(‘WebSiteUrlHere’,’$website_url’)
-
-Write-Host "Updated the runsettings file"
-# Updated the runsettings file
-Set-Content .\MercuryHealth.UITests\MercuryHealthTests.runsettings
+$Content.replace(‘WebSiteUrlHere’,’$website_url’) | Set-Content .\MercuryHealth.UITests\MercuryHealthTests.runsettings
 
 Write-Host "Open runsettings file"
 # Get the runsettings file
