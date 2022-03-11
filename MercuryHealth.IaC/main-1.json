@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "1682891192020789137"
+      "templateHash": "3611755689762450052"
     }
   },
   "parameters": {
@@ -19,7 +19,7 @@
     },
     "createdBy": {
       "type": "string",
-      "defaultValue": "Randy Pagels"
+      "defaultValue": "[resourceGroup().managedBy]"
     },
     "costCenter": {
       "type": "string",
@@ -1069,7 +1069,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "15346588832622405727"
+              "templateHash": "14239927184145222992"
             }
           },
           "parameters": {
@@ -1086,11 +1086,22 @@
             "principalId": {
               "type": "string",
               "defaultValue": "rpagels@microsoft.com"
+            },
+            "builtInRoleType": {
+              "type": "string",
+              "defaultValue": "Load Test Contributor",
+              "metadata": {
+                "description": "Built-in role to assign"
+              }
             }
           },
           "functions": [],
           "variables": {
-            "roleName": "Load Test Contributor"
+            "role": {
+              "Owner": "[format('/subscriptions/{0}/providers/Microsoft.Authorization/roleDefinitions/8e3af657-a8ff-443c-a75c-2fe8c4bcb635', subscription().subscriptionId)]",
+              "Contributor": "[format('/subscriptions/{0}/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c', subscription().subscriptionId)]",
+              "Reader": "[format('/subscriptions/{0}/providers/Microsoft.Authorization/roleDefinitions/acdd72a7-3385-48ef-bd42-f606fba81ae7', subscription().subscriptionId)]"
+            }
           },
           "resources": [
             {
@@ -1106,9 +1117,9 @@
             {
               "type": "Microsoft.Authorization/roleDefinitions",
               "apiVersion": "2018-01-01-preview",
-              "name": "[guid(variables('roleName'))]",
+              "name": "[guid(variables('role')[parameters('builtInRoleType')])]",
               "properties": {
-                "roleName": "[variables('roleName')]",
+                "roleName": "[variables('role')[parameters('builtInRoleType')]]",
                 "description": "Azure Load Testing role",
                 "permissions": [
                   {
@@ -1125,13 +1136,14 @@
             {
               "type": "Microsoft.Authorization/roleAssignments",
               "apiVersion": "2020-04-01-preview",
-              "name": "[guid(variables('roleName'), parameters('principalId'), subscription().subscriptionId)]",
+              "name": "[guid(resourceId('Microsoft.LoadTestService/loadTests', parameters('loadTestsName')), parameters('principalId'), variables('role')[parameters('builtInRoleType')])]",
               "properties": {
-                "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', guid(variables('roleName')))]",
+                "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', guid(variables('role')[parameters('builtInRoleType')]))]",
                 "principalId": "[parameters('principalId')]"
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Authorization/roleDefinitions', guid(variables('roleName')))]"
+                "[resourceId('Microsoft.Authorization/roleDefinitions', guid(variables('role')[parameters('builtInRoleType')]))]",
+                "[resourceId('Microsoft.LoadTestService/loadTests', parameters('loadTestsName'))]"
               ]
             }
           ]
