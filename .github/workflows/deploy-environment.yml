@@ -60,6 +60,7 @@ jobs:
 
     - name: Ensure Resource Group Exists
       uses: Azure/CLI@v1
+      continue-on-error: true
       with:
         inlineScript: |
           #!/bin/bash
