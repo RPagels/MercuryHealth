@@ -55,6 +55,7 @@ jobs:
     # Update Runsettings with Website URL
     - name: Update Runsettings with Website URL
       uses: Azure/powershell@v1
+      continue-on-error: false
       id: setWebsiteUrl
       env:
         POWERSHELL_TELEMETRY_OPTOUT: 1
