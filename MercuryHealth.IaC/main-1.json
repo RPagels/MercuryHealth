@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "9218479543958369202"
+      "templateHash": "902346263166737968"
     }
   },
   "parameters": {
@@ -1069,7 +1069,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "14239927184145222992"
+              "templateHash": "6313404639602617321"
             }
           },
           "parameters": {
@@ -1082,27 +1082,9 @@
             },
             "defaultTags": {
               "type": "object"
-            },
-            "principalId": {
-              "type": "string",
-              "defaultValue": "rpagels@microsoft.com"
-            },
-            "builtInRoleType": {
-              "type": "string",
-              "defaultValue": "Load Test Contributor",
-              "metadata": {
-                "description": "Built-in role to assign"
-              }
             }
           },
           "functions": [],
-          "variables": {
-            "role": {
-              "Owner": "[format('/subscriptions/{0}/providers/Microsoft.Authorization/roleDefinitions/8e3af657-a8ff-443c-a75c-2fe8c4bcb635', subscription().subscriptionId)]",
-              "Contributor": "[format('/subscriptions/{0}/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c', subscription().subscriptionId)]",
-              "Reader": "[format('/subscriptions/{0}/providers/Microsoft.Authorization/roleDefinitions/acdd72a7-3385-48ef-bd42-f606fba81ae7', subscription().subscriptionId)]"
-            }
-          },
           "resources": [
             {
               "type": "Microsoft.LoadTestService/loadTests",
@@ -1113,38 +1095,6 @@
               "properties": {
                 "description": "Azure Load Testing Service"
               }
-            },
-            {
-              "type": "Microsoft.Authorization/roleDefinitions",
-              "apiVersion": "2018-01-01-preview",
-              "name": "[guid(variables('role')[parameters('builtInRoleType')])]",
-              "properties": {
-                "roleName": "[variables('role')[parameters('builtInRoleType')]]",
-                "description": "Azure Load Testing role",
-                "permissions": [
-                  {
-                    "actions": [
-                      "*/write"
-                    ]
-                  }
-                ],
-                "assignableScopes": [
-                  "[subscription().id]"
-                ]
-              }
-            },
-            {
-              "type": "Microsoft.Authorization/roleAssignments",
-              "apiVersion": "2020-04-01-preview",
-              "name": "[guid(resourceId('Microsoft.LoadTestService/loadTests', parameters('loadTestsName')), parameters('principalId'), variables('role')[parameters('builtInRoleType')])]",
-              "properties": {
-                "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', guid(variables('role')[parameters('builtInRoleType')]))]",
-                "principalId": "[parameters('principalId')]"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Authorization/roleDefinitions', guid(variables('role')[parameters('builtInRoleType')]))]",
-                "[resourceId('Microsoft.LoadTestService/loadTests', parameters('loadTestsName'))]"
-              ]
             }
           ]
         }
