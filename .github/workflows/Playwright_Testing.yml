@@ -7,7 +7,7 @@ env:
   buildConfiguration: 'Release'
   buildPlatform: 'Any CPU'
   dotnet_version: '6.x.x'
-  new_website_url: 'https://bing.azurewebsites.net/'
+  new_website_url: 'https://app-xibwnqufj5jam.azurewebsites.net/'  #rg-MercuryHealth-dev-4
   
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
@@ -60,7 +60,7 @@ jobs:
       env:
         POWERSHELL_TELEMETRY_OPTOUT: 1
       with:
-        inlineScript: MercuryHealth.UITests/TransformRunSettings.ps1 -website_url 'XYZ'
+        inlineScript: MercuryHealth.UITests/TransformRunSettings.ps1 -website_url ${{ env.new_website_url }}
         # Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".
         azPSVersion: latest
         # Select the value of the ErrorActionPreference variable for executing the script. Options: stop, continue, silentlyContinue. Default is Stop.
