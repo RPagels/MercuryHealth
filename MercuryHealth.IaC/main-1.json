@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "16728313311925517411"
+      "templateHash": "3247201507869086312"
     }
   },
   "parameters": {
@@ -209,7 +209,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "2780867228498114501"
+              "templateHash": "7740945452280801990"
             }
           },
           "parameters": {
@@ -313,7 +313,7 @@
                 "ASPNETCORE_ENVIRONMENT": "Development",
                 "Debug1": "[format('appService.name = {0}', parameters('webSiteName'))]",
                 "Debug2": "[format('webSiteName = {0}', parameters('webSiteName'))]",
-                "Debug3": "[format('out_webSiteNameURL = https://{0}.azurewebsites.net/', parameters('webSiteName'))]",
+                "Debug3": "[format('out_webSiteNameURL = {0}', reference(resourceId('Microsoft.Web/sites', parameters('webSiteName'))).defaultHostName)]",
                 "type": "SQLAzure"
               },
               "dependsOn": [
@@ -494,7 +494,7 @@
               "type": "string",
               "value": "[parameters('webSiteName')]"
             },
-            "output_webSiteURL": {
+            "out_webSiteName": {
               "type": "string",
               "value": "[reference(resourceId('Microsoft.Web/sites', parameters('webSiteName'))).defaultHostName]"
             }
@@ -1544,6 +1544,10 @@
     "out_webSiteName": {
       "type": "string",
       "value": "[variables('webSiteName')]"
+    },
+    "out_webSiteNameURL": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'webappdeploy'), '2020-06-01').outputs.out_webSiteName.value]"
     },
     "out_sqlserverName": {
       "type": "string",

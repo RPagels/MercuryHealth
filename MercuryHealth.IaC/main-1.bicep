@@ -254,7 +254,7 @@ params: {
 }
 
 output out_webSiteName string = webSiteName
-output out_webSiteNameURL string = webappmod.outputs.out_webSiteNameURL
+output out_webSiteNameURL string = webappmod.outputs.out_webSiteName
 
 output out_sqlserverName string = sqlserverName
 output out_sqlDBName string = sqlDBName
