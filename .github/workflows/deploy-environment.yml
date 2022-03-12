@@ -118,6 +118,7 @@ jobs:
       run: |
          echo 'sqlserverFQName = ${{steps.Infra.outputs.out_sqlserverFQName}}'
          echo 'webSiteName = ${{steps.Infra.outputs.out_webSiteName}}'
+         echo 'out_webSiteNameURL = ${{steps.Infra.outputs.out_webSiteNameURL}}'
 #        echo 'functionAppName = ${{steps.Infra.outputs.out_functionAppName}}'
 #        echo 'sqlserverName = ${{steps.Infra.outputs.out_sqlserverName}}'
 #        echo 'sqlDBName = ${{steps.Infra.outputs.out_sqlDBName}}'
@@ -147,7 +148,7 @@ jobs:
         connection-string: ${{ secrets.sql-connection-string }}
         dacpac-package: './MercuryHealth.Database/MercuryHealth.Database.dacpac'
 
-    - name: Download Build Artifacts-Website Applicationn
+    - name: Download Build Artifacts-Website Application
       uses: actions/download-artifact@v2
       continue-on-error: false
       with:
@@ -262,7 +263,7 @@ jobs:
         env:
           POWERSHELL_TELEMETRY_OPTOUT: 1
         with:
-          inlineScript: MercuryHealth.UITests/TransformRunSettings.ps1 -website_url ${{needs.deploy_to_environment.outputs.output1}}   #${{ steps.Infra.outputs.out_webSiteName }}
+          inlineScript: MercuryHealth.UITests/TransformRunSettings.ps1 -website_url 'https://${{needs.deploy_to_environment.outputs.output1}}'   #${{ steps.Infra.outputs.out_webSiteName }}
           # Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".
           azPSVersion: latest
           # Select the value of the ErrorActionPreference variable for executing the script. Options: stop, continue, silentlyContinue. Default is Stop.
