@@ -43,7 +43,7 @@ jobs:
   deploy_to_environment:
     runs-on: ubuntu-latest
     outputs:
-      output1: ${{ steps.Infra.outputs.WebAppUrl }}
+      output1: ${{ steps.Infra.outputs.out_webSiteNameURL }}
     
     name: Deploy Application
     env:
