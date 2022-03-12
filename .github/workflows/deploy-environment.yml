@@ -112,7 +112,7 @@ jobs:
         failOnStdErr: false
 
     - name: Test Outputs across jobs
-      run: echo "::set-output name=myWebSiteName::${{steps.Infra.outputs.out_webSiteName}}"
+      run: echo "::set-output name=out_webSiteNameURL::${{steps.Infra.outputs.out_webSiteNameURL}}"
       
     - name: Save Application Insights Id to Environment Variable
       run: |
