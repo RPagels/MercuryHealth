@@ -1,8 +1,9 @@
-<Project Sdk="MSBuild.Sdk.SqlProj/2.0.0-beta.1">
+﻿<Project Sdk="MSBuild.Sdk.SqlProj/2.0.0">
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<SqlServerVersion>SqlAzure</SqlServerVersion>
 		<!--<TargetName>MercuryHealthGroup.Database</TargetName>-->
+		<!--MSBuild.Sdk.SqlProj/2.0.0-beta.1-->
 	</PropertyGroup>
 
 	<ItemGroup>
