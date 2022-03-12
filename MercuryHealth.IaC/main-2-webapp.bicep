@@ -81,6 +81,7 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-02-01' = {
     'ASPNETCORE_ENVIRONMENT': 'Development'
     'Debug1': 'appService.name = ${appService.name}'
     'Debug2': 'webSiteName = ${webSiteName}'
+    'Debug3': 'out_webSiteNameURL = https://${appService.name}.azurewebsites.net/'
     type: 'SQLAzure'
   }
 }

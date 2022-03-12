@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "14609916467655041952"
+      "templateHash": "16728313311925517411"
     }
   },
   "parameters": {
@@ -209,7 +209,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "1587317478672653916"
+              "templateHash": "2780867228498114501"
             }
           },
           "parameters": {
@@ -313,6 +313,7 @@
                 "ASPNETCORE_ENVIRONMENT": "Development",
                 "Debug1": "[format('appService.name = {0}', parameters('webSiteName'))]",
                 "Debug2": "[format('webSiteName = {0}', parameters('webSiteName'))]",
+                "Debug3": "[format('out_webSiteNameURL = https://{0}.azurewebsites.net/', parameters('webSiteName'))]",
                 "type": "SQLAzure"
               },
               "dependsOn": [
