@@ -77,7 +77,10 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-02-01' = {
     'APPINSIGHTS_PROFILERFEATURE_VERSION': '1.0.0'
     'APPINSIGHTS_SNAPSHOTFEATURE_VERSION': '1.0.0'
     'APPLICATIONINSIGHTS_CONNECTION_STRING': appInsightsConnectionString
-    'WebAppUrl': 'https://${appService.name}-dev.azurewebsites.net/'
+    'WebAppUrl': 'https://${appService.name}.azurewebsites.net/'
+    'ASPNETCORE_ENVIRONMENT': 'Development'
+    'Debug1': 'appService.name = ${appService.name}'
+    'Debug2': 'webSiteName = ${webSiteName}'
     type: 'SQLAzure'
   }
 }
