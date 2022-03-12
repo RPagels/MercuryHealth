@@ -42,6 +42,9 @@ jobs:
   ###################################################################
   deploy_to_environment:
     runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.Infra.outputs.myWebSiteName }}
+    
     name: Deploy Application
     env:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
@@ -67,9 +70,6 @@ jobs:
           #!/bin/bash
           az group create --name ${{ env.Azure_Resource_GroupName }} --location ${{ inputs.resource-group-location }}
 
-# ERROR!!!
-# The client '53173f83-e7b7-462c-9a4e-adb64374ebed' with object id '53173f83-e7b7-462c-9a4e-adb64374ebed' does not have authorization to perform action 'Microsoft.Resources/subscriptions/resourcegroups/write' over scope '/subscriptions/***/resourcegroups/rg-MercuryHealth-dev' or the scope is invalid. If access was recently granted, please refresh your credentials.
-#
     - name: Ensure Resource Group is UnLocked
       if: contains(github.event_name, 'push')
       uses: Azure/CLI@v1
@@ -111,18 +111,13 @@ jobs:
         deploymentMode: Incremental
         failOnStdErr: false
 
-#    - name: Ensure Resource Group is Locked
-#      if: contains(github.event_name, 'push')
-#      uses: Azure/CLI@v1
-#      continue-on-error: true
-#      with:
-#        inlineScript: |
-#          az group lock create --lock-type CanNotDelete --name DontDeleteMe --resource-group ${{ env.Azure_Resource_GroupName }} --notes 'Prevent deletion of the resource group'
-
+    - name: Test Outputs across jobs
+      run: echo "::set-output name=myWebSiteName::${{steps.Infra.outputs.out_webSiteName}}"
+      
     - name: Save Application Insights Id to Environment Variable
       run: |
          echo 'sqlserverFQName = ${{steps.Infra.outputs.out_sqlserverFQName}}'
-#        echo 'webSiteName = ${{steps.Infra.outputs.out_webSiteName}}'
+         echo 'webSiteName = ${{steps.Infra.outputs.out_webSiteName}}'
 #        echo 'functionAppName = ${{steps.Infra.outputs.out_functionAppName}}'
 #        echo 'sqlserverName = ${{steps.Infra.outputs.out_sqlserverName}}'
 #        echo 'sqlDBName = ${{steps.Infra.outputs.out_sqlDBName}}'
@@ -144,7 +139,7 @@ jobs:
         name: MercuryHealth.Database
         path: ${{ github.workspace }}/MercuryHealth.Database
         
-    # Deploy Database *.dacpac file - Requires windows-latest runner!!!
+    # Deploy Database *.dacpac file - NOT TRUE!!! Requires windows-latest runner!!!
     - name: 'Deploy the database to Azure'
       uses: Azure/sql-action@v1.2
       with:
@@ -241,7 +236,7 @@ jobs:
     name: UI Tests-Chromium
     
     # The type of runner that the job will run on
-    runs-on: windows-latest
+    runs-on: ubuntu-latest    #windows-latest
 
     # Identify any jobs that must complete successfully before this job will run.
     needs: [deploy_to_environment]
@@ -256,6 +251,9 @@ jobs:
           name: MercuryHealth.UITests
           path: ${{ github.workspace }}/MercuryHealth.UITests
 
+      - name: Test Outputs across jobs
+        run: echo 'myWebSiteName=${{needs.deploy_to_environment.outputs.output1}}'
+      
       # Update Runsettings with Website URL
       - name: Update Runsettings with Website URL
         uses: Azure/powershell@v1
@@ -264,7 +262,7 @@ jobs:
         env:
           POWERSHELL_TELEMETRY_OPTOUT: 1
         with:
-          inlineScript: MercuryHealth.UITests/TransformRunSettings.ps1 -website_url ${{ steps.Infra.outputs.out_webSiteName }}
+          inlineScript: MercuryHealth.UITests/TransformRunSettings.ps1 -website_url ${{needs.deploy_to_environment.outputs.output1}}   #${{ steps.Infra.outputs.out_webSiteName }}
           # Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".
           azPSVersion: latest
           # Select the value of the ErrorActionPreference variable for executing the script. Options: stop, continue, silentlyContinue. Default is Stop.
