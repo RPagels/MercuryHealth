@@ -238,6 +238,9 @@ jobs:
 
     name: Playwright UI Tests
     
+    env:
+      dotnet_version: '6.x.x'
+  
     # The type of runner that the job will run on - windows-latest
     runs-on: ubuntu-latest
 
@@ -246,6 +249,11 @@ jobs:
     timeout-minutes: 10
         
     steps:
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.dotnet_version }}
+          
       # Download Artifacts under $GITHUB_WORKSPACE, so your job can access it
       - name: Download Build Artifacts-Playwright Tests
         continue-on-error: false
