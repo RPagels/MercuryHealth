@@ -240,7 +240,8 @@ jobs:
     
     env:
       dotnet_version: '6.x.x'
-  
+      buildConfiguration: 'Release'
+
     # The type of runner that the job will run on - windows-latest
     runs-on: ubuntu-latest
 
