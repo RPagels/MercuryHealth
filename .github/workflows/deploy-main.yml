@@ -176,7 +176,7 @@ jobs:
 
   qa:
       if: contains(github.event_name, 'push')
-      needs: Build_Application
+      needs: [Build_Application, dev]
       uses: ./.github/workflows/deploy-environment.yml
       with:
         resource-group-base-name: 'rg-MercuryHealth'
