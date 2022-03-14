@@ -45,6 +45,7 @@ jobs:
     outputs:
       output1: ${{ steps.Infra.outputs.out_webSiteNameURL }}
       output2: 'https://${{ steps.Infra.outputs.out_webSiteNameURL }}'
+      output3: ${{ steps.Infra.outputs.out_loadTestsName }}
       
     name: Deploy Application
     env:
@@ -237,6 +238,10 @@ jobs:
 
     name: Playwright UI Tests
     
+    env:
+      dotnet_version: '6.x.x'
+      buildConfiguration: 'Release'
+
     # The type of runner that the job will run on - windows-latest
     runs-on: ubuntu-latest
 
@@ -245,6 +250,15 @@ jobs:
     timeout-minutes: 10
         
     steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.dotnet_version }}
+          
       # Download Artifacts under $GITHUB_WORKSPACE, so your job can access it
       - name: Download Build Artifacts-Playwright Tests
         continue-on-error: false
@@ -266,12 +280,20 @@ jobs:
         env:
           POWERSHELL_TELEMETRY_OPTOUT: 1
         with:
-          inlineScript: MercuryHealth.UITests/TransformRunSettings.ps1 -website_url 'https://${{needs.deploy_to_environment.outputs.output1}}'
+          inlineScript: MercuryHealth.UITests/TransformRunSettings.ps1 -website_url 'https://${{needs.deploy_to_environment.outputs.output1}}/'
           # Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".
           azPSVersion: latest
           # Select the value of the ErrorActionPreference variable for executing the script. Options: stop, continue, silentlyContinue. Default is Stop.
           errorActionPreference: continue
-        
+
+      - name: Playwright Tests with DLL
+        continue-on-error: false
+        run: |
+         dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }}
+         dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './MercuryHealth.UITests'
+         dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --filter TestCategory=Playwright_Tests_Chromium --verbosity minimal -l "console;verbosity=normal" --settings MercuryHealth.UITests/MercuryHealthTests.runsettings
+
+
       - name: Playwright Tests on Chromium
         continue-on-error: false
         run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --filter TestCategory=Playwright_Tests_Chromium -l "console;verbosity=normal"  --settings MercuryHealth.UITests/MercuryHealthTests.runsettings
@@ -325,14 +347,36 @@ jobs:
       # Use environment variables in Apache JMeter Load Tests - webAppUrl
       # JMX file uses  ${System.getenv("webAppUrl")}
 
+      - name: Test Outputs across jobs
+        run: |
+           echo 'output1 = ${{needs.deploy_to_environment.outputs.output1}}'
+           echo 'output2 = ${{needs.deploy_to_environment.outputs.output2}}'
+           echo 'output3 = ${{needs.deploy_to_environment.outputs.output3}}'
+           
+      # Update JX with Website URL
+      - name: Update JMX
+        uses: Azure/powershell@v1
+        continue-on-error: false
+        id: setWebsiteUrl
+        env:
+          POWERSHELL_TELEMETRY_OPTOUT: 1
+        with:
+          inlineScript: MercuryHealth.LoadTests/TransformJMXFile.ps1 -website_url ${{needs.deploy_to_environment.outputs.output1}}
+          # Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".
+          azPSVersion: latest
+          # Select the value of the ErrorActionPreference variable for executing the script. Options: stop, continue, silentlyContinue. Default is Stop.
+          errorActionPreference: continue
+          
 # loadTestResource: ${{ env.Load_Test_Resource }}
 # loadTestResource: ${{ steps.Infra.outputs.out_loadTestsName }}
+# ${{ env.Load_Test_Resource }}
+
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
         continue-on-error: false
         with:
           loadTestConfigFile: './MercuryHealth.LoadTests/LoadTest_HomePage_Config.yaml'
-          loadTestResource: ${{ env.Load_Test_Resource }}
+          loadTestResource: ${{needs.deploy_to_environment.outputs.output3}}
           resourceGroup: ${{ env.Azure_Resource_GroupName }}
 
       - name: Azure logout
@@ -342,7 +386,7 @@ jobs:
 ###################################################################
 # CD Stage - Dev                        #
 ###################################################################
-  Dev_Stage_Application:
+  Approval_Stage_Application:
     if: contains(github.event_name, 'push')
 
     name: Approval
@@ -352,7 +396,7 @@ jobs:
 
     # Identify any jobs that must complete successfully before this job will run.
     needs: [UITesting_Stage_Application]
-    environment: Dev
+    environment: ${{ inputs.environment-suffix }}
     steps:
       - name: Approve Deployment
         run: |

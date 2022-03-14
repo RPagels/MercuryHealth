@@ -1,6 +1,7 @@
 # This is a basic workflow to help you get started with Actions
 name: Deploy-Main
 
+#
 ###################################################################
 # Triggers - Controls when the action will run.
 ###################################################################
@@ -150,6 +151,13 @@ jobs:
           name: MercuryHealth.LoadTests
           path: ${{ github.workspace }}/MercuryHealth.LoadTests/*.*
 
+      - name: Upload Build Artifacts-UI Tests runsettings file
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: MercuryHealth.LoadTests
+          path: ${{ github.workspace }}/MercuryHealth.LoadTests/TransformJMXFile.ps1
+          
 #      - name: "Azure login"
 #        uses: azure/login@v1
 #        with:
@@ -176,7 +184,7 @@ jobs:
 
   qa:
       if: contains(github.event_name, 'push')
-      needs: Build_Application
+      needs: [Build_Application, dev]
       uses: ./.github/workflows/deploy-environment.yml
       with:
         resource-group-base-name: 'rg-MercuryHealth'
