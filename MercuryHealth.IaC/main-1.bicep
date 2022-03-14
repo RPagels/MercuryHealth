@@ -15,7 +15,7 @@ param sqlAdministratorLogin string
 @secure()
 param sqlAdministratorLoginPassword string
 
-// Variables
+// Variables for Recommended abbreviations for Azure resource types
 // https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations
 var webAppPlanName = 'plan-${uniqueString(resourceGroup().id)}'
 var webSiteName = 'app-${uniqueString(resourceGroup().id)}'
@@ -121,7 +121,7 @@ resource configStoreName_appconfig_featureflags 'Microsoft.AppConfiguration/conf
   parent: config
   name: '.appconfig.featureflag~2F${FeatureFlagkeyValueNames[i]}$${FeatureFlagkeyValueLabels[i]}'
   properties: {
-    value: FeatureFlagkeyValueNames[i]
+    value: string(FeatureFlagkeyValueKeys[i])
     contentType: contentType
   }
 }]
@@ -130,35 +130,8 @@ resource configStoreName_appconfig_featureflags 'Microsoft.AppConfiguration/conf
 // END - TESTING Config Store
 ////////////////////////////////////////
 
-// Create Configuration Store Entries
-// module configstoremod './main-5-configstore.bicep' = {
-//   name: 'configstoredeploy'
-//   params: {
-//     configParent: config.id
-//     location: location
-//     defaultTags: defaultTags
-//   }
-// }
-
-// Ask Kyle! Error during initial deployment.
-// https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/existing-resource
-//
-// The Resource 'Microsoft.AppConfiguration/configurationStores/appcs-btocbms4557so' under resource group 'rg-MercuryHealth' was not found.
-//
 // Avoid outputs for secrets - Look up secrets dynamically
-// resource config 'Microsoft.AppConfiguration/configurationStores@2021-03-01-preview' existing = {
-//   name: configStoreName
-// }
 var configStoreConnectionString = listKeys(config.id, config.apiVersion).value[0].connectionString
-
-// Lock Resoure Group
-// resource dontDeleteLock 'Microsoft.Authorization/locks@2020-05-01' = {
-//   name: 'DontDeleteMe'
-//   properties: {
-//     level: 'CanNotDelete'
-//     notes: 'Prevent deletion of the resource group'
-//   }
-// }
 
 // Create Web App
 module webappmod './main-2-webapp.bicep' = {

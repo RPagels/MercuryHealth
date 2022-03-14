@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "3247201507869086312"
+      "templateHash": "18093625363310337524"
     }
   },
   "parameters": {
@@ -142,7 +142,7 @@
       "apiVersion": "2021-10-01-preview",
       "name": "[format('{0}/{1}', variables('configStoreName'), format('.appconfig.featureflag~2F{0}${1}', parameters('FeatureFlagkeyValueNames')[copyIndex()], parameters('FeatureFlagkeyValueLabels')[copyIndex()]))]",
       "properties": {
-        "value": "[parameters('FeatureFlagkeyValueNames')[copyIndex()]]",
+        "value": "[string(parameters('FeatureFlagkeyValueKeys')[copyIndex()])]",
         "contentType": "[parameters('contentType')]"
       },
       "dependsOn": [
