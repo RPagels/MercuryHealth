@@ -45,7 +45,7 @@ jobs:
     outputs:
       output1: ${{ steps.Infra.outputs.out_webSiteNameURL }}
       output2: 'https://${{ steps.Infra.outputs.out_webSiteNameURL }}'
-      output3: 'https://${{ steps.Infra.outputs.out_loadTestsName }}'
+      output3: ${{ steps.Infra.outputs.out_loadTestsName }}
       
     name: Deploy Application
     env:
@@ -376,7 +376,7 @@ jobs:
         continue-on-error: false
         with:
           loadTestConfigFile: './MercuryHealth.LoadTests/LoadTest_HomePage_Config.yaml'
-          loadTestResource: ${{needs.deploy_to_environment.outputs.output1}}
+          loadTestResource: ${{needs.deploy_to_environment.outputs.output3}}
           resourceGroup: ${{ env.Azure_Resource_GroupName }}
 
       - name: Azure logout
@@ -386,7 +386,7 @@ jobs:
 ###################################################################
 # CD Stage - Dev                        #
 ###################################################################
-  Dev_Stage_Application:
+  Approval_Stage_Application:
     if: contains(github.event_name, 'push')
 
     name: Approval
@@ -396,7 +396,7 @@ jobs:
 
     # Identify any jobs that must complete successfully before this job will run.
     needs: [UITesting_Stage_Application]
-    environment: Dev
+    environment: ${{ inputs.environment-suffix }}
     steps:
       - name: Approve Deployment
         run: |
