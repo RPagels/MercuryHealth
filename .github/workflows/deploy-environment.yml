@@ -347,6 +347,8 @@ jobs:
            echo 'output1 = ${{needs.deploy_to_environment.outputs.output1}}'
            echo 'output2 = ${{needs.deploy_to_environment.outputs.output2}}'
            echo 'output3 = ${{needs.deploy_to_environment.outputs.output3}}'
+           echo 'Azure_Resource_GroupName=' ${{ env.Azure_Resource_GroupName }}
+           echo 'FromInputs_Resource_GroupName=' ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
            
       # Update JMX file with Website URL
       - name: Update JMX
@@ -368,7 +370,7 @@ jobs:
         with:
           loadTestConfigFile: './MercuryHealth.LoadTests/LoadTest_HomePage_Config.yaml'
           loadTestResource: ${{needs.deploy_to_environment.outputs.output3}}
-          resourceGroup: ${{ env.Azure_Resource_GroupName }}
+          resourceGroup: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
 
       - name: Azure logout
         run: |
