@@ -55,8 +55,8 @@ builder.Services.AddHealthChecks()
     .AddCheck<MyAppHealthCheck>("Sample");
 
 // Setup Health Probe for SQL Server
-//builder.Services.AddHealthChecks()
-//    .AddDbContextCheck<MercuryHealthWebContext>();
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<MercuryHealthWebContext>();
 
 // Add MVC views and Controller services to the container.
 builder.Services.AddControllersWithViews();
