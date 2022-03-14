@@ -7,6 +7,7 @@ using NuGet.Configuration;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.FeatureManagement.FeatureFilters;
 using MercuryHealth.Web;
+using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +50,14 @@ builder.Services.Configure<Settings>(builder.Configuration.GetSection("MercuryHe
 builder.Services.AddDbContext<MercuryHealthWebContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MercuryHealthWebContext")));
 
+// Setup Health Probe
+builder.Services.AddHealthChecks()
+    .AddCheck<MyAppHealthCheck>("Sample");
+
+// Setup Health Probe for SQL Server
+//builder.Services.AddHealthChecks()
+//    .AddDbContextCheck<MercuryHealthWebContext>();
+
 // Add MVC views and Controller services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -60,6 +69,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+// Setup Health Probe Endpoint
+app.MapHealthChecks("/healthy");
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
