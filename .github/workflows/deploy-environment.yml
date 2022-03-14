@@ -310,11 +310,6 @@ jobs:
 
     name: Load Test
     
-    env:
-      load_Test_Resource: 'loadtests-xibwnqufj5jam'
-      #Azure_Resource_GroupName: 
-      #load_Test_Resource2: '${{ steps.Infra.outputs.out_loadTestsName }}'
-
     # Identify any jobs that must complete successfully before this job will run.
     runs-on: ubuntu-latest
 
@@ -337,23 +332,23 @@ jobs:
         with:
           creds: ${{ secrets.azure-credentials }}
 
-      - name: Set Environment Variable
-        run: |
-          echo '::set-output name=webAppUrl::${{ steps.Infra.outputs.out_webSiteName }}'
-          echo 'webAppUrl= ${{ steps.Infra.outputs.out_webSiteName }}' >> $GITHUB_ENV
-          echo 'Load_Test_Resource=${{ env.Load_Test_Resource }}'
-          echo 'Azure_Resource_GroupName=${{ env.Azure_Resource_GroupName }}'
+#      - name: Set Environment Variable
+#        run: |
+#          echo '::set-output name=webAppUrl::${{ steps.Infra.outputs.out_webSiteName }}'
+#          echo 'webAppUrl= ${{ steps.Infra.outputs.out_webSiteName }}' >> $GITHUB_ENV
+#          echo 'Load_Test_Resource=${{ env.Load_Test_Resource }}'
+#          echo 'Azure_Resource_GroupName=${{ env.Azure_Resource_GroupName }}'
 
-      # Use environment variables in Apache JMeter Load Tests - webAppUrl
-      # JMX file uses  ${System.getenv("webAppUrl")}
+#      Use environment variables in Apache JMeter Load Tests - webAppUrl
+#      JMX file uses  ${System.getenv("webAppUrl")}
 
-      - name: Test Outputs across jobs
+      - name: DEBUG Check outputs across jobs
         run: |
            echo 'output1 = ${{needs.deploy_to_environment.outputs.output1}}'
            echo 'output2 = ${{needs.deploy_to_environment.outputs.output2}}'
            echo 'output3 = ${{needs.deploy_to_environment.outputs.output3}}'
            
-      # Update JX with Website URL
+      # Update JMX file with Website URL
       - name: Update JMX
         uses: Azure/powershell@v1
         continue-on-error: false
@@ -367,10 +362,6 @@ jobs:
           # Select the value of the ErrorActionPreference variable for executing the script. Options: stop, continue, silentlyContinue. Default is Stop.
           errorActionPreference: continue
           
-# loadTestResource: ${{ env.Load_Test_Resource }}
-# loadTestResource: ${{ steps.Infra.outputs.out_loadTestsName }}
-# ${{ env.Load_Test_Resource }}
-
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
         continue-on-error: false
