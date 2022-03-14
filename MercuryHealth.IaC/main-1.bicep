@@ -57,26 +57,47 @@ param ConfigkeyKeyValues array = [
   '1'
 ]
 
-param FeatureFlagkeyValueNames array = [
-  'PrivacyBeta'
-  'MetricsDashboard'
-  'CognitiveServices'
-  'CaptureNutritionColor'
-]
+param FeatureFlagKey1 string = 'PrivacyBeta'
+param FeatureFlagKey2 string = 'MetricsDashboard'
+param FeatureFlagKey3 string = 'NutritionColor'
+param FeatureFlagLabel1 string = 'Privacy Beta'
+param FeatureFlagLabel2 string = 'Metrics Dashboard'
+param FeatureFlagLabel3 string = 'Nutrition Color'
 
-param FeatureFlagkeyValueLabels array = [
-  'Privacy Page'
-  'Metrics Dashboard'
-  'Cognitive Services'
-  'Capture Nutrition Color'
-]
+var FeatureFlagValue1 = {
+  id: FeatureFlagKey1
+  description: 'Description for Privacy Beta.'
+  enabled: true
+}
+var FeatureFlagValue2 = {
+  id: FeatureFlagKey2
+  description: 'Description for Metrics Dashboard.'
+  enabled: false
+}
+var FeatureFlagValue3 = {
+  id: FeatureFlagKey3
+  description: 'Description for Nutrition Color.'
+  enabled: false
+}
 
-param FeatureFlagkeyValueKeys array = [
-  'true'
-  'true'
-  'true'
-  'true'
-]
+// Not able to loop through array creating FF
+// param FeatureFlagkeyValueNames array = [
+//   'PrivacyBeta'
+//   'MetricsDashboard'
+//   'NutritionColor'
+// ]
+// Not able to loop through array creating FF
+// param FeatureFlagkeyValueLabels array = [
+//   'Privacy Page'
+//   'Metrics Dashboard'
+//   'Capture Nutrition Color'
+// ]
+// Not able to loop through array creating FF
+// param FeatureFlagkeyValueKeys array = [
+//   'true'
+//   'true'
+//   'true'
+// ]
 
 // Create AppConfiguration configuration Store
 resource config 'Microsoft.AppConfiguration/configurationStores@2021-03-01-preview' = {
@@ -98,34 +119,44 @@ resource configStoreName_keyValueNames 'Microsoft.AppConfiguration/configuration
   }
 }]
 
-// Loop through array and create Feature Flags
+// Want to loop through array and create Feature Flags
+// **Not** able to loop through array creating FF
 // resource configStoreName_appconfig_featureflags 'Microsoft.AppConfiguration/configurationStores/keyValues@2021-10-01-preview' = [for (item, i) in FeatureFlagkeyValueNames: {
 //   parent: config
 //   name: '.appconfig.featureflag~2F${FeatureFlagkeyValueNames[i]}$${FeatureFlagkeyValueLabels[i]}'
 //   properties: {
-//     value: FeatureFlagkeyValueKeys[i]
+//     value: string(FeatureFlagkeyValueKeys[i])
 //     contentType: contentType
 //   }
 // }]
 
-// resource configStoreName_appconfig_featureflags 'Microsoft.AppConfiguration/configurationStores/keyValues@2021-10-01-preview' = [for (item, i) in FeatureFlagkeyValueNames: {
-//   parent: config
-//   name: '.appconfig.featureflag~2F${FeatureFlagkeyValueNames[i]}$${FeatureFlagkeyValueLabels[i]}'
-//   properties: {
-//     value: FeatureFlagkeyValueKeys[i]
-//     contentType: contentType
-//   }
-// }]
-
-resource configStoreName_appconfig_featureflags 'Microsoft.AppConfiguration/configurationStores/keyValues@2021-10-01-preview' = [for (item, i) in FeatureFlagkeyValueNames: {
+// Feature Flag 1
+resource configStoreName_appconfig_featureflags_1 'Microsoft.AppConfiguration/configurationStores/keyValues@2020-07-01-preview' = {
   parent: config
-  name: '.appconfig.featureflag~2F${FeatureFlagkeyValueNames[i]}$${FeatureFlagkeyValueLabels[i]}'
+  name: '.appconfig.featureflag~2F${FeatureFlagKey1}$${FeatureFlagLabel1}'
   properties: {
-    value: string(FeatureFlagkeyValueKeys[i])
+    value: string(FeatureFlagValue1)
     contentType: contentType
   }
-}]
-
+}
+// Feature Flag 2
+resource configStoreName_appconfig_featureflags_2 'Microsoft.AppConfiguration/configurationStores/keyValues@2020-07-01-preview' = {
+  parent: config
+  name: '.appconfig.featureflag~2F${FeatureFlagKey2}$${FeatureFlagLabel2}'
+  properties: {
+    value: string(FeatureFlagValue2)
+    contentType: contentType
+  }
+}
+// Feature Flag 3
+resource configStoreName_appconfig_featureflags_3 'Microsoft.AppConfiguration/configurationStores/keyValues@2020-07-01-preview' = {
+  parent: config
+  name: '.appconfig.featureflag~2F${FeatureFlagKey3}$${FeatureFlagLabel3}'
+  properties: {
+    value: string(FeatureFlagValue3)
+    contentType: contentType
+  }
+}
 ////////////////////////////////////////
 // END - TESTING Config Store
 ////////////////////////////////////////

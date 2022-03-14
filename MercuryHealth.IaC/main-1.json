@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "18093625363310337524"
+      "templateHash": "10094059467950465193"
     }
   },
   "parameters": {
@@ -56,32 +56,29 @@
         "1"
       ]
     },
-    "FeatureFlagkeyValueNames": {
-      "type": "array",
-      "defaultValue": [
-        "PrivacyBeta",
-        "MetricsDashboard",
-        "CognitiveServices",
-        "CaptureNutritionColor"
-      ]
+    "FeatureFlagKey1": {
+      "type": "string",
+      "defaultValue": "PrivacyBeta"
     },
-    "FeatureFlagkeyValueLabels": {
-      "type": "array",
-      "defaultValue": [
-        "Privacy Page",
-        "Metrics Dashboard",
-        "Cognitive Services",
-        "Capture Nutrition Color"
-      ]
+    "FeatureFlagKey2": {
+      "type": "string",
+      "defaultValue": "MetricsDashboard"
     },
-    "FeatureFlagkeyValueKeys": {
-      "type": "array",
-      "defaultValue": [
-        "true",
-        "true",
-        "true",
-        "true"
-      ]
+    "FeatureFlagKey3": {
+      "type": "string",
+      "defaultValue": "NutritionColor"
+    },
+    "FeatureFlagLabel1": {
+      "type": "string",
+      "defaultValue": "Privacy Beta"
+    },
+    "FeatureFlagLabel2": {
+      "type": "string",
+      "defaultValue": "Metrics Dashboard"
+    },
+    "FeatureFlagLabel3": {
+      "type": "string",
+      "defaultValue": "Nutrition Color"
     }
   },
   "functions": [],
@@ -103,6 +100,21 @@
       "App": "Mercury Health",
       "CostCenter": "[parameters('costCenter')]",
       "CreatedBy": "[parameters('createdBy')]"
+    },
+    "FeatureFlagValue1": {
+      "id": "[parameters('FeatureFlagKey1')]",
+      "description": "Description for Privacy Beta.",
+      "enabled": true
+    },
+    "FeatureFlagValue2": {
+      "id": "[parameters('FeatureFlagKey2')]",
+      "description": "Description for Metrics Dashboard.",
+      "enabled": false
+    },
+    "FeatureFlagValue3": {
+      "id": "[parameters('FeatureFlagKey3')]",
+      "description": "Description for Nutrition Color.",
+      "enabled": false
     }
   },
   "resources": [
@@ -134,15 +146,35 @@
       ]
     },
     {
-      "copy": {
-        "name": "configStoreName_appconfig_featureflags",
-        "count": "[length(parameters('FeatureFlagkeyValueNames'))]"
-      },
       "type": "Microsoft.AppConfiguration/configurationStores/keyValues",
-      "apiVersion": "2021-10-01-preview",
-      "name": "[format('{0}/{1}', variables('configStoreName'), format('.appconfig.featureflag~2F{0}${1}', parameters('FeatureFlagkeyValueNames')[copyIndex()], parameters('FeatureFlagkeyValueLabels')[copyIndex()]))]",
+      "apiVersion": "2020-07-01-preview",
+      "name": "[format('{0}/{1}', variables('configStoreName'), format('.appconfig.featureflag~2F{0}${1}', parameters('FeatureFlagKey1'), parameters('FeatureFlagLabel1')))]",
       "properties": {
-        "value": "[string(parameters('FeatureFlagkeyValueKeys')[copyIndex()])]",
+        "value": "[string(variables('FeatureFlagValue1'))]",
+        "contentType": "[parameters('contentType')]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.AppConfiguration/configurationStores/keyValues",
+      "apiVersion": "2020-07-01-preview",
+      "name": "[format('{0}/{1}', variables('configStoreName'), format('.appconfig.featureflag~2F{0}${1}', parameters('FeatureFlagKey2'), parameters('FeatureFlagLabel2')))]",
+      "properties": {
+        "value": "[string(variables('FeatureFlagValue2'))]",
+        "contentType": "[parameters('contentType')]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.AppConfiguration/configurationStores/keyValues",
+      "apiVersion": "2020-07-01-preview",
+      "name": "[format('{0}/{1}', variables('configStoreName'), format('.appconfig.featureflag~2F{0}${1}', parameters('FeatureFlagKey3'), parameters('FeatureFlagLabel3')))]",
+      "properties": {
+        "value": "[string(variables('FeatureFlagValue3'))]",
         "contentType": "[parameters('contentType')]"
       },
       "dependsOn": [
