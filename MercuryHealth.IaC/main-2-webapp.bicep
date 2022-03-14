@@ -61,6 +61,7 @@ resource appService 'Microsoft.Web/sites@2021-01-15' = {
     httpsOnly: true
     siteConfig: {
       minTlsVersion: '1.2'
+      healthCheckPath: '/healthy'
     }
   }
 }

@@ -2,7 +2,7 @@
 <RunSettings>
   <TestRunParameters>
 	  <Parameter name="webAppUrl" value="WebSiteUrlHere" />
-	  <!--<Parameter name="webAppUrl" value="https://app-xibwnqufj5jam.azurewebsites.net/" />-->
+	  <!--<Parameter name="webAppUrl" value="https://app-fq3ruuhxgjony.azurewebsites.net/" />-->
 	  <Parameter name="browserType" value="chrome" />
   </TestRunParameters>
 </RunSettings>
