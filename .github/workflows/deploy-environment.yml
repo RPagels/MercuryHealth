@@ -50,7 +50,6 @@ jobs:
     name: Deploy Application
     env:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
-      webAppUrl: 'TBD'
 
     permissions:
       contents: read
@@ -286,11 +285,11 @@ jobs:
           # Select the value of the ErrorActionPreference variable for executing the script. Options: stop, continue, silentlyContinue. Default is Stop.
           errorActionPreference: continue
 
-#      - name: Playwright Tests with DLL
-#        continue-on-error: true
-#        run: |
-#         dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }}
-#         dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './MercuryHealth.UITests'
+      - name: Playwright Tests with DLL
+        continue-on-error: true
+        run: |
+         dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }}
+         dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './MercuryHealth.UITests'
 #         dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --filter TestCategory=Playwright_Tests_Chromium --verbosity minimal -l "console;verbosity=normal" --settings MercuryHealth.UITests/MercuryHealthTests.runsettings
 
       - name: Playwright Tests on Chromium
@@ -355,6 +354,7 @@ jobs:
         continue-on-error: false
         id: setWebsiteUrl
         env:
+          Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
           POWERSHELL_TELEMETRY_OPTOUT: 1
         with:
           inlineScript: MercuryHealth.LoadTests/TransformJMXFile.ps1 -website_url ${{needs.deploy_to_environment.outputs.output1}}
@@ -369,7 +369,7 @@ jobs:
         with:
           loadTestConfigFile: './MercuryHealth.LoadTests/LoadTest_HomePage_Config.yaml'
           loadTestResource: ${{needs.deploy_to_environment.outputs.output3}}
-          resourceGroup: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
+          resourceGroup: ${{ env.Azure_Resource_GroupName }}
 
       - name: Azure logout
         run: |
