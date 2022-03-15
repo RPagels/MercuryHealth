@@ -112,27 +112,15 @@ jobs:
         deploymentMode: Incremental
         failOnStdErr: false
 
-#    - name: Test Outputs across jobs
-#      run: echo "::set-output name=out_webSiteNameURL::${{steps.Infra.outputs.out_webSiteNameURL}}"
-      
-    - name: Save Application Insights Id to Environment Variable
-      run: |
-         echo 'sqlserverFQName = ${{steps.Infra.outputs.out_sqlserverFQName}}'
-         echo 'webSiteName = ${{steps.Infra.outputs.out_webSiteName}}'
-         echo 'out_webSiteNameURL = ${{steps.Infra.outputs.out_webSiteNameURL}}'
+#    - name: Save Application Insights Id to Environment Variable
+#      run: |
+#         echo 'sqlserverFQName = ${{steps.Infra.outputs.out_sqlserverFQName}}'
+#         echo 'webSiteName = ${{steps.Infra.outputs.out_webSiteName}}'
+#         echo 'out_webSiteNameURL = ${{steps.Infra.outputs.out_webSiteNameURL}}'
 #        echo 'functionAppName = ${{steps.Infra.outputs.out_functionAppName}}'
 #        echo 'sqlserverName = ${{steps.Infra.outputs.out_sqlserverName}}'
 #        echo 'sqlDBName = ${{steps.Infra.outputs.out_sqlDBName}}'
 #        echo 'sqlConnectionString = ${{steps.Infra.outputs.out_sqlConnectionString}}
-#        echo 'configStoreName = ${{steps.Infra.outputs.out_configStoreName}}'
-#        echo 'appInsightsName = ${{steps.Infra.outputs.out_appInsightsName}}'
-#        echo 'apiServiceName = ${{steps.Infra.outputs.out_apiServiceName}}'
-#        echo 'loadTestsName = ${{steps.Infra.outputs.out_loadTestsName}}'
-#        echo 'keyvaultName = ${{steps.Infra.outputs.out_keyvaultName}}'
-#        echo 'appInsightsApplicationId = ${{steps.Infra.outputs.out_appInsightsApplicationId}}'
-#        echo ''
-#        echo "::set-output name=appInsightsAppId2::${{steps.Infra.outputs.out_appInsightsApplicationId}}"
-#        echo "appInsightsAppId3= ${{ steps.Infra.outputs.out_appInsightsApplicationId }}" >> $GITHUB_ENV
 
     - name: Download Build Artifact-Database
       uses: actions/download-artifact@v2
@@ -141,7 +129,7 @@ jobs:
         name: MercuryHealth.Database
         path: ${{ github.workspace }}/MercuryHealth.Database
         
-    # Deploy Database *.dacpac file - NOT TRUE!!! Requires windows-latest runner!!!
+    # Deploy Database *.dacpac file
     - name: 'Deploy the database to Azure'
       uses: Azure/sql-action@v1.2
       with:
@@ -210,7 +198,6 @@ jobs:
         message: ${{ github.event.head_commit.message }}
         actor: ${{ github.actor }}
 
-# --api-key ${{ steps.Infra.outputs.releaseAnnotationId }}
     - name: Remove Temporary API Key For App Insights
       uses: Azure/CLI@v1
       with:
@@ -305,18 +292,17 @@ jobs:
 # CD Stage - Load and Performance Testing                         #
 ###################################################################
   LoadTesting_Stage_Application:
-    if: contains(github.event_name, 'push')
-
-    name: Load Test
-    
-    env:
-      Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
-              
     # Identify any jobs that must complete successfully before this job will run.
     runs-on: ubuntu-latest
-
+    if: contains(github.event_name, 'push')
+    name: Load Test   
+    env:
+      Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
+      EnvOutput1: ${{needs.deploy_to_environment.outputs.output1}}
+      EnvOutput3: ${{needs.deploy_to_environment.outputs.output3}}
+           
     # Identify any jobs that must complete successfully before this job will run.
-    needs: [UITesting_Stage_Application]
+    needs: [deploy_to_environment, UITesting_Stage_Application]
     steps:
       - name: Checkout GitHub Actions 
         uses: actions/checkout@v2
@@ -349,6 +335,8 @@ jobs:
            echo 'output1 = ${{needs.deploy_to_environment.outputs.output1}}'
            echo 'output2 = ${{needs.deploy_to_environment.outputs.output2}}'
            echo 'output3 = ${{needs.deploy_to_environment.outputs.output3}}'
+           echo 'EnvOutput1 = ${{env.EnvOutput1}}'
+           echo 'EnvOutput3 = ${{env.EnvOutput3}}'
            
       # Update JMX file with Website URL
       - name: Update JMX
