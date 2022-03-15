@@ -266,11 +266,12 @@ jobs:
           name: MercuryHealth.UITests
           path: ${{ github.workspace }}/MercuryHealth.UITests
 
-      - name: Test Outputs across jobs
+      - name: DEBUG - Infra Outputs across jobs
         run: |
            echo 'output1 = ${{needs.deploy_to_environment.outputs.output1}}'
            echo 'output2 = ${{needs.deploy_to_environment.outputs.output2}}'
-      
+           echo 'output3 = ${{needs.deploy_to_environment.outputs.output3}}'
+           
       # Update Runsettings with Website URL
       - name: Update Runsettings with Website URL
         uses: Azure/powershell@v1
@@ -340,13 +341,11 @@ jobs:
 #      Use environment variables in Apache JMeter Load Tests - webAppUrl
 #      JMX file uses  ${System.getenv("webAppUrl")}
 
-      - name: DEBUG Check outputs across jobs
+      - name: DEBUG - Infra Outputs across jobs
         run: |
            echo 'output1 = ${{needs.deploy_to_environment.outputs.output1}}'
            echo 'output2 = ${{needs.deploy_to_environment.outputs.output2}}'
            echo 'output3 = ${{needs.deploy_to_environment.outputs.output3}}'
-           echo 'Azure_Resource_GroupName=' ${{ env.Azure_Resource_GroupName }}
-           echo 'FromInputs_Resource_GroupName=' ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
            
       # Update JMX file with Website URL
       - name: Update JMX
