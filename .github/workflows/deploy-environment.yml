@@ -40,7 +40,7 @@ jobs:
   ###################################################################
   # Deployment Stage - Infrastructure / Application / Database      #
   ###################################################################
-  deploy_to_environment:
+  Deploy_to_Environment:
     runs-on: ubuntu-latest
     outputs:
       output1: ${{ steps.Infra.outputs.out_webSiteNameURL }}
@@ -232,7 +232,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # Identify any jobs that must complete successfully before this job will run.
-    needs: [deploy_to_environment]
+    needs: [Deploy_to_Environment]
     timeout-minutes: 10
         
     steps:
@@ -298,11 +298,9 @@ jobs:
     name: Load Test   
     env:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
-      EnvOutput1: ${{needs.deploy_to_environment.outputs.output1}}
-      EnvOutput3: ${{needs.deploy_to_environment.outputs.output3}}
            
     # Identify any jobs that must complete successfully before this job will run.
-    needs: [deploy_to_environment, UITesting_Stage_Application]
+    needs: [Deploy_to_Environment, UITesting_Stage_Application]
     steps:
       - name: Checkout GitHub Actions 
         uses: actions/checkout@v2
@@ -320,16 +318,6 @@ jobs:
         with:
           creds: ${{ secrets.azure-credentials }}
 
-#      - name: Set Environment Variable
-#        run: |
-#          echo '::set-output name=webAppUrl::${{ steps.Infra.outputs.out_webSiteName }}'
-#          echo 'webAppUrl= ${{ steps.Infra.outputs.out_webSiteName }}' >> $GITHUB_ENV
-#          echo 'Load_Test_Resource=${{ env.Load_Test_Resource }}'
-#          echo 'Azure_Resource_GroupName=${{ env.Azure_Resource_GroupName }}'
-
-#      Use environment variables in Apache JMeter Load Tests - webAppUrl
-#      JMX file uses  ${System.getenv("webAppUrl")}
-
       - name: DEBUG - Infra Outputs across jobs
         run: |
            echo 'output1 = ${{needs.deploy_to_environment.outputs.output1}}'
@@ -337,9 +325,18 @@ jobs:
            echo 'output3 = ${{needs.deploy_to_environment.outputs.output3}}'
            echo 'EnvOutput1 = ${{env.EnvOutput1}}'
            echo 'EnvOutput3 = ${{env.EnvOutput3}}'
-           
+
+      # Assign the Load Test Contributor or Load Test Owner role to your Azure account
+      - name: Assign Azure Role to Load Test Service
+        uses: Azure/CLI@v1
+        continue-on-error: true
+        with:
+          inlineScript: |
+            #!/bin/bash
+            az role assignment create --assignee "rpagels@microsoft.com" --role "Load Test Contributor" --resource-group ${{ env.Azure_Resource_GroupName }}
+
       # Update JMX file with Website URL
-      - name: Update JMX
+      - name: Update JMX File webAppUrl
         uses: Azure/powershell@v1
         continue-on-error: false
         id: setWebsiteUrl
@@ -354,7 +351,7 @@ jobs:
           
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
-        continue-on-error: false
+        continue-on-error: true
         with:
           loadTestConfigFile: './MercuryHealth.LoadTests/LoadTest_HomePage_Config.yaml'
           loadTestResource: ${{needs.deploy_to_environment.outputs.output3}}
