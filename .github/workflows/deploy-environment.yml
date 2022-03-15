@@ -309,6 +309,9 @@ jobs:
 
     name: Load Test
     
+    env:
+      Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
+              
     # Identify any jobs that must complete successfully before this job will run.
     runs-on: ubuntu-latest
 
@@ -353,7 +356,6 @@ jobs:
         continue-on-error: false
         id: setWebsiteUrl
         env:
-          Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
           POWERSHELL_TELEMETRY_OPTOUT: 1
         with:
           inlineScript: MercuryHealth.LoadTests/TransformJMXFile.ps1 -website_url ${{needs.deploy_to_environment.outputs.output1}}
