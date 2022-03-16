@@ -351,12 +351,12 @@ jobs:
           loadTestResource: ${{needs.deploy_to_environment.outputs.output3}}
           resourceGroup: ${{ env.Azure_Resource_GroupName }}
           env: |
-          [
-            {
-              "name": "webHost",
-              "value": ${{needs.deploy_to_environment.outputs.output1}}
-            }
-          ]
+            [
+              {
+                "name": "webHost",
+                "value": ${{needs.deploy_to_environment.outputs.output1}}
+              }
+            ]
 
       - name: 'Upload Load Test Results'
         uses: actions/upload-artifact@v2
