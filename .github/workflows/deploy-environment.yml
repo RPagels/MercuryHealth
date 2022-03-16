@@ -288,6 +288,14 @@ jobs:
         continue-on-error: true
         run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --filter TestCategory=Playwright_Tests_FireFox -l "console;verbosity=normal" --settings MercuryHealth.UITests/MercuryHealthTests.runsettings
 
+      - name: 'Upload Playwright Test Results'
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: MercuryHealth.UITests
+          path: ${{ github.workspace }}/MercuryHealth.UITests
+          retention-days: 30
+          
 ##################################################################
 # CD Stage - Load and Performance Testing                         #
 ###################################################################
@@ -357,6 +365,13 @@ jobs:
           loadTestResource: ${{needs.deploy_to_environment.outputs.output3}}
           resourceGroup: ${{ env.Azure_Resource_GroupName }}
 
+      - name: 'Upload Load Test Results'
+        uses: actions/upload-artifact@v2
+        continue-on-error: true
+        with:
+          name: MercuryHealth.LoadTestsResults
+          path: ${{ github.workspace }}/MercuryHealth.LoadTests
+          
       - name: Azure logout
         run: |
           az logout
