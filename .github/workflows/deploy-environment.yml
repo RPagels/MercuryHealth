@@ -354,7 +354,7 @@ jobs:
             [
               {
                 "name": "webHost",
-                "value": ${{needs.deploy_to_environment.outputs.output1}}
+                "value": "${{needs.deploy_to_environment.outputs.output1}}"
               }
             ]
 
@@ -373,7 +373,7 @@ jobs:
 # CD Stage - Dev  
 ###################################################################
   Approval_Stage_Application:
-    if: contains(github.event_name, 'push')
+    if: contains(github.event_name, 'push') && (inputs.approval-required == 'true')
 
     name: Approval to Next Stage
     
