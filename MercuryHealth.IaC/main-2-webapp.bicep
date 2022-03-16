@@ -416,3 +416,5 @@ resource standardWebTestPageExercises  'Microsoft.Insights/webtests@2020-10-05-p
 
 output output_webSiteName string = appService.name
 output out_webSiteName string = appService.properties.defaultHostName
+output out_sqlConnectionString string = 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+

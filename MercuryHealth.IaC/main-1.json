@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "17263488302798887315"
+      "templateHash": "2571015607599703891"
     }
   },
   "parameters": {
@@ -242,7 +242,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "8873211770347604782"
+              "templateHash": "13252402732018465506"
             }
           },
           "parameters": {
@@ -531,6 +531,10 @@
             "out_webSiteName": {
               "type": "string",
               "value": "[reference(resourceId('Microsoft.Web/sites', parameters('webSiteName'))).defaultHostName]"
+            },
+            "out_sqlConnectionString": {
+              "type": "string",
+              "value": "[format('Server=tcp:{0},1433;Initial Catalog={1};Persist Security Info=False;User Id={2}@{3};Password={4};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;', parameters('sqlserverfullyQualifiedDomainName'), parameters('sqlDBName'), parameters('sqlAdministratorLogin'), parameters('sqlserverName'), parameters('sqlAdministratorLoginPassword'))]"
             }
           }
         }
@@ -1622,6 +1626,10 @@
     "out_sqlserverFQName": {
       "type": "string",
       "value": "[reference(resourceId('Microsoft.Resources/deployments', 'sqldbdeploy'), '2020-06-01').outputs.sqlserverfullyQualifiedDomainName.value]"
+    },
+    "out_sqlConnectionString": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'webappdeploy'), '2020-06-01').outputs.out_sqlConnectionString.value]"
     },
     "out_configStoreName": {
       "type": "string",
