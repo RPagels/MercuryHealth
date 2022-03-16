@@ -364,12 +364,28 @@ jobs:
               }
             ]
 
-      - name: 'Upload Load Test Results'
+      - name: '1-Upload Load Test Results'
         uses: actions/upload-artifact@v2
         continue-on-error: true
         with:
           name: MercuryHealth.LoadTestsResults
           path: MercuryHealth.LoadTests/MercuryHealth.LoadTests
+          retention-days: 30
+
+      - name: '2-Upload Load Test Results'
+        uses: actions/upload-artifact@v2
+        continue-on-error: true
+        with:
+          name: MercuryHealth.LoadTestsResults
+          path: ./MercuryHealth.LoadTests/MercuryHealth.LoadTests
+          retention-days: 30
+   
+      - name: '3-Upload Load Test Results'
+        uses: actions/upload-artifact@v2
+        continue-on-error: true
+        with:
+          name: MercuryHealth.LoadTestsResults
+          path: ${{ github.workspace }}/MercuryHealth.LoadTests
           retention-days: 30
           
       - name: Azure logout
