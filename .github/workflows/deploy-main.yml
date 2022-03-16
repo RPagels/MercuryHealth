@@ -180,7 +180,7 @@ jobs:
       sql-db-login: ${{ secrets.SQL_DB_LOGIN }}
       sql-db-password: ${{ secrets.SQL_DB_PASSWORD }}
       #sql-db-server-name: ${{ secrets.SQL_DB_Server_Name }}
-      #sql-connection-string: ${{ secrets.SQL_DB_Connection_String }}
+      sql-connection-string: ${{ secrets.SQL_DB_Connection_String }}
 
   qa:
       if: contains(github.event_name, 'push')
@@ -196,4 +196,4 @@ jobs:
         sql-db-login: ${{ secrets.SQL_DB_LOGIN }}
         sql-db-password: ${{ secrets.SQL_DB_PASSWORD }}
         #sql-db-server-name: ${{ secrets.SQL_DB_Server_Name }}
-        #sql-connection-string: ${{ secrets.SQL_DB_Connection_String }}
+        sql-connection-string: ${{ secrets.SQL_DB_Connection_String }}
