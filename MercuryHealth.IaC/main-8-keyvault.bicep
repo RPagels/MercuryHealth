@@ -97,6 +97,7 @@ resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' = {
       family: 'A'
       name: sku
     }
+    enableSoftDelete: false
     accessPolicies: accessPolicies
     enabledForDeployment: enabledForDeployment
     enabledForDiskEncryption: enabledForDiskEncryption

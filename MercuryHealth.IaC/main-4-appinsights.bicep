@@ -1,10 +1,28 @@
 param location string = resourceGroup().location
 //param webSiteName string
 param appInsightsName string
+param appInsightsWorkspaceName string
 param appInsightsAlertName string
 param defaultTags object
 //param releaseAnnotationGuid string = newGuid()
 //param releaseAnnotationDateStamp string = utcNow('yyyy-MM-ddTHH:mm:ss')
+
+// Log Analytics workspace for Application Insights
+resource applicationInsightsWorkspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
+  name: appInsightsWorkspaceName
+  location: location
+  properties:{
+    sku: {
+      name: 'PerGB2018'
+    }
+    retentionInDays: 30
+    features: {
+      searchVersion: 1
+      legacy: 0
+      enableLogAccessUsingOnlyResourcePermissions: true
+    }
+  }
+}
 
 // Application Insights
 resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
@@ -14,6 +32,7 @@ resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
   kind: 'web'
   properties: {
     Application_Type: 'web'
+    WorkspaceResourceId: applicationInsightsWorkspace.id
   }
 }
 
@@ -26,10 +45,7 @@ resource metricAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
     enabled: true
     scopes: [
       applicationInsights.id
-      // ERROR during Deployment
-      // "Property id 'b7e034a7-df34-4fef-a6ea-28136655e0a7' at path 'properties.scopes[0]' is invalid. Expect fully qualified resource Id that start with '/subscriptions/***subscriptionId***' or '/providers/***resourceProviderNamespace***/'
-
-    ]
+      ]
     evaluationFrequency: 'PT1M'
     windowSize: 'PT5M'
     criteria: {
@@ -39,7 +55,7 @@ resource metricAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
           name: '1st criterion'
           metricName: 'requests/duration'
           operator: 'GreaterThan'
-          threshold: 100
+          threshold: 500
           timeAggregation: 'Average'
           criterionType: 'StaticThresholdCriterion'
         }
@@ -71,8 +87,6 @@ resource emailActionGroup 'microsoft.insights/actionGroups@2019-06-01' = {
 
 output out_appInsightsInstrumentationKey string = applicationInsights.properties.InstrumentationKey
 output out_appInsightsConnectionString string = applicationInsights.properties.ConnectionString
-
 output out_appInsightsApplicationId string = applicationInsights.properties.ApplicationId
 output out_appInsightsAPIApplicationId string = applicationInsights.properties.AppId
-//output out_applicationInsightsApiAppId string = applicationInsights.properties.AppId
-//output out_releaseAnnotationId string = releaseAnnotationGuid
+

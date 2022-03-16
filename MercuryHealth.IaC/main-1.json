@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "14973248800970351847"
+      "templateHash": "17263488302798887315"
     }
   },
   "parameters": {
@@ -89,6 +89,7 @@
     "sqlDBName": "[toLower(format('sqldb-{0}', uniqueString(resourceGroup().id)))]",
     "configStoreName": "[format('appcs-{0}', uniqueString(resourceGroup().id))]",
     "appInsightsName": "[format('appi-{0}', uniqueString(resourceGroup().id))]",
+    "appInsightsWorkspaceName": "[format('appw-{0}', uniqueString(resourceGroup().id))]",
     "appInsightsAlertName": "[format('ResponseTime-{0}', uniqueString(resourceGroup().id))]",
     "functionAppName": "[format('func-{0}', uniqueString(resourceGroup().id))]",
     "functionAppServiceName": "[format('funcplan-{0}', uniqueString(resourceGroup().id))]",
@@ -670,6 +671,9 @@
           },
           "appInsightsAlertName": {
             "value": "[variables('appInsightsAlertName')]"
+          },
+          "appInsightsWorkspaceName": {
+            "value": "[variables('appInsightsWorkspaceName')]"
           }
         },
         "template": {
@@ -679,7 +683,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "8001440945521567697"
+              "templateHash": "7603060922689579311"
             }
           },
           "parameters": {
@@ -688,6 +692,9 @@
               "defaultValue": "[resourceGroup().location]"
             },
             "appInsightsName": {
+              "type": "string"
+            },
+            "appInsightsWorkspaceName": {
               "type": "string"
             },
             "appInsightsAlertName": {
@@ -700,6 +707,23 @@
           "functions": [],
           "resources": [
             {
+              "type": "Microsoft.OperationalInsights/workspaces",
+              "apiVersion": "2021-06-01",
+              "name": "[parameters('appInsightsWorkspaceName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "sku": {
+                  "name": "PerGB2018"
+                },
+                "retentionInDays": 30,
+                "features": {
+                  "searchVersion": 1,
+                  "legacy": 0,
+                  "enableLogAccessUsingOnlyResourcePermissions": true
+                }
+              }
+            },
+            {
               "type": "Microsoft.Insights/components",
               "apiVersion": "2020-02-02",
               "name": "[parameters('appInsightsName')]",
@@ -707,8 +731,12 @@
               "tags": "[parameters('defaultTags')]",
               "kind": "web",
               "properties": {
-                "Application_Type": "web"
-              }
+                "Application_Type": "web",
+                "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('appInsightsWorkspaceName'))]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('appInsightsWorkspaceName'))]"
+              ]
             },
             {
               "type": "Microsoft.Insights/metricAlerts",
@@ -731,7 +759,7 @@
                       "name": "1st criterion",
                       "metricName": "requests/duration",
                       "operator": "GreaterThan",
-                      "threshold": 100,
+                      "threshold": 500,
                       "timeAggregation": "Average",
                       "criterionType": "StaticThresholdCriterion"
                     }
@@ -1179,7 +1207,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "9152982929002923621"
+              "templateHash": "2788979674155792222"
             }
           },
           "parameters": {
@@ -1365,6 +1393,7 @@
                   "family": "A",
                   "name": "[parameters('sku')]"
                 },
+                "enableSoftDelete": false,
                 "accessPolicies": "[parameters('accessPolicies')]",
                 "enabledForDeployment": "[parameters('enabledForDeployment')]",
                 "enabledForDiskEncryption": "[parameters('enabledForDiskEncryption')]",

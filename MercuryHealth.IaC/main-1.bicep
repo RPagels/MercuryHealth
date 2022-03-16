@@ -23,6 +23,7 @@ var sqlserverName = toLower('sql-${uniqueString(resourceGroup().id)}')
 var sqlDBName = toLower('sqldb-${uniqueString(resourceGroup().id)}')
 var configStoreName = 'appcs-${uniqueString(resourceGroup().id)}'
 var appInsightsName = 'appi-${uniqueString(resourceGroup().id)}'
+var appInsightsWorkspaceName = 'appw-${uniqueString(resourceGroup().id)}'
 var appInsightsAlertName = 'ResponseTime-${uniqueString(resourceGroup().id)}'
 var functionAppName = 'func-${uniqueString(resourceGroup().id)}'
 var functionAppServiceName = 'funcplan-${uniqueString(resourceGroup().id)}'
@@ -207,6 +208,7 @@ module appinsightsmod './main-4-appinsights.bicep' = {
     appInsightsName: appInsightsName
     defaultTags: defaultTags
     appInsightsAlertName: appInsightsAlertName
+    appInsightsWorkspaceName: appInsightsWorkspaceName
   }
 }
 
