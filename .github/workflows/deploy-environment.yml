@@ -40,7 +40,7 @@ jobs:
   ###################################################################
   # Deployment Stage - Infrastructure / Application / Database      #
   ###################################################################
-  deploy_to_environment:
+  Deploy_to_Environment:
     runs-on: ubuntu-latest
     outputs:
       output1: ${{ steps.Infra.outputs.out_webSiteNameURL }}
@@ -112,27 +112,15 @@ jobs:
         deploymentMode: Incremental
         failOnStdErr: false
 
-#    - name: Test Outputs across jobs
-#      run: echo "::set-output name=out_webSiteNameURL::${{steps.Infra.outputs.out_webSiteNameURL}}"
-      
-    - name: Save Application Insights Id to Environment Variable
-      run: |
-         echo 'sqlserverFQName = ${{steps.Infra.outputs.out_sqlserverFQName}}'
-         echo 'webSiteName = ${{steps.Infra.outputs.out_webSiteName}}'
-         echo 'out_webSiteNameURL = ${{steps.Infra.outputs.out_webSiteNameURL}}'
+#    - name: Save Application Insights Id to Environment Variable
+#      run: |
+#         echo 'sqlserverFQName = ${{steps.Infra.outputs.out_sqlserverFQName}}'
+#         echo 'webSiteName = ${{steps.Infra.outputs.out_webSiteName}}'
+#         echo 'out_webSiteNameURL = ${{steps.Infra.outputs.out_webSiteNameURL}}'
 #        echo 'functionAppName = ${{steps.Infra.outputs.out_functionAppName}}'
 #        echo 'sqlserverName = ${{steps.Infra.outputs.out_sqlserverName}}'
 #        echo 'sqlDBName = ${{steps.Infra.outputs.out_sqlDBName}}'
 #        echo 'sqlConnectionString = ${{steps.Infra.outputs.out_sqlConnectionString}}
-#        echo 'configStoreName = ${{steps.Infra.outputs.out_configStoreName}}'
-#        echo 'appInsightsName = ${{steps.Infra.outputs.out_appInsightsName}}'
-#        echo 'apiServiceName = ${{steps.Infra.outputs.out_apiServiceName}}'
-#        echo 'loadTestsName = ${{steps.Infra.outputs.out_loadTestsName}}'
-#        echo 'keyvaultName = ${{steps.Infra.outputs.out_keyvaultName}}'
-#        echo 'appInsightsApplicationId = ${{steps.Infra.outputs.out_appInsightsApplicationId}}'
-#        echo ''
-#        echo "::set-output name=appInsightsAppId2::${{steps.Infra.outputs.out_appInsightsApplicationId}}"
-#        echo "appInsightsAppId3= ${{ steps.Infra.outputs.out_appInsightsApplicationId }}" >> $GITHUB_ENV
 
     - name: Download Build Artifact-Database
       uses: actions/download-artifact@v2
@@ -141,7 +129,7 @@ jobs:
         name: MercuryHealth.Database
         path: ${{ github.workspace }}/MercuryHealth.Database
         
-    # Deploy Database *.dacpac file - NOT TRUE!!! Requires windows-latest runner!!!
+    # Deploy Database *.dacpac file
     - name: 'Deploy the database to Azure'
       uses: Azure/sql-action@v1.2
       with:
@@ -210,7 +198,6 @@ jobs:
         message: ${{ github.event.head_commit.message }}
         actor: ${{ github.actor }}
 
-# --api-key ${{ steps.Infra.outputs.releaseAnnotationId }}
     - name: Remove Temporary API Key For App Insights
       uses: Azure/CLI@v1
       with:
@@ -245,7 +232,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # Identify any jobs that must complete successfully before this job will run.
-    needs: [deploy_to_environment]
+    needs: [Deploy_to_Environment]
     timeout-minutes: 10
         
     steps:
@@ -266,11 +253,12 @@ jobs:
           name: MercuryHealth.UITests
           path: ${{ github.workspace }}/MercuryHealth.UITests
 
-      - name: Test Outputs across jobs
+      - name: DEBUG - Infra Outputs across jobs
         run: |
            echo 'output1 = ${{needs.deploy_to_environment.outputs.output1}}'
            echo 'output2 = ${{needs.deploy_to_environment.outputs.output2}}'
-      
+           echo 'output3 = ${{needs.deploy_to_environment.outputs.output3}}'
+           
       # Update Runsettings with Website URL
       - name: Update Runsettings with Website URL
         uses: Azure/powershell@v1
@@ -304,15 +292,15 @@ jobs:
 # CD Stage - Load and Performance Testing                         #
 ###################################################################
   LoadTesting_Stage_Application:
-    if: contains(github.event_name, 'push')
-
-    name: Load Test
-    
     # Identify any jobs that must complete successfully before this job will run.
     runs-on: ubuntu-latest
-
+    if: contains(github.event_name, 'push')
+    name: Load Test   
+    env:
+      Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
+           
     # Identify any jobs that must complete successfully before this job will run.
-    needs: [deploy_to_environment]
+    needs: [Deploy_to_Environment, UITesting_Stage_Application]
     steps:
       - name: Checkout GitHub Actions 
         uses: actions/checkout@v2
@@ -330,31 +318,29 @@ jobs:
         with:
           creds: ${{ secrets.azure-credentials }}
 
-#      - name: Set Environment Variable
-#        run: |
-#          echo '::set-output name=webAppUrl::${{ steps.Infra.outputs.out_webSiteName }}'
-#          echo 'webAppUrl= ${{ steps.Infra.outputs.out_webSiteName }}' >> $GITHUB_ENV
-#          echo 'Load_Test_Resource=${{ env.Load_Test_Resource }}'
-#          echo 'Azure_Resource_GroupName=${{ env.Azure_Resource_GroupName }}'
-
-#      Use environment variables in Apache JMeter Load Tests - webAppUrl
-#      JMX file uses  ${System.getenv("webAppUrl")}
-
-      - name: DEBUG Check outputs across jobs
+      - name: DEBUG - Infra Outputs across jobs
         run: |
            echo 'output1 = ${{needs.deploy_to_environment.outputs.output1}}'
            echo 'output2 = ${{needs.deploy_to_environment.outputs.output2}}'
            echo 'output3 = ${{needs.deploy_to_environment.outputs.output3}}'
-           echo 'Azure_Resource_GroupName=' ${{ env.Azure_Resource_GroupName }}
-           echo 'FromInputs_Resource_GroupName=' ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
-           
+           echo 'EnvOutput1 = ${{env.EnvOutput1}}'
+           echo 'EnvOutput3 = ${{env.EnvOutput3}}'
+
+      # Assign the Load Test Contributor or Load Test Owner role to your Azure account
+      - name: Assign Azure Role to Load Test Service
+        uses: Azure/CLI@v1
+        continue-on-error: true
+        with:
+          inlineScript: |
+            #!/bin/bash
+            az role assignment create --assignee "rpagels@microsoft.com" --role "Load Test Contributor" --resource-group ${{ env.Azure_Resource_GroupName }}
+
       # Update JMX file with Website URL
-      - name: Update JMX
+      - name: Update JMX File webAppUrl
         uses: Azure/powershell@v1
         continue-on-error: false
         id: setWebsiteUrl
         env:
-          Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
           POWERSHELL_TELEMETRY_OPTOUT: 1
         with:
           inlineScript: MercuryHealth.LoadTests/TransformJMXFile.ps1 -website_url ${{needs.deploy_to_environment.outputs.output1}}
@@ -365,7 +351,7 @@ jobs:
           
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
-        continue-on-error: false
+        continue-on-error: true
         with:
           loadTestConfigFile: './MercuryHealth.LoadTests/LoadTest_HomePage_Config.yaml'
           loadTestResource: ${{needs.deploy_to_environment.outputs.output3}}
