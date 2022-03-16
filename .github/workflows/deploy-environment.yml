@@ -334,20 +334,6 @@ jobs:
           inlineScript: |
             #!/bin/bash
             az role assignment create --assignee "rpagels@microsoft.com" --role "Load Test Contributor" --resource-group ${{ env.Azure_Resource_GroupName }}
-
-      # Update JMX file with Website URL
-      - name: Update JMX File webAppUrl
-        uses: Azure/powershell@v1
-        continue-on-error: false
-        id: setWebsiteUrl
-        env:
-          POWERSHELL_TELEMETRY_OPTOUT: 1
-        with:
-          inlineScript: MercuryHealth.LoadTests/TransformJMXFile.ps1 -website_url ${{needs.deploy_to_environment.outputs.output1}}
-          # Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".
-          azPSVersion: latest
-          # Select the value of the ErrorActionPreference variable for executing the script. Options: stop, continue, silentlyContinue. Default is Stop.
-          errorActionPreference: continue
           
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
@@ -356,6 +342,13 @@ jobs:
           loadTestConfigFile: './MercuryHealth.LoadTests/LoadTest_HomePage_Config.yaml'
           loadTestResource: ${{needs.deploy_to_environment.outputs.output3}}
           resourceGroup: ${{ env.Azure_Resource_GroupName }}
+          env: |
+          [
+            {
+              "name": "webHost",
+              "value": ${{needs.deploy_to_environment.outputs.output1}}
+            }
+          ]
 
       - name: Azure logout
         run: |
