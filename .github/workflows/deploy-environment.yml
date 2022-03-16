@@ -135,7 +135,7 @@ jobs:
       with:
         server-name: ${{ steps.Infra.outputs.out_sqlserverFQName }}
         #connection-string: ${{ secrets.sql-connection-string }}
-        connection-string: ${{ steps.Infra.outputs.out_sqlConnectionString ))
+        connection-string: ${{ steps.Infra.outputs.out_sqlConnectionString }}
         dacpac-package: './MercuryHealth.Database/MercuryHealth.Database.dacpac'
 
     - name: Download Build Artifacts-Website Application
