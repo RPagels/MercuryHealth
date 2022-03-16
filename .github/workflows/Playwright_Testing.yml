@@ -89,4 +89,11 @@ jobs:
        dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './MercuryHealth.UITests'
        dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --filter TestCategory=Playwright_Tests_Chromium --verbosity minimal -l "console;verbosity=normal" --settings MercuryHealth.UITests/MercuryHealthTests.runsettings
 
+    - name: 'Upload Playwright Test Results'
+      uses: actions/upload-artifact@v2
+      if: always()
+      with:
+        name: MercuryHealth.UITestsResults
+        path: MercuryHealth.UITests/MercuryHealth.UITests
+        retention-days: 30
       
