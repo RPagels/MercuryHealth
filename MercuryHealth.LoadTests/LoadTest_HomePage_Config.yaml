@@ -7,7 +7,7 @@ configurationFiles:
   - 'SampleData-Nutrition.csv'
 failureCriteria:
   - avg(response_time_ms) > 15000
-  - percentage(error) > 20
+  - percentage(error) > 50
 #env:
 #  - name: my-variable
 #    value: my-value

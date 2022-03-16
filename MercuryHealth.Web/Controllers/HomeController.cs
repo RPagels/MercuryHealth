@@ -53,8 +53,8 @@ namespace MercuryHealth.Web.Controllers
             Obj.Visits = pagecount;
             ObjAccessLogs.Add(Obj);
 
-            // Are you tired?
-            Thread.Sleep(5000);
+            // Are you really tired?  Take a break! :)
+            Thread.Sleep(10000);
 
             return View(ObjAccessLogs.ToList());
 
