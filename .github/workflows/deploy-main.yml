@@ -174,12 +174,13 @@ jobs:
       resource-group-base-name: 'rg-MercuryHealth'
       environment-suffix: 'dev'
       resource-group-location: 'eastus2'
+      approval-required: true
     secrets:
       azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
       sql-db-login: ${{ secrets.SQL_DB_LOGIN }}
       sql-db-password: ${{ secrets.SQL_DB_PASSWORD }}
-      sql-db-server-name: ${{ secrets.SQL_DB_Server_Name }}
-      sql-connection-string: ${{ secrets.SQL_DB_Connection_String }}
+      #sql-db-server-name: ${{ secrets.SQL_DB_Server_Name }}
+      #sql-connection-string: ${{ secrets.SQL_DB_Connection_String }}
 
   qa:
       if: contains(github.event_name, 'push')
@@ -189,9 +190,10 @@ jobs:
         resource-group-base-name: 'rg-MercuryHealth'
         environment-suffix: 'qa'
         resource-group-location: 'eastus2'
+        approval-required: false
       secrets:
         azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
         sql-db-login: ${{ secrets.SQL_DB_LOGIN }}
         sql-db-password: ${{ secrets.SQL_DB_PASSWORD }}
-        sql-db-server-name: ${{ secrets.SQL_DB_Server_Name }}
-        sql-connection-string: ${{ secrets.SQL_DB_Connection_String }}
+        #sql-db-server-name: ${{ secrets.SQL_DB_Server_Name }}
+        #sql-connection-string: ${{ secrets.SQL_DB_Connection_String }}

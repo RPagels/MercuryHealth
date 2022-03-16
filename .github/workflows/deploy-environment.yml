@@ -19,22 +19,27 @@ on:
         default: 'eastus'
         required: false
         type: string
+      approval-required:
+        description: 'Approval needed to deploy to environment'
+        default: true
+        required: true
+        type: boolean        
     secrets:
       azure-credentials:
         description: 'Credentials used to log into Azure for deployment of resources'
         required: true
-      sql-db-server-name:
-        description: 'Credentials used to log into SQL for deployment of resources'
-        required: true
+#      sql-db-server-name:
+#        description: 'Credentials used to log into SQL for deployment of resources'
+#        required: true
       sql-db-login:
         description: 'Credentials used to log into SQL for deployment of resources'
         required: true
       sql-db-password:
         description: 'Credentials used to log into SQL for deployment of resources'
         required: true
-      sql-connection-string:
-        description: 'Credentials used to log into SQL for deployment of resources'
-        required: true
+#      sql-connection-string:
+#        description: 'Credentials used to log into SQL for deployment of resources'
+#        required: true
 
 jobs:
   ###################################################################
@@ -134,7 +139,8 @@ jobs:
       uses: Azure/sql-action@v1.2
       with:
         server-name: ${{ steps.Infra.outputs.out_sqlserverFQName }}
-        connection-string: ${{ secrets.sql-connection-string }}
+        #connection-string: ${{ secrets.sql-connection-string }}
+        connection-string: ${{ steps.Infra.outputs.out_sqlConnectionString }}
         dacpac-package: './MercuryHealth.Database/MercuryHealth.Database.dacpac'
 
     - name: Download Build Artifacts-Website Application
@@ -292,8 +298,8 @@ jobs:
         uses: actions/upload-artifact@v2
         if: always()
         with:
-          name: MercuryHealth.UITests
-          path: ${{ github.workspace }}/MercuryHealth.UITests
+          name: MercuryHealth.UITestsResults
+          path: MercuryHealth.UITests/MercuryHealth.UITests
           retention-days: 30
           
 ##################################################################
@@ -354,7 +360,7 @@ jobs:
             [
               {
                 "name": "webHost",
-                "value": ${{needs.deploy_to_environment.outputs.output1}}
+                "value": "${{needs.deploy_to_environment.outputs.output1}}"
               }
             ]
 
@@ -363,7 +369,8 @@ jobs:
         continue-on-error: true
         with:
           name: MercuryHealth.LoadTestsResults
-          path: ${{ github.workspace }}/MercuryHealth.LoadTests
+          path: MercuryHealth.LoadTests/MercuryHealth.LoadTests
+          retention-days: 30
           
       - name: Azure logout
         run: |
@@ -373,7 +380,7 @@ jobs:
 # CD Stage - Dev  
 ###################################################################
   Approval_Stage_Application:
-    if: contains(github.event_name, 'push')
+    if: contains(github.event_name, 'push') && (inputs.approval-required == 'true')
 
     name: Approval to Next Stage
     
