@@ -37,9 +37,9 @@ on:
       sql-db-password:
         description: 'Credentials used to log into SQL for deployment of resources'
         required: true
-#      sql-connection-string:
-#        description: 'Credentials used to log into SQL for deployment of resources'
-#        required: true
+      sql-connection-string:
+        description: 'Credentials used to log into SQL for deployment of resources'
+        required: true
 
 jobs:
   ###################################################################
@@ -117,12 +117,12 @@ jobs:
         deploymentMode: Incremental
         failOnStdErr: false
 
-    - name: Save Application Insights Id to Environment Variable
-      run: |
-         echo 'sqlserverFQName = ${{steps.Infra.outputs.out_sqlserverFQName}}'
-         echo 'webSiteName = ${{steps.Infra.outputs.out_webSiteName}}'
-         echo 'out_webSiteNameURL = ${{steps.Infra.outputs.out_webSiteNameURL}}'
-         echo 'sqlConnectionString = ${{steps.Infra.outputs.out_sqlConnectionString}}
+#    - name: Save Application Insights Id to Environment Variable
+#      run: |
+#         echo 'sqlserverFQName = ${{steps.Infra.outputs.out_sqlserverFQName}}'
+#         echo 'webSiteName = ${{steps.Infra.outputs.out_webSiteName}}'
+#         echo 'out_webSiteNameURL = ${{steps.Infra.outputs.out_webSiteNameURL}}'
+#         echo 'sqlConnectionString = ${{steps.Infra.outputs.out_sqlConnectionString}}
 #        echo 'functionAppName = ${{steps.Infra.outputs.out_functionAppName}}'
 #        echo 'sqlserverName = ${{steps.Infra.outputs.out_sqlserverName}}'
 #        echo 'sqlDBName = ${{steps.Infra.outputs.out_sqlDBName}}'
@@ -134,13 +134,13 @@ jobs:
         name: MercuryHealth.Database
         path: ${{ github.workspace }}/MercuryHealth.Database
 
-    #connection-string: ${{ secrets.sql-connection-string }}
+    #connection-string: ${{ steps.Infra.outputs.out_sqlConnectionString }}
     # Deploy Database *.dacpac file
     - name: 'Deploy the database to Azure'
       uses: Azure/sql-action@v1.2
       with:
         server-name: ${{ steps.Infra.outputs.out_sqlserverFQName }}
-        connection-string: ${{ steps.Infra.outputs.out_sqlConnectionString }}
+        connection-string: ${{ secrets.sql-connection-string }}
         dacpac-package: './MercuryHealth.Database/MercuryHealth.Database.dacpac'
 
     - name: Download Build Artifacts-Website Application
