@@ -305,7 +305,7 @@ jobs:
         if: always()
         with:
           name: MercuryHealth.UITestsResults2
-          path: ${{ github.workspace }}/MercuryHealth.UITests/TestResults/*.*
+          path: ${{ github.workspace }}/MercuryHealth.UITests/*.*
           retention-days: 30
           
 ##################################################################
