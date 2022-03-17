@@ -292,6 +292,14 @@ jobs:
         continue-on-error: true
         run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --filter TestCategory=Playwright_Tests_FireFox -l "console;verbosity=normal" -l "trx;LogFileName=TestResults.trx" --settings MercuryHealth.UITests/MercuryHealthTests.runsettings
 
+      - name: Playwright Tests on Browsers
+        continue-on-error: true
+        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --filter "TestCategory=Playwright_Tests_Chromium|Playwright_Tests_FireFox" -l "console;verbosity=normal" -l "trx;LogFileName=TestResults.trx" --settings MercuryHealth.UITests/MercuryHealthTests.runsettings
+
+      - name: csproj - Playwright Tests on Browsers
+        continue-on-error: true
+        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj --filter "TestCategory=Playwright_Tests_Chromium|Playwright_Tests_FireFox" -l "console;verbosity=normal" -l "trx;LogFileName=TestResults.trx" --settings MercuryHealth.UITests/MercuryHealthTests.runsettings
+
       - name: 'Upload Playwright Test Results-ScreenShots'
         uses: actions/upload-artifact@v2
         if: always()
@@ -305,7 +313,7 @@ jobs:
         if: always()
         with:
           name: MercuryHealth.UITestsResults2
-          path: ${{ github.workspace }}/MercuryHealth.UITests/*.*
+          path: ${{ github.workspace }}/MercuryHealth.UITests/TestResults/*.*
           retention-days: 30
           
 ##################################################################
