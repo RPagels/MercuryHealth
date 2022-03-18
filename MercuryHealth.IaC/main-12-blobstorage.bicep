@@ -11,6 +11,7 @@ resource sa 'Microsoft.Storage/storageAccounts@2019-06-01' = {
   kind: 'StorageV2'
   properties: {
     accessTier: 'Hot'
+    allowBlobPublicAccess: false
   }
 }
 
