@@ -10,12 +10,12 @@ namespace MercuryHealth.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class NutritionsController : ControllerBase
+    public class NutritionsAPIController : ControllerBase
     {
         private readonly MercuryHealthWebContext _context;
         private readonly TelemetryClient telemetry;
 
-        public NutritionsController(MercuryHealthWebContext context, TelemetryClient telemetry)
+        public NutritionsAPIController(MercuryHealthWebContext context, TelemetryClient telemetry)
         {
             _context = context;
             this.telemetry = telemetry;

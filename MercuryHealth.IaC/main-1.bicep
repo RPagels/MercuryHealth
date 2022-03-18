@@ -30,6 +30,8 @@ var functionAppServiceName = 'funcplan-${uniqueString(resourceGroup().id)}'
 var apiServiceName = 'apim-${uniqueString(resourceGroup().id)}'
 var loadTestsName = 'loadtests-${uniqueString(resourceGroup().id)}'
 var keyvaultName = 'kv-${uniqueString(resourceGroup().id)}'
+var blobstorageName = 'stablob-${uniqueString(resourceGroup().id)}'
+var dashboardName = 'dashboard-${uniqueString(resourceGroup().id)}'
 
 // Tags
 var defaultTags = {
@@ -101,7 +103,8 @@ var FeatureFlagValue3 = {
 // ]
 
 // Create AppConfiguration configuration Store
-resource config 'Microsoft.AppConfiguration/configurationStores@2021-03-01-preview' = {
+// enableSoftDelete: false
+resource config 'Microsoft.AppConfiguration/configurationStores@2021-10-01-preview' = {
   name: configStoreName
   location: location
   tags: defaultTags
@@ -251,17 +254,32 @@ module keyvault './main-8-keyvault.bicep' = {
 
 // Create APIM.  NOTE: MUST MOVE THIS. APIM + Azure KeyVault, needs to be in it's own RG + Pipeline
 module apiservicesmod './main-7-apimanagement.bicep' = {
-name: apiServiceName
-params: {
-  location: location
-  apiServiceName: apiServiceName
-  defaultTags: defaultTags
+  name: apiServiceName
+  params: {
+    location: location
+    apiServiceName: apiServiceName
+    defaultTags: defaultTags
+  }
 }
+
+module blogstoragemod './main-12-blobstorage.bicep' = {
+  name: blobstorageName
+  params: {
+    location: location
+     storageAccountName: blobstorageName
+  }
+}
+
+module portaldashboardmod './main-11-Dashboard.bicep' = {
+  name: dashboardName
+  params: {
+    location: location
+    appInsightsName: appInsightsName
+  }
 }
 
 output out_webSiteName string = webSiteName
 output out_webSiteNameURL string = webappmod.outputs.out_webSiteName
-
 output out_sqlserverName string = sqlserverName
 output out_sqlDBName string = sqlDBName
 output out_sqlserverFQName string = sqldbmod.outputs.sqlserverfullyQualifiedDomainName

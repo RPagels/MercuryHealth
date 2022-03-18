@@ -2,7 +2,7 @@
 
 namespace MercuryHealth.Web.Models;
 
-    public class Exercises
+public class Exercises
 {
     public int Id { get; set; }
 
