@@ -1,6 +1,5 @@
 name: Deployment Environment
 
-#
 on:
   workflow_call:
     inputs:
@@ -172,8 +171,7 @@ jobs:
         slot-name: 'production'
         package: './MercuryHealth.FunctionApp'
 
-# --api-key ${{ steps.Infra.outputs.releaseAnnotationId }}
-    - name: Generate Temporary API Key For App Insights
+    - name: 'Generate Temporary API Key For App Insights'
       id: AIKeyGen
       uses: Azure/CLI@v1
       with:
@@ -187,14 +185,14 @@ jobs:
                       --query "apiKey" --output tsv)
           echo "::set-output name=aiKey::$result"
     
-    - name: Consume AI Key For App Insights
-      run: |
-        echo 'out_releaseAnnotationGuidID=${{ steps.Infra.outputs.out_releaseAnnotationGuidID }}'
-        echo 'out_appInsightsApplicationId=${{ steps.Infra.outputs.out_appInsightsApplicationId }}'
-        echo 'out_appInsightsAPIApplicationId=${{ steps.Infra.outputs.out_appInsightsAPIApplicationId }}'
-        echo 'steps.AIKeyGen.outputs.aiKey=${{ steps.AIKeyGen.outputs.aiKey }}'
+#    - name: DEBUG - Infra Outputs across jobs
+#      run: |
+#        echo 'out_releaseAnnotationGuidID=${{ steps.Infra.outputs.out_releaseAnnotationGuidID }}'
+#        echo 'out_appInsightsApplicationId=${{ steps.Infra.outputs.out_appInsightsApplicationId }}'
+#        echo 'out_appInsightsAPIApplicationId=${{ steps.Infra.outputs.out_appInsightsAPIApplicationId }}'
+#        echo 'steps.AIKeyGen.outputs.aiKey=${{ steps.AIKeyGen.outputs.aiKey }}'
         
-    - name: Annotate deployment
+    - name: 'Annotate Deployment'
       uses: wictorwilen/application-insights-action@v1
       id: annotation
       with:
@@ -259,11 +257,11 @@ jobs:
           name: MercuryHealth.UITests
           path: ${{ github.workspace }}/MercuryHealth.UITests
 
-      - name: DEBUG - Infra Outputs across jobs
-        run: |
-           echo 'output1 = ${{needs.deploy_to_environment.outputs.output1}}'
-           echo 'output2 = ${{needs.deploy_to_environment.outputs.output2}}'
-           echo 'output3 = ${{needs.deploy_to_environment.outputs.output3}}'
+#      - name: DEBUG - Infra Outputs across jobs
+#        run: |
+#           echo 'output1 = ${{needs.deploy_to_environment.outputs.output1}}'
+#           echo 'output2 = ${{needs.deploy_to_environment.outputs.output2}}'
+#           echo 'output3 = ${{needs.deploy_to_environment.outputs.output3}}'
            
       # Update Runsettings with Website URL
       - name: Update Runsettings with Website URL
@@ -284,22 +282,37 @@ jobs:
         run: |
          dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }}
          dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './MercuryHealth.UITests'
-#         dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --filter TestCategory=Playwright_Tests_Chromium --verbosity minimal -l "console;verbosity=normal" --settings MercuryHealth.UITests/MercuryHealthTests.runsettings
 
-      - name: Playwright Tests on Chromium
+#      - name: Playwright Tests on Chromium
+#        continue-on-error: true
+#        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --filter TestCategory=Playwright_Tests_Chromium -l "console;verbosity=normal" -l "trx;LogFileName=TestResults.trx" --settings MercuryHealth.UITests/MercuryHealthTests.runsettings
+
+#      - name: Playwright Tests on Firefox
+#        continue-on-error: true
+#        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --filter TestCategory=Playwright_Tests_FireFox -l "console;verbosity=normal" -l "trx;LogFileName=TestResults.trx" --settings MercuryHealth.UITests/MercuryHealthTests.runsettings
+
+#      - name: Playwright Tests on Browsers
+#        continue-on-error: true
+#        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --filter "TestCategory=Playwright_Tests_Chromium|Playwright_Tests_FireFox" -l "console;verbosity=normal" -l "trx;LogFileName=TestResults.trx" --settings MercuryHealth.UITests/MercuryHealthTests.runsettings
+
+      - name: csproj - Playwright Tests on Browsers
         continue-on-error: true
-        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --filter TestCategory=Playwright_Tests_Chromium -l "console;verbosity=normal"  --settings MercuryHealth.UITests/MercuryHealthTests.runsettings
+        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj --filter "TestCategory=Playwright_Tests_Chromium|TestCategory=Playwright_Tests_FireFox" -l "console;verbosity=normal" -l "trx;LogFileName=TestResults.trx" --settings MercuryHealth.UITests/MercuryHealthTests.runsettings
 
-      - name: Playwright Tests on Firefox
-        continue-on-error: true
-        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --filter TestCategory=Playwright_Tests_FireFox -l "console;verbosity=normal" --settings MercuryHealth.UITests/MercuryHealthTests.runsettings
-
-      - name: 'Upload Playwright Test Results'
+      - name: 'Upload Playwright Test Results-ScreenShots'
         uses: actions/upload-artifact@v2
         if: always()
         with:
           name: MercuryHealth.UITestsResults
-          path: MercuryHealth.UITests/MercuryHealth.UITests
+          path: ${{ github.workspace }}/MercuryHealth.UITests/*.png
+          retention-days: 30
+
+      - name: 'Upload Playwright Test Results-Report'
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: MercuryHealth.UITestsResults
+          path: ${{ github.workspace }}/MercuryHealth.UITests/TestResults/
           retention-days: 30
           
 ##################################################################
@@ -309,45 +322,43 @@ jobs:
     # Identify any jobs that must complete successfully before this job will run.
     runs-on: ubuntu-latest
     if: contains(github.event_name, 'push')
-    name: Load Test   
+    name: 'Load Test'   
     env:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
            
     # Identify any jobs that must complete successfully before this job will run.
     needs: [Deploy_to_Environment, UITesting_Stage_Application]
     steps:
-      - name: Checkout GitHub Actions 
+      - name: 'Checkout GitHub Actions'
         uses: actions/checkout@v2
 
       # Download Artifacts under $GITHUB_WORKSPACE, so your job can access it
-      - name: Download Build Artifacts-Load Tests
+      - name: 'Download Build Artifacts-Load Tests'
         uses: actions/download-artifact@v2
         with:
           name: MercuryHealth.LoadTests
           path: ${{ github.workspace }}/MercuryHealth.LoadTests
           
-      - name: Login to Azure
+      - name: 'Login to Azure'
         uses: azure/login@v1
         continue-on-error: false
         with:
           creds: ${{ secrets.azure-credentials }}
 
-      - name: DEBUG - Infra Outputs across jobs
-        run: |
-           echo 'output1 = ${{needs.deploy_to_environment.outputs.output1}}'
-           echo 'output2 = ${{needs.deploy_to_environment.outputs.output2}}'
-           echo 'output3 = ${{needs.deploy_to_environment.outputs.output3}}'
-           echo 'EnvOutput1 = ${{env.EnvOutput1}}'
-           echo 'EnvOutput3 = ${{env.EnvOutput3}}'
+#      - name: DEBUG - Infra Outputs across jobs
+#        run: |
+#           echo 'output1 = ${{needs.deploy_to_environment.outputs.output1}}'
+#           echo 'output2 = ${{needs.deploy_to_environment.outputs.output2}}'
+#           echo 'output3 = ${{needs.deploy_to_environment.outputs.output3}}'
 
       # Assign the Load Test Contributor or Load Test Owner role to your Azure account
-      - name: Assign Azure Role to Load Test Service
-        uses: Azure/CLI@v1
-        continue-on-error: true
-        with:
-          inlineScript: |
-            #!/bin/bash
-            az role assignment create --assignee "rpagels@microsoft.com" --role "Load Test Contributor" --resource-group ${{ env.Azure_Resource_GroupName }}
+#      - name: Assign Azure Role to Load Test Service
+#        uses: Azure/CLI@v1
+#        continue-on-error: true
+#        with:
+#          inlineScript: |
+#            #!/bin/bash
+#            az role assignment create --assignee "rpagels@microsoft.com" --role "Load Test Contributor" --resource-group ${{ env.Azure_Resource_GroupName }}
 
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
@@ -369,10 +380,10 @@ jobs:
         continue-on-error: true
         with:
           name: MercuryHealth.LoadTestsResults
-          path: MercuryHealth.LoadTests/MercuryHealth.LoadTests
+          path: ${{ github.workspace }}/MercuryHealth.LoadTests
           retention-days: 30
           
-      - name: Azure logout
+      - name: 'Azure logout'
         run: |
           az logout
           
@@ -380,7 +391,7 @@ jobs:
 # CD Stage - Dev  
 ###################################################################
   Approval_Stage_Application:
-    if: contains(github.event_name, 'push') && (inputs.approval-required == 'true')
+    if: contains(github.event_name, 'push') && (inputs.approval-required == true)
 
     name: Approval to Next Stage
     
