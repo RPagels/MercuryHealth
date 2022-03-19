@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "6633921393116288595"
+      "templateHash": "16640243706841397741"
     }
   },
   "parameters": {
@@ -136,7 +136,8 @@
       "id": "[parameters('FeatureFlagKey3')]",
       "description": "Description for Nutrition Color.",
       "enabled": false
-    }
+    },
+    "ApimSubscriptionKeyString": "enterPrimaryKeyHere"
   },
   "resources": [
     {
@@ -249,7 +250,10 @@
             "value": "[listKeys(resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName')), '2021-10-01-preview').value[0].connectionString]"
           },
           "ApimSubscriptionKeyString": {
-            "value": "[listSecrets(resourceId('Microsoft.ApiManagement/service', variables('apiServiceName')), '2021-08-01').keys[0].value]"
+            "value": "[variables('ApimSubscriptionKeyString')]"
+          },
+          "ApimWebServiceURL": {
+            "value": "[reference(resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))).gatewayUrl]"
           },
           "sqlserverName": {
             "value": "[variables('sqlserverName')]"
@@ -283,7 +287,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "13943653688736878486"
+              "templateHash": "5243572228092244689"
             }
           },
           "parameters": {
@@ -327,6 +331,9 @@
             },
             "ApimSubscriptionKeyString": {
               "type": "secureString"
+            },
+            "ApimWebServiceURL": {
+              "type": "string"
             },
             "appInsightsInstrumentationKey": {
               "type": "string"
@@ -380,6 +387,7 @@
               "properties": {
                 "ConnectionStrings:MercuryHealthWebContext": "[format('Server=tcp:{0},1433;Initial Catalog={1};Persist Security Info=False;User Id={2}@{3};Password={4};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;', parameters('sqlserverfullyQualifiedDomainName'), parameters('sqlDBName'), parameters('sqlAdministratorLogin'), parameters('sqlserverName'), parameters('sqlAdministratorLoginPassword'))]",
                 "ApimSubscriptionKey": "[parameters('ApimSubscriptionKeyString')]",
+                "ApimWebServiceURL": "[parameters('ApimWebServiceURL')]",
                 "ConnectionStrings:AppConfig": "[parameters('configStoreConnection')]",
                 "Environment": "Prod",
                 "WEBSITE_RUN_FROM_PACKAGE": "1",
@@ -724,7 +732,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "3022747920377722659"
+              "templateHash": "8325329208707907764"
             }
           },
           "parameters": {
@@ -808,18 +816,18 @@
                 },
                 "actions": [
                   {
-                    "actionGroupId": "[resourceId('microsoft.insights/actionGroups', format('ag--{0}', uniqueString(resourceGroup().id)))]"
+                    "actionGroupId": "[resourceId('Microsoft.Insights/actionGroups', format('ag--{0}', uniqueString(resourceGroup().id)))]"
                   }
                 ]
               },
               "dependsOn": [
                 "[resourceId('Microsoft.Insights/components', parameters('appInsightsName'))]",
-                "[resourceId('microsoft.insights/actionGroups', format('ag--{0}', uniqueString(resourceGroup().id)))]"
+                "[resourceId('Microsoft.Insights/actionGroups', format('ag--{0}', uniqueString(resourceGroup().id)))]"
               ]
             },
             {
-              "type": "microsoft.insights/actionGroups",
-              "apiVersion": "2019-06-01",
+              "type": "Microsoft.Insights/actionGroups",
+              "apiVersion": "2021-09-01",
               "name": "[format('ag--{0}', uniqueString(resourceGroup().id))]",
               "location": "global",
               "properties": {
@@ -1613,230 +1621,6 @@
               "name": "[format('{0}/default/{1}', parameters('storageAccountName'), parameters('containerName'))]",
               "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
-              ]
-            }
-          ]
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-06-01",
-      "name": "[variables('dashboardName')]",
-      "properties": {
-        "expressionEvaluationOptions": {
-          "scope": "inner"
-        },
-        "mode": "Incremental",
-        "parameters": {
-          "location": {
-            "value": "[parameters('location')]"
-          },
-          "appInsightsName": {
-            "value": "[variables('appInsightsName')]"
-          },
-          "dashboardName": {
-            "value": "[variables('dashboardName')]"
-          }
-        },
-        "template": {
-          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-          "contentVersion": "1.0.0.0",
-          "metadata": {
-            "_generator": {
-              "name": "bicep",
-              "version": "0.4.1008.15138",
-              "templateHash": "6367675932646007162"
-            }
-          },
-          "parameters": {
-            "location": {
-              "type": "string",
-              "defaultValue": "[resourceGroup().location]"
-            },
-            "appInsightsName": {
-              "type": "string"
-            },
-            "dashboardName": {
-              "type": "string"
-            }
-          },
-          "functions": [],
-          "resources": [
-            {
-              "type": "Microsoft.Insights/components",
-              "apiVersion": "2018-05-01-preview",
-              "name": "[parameters('appInsightsName')]",
-              "location": "[parameters('location')]",
-              "kind": "web",
-              "properties": {
-                "Application_Type": "web"
-              }
-            },
-            {
-              "type": "Microsoft.Portal/dashboards",
-              "apiVersion": "2015-08-01-preview",
-              "name": "[parameters('dashboardName')]",
-              "location": "[parameters('location')]",
-              "tags": {
-                "hidden-title": "Mercury Health Sample Dashboard"
-              },
-              "properties": {
-                "lenses": {
-                  "0": {
-                    "order": 0,
-                    "parts": {
-                      "0": {
-                        "position": {
-                          "colSpan": 10,
-                          "rowSpan": 5,
-                          "x": 0,
-                          "y": 0
-                        },
-                        "metadata": {
-                          "type": "Extension/Microsoft_OperationsManagementSuite_Workspace/PartType/LogsDashboardPart",
-                          "inputs": [
-                            {
-                              "name": "Scope",
-                              "value": {
-                                "resourceIds": [
-                                  "[resourceId('Microsoft.Insights/components', parameters('appInsightsName'))]"
-                                ]
-                              }
-                            },
-                            {
-                              "name": "Dimensions",
-                              "value": {
-                                "xAxis": {
-                                  "name": "timestamp",
-                                  "type": "datetime"
-                                },
-                                "yAxis": [
-                                  {
-                                    "name": "Number of Requests",
-                                    "type": "long"
-                                  }
-                                ],
-                                "splitBy": [
-                                  {
-                                    "name": "operation_Name",
-                                    "type": "string"
-                                  }
-                                ],
-                                "aggregation": "Sum"
-                              }
-                            },
-                            {
-                              "name": "PartId",
-                              "value": "[guid(resourceGroup().name, 'part0')]"
-                            },
-                            {
-                              "name": "Version",
-                              "value": "2.0"
-                            },
-                            {
-                              "name": "TimeRange",
-                              "value": "PT30M"
-                            },
-                            {
-                              "name": "Query",
-                              "value": "set query_bin_auto_size=5m;\r\nrequests\r\n| summarize ['Number of Requests']=count() by operation_Name, bin_auto(timestamp)\r\n| render areachart"
-                            },
-                            {
-                              "name": "PartTitle",
-                              "value": "Forwarded Requests per Backend"
-                            },
-                            {
-                              "name": "PartSubTitle",
-                              "value": "On 5-Minute aggregation"
-                            },
-                            {
-                              "name": "ControlType",
-                              "value": "FrameControlChart"
-                            },
-                            {
-                              "name": "SpecificChart",
-                              "value": "StackedArea"
-                            }
-                          ]
-                        }
-                      },
-                      "1": {
-                        "position": {
-                          "colSpan": 6,
-                          "rowSpan": 5,
-                          "x": 10,
-                          "y": 0
-                        },
-                        "metadata": {
-                          "type": "Extension/Microsoft_OperationsManagementSuite_Workspace/PartType/LogsDashboardPart",
-                          "inputs": [
-                            {
-                              "name": "Scope",
-                              "value": {
-                                "resourceIds": [
-                                  "[resourceId('Microsoft.Insights/components', parameters('appInsightsName'))]"
-                                ]
-                              }
-                            },
-                            {
-                              "name": "Dimensions",
-                              "value": {
-                                "xAxis": {
-                                  "name": "Region",
-                                  "type": "string"
-                                },
-                                "yAxis": [
-                                  {
-                                    "name": "Count",
-                                    "type": "long"
-                                  }
-                                ],
-                                "splitBy": [],
-                                "aggregation": "Sum"
-                              }
-                            },
-                            {
-                              "name": "PartId",
-                              "value": "[guid(resourceGroup().name, 'part1')]"
-                            },
-                            {
-                              "name": "Version",
-                              "value": "2.0"
-                            },
-                            {
-                              "name": "TimeRange",
-                              "value": "PT30M"
-                            },
-                            {
-                              "name": "Query",
-                              "value": "requests\r\n| summarize Count=count() by Region=client_CountryOrRegion\r\n| render piechart"
-                            },
-                            {
-                              "name": "PartTitle",
-                              "value": "Requests by Client Region"
-                            },
-                            {
-                              "name": "PartSubTitle",
-                              "value": "A cool pie chart"
-                            },
-                            {
-                              "name": "ControlType",
-                              "value": "FrameControlChart"
-                            },
-                            {
-                              "name": "SpecificChart",
-                              "value": "Pie"
-                            }
-                          ]
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Insights/components', parameters('appInsightsName'))]"
               ]
             }
           ]

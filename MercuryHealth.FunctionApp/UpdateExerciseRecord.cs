@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using MercuryHealth.Web.Models;
+using Microsoft.ApplicationInsights;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 
@@ -12,16 +13,14 @@ namespace MercuryHealth.FunctionApp;
 public class UpdateExerciseRecord
 {
     private static string ApimSubscriptionKey = System.Environment.GetEnvironmentVariable("ApimSubscriptionKey");
+    private static string ApimWebServiceURL = System.Environment.GetEnvironmentVariable("ApimWebServiceURL");
 
-    // TESTING ONLY
-   // private static string WebAppUrl = System.Environment.GetEnvironmentVariable("WebAppUrl");
+    private readonly TelemetryClient telemetry;
 
-    //private readonly TelemetryClient telemetry;
-
-    //public UpdateNutritionRecord(TelemetryClient telemetry)
-    //{
-    //    this.telemetry = telemetry;
-    //}
+    public UpdateExerciseRecord(TelemetryClient telemetry)
+    {
+        this.telemetry = telemetry;
+    }
 
     [FunctionName("UpdateExerciseRecord")]
     public async Task RunAsync([TimerTrigger("0 */20 * * * *")] TimerInfo myTimer, ILogger log)
@@ -39,8 +38,8 @@ public class UpdateExerciseRecord
             client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", ApimSubscriptionKey);
 
             // Hard code record # 25
-            var uri = "https://rpagels-apim.azure-api.net/api/Exercises/25";
-            //var uri = WebAppUrl + "api/Exercises/25";
+            //var uri = "https://apim-fq3ruuhxgjony.azure-api.net/api/Exercises/25";
+            var uri = ApimWebServiceURL + "/api/Exercises/25";
 
             var response = await client.GetAsync(uri);
             response.EnsureSuccessStatusCode();
@@ -77,7 +76,7 @@ public class UpdateExerciseRecord
             }
 
             // Application Insights - Track Events
-            //telemetry.TrackEvent("TrackEvent-Exercise API Update " + exercise.Name.ToString() + " " + exercise.Description);
+            telemetry.TrackEvent("TrackEvent-Exercise API Update " + exercise.Name.ToString() + " " + exercise.Description);
 
         }
         catch (Exception)

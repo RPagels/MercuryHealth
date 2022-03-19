@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using MercuryHealth.Web.Models;
+using Microsoft.ApplicationInsights;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 
@@ -16,12 +17,12 @@ public class UpdateNutritionRecord
     // TESTING ONLY
     //private static string WebAppUrl = System.Environment.GetEnvironmentVariable("WebAppUrl");
 
-    //private readonly TelemetryClient telemetry;
+    private readonly TelemetryClient telemetry;
 
-    //public UpdateNutritionRecord(TelemetryClient telemetry)
-    //{
-    //    this.telemetry = telemetry;
-    //}
+    public UpdateNutritionRecord(TelemetryClient telemetry)
+    {
+        this.telemetry = telemetry;
+    }
 
     [FunctionName("UpdateNutritionRecord")]
     //public void Run([TimerTrigger("0 */5 * * * *")]TimerInfo myTimer, ILogger log)
@@ -40,10 +41,7 @@ public class UpdateNutritionRecord
             client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", ApimSubscriptionKey);
 
             // Hard code record # 25
-            // Eable once API;s work!!!
-            var uri = "https://rpagels-apim.azure-api.net/api/Nutritions/25";
-            //var uri = "https://website-4vwxkvpofrtbq-dev.azurewebsites.net/Nutritions/Edit/25";
-            //var uri = WebAppUrl + "api/Nutritions/25";
+            var uri = "https://apim-fq3ruuhxgjony.azure-api.net/api/Nutritions/25";
 
             var response = await client.GetAsync(uri);
             response.EnsureSuccessStatusCode();
@@ -77,7 +75,7 @@ public class UpdateNutritionRecord
             }
 
             // Application Insights - Track Events
-            //telemetry.TrackEvent("TrackEvent-Nutrition API Update " + nutrition.Id.ToString() + " " + nutrition.Description);
+            telemetry.TrackEvent("TrackEvent-Nutrition API Update " + nutrition.Id.ToString() + " " + nutrition.Description);
 
         }
         catch (Exception)
