@@ -174,7 +174,7 @@ jobs:
     uses: ./.github/workflows/deploy-environment.yml
     with:
       resource-group-base-name: 'rg-MercuryHealth'
-      environment-suffix: 'dev2'
+      environment-suffix: 'dev'
       resource-group-location: 'eastus2'
       approval-required: true
     secrets:
