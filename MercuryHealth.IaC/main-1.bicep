@@ -216,7 +216,6 @@ resource apiManagement 'Microsoft.ApiManagement/service@2021-08-01' = {
 var ApimSubscriptionKeyString = apiManagement.listSecrets().keys[0].value
 
 
-
 // Create Web App
 module webappmod './main-2-webapp.bicep' = {
   name: 'webappdeploy'
@@ -344,3 +343,6 @@ output out_keyvaultName string = keyvaultName
 output out_appInsightsApplicationId string = appinsightsmod.outputs.out_appInsightsApplicationId
 output out_appInsightsAPIApplicationId string = appinsightsmod.outputs.out_appInsightsAPIApplicationId
 output out_releaseAnnotationGuidID string = releaseAnnotationGuid
+
+//test only
+//output out_apiManagementKey string = apiManagement.properties.gatewayUrl
