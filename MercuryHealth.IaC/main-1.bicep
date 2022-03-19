@@ -199,7 +199,7 @@ resource apiManagement 'Microsoft.ApiManagement/service@2020-12-01' = {
 //   name: apiServiceName
 // }
 var ApimSubscriptionKeyString = listKeys(apiManagement.id, apiManagement.apiVersion).value[0].connectionString
-var ApimSubscriptionKeyString2 = listKeys(apiManagement.id, apiManagement.apiVersion).keys[0].value
+//var ApimSubscriptionKeyString2 = listKeys(apiManagement.id, apiManagement.apiVersion).keys[0].value
 
 // Create Web App
 module webappmod './main-2-webapp.bicep' = {
