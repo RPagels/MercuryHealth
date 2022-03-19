@@ -69,7 +69,7 @@ resource metricAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
   }
 }
 
-resource emailActionGroup 'microsoft.insights/actionGroups@2019-06-01' = {
+resource emailActionGroup 'Microsoft.Insights/actionGroups@2021-09-01' = {
   name: 'ag--${uniqueString(resourceGroup().id)}' //'emailActionGroup'
   location: 'global'
   properties: {

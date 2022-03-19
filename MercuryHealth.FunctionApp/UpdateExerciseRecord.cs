@@ -14,7 +14,7 @@ public class UpdateExerciseRecord
     private static string ApimSubscriptionKey = System.Environment.GetEnvironmentVariable("ApimSubscriptionKey");
 
     // TESTING ONLY
-    private static string WebAppUrl = System.Environment.GetEnvironmentVariable("WebAppUrl");
+   // private static string WebAppUrl = System.Environment.GetEnvironmentVariable("WebAppUrl");
 
     //private readonly TelemetryClient telemetry;
 
@@ -39,8 +39,8 @@ public class UpdateExerciseRecord
             client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", ApimSubscriptionKey);
 
             // Hard code record # 25
-            // uri = "https://rpagels-apim.azure-api.net/api/Exercises/25";
-            var uri = WebAppUrl + "api/Exercises/25";
+            var uri = "https://rpagels-apim.azure-api.net/api/Exercises/25";
+            //var uri = WebAppUrl + "api/Exercises/25";
 
             var response = await client.GetAsync(uri);
             response.EnsureSuccessStatusCode();

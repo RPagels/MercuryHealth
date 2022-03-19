@@ -15,7 +15,7 @@ public class InsertNutritionRecord_WrongKey
     private static string ApimSubscriptionKey = System.Environment.GetEnvironmentVariable("ApimSubscriptionKey");
 
     // TESTING ONLY
-    private static string WebAppUrl = System.Environment.GetEnvironmentVariable("WebAppUrl");
+    //private static string WebAppUrl = System.Environment.GetEnvironmentVariable("WebAppUrl");
 
     [FunctionName("InsertNutritionRecord_WrongKey")]
     public async Task RunAsync([TimerTrigger("0 0 */12 * * *")] TimerInfo myTimer, ILogger log)
@@ -31,8 +31,8 @@ public class InsertNutritionRecord_WrongKey
         // Request headers with APIM Key retrieved from Azure KeyVault
         client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", ApimSubscriptionKey + "XYZ");
 
-        //var uri = "https://rpagels-apim.azure-api.net/api/Nutritions?" + queryString;
-        var uri = WebAppUrl + "api/Nutritions?" + queryString;
+        var uri = "https://rpagels-apim.azure-api.net/api/Nutritions?" + queryString;
+        //var uri = WebAppUrl + "api/Nutritions?" + queryString;
 
         HttpResponseMessage response;
 
