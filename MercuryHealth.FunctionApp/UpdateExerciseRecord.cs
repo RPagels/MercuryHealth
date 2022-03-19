@@ -41,6 +41,8 @@ public class UpdateExerciseRecord
             //var uri = "https://apim-fq3ruuhxgjony.azure-api.net/api/Exercises/25";
             var uri = ApimWebServiceURL + "/api/Exercises/25";
 
+            log.LogInformation($"uri: {uri}");
+
             var response = await client.GetAsync(uri);
             response.EnsureSuccessStatusCode();
             string responseBody = await response.Content.ReadAsStringAsync();

@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "16136976502972815130"
+      "templateHash": "4493593338496253083"
     }
   },
   "parameters": {
@@ -112,6 +112,7 @@
     "functionAppName": "[format('func-{0}', uniqueString(resourceGroup().id))]",
     "functionAppServiceName": "[format('funcplan-{0}', uniqueString(resourceGroup().id))]",
     "apiServiceName": "[format('apim-{0}', uniqueString(resourceGroup().id))]",
+    "apiSubscriptionName": "[format('apimsub-{0}', uniqueString(resourceGroup().id))]",
     "loadTestsName": "[format('loadtests-{0}', uniqueString(resourceGroup().id))]",
     "keyvaultName": "[format('kv-{0}', uniqueString(resourceGroup().id))]",
     "blobstorageName": "[format('stablob{0}', uniqueString(resourceGroup().id))]",
@@ -136,8 +137,7 @@
       "id": "[parameters('FeatureFlagKey3')]",
       "description": "Description for Nutrition Color.",
       "enabled": false
-    },
-    "ApimSubscriptionKeyString": "enterPrimaryKeyHere"
+    }
   },
   "resources": [
     {
@@ -220,6 +220,18 @@
       "identity": {
         "type": "SystemAssigned"
       }
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/subscriptions",
+      "apiVersion": "2021-08-01",
+      "name": "[format('{0}/{1}', variables('apiServiceName'), variables('apiSubscriptionName'))]",
+      "properties": {
+        "scope": "/apis",
+        "displayName": "[variables('apiSubscriptionName')]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]"
+      ]
     },
     {
       "type": "Microsoft.Resources/deployments",
@@ -611,7 +623,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "13379607039137218547"
+              "templateHash": "8160911054246927416"
             }
           },
           "parameters": {
@@ -655,8 +667,8 @@
               "location": "[parameters('location')]",
               "tags": "[parameters('defaultTags')]",
               "sku": {
-                "name": "Basic",
-                "tier": "Basic"
+                "name": "Standard",
+                "tier": "Standard"
               },
               "dependsOn": [
                 "[resourceId('Microsoft.Sql/servers', parameters('sqlserverName'))]"
@@ -875,7 +887,7 @@
             "value": "[variables('defaultTags')]"
           },
           "ApimSubscriptionKey": {
-            "value": "[variables('ApimSubscriptionKeyString')]"
+            "value": "[listSecrets(resourceId('Microsoft.ApiManagement/service/subscriptions', variables('apiServiceName'), variables('apiSubscriptionName')), '2021-08-01').primaryKey]"
           },
           "ApimWebServiceURL": {
             "value": "[reference(resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))).gatewayUrl]"
@@ -1155,6 +1167,7 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]",
+        "[resourceId('Microsoft.ApiManagement/service/subscriptions', variables('apiServiceName'), variables('apiSubscriptionName'))]",
         "[resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')]"
       ]
     },

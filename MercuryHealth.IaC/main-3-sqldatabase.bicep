@@ -22,8 +22,8 @@ resource sqlDB 'Microsoft.Sql/servers/databases@2021-08-01-preview' = {
   location: location
   tags: defaultTags
   sku: {
-    name: 'Basic' //'Standard'
-    tier: 'Basic' //'Standard'
+    name: 'Standard' //'Basic'
+    tier: 'Standard' //'Basic'
   }
 }
 

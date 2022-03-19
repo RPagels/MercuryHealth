@@ -28,6 +28,7 @@ var appInsightsAlertName = 'ResponseTime-${uniqueString(resourceGroup().id)}'
 var functionAppName = 'func-${uniqueString(resourceGroup().id)}'
 var functionAppServiceName = 'funcplan-${uniqueString(resourceGroup().id)}'
 var apiServiceName = 'apim-${uniqueString(resourceGroup().id)}'
+var apiSubscriptionName = 'apimsub-${uniqueString(resourceGroup().id)}'
 var loadTestsName = 'loadtests-${uniqueString(resourceGroup().id)}'
 var keyvaultName = 'kv-${uniqueString(resourceGroup().id)}'
 var blobstorageName = 'stablob${uniqueString(resourceGroup().id)}'
@@ -194,48 +195,22 @@ resource apiManagement 'Microsoft.ApiManagement/service@2021-08-01' = {
   }
 }
 
-// resource apiManagementlogger 'Microsoft.ApiManagement/service/loggers@2021-08-01' = {
-//   name: '${apiServiceName}-logger'
-//   parent: apiManagement
-//   properties: {
-//     credentials: appinsightsmod.outputs.out_appInsightsInstrumentationKey
-//     description: 'Randy'
-//     isBuffered: false
-//     loggerType: 'applicationInsights'
-//     resourceId: 'string'
-//   }
-// }
+resource apiManagementSubscription 'Microsoft.ApiManagement/service/subscriptions@2021-08-01' = {
+  parent: apiManagement
+  name: apiSubscriptionName
+  properties: {
+    scope: '/apis' // Subscription applies to all APIs
+    displayName: apiSubscriptionName
+  }
+}
 
 // API Management - Avoid outputs for secrets - Look up secrets dynamically
 // Note: This is why API Management isn't it's own module...MUST be in the main
 // resource apiManagement 'Microsoft.ApiManagement/service@2020-12-01' existing = {
 //   name: apiServiceName
 // }
-//var ApimSubscriptionKeyString = listKeys(apiManagement.id, apiManagement.apiVersion).value[0].connectionString
-//var ApimSubscriptionKeyString = 'tesing'
-//var ApimSubscriptionKeyString = listKeys(apiManagement.id, apiManagement.apiVersion).primaryConnectionString
-//var ApimSubscriptionKeyString = apiManagement.listKeys().keys[0].value
 
-// This worked!
-//var ApimSubscriptionKeyString = 'not working'
-
-// Test 2
-//var ApimSubscriptionKeyString = apiManagement.listKeys().keys[0].value
-
-// Test 3
-//var ApimSubscriptionKeyString = listKeys(apiManagement.id, apiManagement.apiVersion).value[0].value
-
-// Test 4
-//var ApimSubscriptionKeyString = apiManagement.listSecrets().keys[0].value
-
-// Test 5
-//var ApimSubscriptionKeyString = apiManagement.properties.gatewayUrl
-
-// Test 6
-//var ApimSubscriptionKeyString = listSecrets(apiManagement.id, apiManagement.apiVersion).value[0].value
-
-// Test 7
-var ApimSubscriptionKeyString = 'enterPrimaryKeyHere'
+var ApimSubscriptionKeyString = apiManagementSubscription.listSecrets().primaryKey
 
 
 // Create Web App

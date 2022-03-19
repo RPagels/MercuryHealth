@@ -26,8 +26,7 @@ public class UpdateNutritionRecord
     }
 
     [FunctionName("UpdateNutritionRecord")]
-    //public void Run([TimerTrigger("0 */5 * * * *")]TimerInfo myTimer, ILogger log)
-    public async Task RunAsync([TimerTrigger("0 */10 * * * *")] TimerInfo myTimer, ILogger log)
+    public async Task RunAsync([TimerTrigger("0 */5 * * * *")] TimerInfo myTimer, ILogger log)
     {
 
         try
@@ -43,6 +42,7 @@ public class UpdateNutritionRecord
 
             // Hard code record # 25
             var uri = ApimWebServiceURL + "/api/Nutritions/25";
+            log.LogInformation($"uri: {uri}");
 
             var response = await client.GetAsync(uri);
             response.EnsureSuccessStatusCode();
