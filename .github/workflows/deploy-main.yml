@@ -166,7 +166,7 @@ jobs:
 #        run: |
 #          az logout
           
-  dev2:
+  dev:
     if: contains(github.event_name, 'push')
     needs: Build_Application
     uses: ./.github/workflows/deploy-environment.yml
@@ -184,7 +184,7 @@ jobs:
 
   qa:
       if: contains(github.event_name, 'push')
-      needs: [Build_Application, dev2]
+      needs: [Build_Application, dev]
       uses: ./.github/workflows/deploy-environment.yml
       with:
         resource-group-base-name: 'rg-MercuryHealth'
