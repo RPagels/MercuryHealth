@@ -15,7 +15,7 @@ resource dashboard 'Microsoft.Portal/dashboards@2015-08-01-preview' = {
   name: dashboardName
   location: location
   tags: {
-    'hidden-title': 'Bicep Sample Dashboard'
+    'hidden-title': 'Mercury Health Sample Dashboard'
   }
   properties: {
     lenses: {

@@ -202,7 +202,15 @@ resource apiManagement 'Microsoft.ApiManagement/service@2021-08-01' = {
 //var ApimSubscriptionKeyString = 'tesing'
 //var ApimSubscriptionKeyString = listKeys(apiManagement.id, apiManagement.apiVersion).primaryConnectionString
 //var ApimSubscriptionKeyString = apiManagement.listKeys().keys[0].value
-var ApimSubscriptionKeyString = 'not working'
+
+// This worked!
+//var ApimSubscriptionKeyString = 'not working'
+
+// Test 2
+var ApimSubscriptionKeyString = apiManagement.listKeys().keys[0].value
+
+// Test 3
+//var ApimSubscriptionKeyString = listKeys(apiManagement.id, apiManagement.apiVersion).value[0].value
 
 
 // Create Web App
@@ -308,14 +316,14 @@ module blogstoragemod './main-12-blobstorage.bicep' = {
   }
 }
 
-// module portaldashboardmod './main-11-Dashboard.bicep' = {
-//   name: dashboardName
-//   params: {
-//     location: location
-//     appInsightsName: appInsightsName
-//     dashboardName: dashboardName
-//   }
-// }
+module portaldashboardmod './main-11-Dashboard.bicep' = {
+  name: dashboardName
+  params: {
+    location: location
+    appInsightsName: appInsightsName
+    dashboardName: dashboardName
+  }
+}
 
 output out_webSiteName string = webSiteName
 output out_webSiteNameURL string = webappmod.outputs.out_webSiteName
