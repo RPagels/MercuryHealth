@@ -165,23 +165,39 @@ resource configStoreName_appconfig_featureflags_3 'Microsoft.AppConfiguration/co
 // END - Setup Config Store
 ////////////////////////////////////////
 
-// Create APIM.  NOTE: MUST MOVE THIS. APIM + Azure KeyVault, needs to be in it's own RG + Pipeline
-module apiservicesmod './main-7-apimanagement.bicep' = {
+// AppConfiguration - Avoid outputs for secrets - Look up secrets dynamically
+// Note: This is why ConfigStore isn't it's own module...MUST be in the main
+var configStoreConnectionString = listKeys(config.id, config.apiVersion).value[0].connectionString
+
+@minLength(1)
+param publisherEmail string = 'rpagels@microsoft.com'
+@minLength(1)
+param publisherName string = 'Randy Pagels'
+param sku string = 'Consumption'
+param skuCount int = 0 // Must be Zero for Consumption
+
+resource apiManagement 'Microsoft.ApiManagement/service@2020-12-01' = {
   name: apiServiceName
-  params: {
-    location: location
-    apiServiceName: apiServiceName
-    defaultTags: defaultTags
+  location: location
+  tags: defaultTags
+  sku: {
+    name: sku
+    capacity: skuCount
+  }
+  properties: {
+    publisherEmail: publisherEmail
+    publisherName: publisherName
+  }
+  identity: {
+    type: 'SystemAssigned'
   }
 }
 
-// AppConfiguration - Avoid outputs for secrets - Look up secrets dynamically
-var configStoreConnectionString = listKeys(config.id, config.apiVersion).value[0].connectionString
-
 // API Management - Avoid outputs for secrets - Look up secrets dynamically
-resource apiManagement 'Microsoft.ApiManagement/service@2020-12-01' existing = {
-  name: apiServiceName
-}
+// Note: This is why API Management isn't it's own module...MUST be in the main
+// resource apiManagement 'Microsoft.ApiManagement/service@2020-12-01' existing = {
+//   name: apiServiceName
+// }
 var ApimSubscriptionKeyString = listKeys(apiManagement.id, apiManagement.apiVersion).value[0].connectionString
 var ApimSubscriptionKeyString2 = listKeys(apiManagement.id, apiManagement.apiVersion).keys[0].value
 
@@ -206,9 +222,6 @@ module webappmod './main-2-webapp.bicep' = {
     appInsightsConnectionString: appinsightsmod.outputs.out_appInsightsConnectionString
     defaultTags: defaultTags
   }
-  dependsOn: [
-    apiManagement
-  ]
 }
 
 // Create SQL database
