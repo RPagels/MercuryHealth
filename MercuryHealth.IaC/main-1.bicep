@@ -213,7 +213,16 @@ resource apiManagement 'Microsoft.ApiManagement/service@2021-08-01' = {
 //var ApimSubscriptionKeyString = listKeys(apiManagement.id, apiManagement.apiVersion).value[0].value
 
 // Test 4
-var ApimSubscriptionKeyString = apiManagement.listSecrets().keys[0].value
+//var ApimSubscriptionKeyString = apiManagement.listSecrets().keys[0].value
+
+// Test 5
+//var ApimSubscriptionKeyString = apiManagement.properties.gatewayUrl
+
+// Test 6
+var ApimSubscriptionKeyString = listSecrets(apiManagement.id, apiManagement.apiVersion).value[0].value
+
+// Test 7
+//var ApimSubscriptionKeyString = 'enterPrimaryKeyHere'
 
 
 // Create Web App
