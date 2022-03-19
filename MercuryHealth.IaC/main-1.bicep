@@ -176,7 +176,7 @@ param publisherName string = 'Randy Pagels'
 param sku string = 'Consumption'
 param skuCount int = 0 // Must be Zero for Consumption
 
-resource apiManagement 'Microsoft.ApiManagement/service@2020-12-01' = {
+resource apiManagement 'Microsoft.ApiManagement/service@2021-08-01' = {
   name: apiServiceName
   location: location
   tags: defaultTags
@@ -200,9 +200,9 @@ resource apiManagement 'Microsoft.ApiManagement/service@2020-12-01' = {
 // }
 //var ApimSubscriptionKeyString = listKeys(apiManagement.id, apiManagement.apiVersion).value[0].connectionString
 //var ApimSubscriptionKeyString = 'tesing'
-var ApimSubscriptionKeyString = listKeys(apiManagement.id, apiManagement.apiVersion).primaryConnectionString
+//var ApimSubscriptionKeyString = listKeys(apiManagement.id, apiManagement.apiVersion).primaryConnectionString
+var ApimSubscriptionKeyString = apiManagement.listKeys().keys[0].value
 
-//var ApimSubscriptionKeyString2 = listKeys(apiManagement.id, apiManagement.apiVersion).keys[0].value
 
 // Create Web App
 module webappmod './main-2-webapp.bicep' = {
@@ -215,7 +215,6 @@ module webappmod './main-2-webapp.bicep' = {
     location: location
     configStoreConnection: configStoreConnectionString
     ApimSubscriptionKeyString: ApimSubscriptionKeyString
-    //ApimSubscriptionKeyString2: ApimSubscriptionKeyString2
     sqlserverName: sqlserverName
     sqlserverfullyQualifiedDomainName: sqldbmod.outputs.sqlserverfullyQualifiedDomainName
     sqlDBName: sqlDBName
