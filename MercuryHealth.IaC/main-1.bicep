@@ -165,6 +165,16 @@ resource configStoreName_appconfig_featureflags_3 'Microsoft.AppConfiguration/co
 // END - Setup Config Store
 ////////////////////////////////////////
 
+// Create APIM.  NOTE: MUST MOVE THIS. APIM + Azure KeyVault, needs to be in it's own RG + Pipeline
+module apiservicesmod './main-7-apimanagement.bicep' = {
+  name: apiServiceName
+  params: {
+    location: location
+    apiServiceName: apiServiceName
+    defaultTags: defaultTags
+  }
+}
+
 // AppConfiguration - Avoid outputs for secrets - Look up secrets dynamically
 var configStoreConnectionString = listKeys(config.id, config.apiVersion).value[0].connectionString
 
@@ -264,15 +274,15 @@ module keyvault './main-8-keyvault.bicep' = {
    }
 }
 
-// Create APIM.  NOTE: MUST MOVE THIS. APIM + Azure KeyVault, needs to be in it's own RG + Pipeline
-module apiservicesmod './main-7-apimanagement.bicep' = {
-  name: apiServiceName
-  params: {
-    location: location
-    apiServiceName: apiServiceName
-    defaultTags: defaultTags
-  }
-}
+// // Create APIM.  NOTE: MUST MOVE THIS. APIM + Azure KeyVault, needs to be in it's own RG + Pipeline
+// module apiservicesmod './main-7-apimanagement.bicep' = {
+//   name: apiServiceName
+//   params: {
+//     location: location
+//     apiServiceName: apiServiceName
+//     defaultTags: defaultTags
+//   }
+// }
 
 module blogstoragemod './main-12-blobstorage.bicep' = {
   name: blobstorageName
