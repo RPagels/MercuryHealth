@@ -196,6 +196,9 @@ module webappmod './main-2-webapp.bicep' = {
     appInsightsConnectionString: appinsightsmod.outputs.out_appInsightsConnectionString
     defaultTags: defaultTags
   }
+  dependsOn: [
+    apiManagement
+  ]
 }
 
 // Create SQL database
