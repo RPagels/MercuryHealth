@@ -201,7 +201,8 @@ resource apiManagement 'Microsoft.ApiManagement/service@2021-08-01' = {
 //var ApimSubscriptionKeyString = listKeys(apiManagement.id, apiManagement.apiVersion).value[0].connectionString
 //var ApimSubscriptionKeyString = 'tesing'
 //var ApimSubscriptionKeyString = listKeys(apiManagement.id, apiManagement.apiVersion).primaryConnectionString
-var ApimSubscriptionKeyString = apiManagement.listKeys().keys[0].value
+//var ApimSubscriptionKeyString = apiManagement.listKeys().keys[0].value
+var ApimSubscriptionKeyString = 'not working'
 
 
 // Create Web App

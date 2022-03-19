@@ -17,13 +17,13 @@ resource sqlServer 'Microsoft.Sql/servers@2021-02-01-preview' = {
   }
 }
 
-resource sqlDB 'Microsoft.Sql/servers/databases@2021-02-01-preview' = {
+resource sqlDB 'Microsoft.Sql/servers/databases@2021-08-01-preview' = {
   name: '${sqlServer.name}/${sqlDBName}'
   location: location
   tags: defaultTags
   sku: {
-    name: 'Standard'
-    tier: 'Standard'
+    name: 'Basic' //'Standard'
+    tier: 'Basic' //'Standard'
   }
 }
 
