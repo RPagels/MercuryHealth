@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "1262470868599684620"
+      "templateHash": "17869780484549569937"
     }
   },
   "parameters": {
@@ -251,9 +251,6 @@
           "ApimSubscriptionKeyString": {
             "value": "[listKeys(resourceId('Microsoft.ApiManagement/service', variables('apiServiceName')), '2020-12-01').value[0].connectionString]"
           },
-          "ApimSubscriptionKeyString2": {
-            "value": "[listKeys(resourceId('Microsoft.ApiManagement/service', variables('apiServiceName')), '2020-12-01').keys[0].value]"
-          },
           "sqlserverName": {
             "value": "[variables('sqlserverName')]"
           },
@@ -286,7 +283,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "5553061372718856070"
+              "templateHash": "16827582344378280041"
             }
           },
           "parameters": {
@@ -331,11 +328,8 @@
             "ApimSubscriptionKeyString": {
               "type": "secureString"
             },
-            "ApimSubscriptionKeyString2": {
-              "type": "secureString"
-            },
             "appInsightsInstrumentationKey": {
-              "type": "string"
+              "type": "secureString"
             },
             "appInsightsConnectionString": {
               "type": "string"
@@ -386,7 +380,6 @@
               "properties": {
                 "ConnectionStrings:MercuryHealthWebContext": "[format('Server=tcp:{0},1433;Initial Catalog={1};Persist Security Info=False;User Id={2}@{3};Password={4};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;', parameters('sqlserverfullyQualifiedDomainName'), parameters('sqlDBName'), parameters('sqlAdministratorLogin'), parameters('sqlserverName'), parameters('sqlAdministratorLoginPassword'))]",
                 "ApimSubscriptionKey": "[parameters('ApimSubscriptionKeyString')]",
-                "ApimSubscriptionKey2": "[parameters('ApimSubscriptionKeyString2')]",
                 "ConnectionStrings:AppConfig": "[parameters('configStoreConnection')]",
                 "Environment": "Prod",
                 "WEBSITE_RUN_FROM_PACKAGE": "1",

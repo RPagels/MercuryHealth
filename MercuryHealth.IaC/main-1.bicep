@@ -212,7 +212,7 @@ module webappmod './main-2-webapp.bicep' = {
     location: location
     configStoreConnection: configStoreConnectionString
     ApimSubscriptionKeyString: ApimSubscriptionKeyString
-    ApimSubscriptionKeyString2: ApimSubscriptionKeyString2
+    //ApimSubscriptionKeyString2: ApimSubscriptionKeyString2
     sqlserverName: sqlserverName
     sqlserverfullyQualifiedDomainName: sqldbmod.outputs.sqlserverfullyQualifiedDomainName
     sqlDBName: sqlDBName
