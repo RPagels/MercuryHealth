@@ -12,6 +12,8 @@ param functionAppServiceName string
 param appInsightsInstrumentationKey string
 //var appInsightsName = '${appNamePrefix}-appinsights'
 param defaultTags object
+param ApimSubscriptionKey string
+param ApimWebServiceURL string
 
 // remove dashes for storage account name
 //var storageAccountName = format('{0}sta', replace(appNamePrefix, '-', ''))
@@ -133,8 +135,12 @@ resource functionApp 'Microsoft.Web/sites@2021-01-15' = {
       appSettings: [
         {
           name: 'ApimSubscriptionKey'
-          value: 'e2d1cf7c5b0.........TBD'
+          value: ApimSubscriptionKey
         }
+        {
+          name: 'ApimWebServiceURL'
+          value: ApimWebServiceURL
+        }        
         {
           name: 'AzureWebJobsStorage'
           value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'

@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "16640243706841397741"
+      "templateHash": "16136976502972815130"
     }
   },
   "parameters": {
@@ -249,12 +249,6 @@
           "configStoreConnection": {
             "value": "[listKeys(resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName')), '2021-10-01-preview').value[0].connectionString]"
           },
-          "ApimSubscriptionKeyString": {
-            "value": "[variables('ApimSubscriptionKeyString')]"
-          },
-          "ApimWebServiceURL": {
-            "value": "[reference(resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))).gatewayUrl]"
-          },
           "sqlserverName": {
             "value": "[variables('sqlserverName')]"
           },
@@ -287,7 +281,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "5243572228092244689"
+              "templateHash": "2595418941209827911"
             }
           },
           "parameters": {
@@ -329,14 +323,8 @@
             "configStoreConnection": {
               "type": "string"
             },
-            "ApimSubscriptionKeyString": {
-              "type": "secureString"
-            },
-            "ApimWebServiceURL": {
-              "type": "string"
-            },
             "appInsightsInstrumentationKey": {
-              "type": "string"
+              "type": "secureString"
             },
             "appInsightsConnectionString": {
               "type": "string"
@@ -386,8 +374,6 @@
               "name": "[format('{0}/appsettings', parameters('webSiteName'))]",
               "properties": {
                 "ConnectionStrings:MercuryHealthWebContext": "[format('Server=tcp:{0},1433;Initial Catalog={1};Persist Security Info=False;User Id={2}@{3};Password={4};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;', parameters('sqlserverfullyQualifiedDomainName'), parameters('sqlDBName'), parameters('sqlAdministratorLogin'), parameters('sqlserverName'), parameters('sqlAdministratorLoginPassword'))]",
-                "ApimSubscriptionKey": "[parameters('ApimSubscriptionKeyString')]",
-                "ApimWebServiceURL": "[parameters('ApimWebServiceURL')]",
                 "ConnectionStrings:AppConfig": "[parameters('configStoreConnection')]",
                 "Environment": "Prod",
                 "WEBSITE_RUN_FROM_PACKAGE": "1",
@@ -584,7 +570,6 @@
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]",
         "[resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')]",
         "[resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName'))]",
         "[resourceId('Microsoft.Resources/deployments', 'sqldbdeploy')]"
@@ -888,6 +873,12 @@
           },
           "defaultTags": {
             "value": "[variables('defaultTags')]"
+          },
+          "ApimSubscriptionKey": {
+            "value": "[variables('ApimSubscriptionKeyString')]"
+          },
+          "ApimWebServiceURL": {
+            "value": "[reference(resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))).gatewayUrl]"
           }
         },
         "template": {
@@ -897,7 +888,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "2101171470057597281"
+              "templateHash": "9414975880441810881"
             }
           },
           "parameters": {
@@ -924,6 +915,12 @@
             },
             "defaultTags": {
               "type": "object"
+            },
+            "ApimSubscriptionKey": {
+              "type": "string"
+            },
+            "ApimWebServiceURL": {
+              "type": "string"
             }
           },
           "functions": [],
@@ -1017,7 +1014,11 @@
                   "appSettings": [
                     {
                       "name": "ApimSubscriptionKey",
-                      "value": "e2d1cf7c5b0.........TBD"
+                      "value": "[parameters('ApimSubscriptionKey')]"
+                    },
+                    {
+                      "name": "ApimWebServiceURL",
+                      "value": "[parameters('ApimWebServiceURL')]"
                     },
                     {
                       "name": "AzureWebJobsStorage",
@@ -1153,6 +1154,7 @@
         }
       },
       "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]",
         "[resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')]"
       ]
     },

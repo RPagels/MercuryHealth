@@ -194,6 +194,18 @@ resource apiManagement 'Microsoft.ApiManagement/service@2021-08-01' = {
   }
 }
 
+// resource apiManagementlogger 'Microsoft.ApiManagement/service/loggers@2021-08-01' = {
+//   name: '${apiServiceName}-logger'
+//   parent: apiManagement
+//   properties: {
+//     credentials: appinsightsmod.outputs.out_appInsightsInstrumentationKey
+//     description: 'Randy'
+//     isBuffered: false
+//     loggerType: 'applicationInsights'
+//     resourceId: 'string'
+//   }
+// }
+
 // API Management - Avoid outputs for secrets - Look up secrets dynamically
 // Note: This is why API Management isn't it's own module...MUST be in the main
 // resource apiManagement 'Microsoft.ApiManagement/service@2020-12-01' existing = {
@@ -236,8 +248,6 @@ module webappmod './main-2-webapp.bicep' = {
     appInsightsName: appInsightsName
     location: location
     configStoreConnection: configStoreConnectionString
-    ApimSubscriptionKeyString: ApimSubscriptionKeyString
-    ApimWebServiceURL: apiManagement.properties.gatewayUrl
     sqlserverName: sqlserverName
     sqlserverfullyQualifiedDomainName: sqldbmod.outputs.sqlserverfullyQualifiedDomainName
     sqlDBName: sqlDBName
@@ -284,6 +294,8 @@ module functionappmod './main-6-funcapp.bicep' = {
     functionAppServiceName: functionAppServiceName
     functionAppName: functionAppName
     defaultTags: defaultTags
+    ApimSubscriptionKey: ApimSubscriptionKeyString
+    ApimWebServiceURL: apiManagement.properties.gatewayUrl
   }
 }
 

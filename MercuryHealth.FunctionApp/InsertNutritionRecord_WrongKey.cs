@@ -13,6 +13,7 @@ namespace MercuryHealth.FunctionApp;
 public class InsertNutritionRecord_WrongKey
 {
     private static string ApimSubscriptionKey = System.Environment.GetEnvironmentVariable("ApimSubscriptionKey");
+    private static string ApimWebServiceURL = System.Environment.GetEnvironmentVariable("ApimWebServiceURL");
 
     // TESTING ONLY
     //private static string WebAppUrl = System.Environment.GetEnvironmentVariable("WebAppUrl");
@@ -31,8 +32,9 @@ public class InsertNutritionRecord_WrongKey
         // Request headers with APIM Key retrieved from Azure KeyVault
         client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", ApimSubscriptionKey + "XYZ");
 
-        var uri = "https://rpagels-apim.azure-api.net/api/Nutritions?" + queryString;
+        //var uri = "https://rpagels-apim.azure-api.net/api/Nutritions?" + queryString;
         //var uri = WebAppUrl + "api/Nutritions?" + queryString;
+        var uri = ApimWebServiceURL + "/api/Nutritions?" + queryString;
 
         HttpResponseMessage response;
 

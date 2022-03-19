@@ -13,6 +13,7 @@ namespace MercuryHealth.FunctionApp;
 public class UpdateNutritionRecord
 {
     private static string ApimSubscriptionKey = System.Environment.GetEnvironmentVariable("ApimSubscriptionKey");
+    private static string ApimWebServiceURL = System.Environment.GetEnvironmentVariable("ApimWebServiceURL");
 
     // TESTING ONLY
     //private static string WebAppUrl = System.Environment.GetEnvironmentVariable("WebAppUrl");
@@ -41,7 +42,7 @@ public class UpdateNutritionRecord
             client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", ApimSubscriptionKey);
 
             // Hard code record # 25
-            var uri = "https://apim-fq3ruuhxgjony.azure-api.net/api/Nutritions/25";
+            var uri = ApimWebServiceURL + "/api/Nutritions/25";
 
             var response = await client.GetAsync(uri);
             response.EnsureSuccessStatusCode();
