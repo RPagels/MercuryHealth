@@ -14,6 +14,9 @@ public class InsertExerciseRecord_WrongKey
 {
     private static string ApimSubscriptionKey = System.Environment.GetEnvironmentVariable("ApimSubscriptionKey");
 
+    // TESTING ONLY
+    private static string WebAppUrl = System.Environment.GetEnvironmentVariable("WebAppUrl");
+
     [FunctionName("InsertExerciseRecord_WrongKey")]
     public async Task RunAsync([TimerTrigger("0 0 */6 * * *")] TimerInfo myTimer, ILogger log)
     {
@@ -28,9 +31,10 @@ public class InsertExerciseRecord_WrongKey
         var queryString = HttpUtility.ParseQueryString(string.Empty);
 
         // Request headers with APIM Key retrieved from Azure KeyVault
-        client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", ApimSubscriptionKey + "XYZ");
+        client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", ApimSubscriptionKey + "BadKey");
 
-        var uri = "https://rpagels-apim.azure-api.net/api/Exercises?" + queryString;
+        //var uri = "https://rpagels-apim.azure-api.net/api/Exercises?" + queryString;
+        var uri = WebAppUrl + "api/Exercises?" + queryString;
 
         HttpResponseMessage response;
 

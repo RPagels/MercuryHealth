@@ -31,7 +31,6 @@
     <PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="2.4.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.1" />
 	<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
-	<!--<ProjectReference Include="..\MercuryHealth.API\MercuryHealth.API.csproj" />-->
   </ItemGroup>
 
 </Project>

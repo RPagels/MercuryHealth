@@ -165,8 +165,15 @@ resource configStoreName_appconfig_featureflags_3 'Microsoft.AppConfiguration/co
 // END - Setup Config Store
 ////////////////////////////////////////
 
-// Avoid outputs for secrets - Look up secrets dynamically
+// AppConfiguration - Avoid outputs for secrets - Look up secrets dynamically
 var configStoreConnectionString = listKeys(config.id, config.apiVersion).value[0].connectionString
+
+// API Management - Avoid outputs for secrets - Look up secrets dynamically
+resource apiManagement 'Microsoft.ApiManagement/service@2020-12-01' existing = {
+  name: apiServiceName
+}
+var ApimSubscriptionKeyString = listKeys(apiManagement.id, apiManagement.apiVersion).value[0].connectionString
+var ApimSubscriptionKeyString2 = listKeys(apiManagement.id, apiManagement.apiVersion).keys[0].value
 
 // Create Web App
 module webappmod './main-2-webapp.bicep' = {
@@ -178,6 +185,8 @@ module webappmod './main-2-webapp.bicep' = {
     appInsightsName: appInsightsName
     location: location
     configStoreConnection: configStoreConnectionString
+    ApimSubscriptionKeyString: ApimSubscriptionKeyString
+    ApimSubscriptionKeyString2: ApimSubscriptionKeyString2
     sqlserverName: sqlserverName
     sqlserverfullyQualifiedDomainName: sqldbmod.outputs.sqlserverfullyQualifiedDomainName
     sqlDBName: sqlDBName
