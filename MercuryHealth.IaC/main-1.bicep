@@ -166,6 +166,7 @@ resource configStoreName_appconfig_featureflags_3 'Microsoft.AppConfiguration/co
 ////////////////////////////////////////
 
 // AppConfiguration - Avoid outputs for secrets - Look up secrets dynamically
+// https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/scenarios-secrets
 // Note: This is why ConfigStore isn't it's own module...MUST be in the main
 var configStoreConnectionString = listKeys(config.id, config.apiVersion).value[0].connectionString
 
@@ -219,10 +220,10 @@ resource apiManagement 'Microsoft.ApiManagement/service@2021-08-01' = {
 //var ApimSubscriptionKeyString = apiManagement.properties.gatewayUrl
 
 // Test 6
-var ApimSubscriptionKeyString = listSecrets(apiManagement.id, apiManagement.apiVersion).value[0].value
+//var ApimSubscriptionKeyString = listSecrets(apiManagement.id, apiManagement.apiVersion).value[0].value
 
 // Test 7
-//var ApimSubscriptionKeyString = 'enterPrimaryKeyHere'
+var ApimSubscriptionKeyString = 'enterPrimaryKeyHere'
 
 
 // Create Web App
