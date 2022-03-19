@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "14167167824276874946"
+      "templateHash": "10631809552785846462"
     }
   },
   "parameters": {
@@ -136,8 +136,7 @@
       "id": "[parameters('FeatureFlagKey3')]",
       "description": "Description for Nutrition Color.",
       "enabled": false
-    },
-    "ApimSubscriptionKeyString": "tesing"
+    }
   },
   "resources": [
     {
@@ -250,7 +249,7 @@
             "value": "[listKeys(resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName')), '2021-10-01-preview').value[0].connectionString]"
           },
           "ApimSubscriptionKeyString": {
-            "value": "[variables('ApimSubscriptionKeyString')]"
+            "value": "[listKeys(resourceId('Microsoft.ApiManagement/service', variables('apiServiceName')), '2020-12-01').primaryConnectionString]"
           },
           "sqlserverName": {
             "value": "[variables('sqlserverName')]"
@@ -577,6 +576,7 @@
         }
       },
       "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]",
         "[resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')]",
         "[resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName'))]",
         "[resourceId('Microsoft.Resources/deployments', 'sqldbdeploy')]"
