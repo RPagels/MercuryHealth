@@ -1,5 +1,6 @@
 param location string = resourceGroup().location
 param appInsightsName string
+param dashboardName string
 
 resource appinsights 'Microsoft.Insights/components@2018-05-01-preview' = {
   name: appInsightsName
@@ -11,7 +12,7 @@ resource appinsights 'Microsoft.Insights/components@2018-05-01-preview' = {
 }
 
 resource dashboard 'Microsoft.Portal/dashboards@2015-08-01-preview' = {
-  name: guid(resourceGroup().name, 'dashboard')
+  name: dashboardName
   location: location
   tags: {
     'hidden-title': 'Bicep Sample Dashboard'

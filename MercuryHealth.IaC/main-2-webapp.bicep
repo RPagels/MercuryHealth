@@ -68,12 +68,11 @@ resource appService 'Microsoft.Web/sites@2021-01-15' = {
   }
 }
 
-//   type: 'SQLAzure'
 resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
   name: '${webSiteName}/appsettings'
   properties: {
     'ConnectionStrings:MercuryHealthWebContext': 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
-    'ApimSubscriptionKey': 'test' //ApimSubscriptionKeyString
+    'ApimSubscriptionKey': ApimSubscriptionKeyString
     'ConnectionStrings:AppConfig': configStoreConnection
     'Environment': 'Prod'
     'WEBSITE_RUN_FROM_PACKAGE': '1'

@@ -308,13 +308,14 @@ module blogstoragemod './main-12-blobstorage.bicep' = {
   }
 }
 
-module portaldashboardmod './main-11-Dashboard.bicep' = {
-  name: dashboardName
-  params: {
-    location: location
-    appInsightsName: appInsightsName
-  }
-}
+// module portaldashboardmod './main-11-Dashboard.bicep' = {
+//   name: dashboardName
+//   params: {
+//     location: location
+//     appInsightsName: appInsightsName
+//     dashboardName: dashboardName
+//   }
+// }
 
 output out_webSiteName string = webSiteName
 output out_webSiteNameURL string = webappmod.outputs.out_webSiteName
