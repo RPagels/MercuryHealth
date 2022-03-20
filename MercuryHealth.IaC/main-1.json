@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "10660229281709274764"
+      "templateHash": "5902331977591946694"
     }
   },
   "parameters": {
@@ -248,7 +248,7 @@
     {
       "type": "Microsoft.ApiManagement/service/loggers",
       "apiVersion": "2021-08-01",
-      "name": "[format('{0}/MercuryHealth-applicationinsights', reference(resourceId('Microsoft.ApiManagement/service', variables('apiServiceName')), '2021-08-01', 'full'))]",
+      "name": "[format('{0}/MercuryHealth-applicationinsights', variables('apiServiceName'))]",
       "properties": {
         "loggerType": "applicationInsights",
         "description": "Mercury Health Application Insights instance.",
@@ -258,7 +258,6 @@
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]",
         "[resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')]"
       ]
     },
