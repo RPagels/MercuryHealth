@@ -28,7 +28,7 @@ var appInsightsAlertName = 'ResponseTime-${uniqueString(resourceGroup().id)}'
 var functionAppName = 'func-${uniqueString(resourceGroup().id)}'
 var functionAppServiceName = 'funcplan-${uniqueString(resourceGroup().id)}'
 var apiServiceName = 'apim-${uniqueString(resourceGroup().id)}'
-var apiSubscriptionName = 'apimsub-${uniqueString(resourceGroup().id)}'
+//var apiSubscriptionName = 'apimsub-${uniqueString(resourceGroup().id)}'
 var loadTestsName = 'loadtests-${uniqueString(resourceGroup().id)}'
 var keyvaultName = 'kv-${uniqueString(resourceGroup().id)}'
 var blobstorageName = 'stablob${uniqueString(resourceGroup().id)}'
@@ -197,10 +197,32 @@ resource apiManagement 'Microsoft.ApiManagement/service@2021-08-01' = {
 
 resource apiManagementSubscription 'Microsoft.ApiManagement/service/subscriptions@2021-08-01' = {
   parent: apiManagement
-  name: apiSubscriptionName
+  name: 'Mercury Health - Developers' //apiSubscriptionName
   properties: {
     scope: '/apis' // Subscription applies to all APIs
-    displayName: apiSubscriptionName
+    displayName: 'Mercury Health - Developers' //apiSubscriptionName
+  }
+}
+
+resource apiManagementProducts 'Microsoft.ApiManagement/service/products@2021-08-01' = {
+  parent: apiManagement
+  name: 'Mercury Health - Developers'
+  properties: {
+    approvalRequired: false
+    description: 'Mercury Health - Developers'
+    displayName: 'Mercury Health - Developers' //apiSubscriptionName
+  }
+}
+
+resource appInsightsAPIManagement 'Microsoft.ApiManagement/service/loggers@2021-08-01' = {
+  name: '${appInsightsName}/MercuryHealth-applicationinsights'
+  properties: {
+    loggerType: 'applicationInsights'
+    description: 'Mercury Health Application Insights instance.'
+    resourceId: appinsightsmod.outputs.out_applicationInsightsID
+    credentials: {
+      instrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
+    }
   }
 }
 

@@ -263,3 +263,11 @@ resource functionAppBinding 'Microsoft.Web/sites/hostNameBindings@2021-01-15' = 
     hostNameType: 'Verified'
   }
 }
+
+resource functionAppServiceAppSettings 'Microsoft.Web/sites/siteextensions@2021-03-01' = {
+  parent: functionApp
+  name: 'Microsoft.ApplicationInsights.AzureWebSites'
+  // dependsOn: [
+  //   appInsights
+  // ]
+}

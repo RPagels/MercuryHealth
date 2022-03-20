@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "4493593338496253083"
+      "templateHash": "513764664405679116"
     }
   },
   "parameters": {
@@ -112,7 +112,6 @@
     "functionAppName": "[format('func-{0}', uniqueString(resourceGroup().id))]",
     "functionAppServiceName": "[format('funcplan-{0}', uniqueString(resourceGroup().id))]",
     "apiServiceName": "[format('apim-{0}', uniqueString(resourceGroup().id))]",
-    "apiSubscriptionName": "[format('apimsub-{0}', uniqueString(resourceGroup().id))]",
     "loadTestsName": "[format('loadtests-{0}', uniqueString(resourceGroup().id))]",
     "keyvaultName": "[format('kv-{0}', uniqueString(resourceGroup().id))]",
     "blobstorageName": "[format('stablob{0}', uniqueString(resourceGroup().id))]",
@@ -224,13 +223,42 @@
     {
       "type": "Microsoft.ApiManagement/service/subscriptions",
       "apiVersion": "2021-08-01",
-      "name": "[format('{0}/{1}', variables('apiServiceName'), variables('apiSubscriptionName'))]",
+      "name": "[format('{0}/{1}', variables('apiServiceName'), 'Mercury Health - Developers')]",
       "properties": {
         "scope": "/apis",
-        "displayName": "[variables('apiSubscriptionName')]"
+        "displayName": "Mercury Health - Developers"
       },
       "dependsOn": [
         "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/products",
+      "apiVersion": "2021-08-01",
+      "name": "[format('{0}/{1}', variables('apiServiceName'), 'Mercury Health - Developers')]",
+      "properties": {
+        "approvalRequired": false,
+        "description": "Mercury Health - Developers",
+        "displayName": "Mercury Health - Developers"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/loggers",
+      "apiVersion": "2021-08-01",
+      "name": "[format('{0}/MercuryHealth-applicationinsights', variables('appInsightsName'))]",
+      "properties": {
+        "loggerType": "applicationInsights",
+        "description": "Mercury Health Application Insights instance.",
+        "resourceId": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy'), '2020-06-01').outputs.out_applicationInsightsID.value]",
+        "credentials": {
+          "instrumentationKey": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy'), '2020-06-01').outputs.out_appInsightsInstrumentationKey.value]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')]"
       ]
     },
     {
@@ -729,7 +757,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "8325329208707907764"
+              "templateHash": "6206901012013598652"
             }
           },
           "parameters": {
@@ -841,6 +869,10 @@
             }
           ],
           "outputs": {
+            "out_applicationInsightsID": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Insights/components', parameters('appInsightsName'))]"
+            },
             "out_appInsightsInstrumentationKey": {
               "type": "string",
               "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName'))).InstrumentationKey]"
@@ -887,7 +919,7 @@
             "value": "[variables('defaultTags')]"
           },
           "ApimSubscriptionKey": {
-            "value": "[listSecrets(resourceId('Microsoft.ApiManagement/service/subscriptions', variables('apiServiceName'), variables('apiSubscriptionName')), '2021-08-01').primaryKey]"
+            "value": "[listSecrets(resourceId('Microsoft.ApiManagement/service/subscriptions', variables('apiServiceName'), 'Mercury Health - Developers'), '2021-08-01').primaryKey]"
           },
           "ApimWebServiceURL": {
             "value": "[reference(resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))).gatewayUrl]"
@@ -900,7 +932,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "9414975880441810881"
+              "templateHash": "4375167616500746463"
             }
           },
           "parameters": {
@@ -1161,13 +1193,21 @@
               "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]"
               ]
+            },
+            {
+              "type": "Microsoft.Web/sites/siteextensions",
+              "apiVersion": "2021-03-01",
+              "name": "[format('{0}/{1}', parameters('functionAppName'), 'Microsoft.ApplicationInsights.AzureWebSites')]",
+              "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]"
+              ]
             }
           ]
         }
       },
       "dependsOn": [
         "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]",
-        "[resourceId('Microsoft.ApiManagement/service/subscriptions', variables('apiServiceName'), variables('apiSubscriptionName'))]",
+        "[resourceId('Microsoft.ApiManagement/service/subscriptions', variables('apiServiceName'), 'Mercury Health - Developers')]",
         "[resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')]"
       ]
     },
