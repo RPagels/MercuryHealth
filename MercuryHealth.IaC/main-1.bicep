@@ -214,21 +214,21 @@ resource apiManagementProducts 'Microsoft.ApiManagement/service/products@2021-08
   }
 }
 
-resource appInsightsAPIManagement 'Microsoft.ApiManagement/service/loggers@2021-08-01' = {
-  name: '${appInsightsName}/MercuryHealth-applicationinsights'
-  properties: {
-    loggerType: 'applicationInsights'
-    description: 'Mercury Health Application Insights instance.'
-    resourceId: appinsightsmod.outputs.out_applicationInsightsID
-    credentials: {
-      instrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
-    }
-  }
-  dependsOn:  [
-    appinsightsmod
-]
+// resource appInsightsAPIManagement 'Microsoft.ApiManagement/service/loggers@2021-08-01' = {
+//   name: '${appInsightsName}/MercuryHealth-applicationinsights'
+//   properties: {
+//     loggerType: 'applicationInsights'
+//     description: 'Mercury Health Application Insights instance.'
+//     resourceId: appinsightsmod.outputs.out_applicationInsightsID
+//     credentials: {
+//       instrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
+//     }
+//   }
+//   dependsOn:  [
+//     appinsightsmod
+//   ]
   
-}
+// }
 
 // API Management - Avoid outputs for secrets - Look up secrets dynamically
 // Note: This is why API Management isn't it's own module...MUST be in the main
