@@ -197,7 +197,7 @@ resource apiManagement 'Microsoft.ApiManagement/service@2021-08-01' = {
 
 resource apiManagementSubscription 'Microsoft.ApiManagement/service/subscriptions@2021-08-01' = {
   parent: apiManagement
-  name: 'Mercury Health - Developers' //apiSubscriptionName
+  name: 'MercuryHealth-Developers' //apiSubscriptionName
   properties: {
     scope: '/apis' // Subscription applies to all APIs
     displayName: 'Mercury Health - Developers' //apiSubscriptionName
@@ -206,7 +206,7 @@ resource apiManagementSubscription 'Microsoft.ApiManagement/service/subscription
 
 resource apiManagementProducts 'Microsoft.ApiManagement/service/products@2021-08-01' = {
   parent: apiManagement
-  name: 'Mercury Health - Developers'
+  name: 'MercuryHealth-Developers'
   properties: {
     approvalRequired: false
     description: 'Mercury Health - Developers'
@@ -224,6 +224,10 @@ resource appInsightsAPIManagement 'Microsoft.ApiManagement/service/loggers@2021-
       instrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
     }
   }
+  dependsOn:  [
+    appinsightsmod
+]
+  
 }
 
 // API Management - Avoid outputs for secrets - Look up secrets dynamically

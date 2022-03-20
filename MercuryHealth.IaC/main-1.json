@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "513764664405679116"
+      "templateHash": "5738044535788699615"
     }
   },
   "parameters": {
@@ -223,7 +223,7 @@
     {
       "type": "Microsoft.ApiManagement/service/subscriptions",
       "apiVersion": "2021-08-01",
-      "name": "[format('{0}/{1}', variables('apiServiceName'), 'Mercury Health - Developers')]",
+      "name": "[format('{0}/{1}', variables('apiServiceName'), 'MercuryHealth-Developers')]",
       "properties": {
         "scope": "/apis",
         "displayName": "Mercury Health - Developers"
@@ -235,7 +235,7 @@
     {
       "type": "Microsoft.ApiManagement/service/products",
       "apiVersion": "2021-08-01",
-      "name": "[format('{0}/{1}', variables('apiServiceName'), 'Mercury Health - Developers')]",
+      "name": "[format('{0}/{1}', variables('apiServiceName'), 'MercuryHealth-Developers')]",
       "properties": {
         "approvalRequired": false,
         "description": "Mercury Health - Developers",
@@ -919,7 +919,7 @@
             "value": "[variables('defaultTags')]"
           },
           "ApimSubscriptionKey": {
-            "value": "[listSecrets(resourceId('Microsoft.ApiManagement/service/subscriptions', variables('apiServiceName'), 'Mercury Health - Developers'), '2021-08-01').primaryKey]"
+            "value": "[listSecrets(resourceId('Microsoft.ApiManagement/service/subscriptions', variables('apiServiceName'), 'MercuryHealth-Developers'), '2021-08-01').primaryKey]"
           },
           "ApimWebServiceURL": {
             "value": "[reference(resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))).gatewayUrl]"
@@ -1207,7 +1207,7 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]",
-        "[resourceId('Microsoft.ApiManagement/service/subscriptions', variables('apiServiceName'), 'Mercury Health - Developers')]",
+        "[resourceId('Microsoft.ApiManagement/service/subscriptions', variables('apiServiceName'), 'MercuryHealth-Developers')]",
         "[resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')]"
       ]
     },
