@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "10996439024303683376"
+      "templateHash": "10660229281709274764"
     }
   },
   "parameters": {
@@ -243,6 +243,23 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/loggers",
+      "apiVersion": "2021-08-01",
+      "name": "[format('{0}/MercuryHealth-applicationinsights', reference(resourceId('Microsoft.ApiManagement/service', variables('apiServiceName')), '2021-08-01', 'full'))]",
+      "properties": {
+        "loggerType": "applicationInsights",
+        "description": "Mercury Health Application Insights instance.",
+        "resourceId": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy'), '2020-06-01').outputs.out_applicationInsightsID.value]",
+        "credentials": {
+          "instrumentationKey": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy'), '2020-06-01').outputs.out_appInsightsInstrumentationKey.value]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]",
+        "[resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')]"
       ]
     },
     {
@@ -741,7 +758,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "12817199100082288428"
+              "templateHash": "6206901012013598652"
             }
           },
           "parameters": {
@@ -850,25 +867,13 @@
                   }
                 ]
               }
-            },
-            {
-              "type": "Microsoft.ApiManagement/service/loggers",
-              "apiVersion": "2021-08-01",
-              "name": "[format('{0}/MercuryHealth-applicationinsights', parameters('appInsightsName'))]",
-              "properties": {
-                "loggerType": "applicationInsights",
-                "description": "Mercury Health Application Insights instance.",
-                "resourceId": "[resourceId('Microsoft.Insights/components', parameters('appInsightsName'))]",
-                "credentials": {
-                  "instrumentationKey": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName'))).InstrumentationKey]"
-                }
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Insights/components', parameters('appInsightsName'))]"
-              ]
             }
           ],
           "outputs": {
+            "out_applicationInsightsID": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Insights/components', parameters('appInsightsName'))]"
+            },
             "out_appInsightsInstrumentationKey": {
               "type": "string",
               "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName'))).InstrumentationKey]"

@@ -85,19 +85,19 @@ resource emailActionGroup 'Microsoft.Insights/actionGroups@2021-09-01' = {
   }
 }
 
-resource appInsightsAPIManagement 'Microsoft.ApiManagement/service/loggers@2021-08-01' = {
-  name: '${appInsightsName}/MercuryHealth-applicationinsights'
-  properties: {
-    loggerType: 'applicationInsights'
-    description: 'Mercury Health Application Insights instance.'
-    resourceId: applicationInsights.id
-    credentials: {
-      instrumentationKey: applicationInsights.properties.InstrumentationKey
-    }
-  }
-}
+// resource appInsightsAPIManagement 'Microsoft.ApiManagement/service/loggers@2021-08-01' = {
+//   name: '${appInsightsName}/MercuryHealth-applicationinsights'
+//   properties: {
+//     loggerType: 'applicationInsights'
+//     description: 'Mercury Health Application Insights instance.'
+//     resourceId: applicationInsights.id
+//     credentials: {
+//       instrumentationKey: applicationInsights.properties.InstrumentationKey
+//     }
+//   }
+// }
 
-//output out_applicationInsightsID string = applicationInsights.id
+output out_applicationInsightsID string = applicationInsights.id
 output out_appInsightsInstrumentationKey string = applicationInsights.properties.InstrumentationKey
 output out_appInsightsConnectionString string = applicationInsights.properties.ConnectionString
 output out_appInsightsApplicationId string = applicationInsights.properties.ApplicationId
