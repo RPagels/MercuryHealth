@@ -1,7 +1,5 @@
 name: Deployment Environment
 
-#
-
 on:
   workflow_call:
     inputs:
@@ -230,7 +228,7 @@ jobs:
   ###################################################################
   Deploy_Application:
     runs-on: ubuntu-latest
-    name: TEST to Deploy Application
+    name: Deploy Application
     needs: [Deploy_Infrastructure]
     env:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
