@@ -199,7 +199,7 @@ resource apiManagement 'Microsoft.ApiManagement/service@2021-08-01' = {
 
 resource apiManagementSubscription 'Microsoft.ApiManagement/service/subscriptions@2021-08-01' = {
   parent: apiManagement
-  name: 'MercuryHealth-Developers' //apiSubscriptionName
+  name: 'Developers' //apiSubscriptionName
   properties: {
     scope: '/apis' // Subscription applies to all APIs
     displayName: 'Mercury Health - Developers' //apiSubscriptionName
