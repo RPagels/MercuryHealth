@@ -44,7 +44,7 @@ public class InsertExerciseRecord
             description = "Build strong bones and improves cardiovascular.",
             ExerciseTime = DateTime.Now,
             musclesInvolved = "Legs",
-            equipment = "None"
+            equipment = "API Update"
         });
 
         // Request body

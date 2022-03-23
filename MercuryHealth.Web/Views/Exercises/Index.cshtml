@@ -1,6 +1,6 @@
 ﻿@using Microsoft.Extensions.Configuration
 @inject IConfiguration Configuration
-@model IEnumerable<MercuryHealth.Web.Models.Exercises>
+@model IEnumerable<MercuryHealth.Web.Models.ExercisesViewModel>
 
 @{
     ViewData["Title"] = "Exercises";
@@ -35,19 +35,19 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
+            <td style="color:@item.FontColor">
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-            <td>
+            <td style="color:@item.FontColor">
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
-            <td>
+            <td style="color:@item.FontColor">
                 @Html.DisplayFor(modelItem => item.ExerciseTime)
             </td>
-            <td>
+            <td style="color:@item.FontColor">
                 @Html.DisplayFor(modelItem => item.MusclesInvolved)
             </td>
-            <td>
+            <td style="color:@item.FontColor">
                 @Html.DisplayFor(modelItem => item.Equipment)
             </td>
             <td>

@@ -8,22 +8,58 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MercuryHealth.Web.Data;
 using MercuryHealth.Web.Models;
+using Microsoft.ApplicationInsights;
 
 namespace MercuryHealth.Web.Controllers;
 
 public class ExercisesController : Controller
 {
     private readonly MercuryHealthWebContext _context;
+    private readonly TelemetryClient telemetry;
 
-    public ExercisesController(MercuryHealthWebContext context)
+    public ExercisesController(MercuryHealthWebContext context, TelemetryClient telemetry)
     {
         _context = context;
+        this.telemetry = telemetry;
     }
 
     // GET: Exercises
     public async Task<IActionResult> Index()
     {
-        return View(await _context.Exercises.ToListAsync());
+        //return View(await _context.Exercises.ToListAsync());
+        // Keep color logic out of the ViewPage, per MVC pattern, use a ViewModel.
+        var exercises = from n in _context.Exercises select n;
+
+        List<ExercisesViewModel> ExerciseViewModels = new List<ExercisesViewModel>();
+
+        foreach (var myexerciserec in exercises)
+        {
+            ExercisesViewModel evm = new ExercisesViewModel();
+
+            evm.Id = myexerciserec.Id;
+            evm.Name = myexerciserec.Name;
+            evm.Description = myexerciserec.Description;
+            evm.ExerciseTime = myexerciserec.ExerciseTime;
+            evm.Description = myexerciserec.Description;
+            evm.MusclesInvolved = myexerciserec.MusclesInvolved;
+            evm.Equipment = myexerciserec.Equipment;
+            evm.FontColor = "Black";
+
+            // Check for text with API in it
+            if (myexerciserec.Equipment == "API Update")
+            {
+                evm.FontColor = "Red";
+            }
+
+            ExerciseViewModels.Add(evm);
+
+        }
+
+        // Application Insights - Track Events
+        telemetry.TrackEvent("TrackEvent-Exercise ViewModel Created");
+
+        //return View(await _context.Nutrition.ToListAsync());
+        return View(ExerciseViewModels);
     }
 
     // GET: Exercises/Details/5

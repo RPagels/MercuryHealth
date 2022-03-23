@@ -53,8 +53,8 @@ public class UpdateExerciseRecord
             exercise = Newtonsoft.Json.JsonConvert.DeserializeObject<Exercises>(responseBody);
 
             // Update a couple fields
-            exercise.Name = "API Update";
-            exercise.MusclesInvolved = "API Update";
+            //exercise.Name = "API Update";
+            exercise.Equipment = "API Update";
             exercise.ExerciseTime = DateTime.Now;
 
             // Serialize JSON Object from Nutrition record

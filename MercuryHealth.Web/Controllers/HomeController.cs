@@ -54,7 +54,7 @@ public class HomeController : Controller
         ObjAccessLogs.Add(Obj);
 
         // Are you really tired?  Take a break! :)
-        Thread.Sleep(10000);
+        Thread.Sleep(5000);
 
         return View(ObjAccessLogs.ToList());
 
