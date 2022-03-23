@@ -52,6 +52,8 @@ jobs:
       output1: ${{ steps.Infra.outputs.out_webSiteNameURL }}
       output2: 'https://${{ steps.Infra.outputs.out_webSiteNameURL }}'
       output3: ${{ steps.Infra.outputs.out_loadTestsName }}
+      output4: ${{ steps.Infra.outputs.out_webSiteName }}
+      output5: ${{ steps.Infra.outputs.out_functionAppName }}
       
     name: Deploy Application
     env:
@@ -255,6 +257,8 @@ jobs:
          echo 'output1 = ${{needs.deploy_to_environment.outputs.output1}}'
          echo 'output2 = ${{needs.deploy_to_environment.outputs.output2}}'
          echo 'output3 = ${{needs.deploy_to_environment.outputs.output3}}'
+         echo 'output4 = ${{needs.deploy_to_environment.outputs.output4}}'
+         echo 'output5 = ${{needs.deploy_to_environment.outputs.output5}}'
 
     - name: Download Build Artifacts-Website Application
       uses: actions/download-artifact@v2
@@ -266,7 +270,7 @@ jobs:
     - name: 'Deploy Website Application'
       uses: azure/webapps-deploy@v2
       with:
-          app-name: ${{ steps.Infra.outputs.out_webSiteName }}
+          app-name: ${{ needs.deploy_to_environment.outputs.output4 }}
           #slot-name: 'Dev'
           package: './MercuryHealth.Website'
 
