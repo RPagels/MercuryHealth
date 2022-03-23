@@ -30,6 +30,7 @@ env:
 jobs:
   Build_Application:
     runs-on: ubuntu-latest
+    name: 'Build Application'
 
     permissions:
       contents: read
