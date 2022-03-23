@@ -99,18 +99,6 @@ jobs:
         name: MercuryHealth.IaC
         path: ${{ github.workspace }}/MercuryHealth.IaC
 
-#      ###########################################
-#      # Validate ARM Template using Bicep DSL
-#      ###########################################
-#    - name: Validate Azure Bicep
-#      uses: azure/arm-deploy@v1
-#      continue-on-error: false
-#      with:
-#        resourceGroupName: ${{ env.Azure_Resource_GroupName }}
-#        template: ./MercuryHealth.IaC/main-1.bicep
-#        parameters: ./MercuryHealth.IaC/main-1.params.json sqlAdministratorLogin=${{ secrets.sql-db-login }} sqlAdministratorLoginPassword=${{ secrets.sql-db-password }}
-#        deploymentMode: Validate
-        
       ###########################################
       # Deploy ARM Template using Bicep DSL
       ###########################################
@@ -124,92 +112,6 @@ jobs:
         parameters: ./MercuryHealth.IaC/main-1.params.json sqlAdministratorLogin=${{ secrets.sql-db-login }} sqlAdministratorLoginPassword=${{ secrets.sql-db-password }} Deploy_Environment=${{ env.Deploy_Environment }}
         deploymentMode: Incremental
         failOnStdErr: false
-
-#     - name: Download Build Artifact-Database
-#       uses: actions/download-artifact@v2
-#       continue-on-error: false
-#       with:
-#         name: MercuryHealth.Database
-#         path: ${{ github.workspace }}/MercuryHealth.Database
-
-#     #connection-string: ${{ steps.Infra.outputs.out_sqlConnectionString }}
-#     # Deploy Database *.dacpac file
-#     - name: 'Deploy the database to Azure'
-#       uses: Azure/sql-action@v1.2
-#       with:
-#         server-name: ${{ steps.Infra.outputs.out_sqlserverFQName }}
-#         connection-string: ${{ secrets.sql-connection-string }}
-#         dacpac-package: './MercuryHealth.Database/MercuryHealth.Database.dacpac'
-
-#     - name: Download Build Artifacts-Website Application
-#       uses: actions/download-artifact@v2
-#       continue-on-error: false
-#       with:
-#         name: MercuryHealth.Website
-#         path: ${{ github.workspace }}/MercuryHealth.Website
-
-#     - name: 'Deploy Website Application'
-#       uses: azure/webapps-deploy@v2
-#       with:
-#           app-name: ${{ steps.Infra.outputs.out_webSiteName }}
-#           #slot-name: 'Dev'
-#           package: './MercuryHealth.Website'
-          
-#     - name: Download Build Artifacts-Function Application
-#       uses: actions/download-artifact@v2
-#       continue-on-error: false
-#       with:
-#         name: MercuryHealth.FunctionApp
-#         path: ${{ github.workspace }}/MercuryHealth.FunctionApp
-
-#     # Deploy Function Application
-#     - name: 'Deploy Function Application'
-#       uses: Azure/functions-action@v1
-#       with:
-#         app-name: ${{ steps.Infra.outputs.out_functionAppName }}
-#         slot-name: 'production'
-#         package: './MercuryHealth.FunctionApp'
-
-#     - name: 'Generate Temporary API Key For App Insights'
-#       id: AIKeyGen
-#       uses: Azure/CLI@v1
-#       with:
-#         inlineScript: |
-#           az config set extension.use_dynamic_install=yes_without_prompt
-#           result=$(az monitor app-insights api-key create \
-#                       --api-key ${{ steps.Infra.outputs.out_releaseAnnotationGuidID }} \
-#                       --write-properties WriteAnnotations \
-#                       -g ${{ env.Azure_Resource_GroupName }} \
-#                       --app ${{ steps.Infra.outputs.out_appInsightsApplicationId }} \
-#                       --query "apiKey" --output tsv)
-#           echo "::set-output name=aiKey::$result"
-    
-# #    - name: DEBUG - Infra Outputs across jobs
-# #      run: |
-# #        echo 'out_releaseAnnotationGuidID=${{ steps.Infra.outputs.out_releaseAnnotationGuidID }}'
-# #        echo 'out_appInsightsApplicationId=${{ steps.Infra.outputs.out_appInsightsApplicationId }}'
-# #        echo 'out_appInsightsAPIApplicationId=${{ steps.Infra.outputs.out_appInsightsAPIApplicationId }}'
-# #        echo 'steps.AIKeyGen.outputs.aiKey=${{ steps.AIKeyGen.outputs.aiKey }}'
-        
-#     - name: 'Annotate Deployment'
-#       uses: wictorwilen/application-insights-action@v1
-#       id: annotation
-#       with:
-#         applicationId: ${{ steps.Infra.outputs.out_appInsightsAPIApplicationId }}
-#         apiKey: ${{ steps.AIKeyGen.outputs.aiKey }}
-#         releaseName: ${{ github.event_name }}
-#         message: ${{ github.event.head_commit.message }}
-#         actor: ${{ github.actor }}
-
-#     - name: Remove Temporary API Key For App Insights
-#       uses: Azure/CLI@v1
-#       with:
-#         inlineScript: |
-#           az config set extension.use_dynamic_install=yes_without_prompt
-#           az monitor app-insights api-key delete \
-#                       --api-key ${{ steps.Infra.outputs.out_releaseAnnotationGuidID }} \
-#                       -g ${{ env.Azure_Resource_GroupName }} \
-#                       --app ${{ steps.Infra.outputs.out_appInsightsApplicationId }} 
 
     - name: Ensure Resource Group is Locked
       if: contains(github.event_name, 'push')
@@ -275,14 +177,12 @@ jobs:
         name: MercuryHealth.Database
         path: ${{ github.workspace }}/MercuryHealth.Database
 
-    #connection-string: ${{ steps.Infra.outputs.out_sqlConnectionString }}
-    #${{ steps.Infra.outputs.out_sqlserverFQName }}
     # Deploy Database *.dacpac file
     - name: 'Deploy the database to Azure'
       uses: Azure/sql-action@v1.2
       with:
         server-name: ${{ needs.deploy_infrastructure.outputs.output6 }}
-        connection-string: ${{ secrets.sql-connection-string }}
+        connection-string: ${{ secrets.sql-connection-string }}
         dacpac-package: './MercuryHealth.Database/MercuryHealth.Database.dacpac'
 
     - name: Download Build Artifacts-Website Application
@@ -292,7 +192,6 @@ jobs:
         name: MercuryHealth.Website
         path: ${{ github.workspace }}/MercuryHealth.Website
 
-#${{ steps.Infra.outputs.out_webSiteName }}
     - name: 'Deploy Website Application'
       uses: azure/webapps-deploy@v2
       with:
@@ -307,7 +206,6 @@ jobs:
         name: MercuryHealth.FunctionApp
         path: ${{ github.workspace }}/MercuryHealth.FunctionApp
 
-#${{ steps.Infra.outputs.out_functionAppName }}
     # Deploy Function Application
     - name: 'Deploy Function Application'
       uses: Azure/functions-action@v1
@@ -316,8 +214,6 @@ jobs:
         slot-name: 'production'
         package: './MercuryHealth.FunctionApp'
 
-# --api-key ${{ steps.Infra.outputs.out_releaseAnnotationGuidID }} \
-# --app ${{ steps.Infra.outputs.out_appInsightsApplicationId }} \
     - name: 'Generate Temporary API Key For App Insights'
       id: AIKeyGen
       uses: Azure/CLI@v1
@@ -380,7 +276,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # Identify any jobs that must complete successfully before this job will run.
-    needs: [Deploy_Application, Deploy_Infrastructure]
+    needs: [Deploy_Infrastructure, Deploy_Application]
     timeout-minutes: 10
         
     steps:
