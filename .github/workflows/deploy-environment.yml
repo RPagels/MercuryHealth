@@ -44,9 +44,9 @@ on:
 
 jobs:
   ###################################################################
-  # Deployment Stage - Infrastructure / Application / Database      #
+  # Deployment Stage - Infrastructure
   ###################################################################
-  Deploy_to_Environment:
+  Deploy_Infrastructure:
     runs-on: ubuntu-latest
     outputs:
       output1: ${{ steps.Infra.outputs.out_webSiteNameURL }}
@@ -54,8 +54,14 @@ jobs:
       output3: ${{ steps.Infra.outputs.out_loadTestsName }}
       output4: ${{ steps.Infra.outputs.out_webSiteName }}
       output5: ${{ steps.Infra.outputs.out_functionAppName }}
+      output6: ${{ steps.Infra.outputs.out_sqlserverFQName }}
+      output7: ${{ steps.Infra.outputs.out_webSiteName }}
+      output8: ${{ steps.Infra.outputs.out_functionAppName }}
+      output9: ${{ steps.Infra.outputs.out_releaseAnnotationGuidID }}
+      output10: ${{ steps.Infra.outputs.out_appInsightsApplicationId }}
+      output11: ${{ steps.Infra.outputs.out_appInsightsAPIApplicationId }}
       
-    name: Deploy Application
+    name: Deploy Infrastructure
     env:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
       Deploy_Environment: ${{ inputs.environment-suffix }}
@@ -121,101 +127,91 @@ jobs:
         deploymentMode: Incremental
         failOnStdErr: false
 
-#    - name: Save Application Insights Id to Environment Variable
-#      run: |
-#         echo 'sqlserverFQName = ${{steps.Infra.outputs.out_sqlserverFQName}}'
-#         echo 'webSiteName = ${{steps.Infra.outputs.out_webSiteName}}'
-#         echo 'out_webSiteNameURL = ${{steps.Infra.outputs.out_webSiteNameURL}}'
-#         echo 'sqlConnectionString = ${{steps.Infra.outputs.out_sqlConnectionString}}
-#        echo 'functionAppName = ${{steps.Infra.outputs.out_functionAppName}}'
-#        echo 'sqlserverName = ${{steps.Infra.outputs.out_sqlserverName}}'
-#        echo 'sqlDBName = ${{steps.Infra.outputs.out_sqlDBName}}'
+#     - name: Download Build Artifact-Database
+#       uses: actions/download-artifact@v2
+#       continue-on-error: false
+#       with:
+#         name: MercuryHealth.Database
+#         path: ${{ github.workspace }}/MercuryHealth.Database
 
-    - name: Download Build Artifact-Database
-      uses: actions/download-artifact@v2
-      continue-on-error: false
-      with:
-        name: MercuryHealth.Database
-        path: ${{ github.workspace }}/MercuryHealth.Database
+#     #connection-string: ${{ steps.Infra.outputs.out_sqlConnectionString }}
+#     # Deploy Database *.dacpac file
+#     - name: 'Deploy the database to Azure'
+#       uses: Azure/sql-action@v1.2
+#       with:
+#         server-name: ${{ steps.Infra.outputs.out_sqlserverFQName }}
+#         connection-string: ${{ secrets.sql-connection-string }}
+#         dacpac-package: './MercuryHealth.Database/MercuryHealth.Database.dacpac'
 
-    #connection-string: ${{ steps.Infra.outputs.out_sqlConnectionString }}
-    # Deploy Database *.dacpac file
-    - name: 'Deploy the database to Azure'
-      uses: Azure/sql-action@v1.2
-      with:
-        server-name: ${{ steps.Infra.outputs.out_sqlserverFQName }}
-        connection-string: ${{ secrets.sql-connection-string }}
-        dacpac-package: './MercuryHealth.Database/MercuryHealth.Database.dacpac'
+#     - name: Download Build Artifacts-Website Application
+#       uses: actions/download-artifact@v2
+#       continue-on-error: false
+#       with:
+#         name: MercuryHealth.Website
+#         path: ${{ github.workspace }}/MercuryHealth.Website
 
-    - name: Download Build Artifacts-Website Application
-      uses: actions/download-artifact@v2
-      continue-on-error: false
-      with:
-        name: MercuryHealth.Website
-        path: ${{ github.workspace }}/MercuryHealth.Website
-
-    - name: 'Deploy Website Application'
-      uses: azure/webapps-deploy@v2
-      with:
-          app-name: ${{ steps.Infra.outputs.out_webSiteName }}
-          #slot-name: 'Dev'
-          package: './MercuryHealth.Website'
+#     - name: 'Deploy Website Application'
+#       uses: azure/webapps-deploy@v2
+#       with:
+#           app-name: ${{ steps.Infra.outputs.out_webSiteName }}
+#           #slot-name: 'Dev'
+#           package: './MercuryHealth.Website'
           
-    - name: Download Build Artifacts-Function Application
-      uses: actions/download-artifact@v2
-      continue-on-error: false
-      with:
-        name: MercuryHealth.FunctionApp
-        path: ${{ github.workspace }}/MercuryHealth.FunctionApp
+#     - name: Download Build Artifacts-Function Application
+#       uses: actions/download-artifact@v2
+#       continue-on-error: false
+#       with:
+#         name: MercuryHealth.FunctionApp
+#         path: ${{ github.workspace }}/MercuryHealth.FunctionApp
 
-    # Deploy Function Application
-    - name: 'Deploy Function Application'
-      uses: Azure/functions-action@v1
-      with:
-        app-name: ${{ steps.Infra.outputs.out_functionAppName }}
-        slot-name: 'production'
-        package: './MercuryHealth.FunctionApp'
+#     # Deploy Function Application
+#     - name: 'Deploy Function Application'
+#       uses: Azure/functions-action@v1
+#       with:
+#         app-name: ${{ steps.Infra.outputs.out_functionAppName }}
+#         slot-name: 'production'
+#         package: './MercuryHealth.FunctionApp'
 
-    - name: 'Generate Temporary API Key For App Insights'
-      id: AIKeyGen
-      uses: Azure/CLI@v1
-      with:
-        inlineScript: |
-          az config set extension.use_dynamic_install=yes_without_prompt
-          result=$(az monitor app-insights api-key create \
-                      --api-key ${{ steps.Infra.outputs.out_releaseAnnotationGuidID }} \
-                      --write-properties WriteAnnotations \
-                      -g ${{ env.Azure_Resource_GroupName }} \
-                      --app ${{ steps.Infra.outputs.out_appInsightsApplicationId }} \
-                      --query "apiKey" --output tsv)
-          echo "::set-output name=aiKey::$result"
+#     - name: 'Generate Temporary API Key For App Insights'
+#       id: AIKeyGen
+#       uses: Azure/CLI@v1
+#       with:
+#         inlineScript: |
+#           az config set extension.use_dynamic_install=yes_without_prompt
+#           result=$(az monitor app-insights api-key create \
+#                       --api-key ${{ steps.Infra.outputs.out_releaseAnnotationGuidID }} \
+#                       --write-properties WriteAnnotations \
+#                       -g ${{ env.Azure_Resource_GroupName }} \
+#                       --app ${{ steps.Infra.outputs.out_appInsightsApplicationId }} \
+#                       --query "apiKey" --output tsv)
+#           echo "::set-output name=aiKey::$result"
     
-#    - name: DEBUG - Infra Outputs across jobs
-#      run: |
-#        echo 'out_releaseAnnotationGuidID=${{ steps.Infra.outputs.out_releaseAnnotationGuidID }}'
-#        echo 'out_appInsightsApplicationId=${{ steps.Infra.outputs.out_appInsightsApplicationId }}'
-#        echo 'out_appInsightsAPIApplicationId=${{ steps.Infra.outputs.out_appInsightsAPIApplicationId }}'
-#        echo 'steps.AIKeyGen.outputs.aiKey=${{ steps.AIKeyGen.outputs.aiKey }}'
+# #    - name: DEBUG - Infra Outputs across jobs
+# #      run: |
+# #        echo 'out_releaseAnnotationGuidID=${{ steps.Infra.outputs.out_releaseAnnotationGuidID }}'
+# #        echo 'out_appInsightsApplicationId=${{ steps.Infra.outputs.out_appInsightsApplicationId }}'
+# #        echo 'out_appInsightsAPIApplicationId=${{ steps.Infra.outputs.out_appInsightsAPIApplicationId }}'
+# #        echo 'steps.AIKeyGen.outputs.aiKey=${{ steps.AIKeyGen.outputs.aiKey }}'
         
-    - name: 'Annotate Deployment'
-      uses: wictorwilen/application-insights-action@v1
-      id: annotation
-      with:
-        applicationId: ${{ steps.Infra.outputs.out_appInsightsAPIApplicationId }}
-        apiKey: ${{ steps.AIKeyGen.outputs.aiKey }}
-        releaseName: ${{ github.event_name }}
-        message: ${{ github.event.head_commit.message }}
-        actor: ${{ github.actor }}
+#     - name: 'Annotate Deployment'
+#       uses: wictorwilen/application-insights-action@v1
+#       id: annotation
+#       with:
+#         applicationId: ${{ steps.Infra.outputs.out_appInsightsAPIApplicationId }}
+#         apiKey: ${{ steps.AIKeyGen.outputs.aiKey }}
+#         releaseName: ${{ github.event_name }}
+#         message: ${{ github.event.head_commit.message }}
+#         actor: ${{ github.actor }}
 
-    - name: Remove Temporary API Key For App Insights
-      uses: Azure/CLI@v1
-      with:
-        inlineScript: |
-          az config set extension.use_dynamic_install=yes_without_prompt
-          az monitor app-insights api-key delete \
-                      --api-key ${{ steps.Infra.outputs.out_releaseAnnotationGuidID }} \
-                      -g ${{ env.Azure_Resource_GroupName }} \
-                      --app ${{ steps.Infra.outputs.out_appInsightsApplicationId }} 
+#     - name: Remove Temporary API Key For App Insights
+#       uses: Azure/CLI@v1
+#       with:
+#         inlineScript: |
+#           az config set extension.use_dynamic_install=yes_without_prompt
+#           az monitor app-insights api-key delete \
+#                       --api-key ${{ steps.Infra.outputs.out_releaseAnnotationGuidID }} \
+#                       -g ${{ env.Azure_Resource_GroupName }} \
+#                       --app ${{ steps.Infra.outputs.out_appInsightsApplicationId }} 
 
     - name: Ensure Resource Group is Locked
       if: contains(github.event_name, 'push')
@@ -229,13 +225,13 @@ jobs:
       run: |
         az logout
         
-###################################################################
-# TEST to Deploy Application                         
-###################################################################
-  TestStageOnly:
+  ###################################################################
+  # Deployment Stage - Application / Database 
+  ###################################################################
+  Deploy_Application:
     runs-on: ubuntu-latest
     name: TEST to Deploy Application
-    needs: [Deploy_to_Environment]
+    needs: [Deploy_Infrastructure]
     env:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
       Deploy_Environment: ${{ inputs.environment-suffix }}
@@ -254,11 +250,42 @@ jobs:
   
     - name: Display Output Variables
       run: |
-         echo 'output1 = ${{needs.deploy_to_environment.outputs.output1}}'
-         echo 'output2 = ${{needs.deploy_to_environment.outputs.output2}}'
-         echo 'output3 = ${{needs.deploy_to_environment.outputs.output3}}'
-         echo 'output4 = ${{needs.deploy_to_environment.outputs.output4}}'
-         echo 'output5 = ${{needs.deploy_to_environment.outputs.output5}}'
+         echo 'output1 = ${{needs.deploy_infrastructure.outputs.output1}}'
+         echo 'output2 = ${{needs.deploy_infrastructure.outputs.output2}}'
+         echo 'output3 = ${{needs.deploy_infrastructure.outputs.output3}}'
+         echo 'output4 = ${{needs.deploy_infrastructure.outputs.output4}}'
+         echo 'output5 = ${{needs.deploy_infrastructure.outputs.output5}}'
+         echo 'output6 = ${{needs.deploy_infrastructure.outputs.output6}}'
+         echo 'output7 = ${{needs.deploy_infrastructure.outputs.output7}}'
+         echo 'output8 = ${{needs.deploy_infrastructure.outputs.output8}}'
+         echo 'output9 = ${{needs.deploy_infrastructure.outputs.output9}}'
+         echo 'output10 = ${{needs.deploy_infrastructure.outputs.output10}}'
+         echo 'output11 = ${{needs.deploy_infrastructure.outputs.output11}}'
+
+    - name: Ensure Resource Group is UnLocked
+      if: contains(github.event_name, 'push')
+      uses: Azure/CLI@v1
+      continue-on-error: true
+      with:
+        inlineScript: |
+          az group lock delete --name DontDeleteMe --resource-group ${{ env.Azure_Resource_GroupName }}
+
+    - name: Download Build Artifact-Database
+      uses: actions/download-artifact@v2
+      continue-on-error: false
+      with:
+        name: MercuryHealth.Database
+        path: ${{ github.workspace }}/MercuryHealth.Database
+
+    #connection-string: ${{ steps.Infra.outputs.out_sqlConnectionString }}
+    #${{ steps.Infra.outputs.out_sqlserverFQName }}
+    # Deploy Database *.dacpac file
+    - name: 'Deploy the database to Azure'
+      uses: Azure/sql-action@v1.2
+      with:
+        server-name: ${{ needs.deploy_infrastructure.outputs.output6 }}
+        connection-string: ${{ secrets.sql-connection-string }}
+        dacpac-package: './MercuryHealth.Database/MercuryHealth.Database.dacpac'
 
     - name: Download Build Artifacts-Website Application
       uses: actions/download-artifact@v2
@@ -267,12 +294,73 @@ jobs:
         name: MercuryHealth.Website
         path: ${{ github.workspace }}/MercuryHealth.Website
 
+#${{ steps.Infra.outputs.out_webSiteName }}
     - name: 'Deploy Website Application'
       uses: azure/webapps-deploy@v2
       with:
-          app-name: ${{ needs.deploy_to_environment.outputs.output4 }}
+          app-name: ${{ needs.deploy_infrastructure.outputs.output7 }}
           #slot-name: 'Dev'
           package: './MercuryHealth.Website'
+          
+    - name: Download Build Artifacts-Function Application
+      uses: actions/download-artifact@v2
+      continue-on-error: false
+      with:
+        name: MercuryHealth.FunctionApp
+        path: ${{ github.workspace }}/MercuryHealth.FunctionApp
+
+#${{ steps.Infra.outputs.out_functionAppName }}
+    # Deploy Function Application
+    - name: 'Deploy Function Application'
+      uses: Azure/functions-action@v1
+      with:
+        app-name: ${{ needs.deploy_infrastructure.outputs.output8 }}
+        slot-name: 'production'
+        package: './MercuryHealth.FunctionApp'
+
+# --api-key ${{ steps.Infra.outputs.out_releaseAnnotationGuidID }} \
+# --app ${{ steps.Infra.outputs.out_appInsightsApplicationId }} \
+    - name: 'Generate Temporary API Key For App Insights'
+      id: AIKeyGen
+      uses: Azure/CLI@v1
+      with:
+        inlineScript: |
+          az config set extension.use_dynamic_install=yes_without_prompt
+          result=$(az monitor app-insights api-key create \
+                      --api-key ${{ needs.deploy_infrastructure.outputs.output9 }} \
+                      --write-properties WriteAnnotations \
+                      -g ${{ env.Azure_Resource_GroupName }} \
+                      --app ${{ needs.deploy_infrastructure.outputs.output10 }} \
+                      --query "apiKey" --output tsv)
+          echo "::set-output name=aiKey::$result"
+        
+    - name: 'Annotate Deployment'
+      uses: wictorwilen/application-insights-action@v1
+      id: annotation
+      with:
+        applicationId: ${{ needs.deploy_infrastructure.outputs.output11 }}
+        apiKey: ${{ steps.AIKeyGen.outputs.aiKey }}
+        releaseName: ${{ github.event_name }}
+        message: ${{ github.event.head_commit.message }}
+        actor: ${{ github.actor }}
+
+    - name: Remove Temporary API Key For App Insights
+      uses: Azure/CLI@v1
+      with:
+        inlineScript: |
+          az config set extension.use_dynamic_install=yes_without_prompt
+          az monitor app-insights api-key delete \
+                      --api-key ${{ needs.deploy_infrastructure.outputs.output9 }} \
+                      -g ${{ env.Azure_Resource_GroupName }} \
+                      --app ${{ needs.deploy_infrastructure.outputs.output10 }} 
+
+    - name: Ensure Resource Group is Locked
+      if: contains(github.event_name, 'push')
+      uses: Azure/CLI@v1
+      continue-on-error: true
+      with:
+        inlineScript: |
+          az group lock create --lock-type CanNotDelete --name DontDeleteMe --resource-group ${{ env.Azure_Resource_GroupName }} --notes 'Prevent deletion of the resource group'
 
     - name: 'Azure logout'
       run: |
@@ -294,7 +382,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # Identify any jobs that must complete successfully before this job will run.
-    needs: [Deploy_to_Environment]
+    needs: [Deploy_Application]
     timeout-minutes: 10
         
     steps:
@@ -317,9 +405,9 @@ jobs:
 
 #      - name: DEBUG - Infra Outputs across jobs
 #        run: |
-#           echo 'output1 = ${{needs.deploy_to_environment.outputs.output1}}'
-#           echo 'output2 = ${{needs.deploy_to_environment.outputs.output2}}'
-#           echo 'output3 = ${{needs.deploy_to_environment.outputs.output3}}'
+#           echo 'output1 = ${{needs.deploy_infrastructure.outputs.output1}}'
+#           echo 'output2 = ${{needs.deploy_infrastructure.outputs.output2}}'
+#           echo 'output3 = ${{needs.deploy_infrastructure.outputs.output3}}'
            
       # Update Runsettings with Website URL
       - name: Update Runsettings with Website URL
@@ -329,7 +417,7 @@ jobs:
         env:
           POWERSHELL_TELEMETRY_OPTOUT: 1
         with:
-          inlineScript: MercuryHealth.UITests/TransformRunSettings.ps1 -website_url 'https://${{needs.deploy_to_environment.outputs.output1}}/'
+          inlineScript: MercuryHealth.UITests/TransformRunSettings.ps1 -website_url 'https://${{needs.deploy_infrastructure.outputs.output1}}/'
           # Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".
           azPSVersion: latest
           # Select the value of the ErrorActionPreference variable for executing the script. Options: stop, continue, silentlyContinue. Default is Stop.
@@ -385,7 +473,8 @@ jobs:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
            
     # Identify any jobs that must complete successfully before this job will run.
-    needs: [Deploy_to_Environment, UITesting_Stage_Application]
+    #needs: [Deploy_Application, UITesting_Stage_Application]
+    needs: [Deploy_Application, UITesting_Stage_Application]
     steps:
       - name: 'Checkout GitHub Actions'
         uses: actions/checkout@v2
@@ -405,9 +494,9 @@ jobs:
 
 #      - name: DEBUG - Infra Outputs across jobs
 #        run: |
-#           echo 'output1 = ${{needs.deploy_to_environment.outputs.output1}}'
-#           echo 'output2 = ${{needs.deploy_to_environment.outputs.output2}}'
-#           echo 'output3 = ${{needs.deploy_to_environment.outputs.output3}}'
+#           echo 'output1 = ${{needs.deploy_infrastructure.outputs.output1}}'
+#           echo 'output2 = ${{needs.deploy_infrastructure.outputs.output2}}'
+#           echo 'output3 = ${{needs.deploy_infrastructure.outputs.output3}}'
 
       # Assign the Load Test Contributor or Load Test Owner role to your Azure account
 #      - name: Assign Azure Role to Load Test Service
@@ -423,13 +512,13 @@ jobs:
         continue-on-error: true
         with:
           loadTestConfigFile: './MercuryHealth.LoadTests/LoadTest_HomePage_Config.yaml'
-          loadTestResource: ${{needs.deploy_to_environment.outputs.output3}}
+          loadTestResource: ${{needs.deploy_infrastructure.outputs.output3}}
           resourceGroup: ${{ env.Azure_Resource_GroupName }}
           env: |
             [
               {
                 "name": "webHost",
-                "value": "${{needs.deploy_to_environment.outputs.output1}}"
+                "value": "${{needs.deploy_infrastructure.outputs.output1}}"
               }
             ]
 
