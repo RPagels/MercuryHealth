@@ -5,6 +5,7 @@ param sqlserverName string
 param sqlserverfullyQualifiedDomainName string
 param sqlDBName string
 param sqlAdministratorLogin string
+param Deploy_Environment string
 
 @secure()
 param sqlAdministratorLoginPassword string
@@ -72,7 +73,7 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
   properties: {
     'ConnectionStrings:MercuryHealthWebContext': 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
     'ConnectionStrings:AppConfig': configStoreConnection
-    'Environment': 'Prod'
+    'Environment': Deploy_Environment
     'WEBSITE_RUN_FROM_PACKAGE': '1'
     'APPINSIGHTS_INSTRUMENTATIONKEY': appInsightsInstrumentationKey
     'APPINSIGHTS_PROFILERFEATURE_VERSION': '1.0.0'

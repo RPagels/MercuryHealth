@@ -7,6 +7,9 @@
         },
         "sqlAdministratorLoginPassword": {
             "value": ""
+        },
+        "AzureEnvironment": {
+            "value": ""
         }
     }
 }

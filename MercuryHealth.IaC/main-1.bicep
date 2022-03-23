@@ -3,12 +3,14 @@
 //targetScope = 'subscription'
 // Region for all resources
 param location string = resourceGroup().location
-param environment string = 'dev'
+//param environment string = 'dev'
 param createdBy string = 'Randy Pagels' // resourceGroup().managedBy
 param costCenter string = '74f644d3e665'
 param releaseAnnotationGuid string = newGuid()
 
 // Data params
+param Deploy_Environment string
+
 @secure()
 param sqlAdministratorLogin string
 
@@ -36,7 +38,7 @@ var dashboardName = 'dashboard-${uniqueString(resourceGroup().id)}'
 
 // Tags
 var defaultTags = {
-  'Env': environment
+  'Env': Deploy_Environment
   'App': 'Mercury Health'
   'CostCenter': costCenter
   'CreatedBy': createdBy
@@ -206,16 +208,17 @@ resource apiManagementSubscription 'Microsoft.ApiManagement/service/subscription
 
 resource apiManagementProducts 'Microsoft.ApiManagement/service/products@2021-08-01' = {
   parent: apiManagement
-  name: 'MercuryHealth-Developers'
+  name: 'Development'
   properties: {
     approvalRequired: false
+    state: 'published'
     description: 'Mercury Health - Developers'
     displayName: 'Mercury Health - Developers' //apiSubscriptionName
   }
 }
 
 resource appInsightsAPIManagement 'Microsoft.ApiManagement/service/loggers@2021-08-01' = {
-  name: '${apiServiceName}/MercuryHealth-applicationinsights'
+  name: '${apiServiceName}/${appInsightsName}' //MercuryHealth-applicationinsights'
   properties: {
     loggerType: 'applicationInsights'
     description: 'Mercury Health Application Insights instance.'
@@ -246,6 +249,7 @@ module webappmod './main-2-webapp.bicep' = {
     webAppPlanName: webAppPlanName
     webSiteName: webSiteName
     resourceGroupName: resourceGroup().name
+    Deploy_Environment: Deploy_Environment
     appInsightsName: appInsightsName
     location: location
     configStoreConnection: configStoreConnectionString

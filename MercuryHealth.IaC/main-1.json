@@ -5,17 +5,13 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "5902331977591946694"
+      "templateHash": "8354408214032041923"
     }
   },
   "parameters": {
     "location": {
       "type": "string",
       "defaultValue": "[resourceGroup().location]"
-    },
-    "environment": {
-      "type": "string",
-      "defaultValue": "dev"
     },
     "createdBy": {
       "type": "string",
@@ -28,6 +24,9 @@
     "releaseAnnotationGuid": {
       "type": "string",
       "defaultValue": "[newGuid()]"
+    },
+    "Deploy_Environment": {
+      "type": "string"
     },
     "sqlAdministratorLogin": {
       "type": "secureString"
@@ -117,7 +116,7 @@
     "blobstorageName": "[format('stablob{0}', uniqueString(resourceGroup().id))]",
     "dashboardName": "[format('dashboard-{0}', uniqueString(resourceGroup().id))]",
     "defaultTags": {
-      "Env": "[parameters('environment')]",
+      "Env": "[parameters('Deploy_Environment')]",
       "App": "Mercury Health",
       "CostCenter": "[parameters('costCenter')]",
       "CreatedBy": "[parameters('createdBy')]"
@@ -235,9 +234,10 @@
     {
       "type": "Microsoft.ApiManagement/service/products",
       "apiVersion": "2021-08-01",
-      "name": "[format('{0}/{1}', variables('apiServiceName'), 'MercuryHealth-Developers')]",
+      "name": "[format('{0}/{1}', variables('apiServiceName'), 'Development')]",
       "properties": {
         "approvalRequired": false,
+        "state": "published",
         "description": "Mercury Health - Developers",
         "displayName": "Mercury Health - Developers"
       },
@@ -248,7 +248,7 @@
     {
       "type": "Microsoft.ApiManagement/service/loggers",
       "apiVersion": "2021-08-01",
-      "name": "[format('{0}/MercuryHealth-applicationinsights', variables('apiServiceName'))]",
+      "name": "[format('{0}/{1}', variables('apiServiceName'), variables('appInsightsName'))]",
       "properties": {
         "loggerType": "applicationInsights",
         "description": "Mercury Health Application Insights instance.",
@@ -279,6 +279,9 @@
           },
           "resourceGroupName": {
             "value": "[resourceGroup().name]"
+          },
+          "Deploy_Environment": {
+            "value": "[parameters('Deploy_Environment')]"
           },
           "appInsightsName": {
             "value": "[variables('appInsightsName')]"
@@ -321,7 +324,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "2595418941209827911"
+              "templateHash": "17514706732472550435"
             }
           },
           "parameters": {
@@ -343,6 +346,9 @@
               "type": "string"
             },
             "sqlAdministratorLogin": {
+              "type": "string"
+            },
+            "Deploy_Environment": {
               "type": "string"
             },
             "sqlAdministratorLoginPassword": {
@@ -415,7 +421,7 @@
               "properties": {
                 "ConnectionStrings:MercuryHealthWebContext": "[format('Server=tcp:{0},1433;Initial Catalog={1};Persist Security Info=False;User Id={2}@{3};Password={4};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;', parameters('sqlserverfullyQualifiedDomainName'), parameters('sqlDBName'), parameters('sqlAdministratorLogin'), parameters('sqlserverName'), parameters('sqlAdministratorLoginPassword'))]",
                 "ConnectionStrings:AppConfig": "[parameters('configStoreConnection')]",
-                "Environment": "Prod",
+                "Environment": "[parameters('Deploy_Environment')]",
                 "WEBSITE_RUN_FROM_PACKAGE": "1",
                 "APPINSIGHTS_INSTRUMENTATIONKEY": "[parameters('appInsightsInstrumentationKey')]",
                 "APPINSIGHTS_PROFILERFEATURE_VERSION": "1.0.0",

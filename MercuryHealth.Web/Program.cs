@@ -23,7 +23,7 @@ builder.Host.ConfigureAppConfiguration(builder =>
         options.Connect(connectionString)
         .ConfigureRefresh(refreshOptions =>
          {
-             refreshOptions.Register("MercuryHealth:Settings:Sentinel", refreshAll: true).SetCacheExpiration(TimeSpan.FromSeconds(10));
+             refreshOptions.Register("MercuryHealth:Settings:Sentinel", refreshAll: true).SetCacheExpiration(TimeSpan.FromSeconds(5));
 
              // Set Cache timeout for one value only
              //refresh.Register("Settings:MetricsDashboard").SetCacheExpiration(TimeSpan.FromSeconds(10));
