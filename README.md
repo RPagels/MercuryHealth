@@ -6,10 +6,12 @@ https://status.dev.azure.com/
 
 The amazing Mercury Health development team has embraced a DevOps approach and is using continuous integration for builds and unit tests. If everything passes they use release management for continuous deployment that deploys to various environments and runs UI automation and load tests from coast to coast.
 
-# Build & Deploy Status
-[![Build_And_Deploy_To_Azure](https://github.com/RPagels/MercuryHealth/actions/workflows/Build_And_Deploy_To_Azure.yml/badge.svg)](https://github.com/RPagels/MercuryHealth/actions/workflows/Build_And_Deploy_To_Azure.yml)
+# Security Scan Status
+[![CodeQL](https://github.com/RPagels/MercuryHealth/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/RPagels/MercuryHealth/actions/workflows/codeql-analysis.yml)
 
+# Build & Deploy Status
 [![Deploy-Main](https://github.com/RPagels/MercuryHealth/actions/workflows/deploy-main.yml/badge.svg)](https://github.com/RPagels/MercuryHealth/actions/workflows/deploy-main.yml)
+[![Build_And_Deploy_To_Azure](https://github.com/RPagels/MercuryHealth/actions/workflows/Build_And_Deploy_To_Azure.yml/badge.svg)](https://github.com/RPagels/MercuryHealth/actions/workflows/Build_And_Deploy_To_Azure.yml)
 
 # Mercury Health Resources
 ### Team Resources
@@ -20,9 +22,9 @@ The amazing Mercury Health development team has embraced a DevOps approach and i
 - [GitHub Feedback](https://github.com/github/feedback)
 
 ### Application Environments
-- [Dev](https://website-4vwxkvpofrtbq-dev.azurewebsites.net/)
-- [QA](https://website-4vwxkvpofrtbq-qa.azurewebsites.net/)
-- [Prod](https://website-4vwxkvpofrtbq.azurewebsites.net/)
+- [Dev](https://app-fq3ruuhxgjony.azurewebsites.net/)
+- [QA](https://app-4av6wwkty4xb6.azurewebsites.net/)
+- [Prod](TBD)
 
 # Integrations 
 

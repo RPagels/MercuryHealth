@@ -54,6 +54,7 @@ jobs:
     name: Deploy Application
     env:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
+      Deploy_Environment: ${{ inputs.environment-suffix }}
 
     permissions:
       contents: read
@@ -112,7 +113,7 @@ jobs:
       with:
         resourceGroupName: ${{ env.Azure_Resource_GroupName }}
         template: ./MercuryHealth.IaC/main-1.bicep
-        parameters: ./MercuryHealth.IaC/main-1.params.json sqlAdministratorLogin=${{ secrets.sql-db-login }} sqlAdministratorLoginPassword=${{ secrets.sql-db-password }}
+        parameters: ./MercuryHealth.IaC/main-1.params.json sqlAdministratorLogin=${{ secrets.sql-db-login }} sqlAdministratorLoginPassword=${{ secrets.sql-db-password }} AzureEnvironment=${{ env.Deploy_Environment }}
         deploymentMode: Incremental
         failOnStdErr: false
 
