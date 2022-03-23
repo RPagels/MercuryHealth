@@ -23,7 +23,7 @@ public class NutritionsController : Controller
         this.telemetry = telemetry;
     }
 
-    // GET: Nutritions
+    // GET: Nutritions /  TEST
     public async Task<IActionResult> Index()
     {
         // Keep color logic out of the ViewPage, per MVC pattern, use a ViewModel.
