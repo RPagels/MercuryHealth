@@ -8,7 +8,7 @@
         "sqlAdministratorLoginPassword": {
             "value": ""
         },
-        "AzureEnvironment": {
+        "Deploy_Environment": {
             "value": ""
         }
     }
