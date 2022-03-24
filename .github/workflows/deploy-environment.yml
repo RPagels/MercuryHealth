@@ -47,17 +47,14 @@ jobs:
   Deploy_Infrastructure:
     runs-on: ubuntu-latest
     outputs:
-      output1: ${{ steps.Infra.outputs.out_webSiteNameURL }}
-      output2: 'https://${{ steps.Infra.outputs.out_webSiteNameURL }}'
-      output3: ${{ steps.Infra.outputs.out_loadTestsName }}
-      output4: ${{ steps.Infra.outputs.out_webSiteName }}
-      output5: ${{ steps.Infra.outputs.out_functionAppName }}
-      output6: ${{ steps.Infra.outputs.out_sqlserverFQName }}
-      output7: ${{ steps.Infra.outputs.out_webSiteName }}
-      output8: ${{ steps.Infra.outputs.out_functionAppName }}
-      output9: ${{ steps.Infra.outputs.out_releaseAnnotationGuidID }}
-      output10: ${{ steps.Infra.outputs.out_appInsightsApplicationId }}
-      output11: ${{ steps.Infra.outputs.out_appInsightsAPIApplicationId }}
+      output_webSiteNameURL: ${{ steps.Infra.outputs.out_webSiteNameURL }}
+      output_loadTestsName: ${{ steps.Infra.outputs.out_loadTestsName }}
+      output_webSiteName: ${{ steps.Infra.outputs.out_webSiteName }}
+      output_functionAppName: ${{ steps.Infra.outputs.out_functionAppName }}
+      output_sqlserverFQName: ${{ steps.Infra.outputs.out_sqlserverFQName }}
+      output_releaseAnnotationGuidID: ${{ steps.Infra.outputs.out_releaseAnnotationGuidID }}
+      output_appInsightsApplicationId: ${{ steps.Infra.outputs.out_appInsightsApplicationId }}
+      output_appInsightsAPIApplicationId: ${{ steps.Infra.outputs.out_appInsightsAPIApplicationId }}
       
     name: Deploy Infrastructure
     env:
@@ -148,19 +145,17 @@ jobs:
       with:
         creds: ${{ secrets.azure-credentials }}
   
-    - name: Display Output Variables
+    - name: DEBUG ONLY Display Output Variables
       run: |
-         echo 'output1 = ${{needs.deploy_infrastructure.outputs.output1}}'
-         echo 'output2 = ${{needs.deploy_infrastructure.outputs.output2}}'
-         echo 'output3 = ${{needs.deploy_infrastructure.outputs.output3}}'
-         echo 'output4 = ${{needs.deploy_infrastructure.outputs.output4}}'
-         echo 'output5 = ${{needs.deploy_infrastructure.outputs.output5}}'
-         echo 'output6 = ${{needs.deploy_infrastructure.outputs.output6}}'
-         echo 'output7 = ${{needs.deploy_infrastructure.outputs.output7}}'
-         echo 'output8 = ${{needs.deploy_infrastructure.outputs.output8}}'
-         echo 'output9 = ${{needs.deploy_infrastructure.outputs.output9}}'
-         echo 'output10 = ${{needs.deploy_infrastructure.outputs.output10}}'
-         echo 'output11 = ${{needs.deploy_infrastructure.outputs.output11}}'
+         echo 'output_loadTestsName: ${{ steps.Infra.outputs.out_loadTestsName }}'
+         echo 'output_webSiteName: ${{ steps.Infra.outputs.out_webSiteName }}'
+         echo 'output_functionAppName: ${{ steps.Infra.outputs.out_functionAppName }}'
+         echo 'output_webSiteNameURL: ${{ steps.Infra.outputs.out_webSiteNameURL }}'
+         echo 'output_sqlserverFQName: ${{ steps.Infra.outputs.out_sqlserverFQName }}'
+         echo 'output_releaseAnnotationGuidID: ${{ steps.Infra.outputs.out_releaseAnnotationGuidID }}'
+         echo 'output_appInsightsApplicationId: ${{ steps.Infra.outputs.out_appInsightsApplicationId }}'
+         echo 'output_appInsightsAPIApplicationId: ${{ steps.Infra.outputs.out_appInsightsAPIApplicationId }}'
+
 
     - name: Ensure Resource Group is UnLocked
       if: contains(github.event_name, 'push')
@@ -181,7 +176,7 @@ jobs:
     - name: 'Deploy the database to Azure'
       uses: Azure/sql-action@v1.2
       with:
-        server-name: ${{ needs.deploy_infrastructure.outputs.output6 }}
+        server-name: ${{ needs.deploy_infrastructure.outputs.output_sqlserverFQName }}
         connection-string: ${{ secrets.sql-connection-string }}
         dacpac-package: './MercuryHealth.Database/MercuryHealth.Database.dacpac'
 
@@ -195,7 +190,7 @@ jobs:
     - name: 'Deploy Website Application'
       uses: azure/webapps-deploy@v2
       with:
-          app-name: ${{ needs.deploy_infrastructure.outputs.output7 }}
+          app-name: ${{ needs.deploy_infrastructure.outputs.output_webSiteName }}
           #slot-name: 'Dev'
           package: './MercuryHealth.Website'
           
@@ -210,7 +205,7 @@ jobs:
     - name: 'Deploy Function Application'
       uses: Azure/functions-action@v1
       with:
-        app-name: ${{ needs.deploy_infrastructure.outputs.output8 }}
+        app-name: ${{ needs.deploy_infrastructure.outputs.output_functionAppName }}
         slot-name: 'production'
         package: './MercuryHealth.FunctionApp'
 
@@ -221,10 +216,10 @@ jobs:
         inlineScript: |
           az config set extension.use_dynamic_install=yes_without_prompt
           result=$(az monitor app-insights api-key create \
-                      --api-key ${{ needs.deploy_infrastructure.outputs.output9 }} \
+                      --api-key ${{ needs.deploy_infrastructure.outputs.output_releaseAnnotationGuidID }} \
                       --write-properties WriteAnnotations \
                       -g ${{ env.Azure_Resource_GroupName }} \
-                      --app ${{ needs.deploy_infrastructure.outputs.output10 }} \
+                      --app ${{ needs.deploy_infrastructure.outputs.output_appInsightsApplicationId }} \
                       --query "apiKey" --output tsv)
           echo "::set-output name=aiKey::$result"
         
@@ -232,7 +227,7 @@ jobs:
       uses: wictorwilen/application-insights-action@v1
       id: annotation
       with:
-        applicationId: ${{ needs.deploy_infrastructure.outputs.output11 }}
+        applicationId: ${{ needs.deploy_infrastructure.outputs.out_appInsightsAPIApplicationId }}
         apiKey: ${{ steps.AIKeyGen.outputs.aiKey }}
         releaseName: ${{ github.event_name }}
         message: ${{ github.event.head_commit.message }}
@@ -244,9 +239,9 @@ jobs:
         inlineScript: |
           az config set extension.use_dynamic_install=yes_without_prompt
           az monitor app-insights api-key delete \
-                      --api-key ${{ needs.deploy_infrastructure.outputs.output9 }} \
+                      --api-key ${{ needs.deploy_infrastructure.outputs.output_releaseAnnotationGuidID }} \
                       -g ${{ env.Azure_Resource_GroupName }} \
-                      --app ${{ needs.deploy_infrastructure.outputs.output10 }} 
+                      --app ${{ needs.deploy_infrastructure.outputs.output_appInsightsApplicationId }} 
 
     - name: Ensure Resource Group is Locked
       if: contains(github.event_name, 'push')
@@ -297,12 +292,6 @@ jobs:
           name: MercuryHealth.UITests
           path: ${{ github.workspace }}/MercuryHealth.UITests
 
-#      - name: DEBUG - Infra Outputs across jobs
-#        run: |
-#           echo 'output1 = ${{needs.deploy_infrastructure.outputs.output1}}'
-#           echo 'output2 = ${{needs.deploy_infrastructure.outputs.output2}}'
-#           echo 'output3 = ${{needs.deploy_infrastructure.outputs.output3}}'
-           
       # Update Runsettings with Website URL
       - name: Update Runsettings with Website URL
         uses: Azure/powershell@v1
@@ -311,7 +300,7 @@ jobs:
         env:
           POWERSHELL_TELEMETRY_OPTOUT: 1
         with:
-          inlineScript: MercuryHealth.UITests/TransformRunSettings.ps1 -website_url 'https://${{needs.deploy_infrastructure.outputs.output1}}/'
+          inlineScript: MercuryHealth.UITests/TransformRunSettings.ps1 -website_url 'https://${{needs.deploy_infrastructure.output_webSiteNameURL}}/'
           # Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".
           azPSVersion: latest
           # Select the value of the ErrorActionPreference variable for executing the script. Options: stop, continue, silentlyContinue. Default is Stop.
@@ -323,19 +312,7 @@ jobs:
          dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }}
          dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './MercuryHealth.UITests'
 
-#      - name: Playwright Tests on Chromium
-#        continue-on-error: true
-#        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --filter TestCategory=Playwright_Tests_Chromium -l "console;verbosity=normal" -l "trx;LogFileName=TestResults.trx" --settings MercuryHealth.UITests/MercuryHealthTests.runsettings
-
-#      - name: Playwright Tests on Firefox
-#        continue-on-error: true
-#        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --filter TestCategory=Playwright_Tests_FireFox -l "console;verbosity=normal" -l "trx;LogFileName=TestResults.trx" --settings MercuryHealth.UITests/MercuryHealthTests.runsettings
-
-#      - name: Playwright Tests on Browsers
-#        continue-on-error: true
-#        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.dll --filter "TestCategory=Playwright_Tests_Chromium|Playwright_Tests_FireFox" -l "console;verbosity=normal" -l "trx;LogFileName=TestResults.trx" --settings MercuryHealth.UITests/MercuryHealthTests.runsettings
-
-      - name: csproj - Playwright Tests on Browsers
+      - name: Playwright Tests all on Browsers
         continue-on-error: true
         run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj --filter "TestCategory=Playwright_Tests_Chromium|TestCategory=Playwright_Tests_FireFox" -l "console;verbosity=normal" -l "trx;LogFileName=TestResults.trx" --settings MercuryHealth.UITests/MercuryHealthTests.runsettings
 
@@ -367,7 +344,6 @@ jobs:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
            
     # Identify any jobs that must complete successfully before this job will run.
-    #needs: [Deploy_Application, UITesting_Stage_Application]
     needs: [Deploy_Application]
     steps:
       - name: 'Checkout GitHub Actions'
@@ -386,12 +362,6 @@ jobs:
         with:
           creds: ${{ secrets.azure-credentials }}
 
-#      - name: DEBUG - Infra Outputs across jobs
-#        run: |
-#           echo 'output1 = ${{needs.deploy_infrastructure.outputs.output1}}'
-#           echo 'output2 = ${{needs.deploy_infrastructure.outputs.output2}}'
-#           echo 'output3 = ${{needs.deploy_infrastructure.outputs.output3}}'
-
       # Assign the Load Test Contributor or Load Test Owner role to your Azure account
 #      - name: Assign Azure Role to Load Test Service
 #        uses: Azure/CLI@v1
@@ -406,13 +376,13 @@ jobs:
         continue-on-error: true
         with:
           loadTestConfigFile: './MercuryHealth.LoadTests/LoadTest_HomePage_Config.yaml'
-          loadTestResource: ${{needs.deploy_infrastructure.outputs.output3}}
+          loadTestResource: ${{needs.deploy_infrastructure.outputs.output_loadTestsName}}
           resourceGroup: ${{ env.Azure_Resource_GroupName }}
           env: |
             [
               {
                 "name": "webHost",
-                "value": "${{needs.deploy_infrastructure.outputs.output1}}"
+                "value": "${{needs.deploy_infrastructure.outputs.output_webSiteNameURL}}"
               }
             ]
 
@@ -434,7 +404,7 @@ jobs:
   Approval_Stage_Application:
     if: contains(github.event_name, 'push') && (inputs.approval-required == true)
 
-    name: Approval to Next Stage
+    name: Approve Deployment
     
     # Identify any jobs that must complete successfully before this job will run.
     runs-on: ubuntu-latest
@@ -445,4 +415,4 @@ jobs:
     steps:
       - name: Approve Deployment
         run: |
-          echo 'Wait for Approval'
+          echo 'Approve Deployment'

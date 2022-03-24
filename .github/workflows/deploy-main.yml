@@ -193,7 +193,7 @@ jobs:
         resource-group-base-name: 'rg-MercuryHealth'
         environment-suffix: 'qa'
         resource-group-location: 'eastus2'
-        approval-required: false
+        approval-required: true
       secrets:
         azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
         sql-db-login: ${{ secrets.SQL_DB_LOGIN }}
