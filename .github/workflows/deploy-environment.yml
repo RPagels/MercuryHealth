@@ -147,15 +147,14 @@ jobs:
   
     - name: DEBUG ONLY Display Output Variables
       run: |
-         echo 'output_loadTestsName: ${{ steps.Infra.outputs.out_loadTestsName }}'
-         echo 'output_webSiteName: ${{ steps.Infra.outputs.out_webSiteName }}'
-         echo 'output_functionAppName: ${{ steps.Infra.outputs.out_functionAppName }}'
-         echo 'output_webSiteNameURL: ${{ steps.Infra.outputs.out_webSiteNameURL }}'
-         echo 'output_sqlserverFQName: ${{ steps.Infra.outputs.out_sqlserverFQName }}'
-         echo 'output_releaseAnnotationGuidID: ${{ steps.Infra.outputs.out_releaseAnnotationGuidID }}'
-         echo 'output_appInsightsApplicationId: ${{ steps.Infra.outputs.out_appInsightsApplicationId }}'
-         echo 'output_appInsightsAPIApplicationId: ${{ steps.Infra.outputs.out_appInsightsAPIApplicationId }}'
-
+         echo 'output_loadTestsName: ${{ needs.deploy_infrastructure.outputs.out_loadTestsName }}'
+         echo 'output_webSiteName: ${{ needs.deploy_infrastructure.outputs.out_webSiteName }}'
+         echo 'output_functionAppName: ${{ needs.deploy_infrastructure.outputs.out_functionAppName }}'
+         echo 'output_webSiteNameURL: ${{ needs.deploy_infrastructure.outputs.out_webSiteNameURL }}'
+         echo 'output_sqlserverFQName: ${{ needs.deploy_infrastructure.outputs.out_sqlserverFQName }}'
+         echo 'output_releaseAnnotationGuidID: ${{ needs.deploy_infrastructure.outputs.out_releaseAnnotationGuidID }}'
+         echo 'output_appInsightsApplicationId: ${{ needs.deploy_infrastructure.outputs.out_appInsightsApplicationId }}'
+         echo 'output_appInsightsAPIApplicationId: ${{ needs.deploy_infrastructure.outputs.out_appInsightsAPIApplicationId }}'
 
     - name: Ensure Resource Group is UnLocked
       if: contains(github.event_name, 'push')
@@ -227,7 +226,7 @@ jobs:
       uses: wictorwilen/application-insights-action@v1
       id: annotation
       with:
-        applicationId: ${{ needs.deploy_infrastructure.outputs.out_appInsightsAPIApplicationId }}
+        applicationId: ${{ needs.deploy_infrastructure.outputs.output_appInsightsAPIApplicationId }}
         apiKey: ${{ steps.AIKeyGen.outputs.aiKey }}
         releaseName: ${{ github.event_name }}
         message: ${{ github.event.head_commit.message }}
