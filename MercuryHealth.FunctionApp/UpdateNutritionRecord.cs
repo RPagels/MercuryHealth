@@ -51,8 +51,9 @@ public class UpdateNutritionRecord
             // Deserialize JSON Object to Nutrition record
             nutrition = Newtonsoft.Json.JsonConvert.DeserializeObject<Nutrition>(responseBody);
 
-            // Update a couple fields
+            // Update a fields
             nutrition.Tags = "API Update";
+            nutrition.ProteinInGrams = Convert.ToDecimal("0.123456");
             nutrition.MealTime = DateTime.Now;
 
             // Serialize JSON Object from Nutrition record

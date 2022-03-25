@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+//using System.ComponentModel.DataAnnotations;
 
 namespace MercuryHealth.Web.Models;
 
@@ -11,6 +12,7 @@ public class Exercises
     public string? Description { get; set; }
 
     [DisplayName("Exercise Time")]
+    //[RegularExpression(@"${day}-${month}-${year}")]
     public DateTime ExerciseTime { get; set; }
 
     [DisplayName("Muscles")]

@@ -20,6 +20,7 @@ public class Nutrition
 
     [DisplayName("Protein/g")]
     [DisplayFormat(DataFormatString = "{0:N}", ApplyFormatInEditMode = true)]
+    [RegularExpression(@"^[\d,]+(\.\d{1,5})?$", ErrorMessage = "Must be formated 9.99999")]
     public decimal ProteinInGrams { get; set; }
 
     [DisplayName("Fat/g")]
