@@ -32,17 +32,10 @@ param accessPolicies array = [
   }
 ]
 
-param enabledForDeployment bool = true
-param enabledForTemplateDeployment bool = true
-param enabledForDiskEncryption bool = true
-param enableRbacAuthorization bool = false
-param softDeleteRetentionInDays int = 90
-
 //param keyName string = 'prodKey'
 param secretName1 string
 param secretValue1 string = configStoreConnection
 param secretName2 string
-//param secretValue3 string = 'Data Source=tcp:${sqlserverName},1433;Initial Catalog=${sqlDBName};User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};'
 param secretValue2 string = 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
 
 param networkAcls object = {
@@ -61,11 +54,11 @@ resource keyvault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
     }
     enableSoftDelete: false
     accessPolicies: accessPolicies
-    enabledForDeployment: enabledForDeployment
-    enabledForDiskEncryption: enabledForDiskEncryption
-    enabledForTemplateDeployment: enabledForTemplateDeployment
-    softDeleteRetentionInDays: softDeleteRetentionInDays
-    enableRbacAuthorization: enableRbacAuthorization
+    enabledForDeployment: true
+    enabledForDiskEncryption: true
+    enabledForTemplateDeployment: true
+    softDeleteRetentionInDays: 90
+    enableRbacAuthorization: false
     networkAcls: networkAcls
   }
 }

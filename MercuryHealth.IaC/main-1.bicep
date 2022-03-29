@@ -307,6 +307,72 @@ module functionappmod './main-6-funcapp.bicep' = {
   }
 }
 
+////////////////////////////////////////
+// START - Key Vault
+////////////////////////////////////////
+
+// Create Azure KeyVault
+// module keyvaultmod './main-8-keyvault.bicep' = {
+//  name: keyvaultName
+//  params: {
+//    location: location
+//    vaultName: keyvaultName
+//    sqlserverName: sqlserverName
+//    sqlDBName: sqlDBName
+//    sqlAdministratorLogin: sqlAdministratorLogin
+//    sqlAdministratorLoginPassword: sqlAdministratorLoginPassword
+//    configStoreConnection: configStoreConnectionString
+//    appServiceprincipalId: webappmod.outputs.out_appServiceprincipalId
+//    sqlserverfullyQualifiedDomainName: sqldbmod.outputs.sqlserverfullyQualifiedDomainName
+//    webSiteName: webSiteName
+//    secretName1: secretName1
+//    secretName2: secretName2
+//    }
+//    dependsOn:  [
+//     webappmod
+//   ]
+// }
+
+resource keyvaultmod 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
+  name: keyvaultName
+  location: location
+  properties: {
+    sku: {
+      family: 'A'
+      name: 'standard'
+    }
+    tenantId: subscription().tenantId
+    accessPolicies:[
+      {
+        objectId: webappmod.outputs.out_appServiceprincipalId
+        permissions: {
+          keys: [
+            'list'
+            'get'
+          ]
+          secrets: [
+            'list'
+            'get'
+          ]
+        }
+        tenantId: subscription().tenantId
+      }
+    ]
+  }
+}
+
+resource secret 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+  name: 'mysecret'
+  parent: keyvaultmod
+  properties: {
+    contentType: 'text/plain'
+    value: 'replace me'
+  }
+}
+////////////////////////////////////////
+// END - Key Vault
+////////////////////////////////////////
+
 // Create Azure Load Tests
 module loadtestsmod './main-9-loadtests.bicep' = {
   name: loadTestsName
@@ -315,28 +381,6 @@ module loadtestsmod './main-9-loadtests.bicep' = {
     loadTestsName: loadTestsName
     defaultTags: defaultTags
   }
-}
-
-// Create Azure KeyVault
-module keyvaultmod './main-8-keyvault.bicep' = {
- name: keyvaultName
- params: {
-   location: location
-   vaultName: keyvaultName
-   sqlserverName: sqlserverName
-   sqlDBName: sqlDBName
-   sqlAdministratorLogin: sqlAdministratorLogin
-   sqlAdministratorLoginPassword: sqlAdministratorLoginPassword
-   configStoreConnection: configStoreConnectionString
-   appServiceprincipalId: webappmod.outputs.out_appServiceprincipalId
-   sqlserverfullyQualifiedDomainName: sqldbmod.outputs.sqlserverfullyQualifiedDomainName
-   webSiteName: webSiteName
-   secretName1: secretName1
-   secretName2: secretName2
-   }
-   dependsOn:  [
-    webappmod
-  ]
 }
 
 // // Create APIM.  NOTE: MUST MOVE THIS. APIM + Azure KeyVault, needs to be in it's own RG + Pipeline

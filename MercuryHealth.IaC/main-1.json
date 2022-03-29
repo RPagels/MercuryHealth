@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "10633057772494036886"
+      "templateHash": "8387411461399410092"
     }
   },
   "parameters": {
@@ -267,6 +267,50 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')]"
+      ]
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults",
+      "apiVersion": "2021-11-01-preview",
+      "name": "[variables('keyvaultName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "sku": {
+          "family": "A",
+          "name": "standard"
+        },
+        "tenantId": "[subscription().tenantId]",
+        "accessPolicies": [
+          {
+            "objectId": "[reference(resourceId('Microsoft.Resources/deployments', 'webappdeploy'), '2020-06-01').outputs.out_appServiceprincipalId.value]",
+            "permissions": {
+              "keys": [
+                "list",
+                "get"
+              ],
+              "secrets": [
+                "list",
+                "get"
+              ]
+            },
+            "tenantId": "[subscription().tenantId]"
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', 'webappdeploy')]"
+      ]
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2021-11-01-preview",
+      "name": "[format('{0}/{1}', variables('keyvaultName'), 'mysecret')]",
+      "properties": {
+        "contentType": "text/plain",
+        "value": "replace me"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.KeyVault/vaults', variables('keyvaultName'))]"
       ]
     },
     {
@@ -1286,239 +1330,6 @@
           ]
         }
       }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-06-01",
-      "name": "[variables('keyvaultName')]",
-      "properties": {
-        "expressionEvaluationOptions": {
-          "scope": "inner"
-        },
-        "mode": "Incremental",
-        "parameters": {
-          "location": {
-            "value": "[parameters('location')]"
-          },
-          "vaultName": {
-            "value": "[variables('keyvaultName')]"
-          },
-          "sqlserverName": {
-            "value": "[variables('sqlserverName')]"
-          },
-          "sqlDBName": {
-            "value": "[variables('sqlDBName')]"
-          },
-          "sqlAdministratorLogin": {
-            "value": "[parameters('sqlAdministratorLogin')]"
-          },
-          "sqlAdministratorLoginPassword": {
-            "value": "[parameters('sqlAdministratorLoginPassword')]"
-          },
-          "configStoreConnection": {
-            "value": "[listKeys(resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName')), '2021-10-01-preview').value[0].connectionString]"
-          },
-          "appServiceprincipalId": {
-            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'webappdeploy'), '2020-06-01').outputs.out_appServiceprincipalId.value]"
-          },
-          "sqlserverfullyQualifiedDomainName": {
-            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'sqldbdeploy'), '2020-06-01').outputs.sqlserverfullyQualifiedDomainName.value]"
-          },
-          "webSiteName": {
-            "value": "[variables('webSiteName')]"
-          },
-          "secretName1": {
-            "value": "[parameters('secretName1')]"
-          },
-          "secretName2": {
-            "value": "[parameters('secretName2')]"
-          }
-        },
-        "template": {
-          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-          "contentVersion": "1.0.0.0",
-          "metadata": {
-            "_generator": {
-              "name": "bicep",
-              "version": "0.4.1008.15138",
-              "templateHash": "15020918475486350323"
-            }
-          },
-          "parameters": {
-            "location": {
-              "type": "string",
-              "defaultValue": "[resourceGroup().location]"
-            },
-            "sqlserverName": {
-              "type": "string"
-            },
-            "sqlDBName": {
-              "type": "string"
-            },
-            "sqlAdministratorLogin": {
-              "type": "string"
-            },
-            "webSiteName": {
-              "type": "string"
-            },
-            "sqlAdministratorLoginPassword": {
-              "type": "secureString"
-            },
-            "vaultName": {
-              "type": "string"
-            },
-            "tenant": {
-              "type": "string",
-              "defaultValue": "[subscription().tenantId]"
-            },
-            "appServiceprincipalId": {
-              "type": "string"
-            },
-            "sqlserverfullyQualifiedDomainName": {
-              "type": "string"
-            },
-            "configStoreConnection": {
-              "type": "string"
-            },
-            "accessPolicies": {
-              "type": "array",
-              "defaultValue": [
-                {
-                  "tenantId": "[parameters('tenant')]",
-                  "objectId": "[parameters('appServiceprincipalId')]",
-                  "permissions": {
-                    "keys": [
-                      "Get",
-                      "List"
-                    ],
-                    "secrets": [
-                      "Get",
-                      "List"
-                    ]
-                  }
-                }
-              ]
-            },
-            "enabledForDeployment": {
-              "type": "bool",
-              "defaultValue": true
-            },
-            "enabledForTemplateDeployment": {
-              "type": "bool",
-              "defaultValue": true
-            },
-            "enabledForDiskEncryption": {
-              "type": "bool",
-              "defaultValue": true
-            },
-            "enableRbacAuthorization": {
-              "type": "bool",
-              "defaultValue": false
-            },
-            "softDeleteRetentionInDays": {
-              "type": "int",
-              "defaultValue": 90
-            },
-            "secretName1": {
-              "type": "string"
-            },
-            "secretValue1": {
-              "type": "string",
-              "defaultValue": "[parameters('configStoreConnection')]"
-            },
-            "secretName2": {
-              "type": "string"
-            },
-            "secretValue2": {
-              "type": "string",
-              "defaultValue": "[format('Server=tcp:{0},1433;Initial Catalog={1};Persist Security Info=False;User Id={2}@{3};Password={4};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;', parameters('sqlserverfullyQualifiedDomainName'), parameters('sqlDBName'), parameters('sqlAdministratorLogin'), parameters('sqlserverName'), parameters('sqlAdministratorLoginPassword'))]"
-            },
-            "networkAcls": {
-              "type": "object",
-              "defaultValue": {
-                "ipRules": [],
-                "virtualNetworkRules": []
-              }
-            }
-          },
-          "functions": [],
-          "resources": [
-            {
-              "type": "Microsoft.KeyVault/vaults",
-              "apiVersion": "2021-11-01-preview",
-              "name": "[parameters('vaultName')]",
-              "location": "[parameters('location')]",
-              "properties": {
-                "tenantId": "[parameters('tenant')]",
-                "sku": {
-                  "family": "A",
-                  "name": "standard"
-                },
-                "enableSoftDelete": false,
-                "accessPolicies": "[parameters('accessPolicies')]",
-                "enabledForDeployment": "[parameters('enabledForDeployment')]",
-                "enabledForDiskEncryption": "[parameters('enabledForDiskEncryption')]",
-                "enabledForTemplateDeployment": "[parameters('enabledForTemplateDeployment')]",
-                "softDeleteRetentionInDays": "[parameters('softDeleteRetentionInDays')]",
-                "enableRbacAuthorization": "[parameters('enableRbacAuthorization')]",
-                "networkAcls": "[parameters('networkAcls')]"
-              }
-            },
-            {
-              "type": "Microsoft.KeyVault/vaults/secrets",
-              "apiVersion": "2021-11-01-preview",
-              "name": "[format('{0}/{1}', parameters('vaultName'), parameters('secretName1'))]",
-              "properties": {
-                "contentType": "text/plain",
-                "value": "[parameters('secretValue1')]"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-              ]
-            },
-            {
-              "type": "Microsoft.KeyVault/vaults/secrets",
-              "apiVersion": "2021-11-01-preview",
-              "name": "[format('{0}/{1}', parameters('vaultName'), parameters('secretName2'))]",
-              "properties": {
-                "contentType": "text/plain",
-                "value": "[parameters('secretValue2')]"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-              ]
-            },
-            {
-              "type": "Microsoft.Web/sites/config",
-              "apiVersion": "2021-03-01",
-              "name": "[format('{0}/appsettings', parameters('webSiteName'))]",
-              "properties": {
-                "ConnectionStrings:MercuryHealthWebContextKV": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('vaultName'), parameters('secretName2'))]",
-                "ConnectionStrings:AppConfigKV": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('vaultName'), parameters('secretName1'))]"
-              }
-            }
-          ],
-          "outputs": {
-            "proxyKey": {
-              "type": "object",
-              "value": "[reference(resourceId('Microsoft.KeyVault/vaults', parameters('vaultName')), '2021-11-01-preview', 'full')]"
-            },
-            "out_secretName1": {
-              "type": "string",
-              "value": "[parameters('secretName1')]"
-            },
-            "out_secretName2": {
-              "type": "string",
-              "value": "[parameters('secretName2')]"
-            }
-          }
-        }
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName'))]",
-        "[resourceId('Microsoft.Resources/deployments', 'sqldbdeploy')]",
-        "[resourceId('Microsoft.Resources/deployments', 'webappdeploy')]"
-      ]
     },
     {
       "type": "Microsoft.Resources/deployments",
