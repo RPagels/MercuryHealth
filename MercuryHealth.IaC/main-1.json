@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "8354408214032041923"
+      "templateHash": "10633057772494036886"
     }
   },
   "parameters": {
@@ -33,6 +33,14 @@
     },
     "sqlAdministratorLoginPassword": {
       "type": "secureString"
+    },
+    "secretName1": {
+      "type": "string",
+      "defaultValue": "ConnectionStrings:AppConfig"
+    },
+    "secretName2": {
+      "type": "string",
+      "defaultValue": "ConnectionStrings:MercuryHealthWebContext"
     },
     "contentType": {
       "type": "string",
@@ -222,7 +230,7 @@
     {
       "type": "Microsoft.ApiManagement/service/subscriptions",
       "apiVersion": "2021-08-01",
-      "name": "[format('{0}/{1}', variables('apiServiceName'), 'MercuryHealth-Developers')]",
+      "name": "[format('{0}/{1}', variables('apiServiceName'), 'Developers')]",
       "properties": {
         "scope": "/apis",
         "displayName": "Mercury Health - Developers"
@@ -324,7 +332,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "17514706732472550435"
+              "templateHash": "2267965490610978452"
             }
           },
           "parameters": {
@@ -611,6 +619,10 @@
             "out_webSiteName": {
               "type": "string",
               "value": "[reference(resourceId('Microsoft.Web/sites', parameters('webSiteName'))).defaultHostName]"
+            },
+            "out_appServiceprincipalId": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.Web/sites', parameters('webSiteName')), '2021-01-15', 'full').identity.principalId]"
             }
           }
         }
@@ -925,7 +937,7 @@
             "value": "[variables('defaultTags')]"
           },
           "ApimSubscriptionKey": {
-            "value": "[listSecrets(resourceId('Microsoft.ApiManagement/service/subscriptions', variables('apiServiceName'), 'MercuryHealth-Developers'), '2021-08-01').primaryKey]"
+            "value": "[listSecrets(resourceId('Microsoft.ApiManagement/service/subscriptions', variables('apiServiceName'), 'Developers'), '2021-08-01').primaryKey]"
           },
           "ApimWebServiceURL": {
             "value": "[reference(resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))).gatewayUrl]"
@@ -1213,7 +1225,7 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]",
-        "[resourceId('Microsoft.ApiManagement/service/subscriptions', variables('apiServiceName'), 'MercuryHealth-Developers')]",
+        "[resourceId('Microsoft.ApiManagement/service/subscriptions', variables('apiServiceName'), 'Developers')]",
         "[resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')]"
       ]
     },
@@ -1306,8 +1318,20 @@
           "configStoreConnection": {
             "value": "[listKeys(resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName')), '2021-10-01-preview').value[0].connectionString]"
           },
-          "appInsightsInstrumentationKey": {
-            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy'), '2020-06-01').outputs.out_appInsightsInstrumentationKey.value]"
+          "appServiceprincipalId": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'webappdeploy'), '2020-06-01').outputs.out_appServiceprincipalId.value]"
+          },
+          "sqlserverfullyQualifiedDomainName": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'sqldbdeploy'), '2020-06-01').outputs.sqlserverfullyQualifiedDomainName.value]"
+          },
+          "webSiteName": {
+            "value": "[variables('webSiteName')]"
+          },
+          "secretName1": {
+            "value": "[parameters('secretName1')]"
+          },
+          "secretName2": {
+            "value": "[parameters('secretName2')]"
           }
         },
         "template": {
@@ -1317,7 +1341,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "2788979674155792222"
+              "templateHash": "15020918475486350323"
             }
           },
           "parameters": {
@@ -1334,21 +1358,23 @@
             "sqlAdministratorLogin": {
               "type": "string"
             },
+            "webSiteName": {
+              "type": "string"
+            },
             "sqlAdministratorLoginPassword": {
               "type": "secureString"
             },
             "vaultName": {
               "type": "string"
             },
-            "sku": {
-              "type": "string",
-              "defaultValue": "Standard"
-            },
             "tenant": {
               "type": "string",
-              "defaultValue": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+              "defaultValue": "[subscription().tenantId]"
             },
-            "appInsightsInstrumentationKey": {
+            "appServiceprincipalId": {
+              "type": "string"
+            },
+            "sqlserverfullyQualifiedDomainName": {
               "type": "string"
             },
             "configStoreConnection": {
@@ -1359,44 +1385,15 @@
               "defaultValue": [
                 {
                   "tenantId": "[parameters('tenant')]",
-                  "objectId": "e8741716-82f1-48fb-86e2-4c5cdfce407d",
+                  "objectId": "[parameters('appServiceprincipalId')]",
                   "permissions": {
                     "keys": [
                       "Get",
-                      "List",
-                      "Update",
-                      "Create",
-                      "Import",
-                      "Delete",
-                      "Recover",
-                      "Backup",
-                      "Restore"
+                      "List"
                     ],
                     "secrets": [
                       "Get",
-                      "List",
-                      "Set",
-                      "Delete",
-                      "Recover",
-                      "Backup",
-                      "Restore"
-                    ],
-                    "certificates": [
-                      "Get",
-                      "List",
-                      "Update",
-                      "Create",
-                      "Import",
-                      "Delete",
-                      "Recover",
-                      "Backup",
-                      "Restore",
-                      "ManageContacts",
-                      "ManageIssuers",
-                      "GetIssuers",
-                      "ListIssuers",
-                      "SetIssuers",
-                      "DeleteIssuers"
+                      "List"
                     ]
                   }
                 }
@@ -1422,65 +1419,19 @@
               "type": "int",
               "defaultValue": 90
             },
-            "keyName": {
-              "type": "string",
-              "defaultValue": "prodKey"
-            },
             "secretName1": {
-              "type": "string",
-              "defaultValue": "AppConfigReadOnlyKey"
+              "type": "string"
             },
             "secretValue1": {
               "type": "string",
               "defaultValue": "[parameters('configStoreConnection')]"
             },
             "secretName2": {
-              "type": "string",
-              "defaultValue": "DBAdmin"
+              "type": "string"
             },
             "secretValue2": {
               "type": "string",
-              "defaultValue": "[parameters('sqlAdministratorLogin')]"
-            },
-            "secretName3": {
-              "type": "string",
-              "defaultValue": "DBPassword"
-            },
-            "secretValue3": {
-              "type": "string",
-              "defaultValue": "[parameters('sqlAdministratorLoginPassword')]"
-            },
-            "secretName4": {
-              "type": "string",
-              "defaultValue": "DBConnectionString"
-            },
-            "secretValue4": {
-              "type": "string",
-              "defaultValue": "[format('Data Source=tcp:{0},1433;Initial Catalog={1};User Id={2}@{3};Password={4};', parameters('sqlserverName'), parameters('sqlDBName'), parameters('sqlAdministratorLogin'), parameters('sqlserverName'), parameters('sqlAdministratorLoginPassword'))]"
-            },
-            "secretName5": {
-              "type": "string",
-              "defaultValue": "FunctionKeyQualityGate"
-            },
-            "secretValue5": {
-              "type": "string",
-              "defaultValue": "TBD"
-            },
-            "secretName6": {
-              "type": "string",
-              "defaultValue": "AppInsightsAPIKey2"
-            },
-            "secretValue6": {
-              "type": "string",
-              "defaultValue": "TBD"
-            },
-            "secretName7": {
-              "type": "string",
-              "defaultValue": "AppInsightsAppID"
-            },
-            "secretValue7": {
-              "type": "string",
-              "defaultValue": "[parameters('appInsightsInstrumentationKey')]"
+              "defaultValue": "[format('Server=tcp:{0},1433;Initial Catalog={1};Persist Security Info=False;User Id={2}@{3};Password={4};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;', parameters('sqlserverfullyQualifiedDomainName'), parameters('sqlDBName'), parameters('sqlAdministratorLogin'), parameters('sqlserverName'), parameters('sqlAdministratorLoginPassword'))]"
             },
             "networkAcls": {
               "type": "object",
@@ -1494,14 +1445,14 @@
           "resources": [
             {
               "type": "Microsoft.KeyVault/vaults",
-              "apiVersion": "2019-09-01",
+              "apiVersion": "2021-11-01-preview",
               "name": "[parameters('vaultName')]",
               "location": "[parameters('location')]",
               "properties": {
                 "tenantId": "[parameters('tenant')]",
                 "sku": {
                   "family": "A",
-                  "name": "[parameters('sku')]"
+                  "name": "standard"
                 },
                 "enableSoftDelete": false,
                 "accessPolicies": "[parameters('accessPolicies')]",
@@ -1514,26 +1465,11 @@
               }
             },
             {
-              "type": "Microsoft.KeyVault/vaults/keys",
-              "apiVersion": "2019-09-01",
-              "name": "[format('{0}/{1}', parameters('vaultName'), parameters('keyName'))]",
-              "properties": {
-                "kty": "RSA",
-                "keyOps": [
-                  "encrypt",
-                  "decrypt"
-                ],
-                "keySize": 4096
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-              ]
-            },
-            {
               "type": "Microsoft.KeyVault/vaults/secrets",
-              "apiVersion": "2018-02-14",
+              "apiVersion": "2021-11-01-preview",
               "name": "[format('{0}/{1}', parameters('vaultName'), parameters('secretName1'))]",
               "properties": {
+                "contentType": "text/plain",
                 "value": "[parameters('secretValue1')]"
               },
               "dependsOn": [
@@ -1542,9 +1478,10 @@
             },
             {
               "type": "Microsoft.KeyVault/vaults/secrets",
-              "apiVersion": "2018-02-14",
+              "apiVersion": "2021-11-01-preview",
               "name": "[format('{0}/{1}', parameters('vaultName'), parameters('secretName2'))]",
               "properties": {
+                "contentType": "text/plain",
                 "value": "[parameters('secretValue2')]"
               },
               "dependsOn": [
@@ -1552,72 +1489,35 @@
               ]
             },
             {
-              "type": "Microsoft.KeyVault/vaults/secrets",
-              "apiVersion": "2018-02-14",
-              "name": "[format('{0}/{1}', parameters('vaultName'), parameters('secretName3'))]",
+              "type": "Microsoft.Web/sites/config",
+              "apiVersion": "2021-03-01",
+              "name": "[format('{0}/appsettings', parameters('webSiteName'))]",
               "properties": {
-                "value": "[parameters('secretValue3')]"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-              ]
-            },
-            {
-              "type": "Microsoft.KeyVault/vaults/secrets",
-              "apiVersion": "2018-02-14",
-              "name": "[format('{0}/{1}', parameters('vaultName'), parameters('secretName4'))]",
-              "properties": {
-                "value": "[parameters('secretValue4')]"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-              ]
-            },
-            {
-              "type": "Microsoft.KeyVault/vaults/secrets",
-              "apiVersion": "2018-02-14",
-              "name": "[format('{0}/{1}', parameters('vaultName'), parameters('secretName5'))]",
-              "properties": {
-                "value": "[parameters('secretValue5')]"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-              ]
-            },
-            {
-              "type": "Microsoft.KeyVault/vaults/secrets",
-              "apiVersion": "2018-02-14",
-              "name": "[format('{0}/{1}', parameters('vaultName'), parameters('secretName6'))]",
-              "properties": {
-                "value": "[parameters('secretValue6')]"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-              ]
-            },
-            {
-              "type": "Microsoft.KeyVault/vaults/secrets",
-              "apiVersion": "2018-02-14",
-              "name": "[format('{0}/{1}', parameters('vaultName'), parameters('secretName7'))]",
-              "properties": {
-                "value": "[parameters('secretValue7')]"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-              ]
+                "ConnectionStrings:MercuryHealthWebContextKV": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('vaultName'), parameters('secretName2'))]",
+                "ConnectionStrings:AppConfigKV": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('vaultName'), parameters('secretName1'))]"
+              }
             }
           ],
           "outputs": {
             "proxyKey": {
               "type": "object",
-              "value": "[reference(resourceId('Microsoft.KeyVault/vaults/keys', split(format('{0}/{1}', parameters('vaultName'), parameters('keyName')), '/')[0], split(format('{0}/{1}', parameters('vaultName'), parameters('keyName')), '/')[1]), '2019-09-01', 'full')]"
+              "value": "[reference(resourceId('Microsoft.KeyVault/vaults', parameters('vaultName')), '2021-11-01-preview', 'full')]"
+            },
+            "out_secretName1": {
+              "type": "string",
+              "value": "[parameters('secretName1')]"
+            },
+            "out_secretName2": {
+              "type": "string",
+              "value": "[parameters('secretName2')]"
             }
           }
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')]",
-        "[resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName'))]"
+        "[resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName'))]",
+        "[resourceId('Microsoft.Resources/deployments', 'sqldbdeploy')]",
+        "[resourceId('Microsoft.Resources/deployments', 'webappdeploy')]"
       ]
     },
     {

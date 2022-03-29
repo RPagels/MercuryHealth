@@ -44,6 +44,10 @@ var defaultTags = {
   'CreatedBy': createdBy
 }
 
+// KeyVault Secret Names
+param secretName1 string = 'ConnectionStrings:AppConfig'
+param secretName2 string = 'ConnectionStrings:MercuryHealthWebContext'
+
 ////////////////////////////////////////
 // BEGIN - Create Config Store
 ////////////////////////////////////////
@@ -241,7 +245,6 @@ resource appInsightsAPIManagement 'Microsoft.ApiManagement/service/loggers@2021-
 
 var ApimSubscriptionKeyString = apiManagementSubscription.listSecrets().primaryKey
 
-
 // Create Web App
 module webappmod './main-2-webapp.bicep' = {
   name: 'webappdeploy'
@@ -315,7 +318,7 @@ module loadtestsmod './main-9-loadtests.bicep' = {
 }
 
 // Create Azure KeyVault
-module keyvault './main-8-keyvault.bicep' = {
+module keyvaultmod './main-8-keyvault.bicep' = {
  name: keyvaultName
  params: {
    location: location
@@ -325,8 +328,14 @@ module keyvault './main-8-keyvault.bicep' = {
    sqlAdministratorLogin: sqlAdministratorLogin
    sqlAdministratorLoginPassword: sqlAdministratorLoginPassword
    configStoreConnection: configStoreConnectionString
-   appInsightsInstrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
+   //appInsightsInstrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
+   appServiceprincipalId: webappmod.outputs.out_appServiceprincipalId
+   sqlserverfullyQualifiedDomainName: sqldbmod.outputs.sqlserverfullyQualifiedDomainName
+   webSiteName: webSiteName
+   secretName1: secretName1
+   secretName2: secretName2
    }
+
 }
 
 // // Create APIM.  NOTE: MUST MOVE THIS. APIM + Azure KeyVault, needs to be in it's own RG + Pipeline
