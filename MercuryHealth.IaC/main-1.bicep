@@ -328,14 +328,15 @@ module keyvaultmod './main-8-keyvault.bicep' = {
    sqlAdministratorLogin: sqlAdministratorLogin
    sqlAdministratorLoginPassword: sqlAdministratorLoginPassword
    configStoreConnection: configStoreConnectionString
-   //appInsightsInstrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
    appServiceprincipalId: webappmod.outputs.out_appServiceprincipalId
    sqlserverfullyQualifiedDomainName: sqldbmod.outputs.sqlserverfullyQualifiedDomainName
    webSiteName: webSiteName
    secretName1: secretName1
    secretName2: secretName2
    }
-
+   dependsOn:  [
+    webappmod
+  ]
 }
 
 // // Create APIM.  NOTE: MUST MOVE THIS. APIM + Azure KeyVault, needs to be in it's own RG + Pipeline
