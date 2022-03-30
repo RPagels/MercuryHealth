@@ -373,7 +373,15 @@ resource keyvaultmod 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
   ]
 }
 resource secret0 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: 'mysecret' //secretName1
+  name: 'ConnectionStrings:AppConfig' //'mysecret' //secretName1
+  parent: keyvaultmod
+  properties: {
+    contentType: 'text/plain'
+    value: 'replace me now!'
+  }
+}
+resource secret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+  name: 'ConnectionStrings:MercuryHealthWebContext' //'mysecret' //secretName1
   parent: keyvaultmod
   properties: {
     contentType: 'text/plain'
