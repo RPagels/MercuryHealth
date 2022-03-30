@@ -307,15 +307,18 @@ jobs:
           # Select the value of the ErrorActionPreference variable for executing the script. Options: stop, continue, silentlyContinue. Default is Stop.
           errorActionPreference: continue
 
-      - name: Playwright Tests with DLL
-        continue-on-error: true
+#      - name: 
+#        continue-on-error: true
+#        run: |
+#         dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }}
+#         dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './MercuryHealth.UITests'
+
+      - name: Playwright Tests all on Browsers
+        continue-on-error: false
         run: |
          dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }}
          dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './MercuryHealth.UITests'
-
-      - name: Playwright Tests all on Browsers
-        continue-on-error: true
-        run: dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj --filter "TestCategory=Playwright_Tests_Chromium|TestCategory=Playwright_Tests_FireFox" -l "console;verbosity=normal" -l "trx;LogFileName=TestResults.trx" --settings MercuryHealth.UITests/MercuryHealthTests.runsettings
+         dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj --filter "TestCategory=Playwright_Tests_Chromium|TestCategory=Playwright_Tests_FireFox" -l "console;verbosity=normal" -l "trx;LogFileName=TestResults.trx" --settings MercuryHealth.UITests/MercuryHealthTests.runsettings
 
       - name: 'Upload Playwright Test Results-ScreenShots'
         uses: actions/upload-artifact@v2
@@ -374,7 +377,7 @@ jobs:
 
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
-        continue-on-error: true
+        continue-on-error: false
         with:
           loadTestConfigFile: './MercuryHealth.LoadTests/LoadTest_HomePage_Config.yaml'
           loadTestResource: ${{needs.deploy_infrastructure.outputs.output_loadTestsName}}
