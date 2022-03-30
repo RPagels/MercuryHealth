@@ -45,8 +45,8 @@ var defaultTags = {
 }
 
 // KeyVault Secret Names
-param secretName1 string = 'ConnectionStrings:AppConfig'
-param secretName2 string = 'ConnectionStrings:MercuryHealthWebContext'
+param secretName1 string = 'ConnectionStringsAppConfig'
+param secretName2 string = 'ConnectionStringsMercuryHealthWebContext'
 
 ////////////////////////////////////////
 // BEGIN - Create Config Store
@@ -372,14 +372,14 @@ resource keyvaultmod 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
     webappmod
   ]
 }
-resource secret0 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: 'ConnectionStringsAppConfig' //'mysecret' //secretName1
-  parent: keyvaultmod
-  properties: {
-    contentType: 'text/plain'
-    value: 'replace me now!'
-  }
-}
+// resource secret0 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+//   name: 'ConnectionStringsAppConfig' //'mysecret' //secretName1
+//   parent: keyvaultmod
+//   properties: {
+//     contentType: 'text/plain'
+//     value: 'replace me now!'
+//   }
+// }
 // resource secret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
 //   name: 'ConnectionStrings:MercuryHealthWebContext' //'mysecret' //secretName1
 //   parent: keyvaultmod
@@ -388,22 +388,22 @@ resource secret0 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
 //     value: 'replace me now!'
 //   }
 // }
-// resource secret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-//   name: secretName1
-//   parent: keyvaultmod
-//   properties: {
-//     contentType: 'text/plain'
-//     value: configStoreConnectionString
-//   }
-// }
-// resource secret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-//   name: secretName2
-//   parent: keyvaultmod
-//   properties: {
-//     contentType: 'text/plain'
-//     value: 'Server=tcp:${sqldbmod.outputs.sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
-//   }
-// }
+resource secret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+  name: secretName1
+  parent: keyvaultmod
+  properties: {
+    contentType: 'text/plain'
+    value: configStoreConnectionString
+  }
+}
+resource secret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+  name: secretName2
+  parent: keyvaultmod
+  properties: {
+    contentType: 'text/plain'
+    value: 'Server=tcp:${sqldbmod.outputs.sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+  }
+}
 // resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
 //   name: '${webSiteName}/appsettings'
 //   kind: 'string'
