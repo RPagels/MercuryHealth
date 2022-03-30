@@ -383,15 +383,15 @@ resource keyvaultmod 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
 //     value: 'Server=tcp:${sqldbmod.outputs.sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
 //   }
 // }
-resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
-  name: '${webSiteName}/appsettings'
-  kind: 'string'
-  //parent: webappmod.outputs.out_appService
-  properties: {
-    'ConnectionStrings:MercuryHealthWebContextKV': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName2})'
-    'ConnectionStrings:AppConfigKV': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName1})'
-  }
-}
+// resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
+//   name: '${webSiteName}/appsettings'
+//   kind: 'string'
+//   //parent: webappmod.outputs.out_appService
+//   properties: {
+//     'ConnectionStrings:MercuryHealthWebContextKV': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName2})'
+//     'ConnectionStrings:AppConfigKV': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName1})'
+//   }
+// }
 
 ////////////////////////////////////////
 // END - Key Vault
