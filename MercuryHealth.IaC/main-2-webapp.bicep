@@ -71,13 +71,15 @@ resource appService 'Microsoft.Web/sites@2021-01-15' = {
   }
 }
 
+// 'ConnectionStrings:MercuryHealthWebContext': 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+// 'ConnectionStrings:AppConfig': configStoreConnection
 resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
   //name: '${webSiteName}/appsettings'
   name: 'appsettings'
   parent: appService
   properties: {
-    'ConnectionStrings:MercuryHealthWebContext': 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
-    'ConnectionStrings:AppConfig': configStoreConnection
+    'ConnectionStrings:MercuryHealthWebContext': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName2})'
+    'ConnectionStrings:AppConfig': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName1})'
     'Environment': Deploy_Environment
     'WEBSITE_RUN_FROM_PACKAGE': '1'
     'APPINSIGHTS_INSTRUMENTATIONKEY': appInsightsInstrumentationKey
@@ -86,10 +88,12 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
     'APPLICATIONINSIGHTS_CONNECTION_STRING': appInsightsConnectionString
     'WebAppUrl': 'https://${appService.name}.azurewebsites.net/'
     'ASPNETCORE_ENVIRONMENT': 'Development'
-    'ConnectionStrings:MercuryHealthWebContextKV': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName2})'
-    'ConnectionStrings:AppConfigKV': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName1})'
   }
 }
+
+// @Microsoft.KeyVault(VaultName=myvault;SecretName=mysecret)
+// OR
+// @Microsoft.KeyVault(SecretUri=https://myvault.vault.azure.net/secrets/mysecret/)
 
 // resource webAppPortalName_environments 'Microsoft.Web/sites/slots@2021-03-01' = [for item in environments: {
 //   name: '${webSiteName}/${item}'

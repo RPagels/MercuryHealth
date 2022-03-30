@@ -64,31 +64,31 @@ resource keyvault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
 }
 
 // create secret
-resource mySecret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: secretName1
-  parent: keyvault
-  properties: {
-    contentType: 'text/plain'
-    value: secretValue1
-  }
-}
-// create secret
-resource mySecret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: secretName2
-  parent: keyvault
-  properties: {
-    contentType: 'text/plain'
-    value: secretValue2
-  }
-}
+// resource mySecret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+//   name: secretName1
+//   parent: keyvault
+//   properties: {
+//     contentType: 'text/plain'
+//     value: secretValue1
+//   }
+// }
+// // create secret
+// resource mySecret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+//   name: secretName2
+//   parent: keyvault
+//   properties: {
+//     contentType: 'text/plain'
+//     value: secretValue2
+//   }
+// }
 
-resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
-  name: '${webSiteName}/appsettings'
-  properties: {
-    'ConnectionStrings:MercuryHealthWebContextKV': '@Microsoft.KeyVault(VaultName=${vaultName};SecretName=${secretName2})'
-    'ConnectionStrings:AppConfigKV': '@Microsoft.KeyVault(VaultName=${vaultName};SecretName=${secretName1})'
-  }
-}
+// resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
+//   name: '${webSiteName}/appsettings'
+//   properties: {
+//     'ConnectionStrings:MercuryHealthWebContextKV': '@Microsoft.KeyVault(VaultName=${vaultName};SecretName=${secretName2})'
+//     'ConnectionStrings:AppConfigKV': '@Microsoft.KeyVault(VaultName=${vaultName};SecretName=${secretName1})'
+//   }
+// }
 // create key
 // resource mySecret1 'Microsoft.KeyVault/vaults/keys@2019-09-01' = {
 //   name: '${keyvault.name}/${keyName}'
