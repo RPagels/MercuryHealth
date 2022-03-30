@@ -264,6 +264,9 @@ module webappmod './main-2-webapp.bicep' = {
     appInsightsInstrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
     appInsightsConnectionString: appinsightsmod.outputs.out_appInsightsConnectionString
     defaultTags: defaultTags
+    keyvaultName: keyvaultName
+    secretName1: secretName1
+    secretName2: secretName2
   }
 }
 
@@ -382,6 +385,8 @@ resource keyvaultmod 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
 // }
 resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
   name: '${webSiteName}/appsettings'
+  kind: 'string'
+  //parent: webappmod.outputs.out_appService
   properties: {
     'ConnectionStrings:MercuryHealthWebContextKV': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName2})'
     'ConnectionStrings:AppConfigKV': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName1})'

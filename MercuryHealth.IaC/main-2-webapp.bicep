@@ -14,6 +14,9 @@ param webAppPlanName string
 param webSiteName string
 param resourceGroupName string
 param appInsightsName string
+param keyvaultName string
+param secretName1 string
+param secretName2 string
 
 //@secure()
 param configStoreConnection string
@@ -69,7 +72,9 @@ resource appService 'Microsoft.Web/sites@2021-01-15' = {
 }
 
 resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
-  name: '${webSiteName}/appsettings'
+  //name: '${webSiteName}/appsettings'
+  name: 'appsettings'
+  parent: appService
   properties: {
     'ConnectionStrings:MercuryHealthWebContext': 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
     'ConnectionStrings:AppConfig': configStoreConnection
@@ -81,6 +86,8 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
     'APPLICATIONINSIGHTS_CONNECTION_STRING': appInsightsConnectionString
     'WebAppUrl': 'https://${appService.name}.azurewebsites.net/'
     'ASPNETCORE_ENVIRONMENT': 'Development'
+    'ConnectionStrings:MercuryHealthWebContextKV': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName2})'
+    'ConnectionStrings:AppConfigKV': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName1})'
   }
 }
 
@@ -412,6 +419,7 @@ resource standardWebTestPageExercises  'Microsoft.Insights/webtests@2020-10-05-p
 // }
 
 output output_webSiteName string = appService.name
+output out_appService string = appService.id
 output out_webSiteName string = appService.properties.defaultHostName
 output out_appServiceprincipalId string = appService.identity.principalId
 //output out_sqlConnectionString string = 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
