@@ -345,6 +345,12 @@ resource keyvaultmod 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
       name: 'standard'
     }
     tenantId: subscription().tenantId
+    enableSoftDelete: false
+    enabledForDeployment: true
+    enabledForDiskEncryption: true
+    enabledForTemplateDeployment: true
+    softDeleteRetentionInDays: 90
+    enableRbacAuthorization: true
     accessPolicies:[
       {
         objectId: webappmod.outputs.out_appServiceprincipalId
@@ -366,15 +372,22 @@ resource keyvaultmod 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
     webappmod
   ]
 }
-
-resource secret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: secretName1
+resource secret0 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+  name: secretName1 //'mysecret'
   parent: keyvaultmod
   properties: {
     contentType: 'text/plain'
-    value: configStoreConnectionString
+    value: 'replace me now!'
   }
 }
+// resource secret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+//   name: secretName1
+//   parent: keyvaultmod
+//   properties: {
+//     contentType: 'text/plain'
+//     value: configStoreConnectionString
+//   }
+// }
 // resource secret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
 //   name: secretName2
 //   parent: keyvaultmod

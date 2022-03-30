@@ -58,7 +58,7 @@ resource keyvault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
     enabledForDiskEncryption: true
     enabledForTemplateDeployment: true
     softDeleteRetentionInDays: 90
-    enableRbacAuthorization: false
+    enableRbacAuthorization: true
     networkAcls: networkAcls
   }
 }
