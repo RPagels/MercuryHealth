@@ -335,7 +335,10 @@ module functionappmod './main-6-funcapp.bicep' = {
 //     webappmod
 //   ]
 // }
-
+param networkAcls object = {
+  ipRules: []
+  virtualNetworkRules: []
+}
 resource keyvaultmod 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
   name: keyvaultName
   location: location
@@ -351,6 +354,7 @@ resource keyvaultmod 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
     enabledForTemplateDeployment: true
     softDeleteRetentionInDays: 90
     enableRbacAuthorization: true
+    networkAcls: networkAcls
     accessPolicies:[
       {
         objectId: webappmod.outputs.out_appServiceprincipalId
