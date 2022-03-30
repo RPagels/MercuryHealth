@@ -373,7 +373,7 @@ resource keyvaultmod 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
   ]
 }
 resource secret0 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: secretName1 //'mysecret'
+  name: 'mysecret' //secretName1
   parent: keyvaultmod
   properties: {
     contentType: 'text/plain'
