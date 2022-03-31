@@ -255,12 +255,12 @@ module webappmod './main-2-webapp.bicep' = {
     Deploy_Environment: Deploy_Environment
     appInsightsName: appInsightsName
     location: location
-    configStoreConnection: configStoreConnectionString
-    sqlserverName: sqlserverName
-    sqlserverfullyQualifiedDomainName: sqldbmod.outputs.sqlserverfullyQualifiedDomainName
-    sqlDBName: sqlDBName
-    sqlAdministratorLogin: sqlAdministratorLogin
-    sqlAdministratorLoginPassword: sqlAdministratorLoginPassword
+    // configStoreConnection: configStoreConnectionString
+    // sqlserverName: sqlserverName
+    // sqlserverfullyQualifiedDomainName: sqldbmod.outputs.sqlserverfullyQualifiedDomainName
+    // sqlDBName: sqlDBName
+    // sqlAdministratorLogin: sqlAdministratorLogin
+    // sqlAdministratorLoginPassword: sqlAdministratorLoginPassword
     appInsightsInstrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
     appInsightsConnectionString: appinsightsmod.outputs.out_appInsightsConnectionString
     defaultTags: defaultTags
@@ -315,99 +315,83 @@ module functionappmod './main-6-funcapp.bicep' = {
 ////////////////////////////////////////
 
 // Create Azure KeyVault
-// module keyvaultmod './main-8-keyvault.bicep' = {
-//  name: keyvaultName
-//  params: {
-//    location: location
-//    vaultName: keyvaultName
-//    sqlserverName: sqlserverName
-//    sqlDBName: sqlDBName
-//    sqlAdministratorLogin: sqlAdministratorLogin
-//    sqlAdministratorLoginPassword: sqlAdministratorLoginPassword
-//    configStoreConnection: configStoreConnectionString
-//    appServiceprincipalId: webappmod.outputs.out_appServiceprincipalId
-//    sqlserverfullyQualifiedDomainName: sqldbmod.outputs.sqlserverfullyQualifiedDomainName
-//    webSiteName: webSiteName
-//    secretName1: secretName1
-//    secretName2: secretName2
-//    }
-//    dependsOn:  [
-//     webappmod
-//   ]
-// }
-param networkAcls object = {
-  ipRules: []
-  virtualNetworkRules: []
-}
-resource keyvaultmod 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
-  name: keyvaultName
-  location: location
-  properties: {
-    sku: {
-      family: 'A'
-      name: 'standard'
-    }
-    tenantId: subscription().tenantId
-    enableSoftDelete: false
-    enabledForDeployment: true
-    enabledForDiskEncryption: true
-    enabledForTemplateDeployment: true
-    softDeleteRetentionInDays: 90
-    enableRbacAuthorization: true
-    networkAcls: networkAcls
-    accessPolicies:[
-      {
-        objectId: webappmod.outputs.out_appServiceprincipalId
-        permissions: {
-          keys: [
-            'list'
-            'get'
-          ]
-          secrets: [
-            'list'
-            'get'
-          ]
-        }
-        tenantId: subscription().tenantId
-      }
-    ]
-  }
-  dependsOn:  [
+module keyvaultmod './main-8-keyvault.bicep' = {
+ name: keyvaultName
+ params: {
+   location: location
+   vaultName: keyvaultName
+   sqlserverName: sqlserverName
+   sqlDBName: sqlDBName
+   sqlAdministratorLogin: sqlAdministratorLogin
+   sqlAdministratorLoginPassword: sqlAdministratorLoginPassword
+   configStoreConnection: configStoreConnectionString
+   appServiceprincipalId: webappmod.outputs.out_appServiceprincipalId
+   sqlserverfullyQualifiedDomainName: sqldbmod.outputs.sqlserverfullyQualifiedDomainName
+   webSiteName: webSiteName
+   secretName1: secretName1
+   secretName2: secretName2
+   }
+   dependsOn:  [
     webappmod
   ]
 }
-// resource secret0 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-//   name: 'ConnectionStringsAppConfig' //'mysecret' //secretName1
-//   parent: keyvaultmod
+// param networkAcls object = {
+//   ipRules: []
+//   virtualNetworkRules: []
+// }
+// resource keyvaultmod 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
+//   name: keyvaultName
+//   location: location
 //   properties: {
-//     contentType: 'text/plain'
-//     value: 'replace me now!'
+//     sku: {
+//       family: 'A'
+//       name: 'standard'
+//     }
+//     tenantId: subscription().tenantId
+//     enableSoftDelete: false
+//     enabledForDeployment: true
+//     enabledForDiskEncryption: true
+//     enabledForTemplateDeployment: true
+//     softDeleteRetentionInDays: 90
+//     enableRbacAuthorization: true
+//     networkAcls: networkAcls
+//     accessPolicies:[
+//       {
+//         objectId: webappmod.outputs.out_appServiceprincipalId
+//         permissions: {
+//           keys: [
+//             'list'
+//             'get'
+//           ]
+//           secrets: [
+//             'list'
+//             'get'
+//           ]
+//         }
+//         tenantId: subscription().tenantId
+//       }
+//     ]
 //   }
+//   dependsOn:  [
+//     webappmod
+//   ]
 // }
 // resource secret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-//   name: 'ConnectionStrings:MercuryHealthWebContext' //'mysecret' //secretName1
+//   name: secretName1
 //   parent: keyvaultmod
 //   properties: {
 //     contentType: 'text/plain'
-//     value: 'replace me now!'
+//     value: configStoreConnectionString
 //   }
 // }
-resource secret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: secretName1
-  parent: keyvaultmod
-  properties: {
-    contentType: 'text/plain'
-    value: configStoreConnectionString
-  }
-}
-resource secret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: secretName2
-  parent: keyvaultmod
-  properties: {
-    contentType: 'text/plain'
-    value: 'Server=tcp:${sqldbmod.outputs.sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
-  }
-}
+// resource secret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+//   name: secretName2
+//   parent: keyvaultmod
+//   properties: {
+//     contentType: 'text/plain'
+//     value: 'Server=tcp:${sqldbmod.outputs.sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+//   }
+// }
 
 ////////////////////////////////////////
 // END - Key Vault

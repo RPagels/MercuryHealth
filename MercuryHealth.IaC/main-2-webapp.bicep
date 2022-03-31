@@ -1,14 +1,14 @@
 param skuName string = 'B1'
 //param skuCapacity int = 1
 param location string = resourceGroup().location
-param sqlserverName string
-param sqlserverfullyQualifiedDomainName string
-param sqlDBName string
-param sqlAdministratorLogin string
+// param sqlserverName string
+// param sqlserverfullyQualifiedDomainName string
+// param sqlDBName string
+// param sqlAdministratorLogin string
 param Deploy_Environment string
 
-@secure()
-param sqlAdministratorLoginPassword string
+//@secure()
+//param sqlAdministratorLoginPassword string
 
 param webAppPlanName string
 param webSiteName string
@@ -19,8 +19,8 @@ param secretName1 string
 param secretName2 string
 
 //@secure()
-param configStoreConnection string
-@secure()
+// param configStoreConnection string
+// @secure()
 
 param appInsightsInstrumentationKey string
 param appInsightsConnectionString string
@@ -71,8 +71,6 @@ resource appService 'Microsoft.Web/sites@2021-01-15' = {
   }
 }
 
-// 'ConnectionStrings:MercuryHealthWebContext': 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
-// 'ConnectionStrings:AppConfig': configStoreConnection
 resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
   //name: '${webSiteName}/appsettings'
   name: 'appsettings'
@@ -90,10 +88,6 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
     'ASPNETCORE_ENVIRONMENT': 'Development'
   }
 }
-
-// @Microsoft.KeyVault(VaultName=myvault;SecretName=mysecret)
-// OR
-// @Microsoft.KeyVault(SecretUri=https://myvault.vault.azure.net/secrets/mysecret/)
 
 // resource webAppPortalName_environments 'Microsoft.Web/sites/slots@2021-03-01' = [for item in environments: {
 //   name: '${webSiteName}/${item}'
@@ -265,162 +259,6 @@ resource standardWebTestPageExercises  'Microsoft.Insights/webtests@2020-10-05-p
     }
   }
 }
-
-// resource standardWebTestPageHomeDev  'Microsoft.Insights/webtests@2020-10-05-preview' = {
-//   name: 'Dev - Page Home'
-//   location: location
-//   tags: {
-//     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
-//   }
-//   kind: 'ping'
-//   properties: {
-//     SyntheticMonitorId: appInsightsName
-//     Name: 'Dev - Page Home'
-//     Description: null
-//     Enabled: true
-//     Frequency: 300
-//     Timeout: 120 
-//     Kind: 'standard'
-//     RetryEnabled: true
-//     Locations: [
-//       {
-//         Id: 'us-va-ash-azr'  // East US
-//       }
-//       {
-//         Id: 'us-fl-mia-edge' // Central US
-//       }
-//       {
-//         Id: 'us-ca-sjc-azr' // West US
-//       }
-//       {
-//         Id: 'emea-au-syd-edge' // Austrailia East
-//       }
-//       {
-//         Id: 'apac-jp-kaw-edge' // Japan East
-//       }
-//     ]
-//     Configuration: null
-//     Request: {
-//       RequestUrl: 'https://${appService.name}-dev.azurewebsites.net/'
-//       Headers: null
-//       HttpVerb: 'GET'
-//       RequestBody: null
-//       ParseDependentRequests: false
-//       FollowRedirects: null
-//     }
-//     ValidationRules: {
-//       ExpectedHttpStatusCode: 200
-//       IgnoreHttpsStatusCode: false
-//       ContentValidation: null
-//       SSLCheck: true
-//       SSLCertRemainingLifetimeCheck: 7
-//     }
-//   }
-// }
-
-// resource standardWebTestPageNutritionsDev  'Microsoft.Insights/webtests@2020-10-05-preview' = {
-//   name: 'Dev - Page Nutritions'
-//   location: location
-//   tags: {
-//     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
-//   }
-//   kind: 'ping'
-//   properties: {
-//     SyntheticMonitorId: appInsightsName
-//     Name: 'Dev - Page Nutritions'
-//     Description: null
-//     Enabled: true
-//     Frequency: 300
-//     Timeout: 120 
-//     Kind: 'standard'
-//     RetryEnabled: true
-//     Locations: [
-//       {
-//         Id: 'us-va-ash-azr'  // East US
-//       }
-//       {
-//         Id: 'us-fl-mia-edge' // Central US
-//       }
-//       {
-//         Id: 'us-ca-sjc-azr' // West US
-//       }
-//       {
-//         Id: 'emea-au-syd-edge' // Austrailia East
-//       }
-//       {
-//         Id: 'apac-jp-kaw-edge' // Japan East
-//       }
-//     ]
-//     Configuration: null
-//     Request: {
-//       RequestUrl: 'https://${appService.name}-dev.azurewebsites.net/Nutritions/'
-//       Headers: null
-//       HttpVerb: 'GET'
-//       RequestBody: null
-//       ParseDependentRequests: false
-//       FollowRedirects: null
-//     }
-//     ValidationRules: {
-//       ExpectedHttpStatusCode: 200
-//       IgnoreHttpsStatusCode: false
-//       ContentValidation: null
-//       SSLCheck: true
-//       SSLCertRemainingLifetimeCheck: 7
-//     }
-//   }
-// }
-
-// resource standardWebTestPageExercisesDev  'Microsoft.Insights/webtests@2020-10-05-preview' = {
-//   name: 'Dev - Page Exercises'
-//   location: location
-//   tags: {
-//     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
-//   }
-//   kind: 'ping'
-//   properties: {
-//     SyntheticMonitorId: appInsightsName
-//     Name: 'Dev - Page Exercises'
-//     Description: null
-//     Enabled: true
-//     Frequency: 300
-//     Timeout: 120 
-//     Kind: 'standard'
-//     RetryEnabled: true
-//     Locations: [
-//       {
-//         Id: 'us-va-ash-azr'  // East US
-//       }
-//       {
-//         Id: 'us-fl-mia-edge' // Central US
-//       }
-//       {
-//         Id: 'us-ca-sjc-azr' // West US
-//       }
-//       {
-//         Id: 'emea-au-syd-edge' // Austrailia East
-//       }
-//       {
-//         Id: 'apac-jp-kaw-edge' // Japan East
-//       }
-//     ]
-//     Configuration: null
-//     Request: {
-//       RequestUrl: 'https://${appService.name}-dev.azurewebsites.net/Exercises/'
-//       Headers: null
-//       HttpVerb: 'GET'
-//       RequestBody: null
-//       ParseDependentRequests: false
-//       FollowRedirects: null
-//     }
-//     ValidationRules: {
-//       ExpectedHttpStatusCode: 200
-//       IgnoreHttpsStatusCode: false
-//       ContentValidation: null
-//       SSLCheck: true
-//       SSLCertRemainingLifetimeCheck: 7
-//     }
-//   }
-// }
 
 output output_webSiteName string = appService.name
 output out_appService string = appService.id
