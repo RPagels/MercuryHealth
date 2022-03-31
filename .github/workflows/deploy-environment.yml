@@ -44,7 +44,7 @@ jobs:
   ###################################################################
   # Deployment Stage - Infrastructure
   ###################################################################
-  Deploy_Infrastructure:
+  deploy_infrastructure:
     runs-on: ubuntu-latest
     outputs:
       output_webSiteNameURL: ${{ steps.Infra.outputs.out_webSiteNameURL }}
@@ -148,10 +148,10 @@ jobs:
   ###################################################################
   # Deployment Stage - Application / Database 
   ###################################################################
-  Deploy_Application:
+  deploy_application:
     runs-on: ubuntu-latest
     name: Deploy Application
-    needs: [Deploy_Infrastructure]
+    needs: [deploy_infrastructure]
     env:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
       Deploy_Environment: ${{ inputs.environment-suffix }}
@@ -162,23 +162,24 @@ jobs:
 
     # Identify any jobs that must complete successfully before this job will run.
     steps:
-    - name: Login to Azure
-      uses: azure/login@v1
-      continue-on-error: false
-      with:
-        creds: ${{ secrets.azure-credentials }}
-  
+ 
     - name: DEBUG ONLY Display Output Variables
       run: |
          echo 'output_loadTestsName: ${{ needs.deploy_infrastructure.outputs.out_loadTestsName }}'
-         echo 'output_webSiteName: ${{ needs.Deploy_Infrastructure.outputs.out_webSiteName }}'
+         echo 'output_webSiteName: ${{ needs.deploy_infrastructure.outputs.out_webSiteName }}'
          echo 'output_functionAppName: ${{ needs.deploy_infrastructure.outputs.out_functionAppName }}'
-         echo 'output_webSiteNameURL: ${{ needs.Deploy_Infrastructure.outputs.out_webSiteNameURL }}'
+         echo 'output_webSiteNameURL: ${{ needs.deploy_infrastructure.outputs.out_webSiteNameURL }}'
          echo 'output_sqlserverFQName: ${{ needs.deploy_infrastructure.outputs.out_sqlserverFQName }}'
          echo 'output_releaseAnnotationGuidID: ${{ needs.deploy_infrastructure.outputs.out_releaseAnnotationGuidID }}'
          echo 'output_appInsightsApplicationId: ${{ needs.deploy_infrastructure.outputs.out_appInsightsApplicationId }}'
          echo 'output_appInsightsAPIApplicationId: ${{ needs.deploy_infrastructure.outputs.out_appInsightsAPIApplicationId }}'
 
+    - name: Login to Azure
+      uses: azure/login@v1
+      continue-on-error: false
+      with:
+        creds: ${{ secrets.azure-credentials }}
+        
     - name: Ensure Resource Group is UnLocked
       if: contains(github.event_name, 'push')
       uses: Azure/CLI@v1
@@ -293,7 +294,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # Identify any jobs that must complete successfully before this job will run.
-    needs: [Deploy_Infrastructure, Deploy_Application]
+    needs: [deploy_infrastructure, deploy_application]
     timeout-minutes: 10
         
     steps:
@@ -374,7 +375,7 @@ jobs:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
            
     # Identify any jobs that must complete successfully before this job will run.
-    needs: [Deploy_Infrastructure, Deploy_Application]
+    needs: [deploy_infrastructure, deploy_application]
     steps:
       - name: 'Checkout GitHub Actions'
         uses: actions/checkout@v2
