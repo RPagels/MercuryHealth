@@ -171,9 +171,9 @@ jobs:
     - name: DEBUG ONLY Display Output Variables
       run: |
          echo 'output_loadTestsName: ${{ needs.deploy_infrastructure.outputs.out_loadTestsName }}'
-         echo 'output_webSiteName: ${{ needs.deploy_infrastructure.outputs.out_webSiteName }}'
+         echo 'output_webSiteName: ${{ needs.Deploy_Infrastructure.outputs.out_webSiteName }}'
          echo 'output_functionAppName: ${{ needs.deploy_infrastructure.outputs.out_functionAppName }}'
-         echo 'output_webSiteNameURL: ${{ needs.deploy_infrastructure.outputs.out_webSiteNameURL }}'
+         echo 'output_webSiteNameURL: ${{ needs.Deploy_Infrastructure.outputs.out_webSiteNameURL }}'
          echo 'output_sqlserverFQName: ${{ needs.deploy_infrastructure.outputs.out_sqlserverFQName }}'
          echo 'output_releaseAnnotationGuidID: ${{ needs.deploy_infrastructure.outputs.out_releaseAnnotationGuidID }}'
          echo 'output_appInsightsApplicationId: ${{ needs.deploy_infrastructure.outputs.out_appInsightsApplicationId }}'
