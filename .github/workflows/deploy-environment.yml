@@ -415,7 +415,7 @@ jobs:
             [
               {
                 "name": "webHost",
-                "value": "https://${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net"
+                "value": "${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net"
               }
             ]
 
