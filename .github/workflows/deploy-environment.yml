@@ -101,7 +101,7 @@ jobs:
         curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
         chmod +x ./bicep
         sudo mv ./bicep /usr/local/bin/bicep
-        bicep --help
+        bicep --version
 
 # mkdir -p target/bicep
     - name: Generate ARM template
@@ -295,7 +295,12 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ env.dotnet_version }}
-          
+
+      - name: DEBUG ONLY Display Output Variables
+        run: |
+           echo 'output_webSiteName: ${{ needs.deploy_infrastructure.outputs.out_webSiteName }}'
+           echo 'output_webSiteNameURL: ${{ needs.deploy_infrastructure.outputs.out_webSiteNameURL }}'
+         
       # Download Artifacts under $GITHUB_WORKSPACE, so your job can access it
       - name: Download Build Artifacts-Playwright Tests
         continue-on-error: false
@@ -359,11 +364,16 @@ jobs:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
            
     # Identify any jobs that must complete successfully before this job will run.
-    needs: [Deploy_Application]
+    needs: [Deploy_Infrastructure, Deploy_Application]
     steps:
       - name: 'Checkout GitHub Actions'
         uses: actions/checkout@v2
 
+      - name: DEBUG ONLY Display Output Variables
+        run: |
+           echo 'output_loadTestsName: ${{ needs.deploy_infrastructure.outputs.out_loadTestsName }}'
+           echo 'output_webSiteNameURL: ${{ needs.deploy_infrastructure.outputs.out_webSiteNameURL }}'
+           
       # Download Artifacts under $GITHUB_WORKSPACE, so your job can access it
       - name: 'Download Build Artifacts-Load Tests'
         uses: actions/download-artifact@v2
