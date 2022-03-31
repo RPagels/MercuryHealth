@@ -15,6 +15,7 @@ namespace MercuryHealth.UITests
     {
         string pageURL = "";
         string myPageTitle = "";
+        int myDefaultTimeout =30000;
 
         // Identify methods that are called once prior to executing any of the tests
         [OneTimeSetUp]
@@ -32,6 +33,7 @@ namespace MercuryHealth.UITests
 
             // Set the page URL from .runsettings
             pageURL = TestContext.Parameters.Get("webAppUrl");
+            myDefaultTimeout = Convert.ToInt16(TestContext.Parameters.Get("DefaultTimeout"));
 
             Console.WriteLine("Debug-pageURL >>> " + pageURL + " <<<");
 
@@ -84,7 +86,7 @@ namespace MercuryHealth.UITests
             await using var browser = await playwright.Chromium.LaunchAsync();
             var context = await browser.NewContextAsync();
             var page = await context.NewPageAsync();
-            page.SetDefaultTimeout(30000);
+            page.SetDefaultTimeout(myDefaultTimeout);
 
             await page.GotoAsync(pageURL);
 
@@ -119,7 +121,7 @@ namespace MercuryHealth.UITests
             await using var browser = await playwright.Chromium.LaunchAsync();
             var context = await browser.NewContextAsync();
             var page = await context.NewPageAsync();
-            page.SetDefaultTimeout(30000);
+            page.SetDefaultTimeout(myDefaultTimeout);
 
             await page.GotoAsync(pageURL);
 
@@ -161,7 +163,7 @@ namespace MercuryHealth.UITests
             await using var browser = await playwright.Chromium.LaunchAsync();
             var context = await browser.NewContextAsync();
             var page = await context.NewPageAsync();
-            page.SetDefaultTimeout(30000);
+            page.SetDefaultTimeout(myDefaultTimeout);
 
             await page.GotoAsync(pageURL);
 
@@ -233,7 +235,7 @@ namespace MercuryHealth.UITests
             await using var browser = await playwright.Chromium.LaunchAsync();
             var context = await browser.NewContextAsync();
             var page = await context.NewPageAsync();
-            page.SetDefaultTimeout(30000);
+            page.SetDefaultTimeout(myDefaultTimeout);
 
             await page.GotoAsync(pageURL);
 
@@ -316,7 +318,7 @@ namespace MercuryHealth.UITests
             await using var browser = await playwright.Chromium.LaunchAsync();
             var context = await browser.NewContextAsync();
             var page = await context.NewPageAsync();
-            page.SetDefaultTimeout(30000);
+            page.SetDefaultTimeout(myDefaultTimeout);
 
             await page.GotoAsync(pageURL);
 
@@ -358,7 +360,7 @@ namespace MercuryHealth.UITests
             await using var browser = await playwright.Chromium.LaunchAsync();
             var context = await browser.NewContextAsync();
             var page = await context.NewPageAsync();
-            page.SetDefaultTimeout(30000);
+            page.SetDefaultTimeout(myDefaultTimeout);
 
             await page.GotoAsync(pageURL);
 
@@ -434,7 +436,7 @@ namespace MercuryHealth.UITests
             await using var browser = await playwright.Chromium.LaunchAsync();
             var context = await browser.NewContextAsync();
             var page = await context.NewPageAsync();
-            page.SetDefaultTimeout(30000);
+            page.SetDefaultTimeout(myDefaultTimeout);
 
             await page.GotoAsync(pageURL);
 
@@ -510,7 +512,7 @@ namespace MercuryHealth.UITests
             using var playwright = await Playwright.CreateAsync();
             await using var browser = await playwright.Chromium.LaunchAsync();
             var page = await browser.NewPageAsync();
-            page.SetDefaultTimeout(30000);
+            page.SetDefaultTimeout(myDefaultTimeout);
             await page.GotoAsync("https://playwright.dev/dotnet");
 
             myPageTitle = await page.TitleAsync();
@@ -525,7 +527,7 @@ namespace MercuryHealth.UITests
             using var playwright = await Playwright.CreateAsync();
             await using var browser = await playwright.Chromium.LaunchAsync();
             var page = await browser.NewPageAsync();
-            page.SetDefaultTimeout(30000);
+            page.SetDefaultTimeout(myDefaultTimeout);
             await page.GotoAsync("https://www.bing.com");
 
             myPageTitle = await page.TitleAsync();
@@ -540,7 +542,7 @@ namespace MercuryHealth.UITests
             using var playwright = await Playwright.CreateAsync();
             await using var browser = await playwright.Chromium.LaunchAsync();
             var page = await browser.NewPageAsync();
-            page.SetDefaultTimeout(30000);
+            page.SetDefaultTimeout(myDefaultTimeout);
             await page.GotoAsync("https://www.google.com");
 
             myPageTitle = await page.TitleAsync();
@@ -555,7 +557,7 @@ namespace MercuryHealth.UITests
             using var playwright = await Playwright.CreateAsync();
             await using var browser = await playwright.Chromium.LaunchAsync();
             var page = await browser.NewPageAsync();
-            page.SetDefaultTimeout(30000);
+            page.SetDefaultTimeout(myDefaultTimeout);
             await page.GotoAsync("https://www.bing.com");
 
             myPageTitle = await page.TitleAsync();
@@ -570,7 +572,7 @@ namespace MercuryHealth.UITests
             using var playwright = await Playwright.CreateAsync();
             await using var browser = await playwright.Chromium.LaunchAsync();
             var page = await browser.NewPageAsync();
-            page.SetDefaultTimeout(30000);
+            page.SetDefaultTimeout(myDefaultTimeout);
             await page.GotoAsync("https://www.google.com");
 
             myPageTitle = await page.TitleAsync();
@@ -585,7 +587,7 @@ namespace MercuryHealth.UITests
             using var playwright = await Playwright.CreateAsync();
             await using var browser = await playwright.Chromium.LaunchAsync();
             var page = await browser.NewPageAsync();
-            page.SetDefaultTimeout(30000);
+            page.SetDefaultTimeout(myDefaultTimeout);
             await page.GotoAsync("https://playwright.dev/dotnet");
 
             myPageTitle = await page.TitleAsync();
