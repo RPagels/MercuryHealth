@@ -165,21 +165,21 @@ jobs:
  
     - name: DEBUG ONLY Display Output Variables
       run: |
-         echo 'output_loadTestsName: ${{ needs.deploy_infrastructure.outputs.out_loadTestsName }}'
-         echo 'output_webSiteName: ${{ needs.deploy_infrastructure.outputs.out_webSiteName }}'
-         echo 'output_functionAppName: ${{ needs.deploy_infrastructure.outputs.out_functionAppName }}'
-         echo 'output_webSiteNameURL: ${{ needs.deploy_infrastructure.outputs.out_webSiteNameURL }}'
-         echo 'output_sqlserverFQName: ${{ needs.deploy_infrastructure.outputs.out_sqlserverFQName }}'
-         echo 'output_releaseAnnotationGuidID: ${{ needs.deploy_infrastructure.outputs.out_releaseAnnotationGuidID }}'
-         echo 'output_appInsightsApplicationId: ${{ needs.deploy_infrastructure.outputs.out_appInsightsApplicationId }}'
-         echo 'output_appInsightsAPIApplicationId: ${{ needs.deploy_infrastructure.outputs.out_appInsightsAPIApplicationId }}'
+         echo 'output_loadTestsName: ${{ needs.deploy_infrastructure.outputs.output_loadTestsName }}'
+         echo 'output_webSiteName: ${{ needs.deploy_infrastructure.outputs.output_webSiteName }}'
+         echo 'output_functionAppName: ${{ needs.deploy_infrastructure.outputs.output_functionAppName }}'
+         echo 'output_webSiteNameURL: ${{ needs.deploy_infrastructure.outputs.output_webSiteNameURL }}'
+         echo 'output_sqlserverFQName: ${{ needs.deploy_infrastructure.outputs.output_sqlserverFQName }}'
+         echo 'output_releaseAnnotationGuidID: ${{ needs.deploy_infrastructure.outputs.output_releaseAnnotationGuidID }}'
+         echo 'output_appInsightsApplicationId: ${{ needs.deploy_infrastructure.outputs.output_appInsightsApplicationId }}'
+         echo 'output_appInsightsAPIApplicationId: ${{ needs.deploy_infrastructure.outputs.output_appInsightsAPIApplicationId }}'
 
     - name: Login to Azure
       uses: azure/login@v1
       continue-on-error: false
       with:
         creds: ${{ secrets.azure-credentials }}
-        
+
     - name: Ensure Resource Group is UnLocked
       if: contains(github.event_name, 'push')
       uses: Azure/CLI@v1
@@ -309,8 +309,8 @@ jobs:
 
       - name: DEBUG ONLY Display Output Variables
         run: |
-           echo 'output_webSiteName: ${{ needs.deploy_infrastructure.outputs.out_webSiteName }}'
-           echo 'output_webSiteNameURL: ${{ needs.deploy_infrastructure.outputs.out_webSiteNameURL }}'
+           echo 'output_webSiteName: ${{ needs.deploy_infrastructure.outputs.output_webSiteName }}'
+           echo 'output_webSiteNameURL: ${{ needs.deploy_infrastructure.outputs.output_webSiteNameURL }}'
          
       # Download Artifacts under $GITHUB_WORKSPACE, so your job can access it
       - name: Download Build Artifacts-Playwright Tests
@@ -382,8 +382,8 @@ jobs:
 
       - name: DEBUG ONLY Display Output Variables
         run: |
-           echo 'output_loadTestsName: ${{ needs.deploy_infrastructure.outputs.out_loadTestsName }}'
-           echo 'output_webSiteNameURL: ${{ needs.deploy_infrastructure.outputs.out_webSiteNameURL }}'
+           echo 'output_loadTestsName: ${{ needs.deploy_infrastructure.outputs.output_loadTestsName }}'
+           echo 'output_webSiteNameURL: ${{ needs.deploy_infrastructure.outputs.output_webSiteNameURL }}'
            
       # Download Artifacts under $GITHUB_WORKSPACE, so your job can access it
       - name: 'Download Build Artifacts-Load Tests'
