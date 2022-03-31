@@ -131,6 +131,17 @@ jobs:
         inlineScript: |
           az group lock create --lock-type CanNotDelete --name DontDeleteMe --resource-group ${{ env.Azure_Resource_GroupName }} --notes 'Prevent deletion of the resource group'
 
+    - name: DEBUG ONLY Display Output Variables
+      run: |
+         echo 'output_webSiteNameURL: ${{ steps.Infra.outputs.out_webSiteNameURL }}'
+         echo 'output_loadTestsName: ${{ steps.Infra.outputs.out_loadTestsName }}'
+         echo 'output_webSiteName: ${{ steps.Infra.outputs.out_webSiteName }}'
+         echo 'output_functionAppName: ${{ steps.Infra.outputs.out_functionAppName }}'
+         echo 'output_sqlserverFQName: ${{ steps.Infra.outputs.out_sqlserverFQName }}'
+         echo 'output_releaseAnnotationGuidID: ${{ steps.Infra.outputs.out_releaseAnnotationGuidID }}'
+         echo 'output_appInsightsApplicationId: ${{ steps.Infra.outputs.out_appInsightsApplicationId }}'
+         echo 'output_appInsightsAPIApplicationId: ${{ steps.Infra.outputs.out_appInsightsAPIApplicationId }}'
+      
     - name: 'Azure logout'
       run: |
         az logout
