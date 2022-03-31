@@ -96,16 +96,29 @@ jobs:
         name: MercuryHealth.IaC
         path: ${{ github.workspace }}/MercuryHealth.IaC
 
+    - name: Install Bicep
+      run: |
+        curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
+        chmod +x ./bicep
+        sudo mv ./bicep /usr/local/bin/bicep
+        bicep --help
+
+# mkdir -p target/bicep
+    - name: Generate ARM template
+      run: |
+        bicep build ./MercuryHealth.IaC/main-1.bicep --outdir ./MercuryHealth.IaC
+
       ###########################################
       # Deploy ARM Template using Bicep DSL
       ###########################################
+      # template: ./MercuryHealth.IaC/main-1.bicep
     - name: Infrastructure
       id: Infra
       uses: azure/arm-deploy@v1
       continue-on-error: false
       with:
         resourceGroupName: ${{ env.Azure_Resource_GroupName }}
-        template: ./MercuryHealth.IaC/main-1.bicep
+        template: ./MercuryHealth.IaC/main-1.json
         parameters: ./MercuryHealth.IaC/main-1.params.json sqlAdministratorLogin=${{ secrets.sql-db-login }} sqlAdministratorLoginPassword=${{ secrets.sql-db-password }} Deploy_Environment=${{ env.Deploy_Environment }}
         deploymentMode: Incremental
         failOnStdErr: false
