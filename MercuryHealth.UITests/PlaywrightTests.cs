@@ -15,7 +15,7 @@ namespace MercuryHealth.UITests
     {
         string pageURL = "";
         string myPageTitle = "";
-        int myDefaultTimeout =30000;
+        int myDefaultTimeout = 30000;
 
         // Identify methods that are called once prior to executing any of the tests
         [OneTimeSetUp]
@@ -33,7 +33,7 @@ namespace MercuryHealth.UITests
 
             // Set the page URL from .runsettings
             pageURL = TestContext.Parameters.Get("webAppUrl");
-            myDefaultTimeout = Convert.ToInt16(TestContext.Parameters.Get("DefaultTimeout"));
+            myDefaultTimeout = Convert.ToInt32(TestContext.Parameters.Get("DefaultTimeout"));
 
             Console.WriteLine("Debug-pageURL >>> " + pageURL + " <<<");
 
