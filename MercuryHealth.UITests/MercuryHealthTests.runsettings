@@ -4,6 +4,6 @@
 	  <Parameter name="webAppUrl" value="WebSiteUrlHere" />
 	  <!--<Parameter name="webAppUrl" value="https://app-fq3ruuhxgjony.azurewebsites.net/" />-->
 	  <Parameter name="browserType" value="chrome" />
-	  <Parameter name="DefaultTimeout" value="50000" />
+	  <Parameter name="DefaultTimeout" value="100000" />
   </TestRunParameters>
 </RunSettings>

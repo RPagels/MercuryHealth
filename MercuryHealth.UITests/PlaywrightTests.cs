@@ -15,7 +15,7 @@ namespace MercuryHealth.UITests
     {
         string pageURL = "";
         string myPageTitle = "";
-        int myDefaultTimeout = 30000;
+        int myDefaultTimeout = 30000;  // 3 secs
 
         // Identify methods that are called once prior to executing any of the tests
         [OneTimeSetUp]

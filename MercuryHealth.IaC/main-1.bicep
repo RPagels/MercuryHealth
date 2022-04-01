@@ -47,6 +47,8 @@ var defaultTags = {
 // KeyVault Secret Names
 param secretName1 string = 'ConnectionStringsAppConfig'
 param secretName2 string = 'ConnectionStringsMercuryHealthWebContext'
+param secretName3 string = 'AzureWebJobsStorage'
+param secretName4 string = 'WebsiteContentAzureFileConnectionString'
 
 ////////////////////////////////////////
 // BEGIN - Create Config Store
@@ -307,6 +309,9 @@ module functionappmod './main-6-funcapp.bicep' = {
     defaultTags: defaultTags
     ApimSubscriptionKey: ApimSubscriptionKeyString
     ApimWebServiceURL: apiManagement.properties.gatewayUrl
+    keyvaultName: keyvaultName
+    secretName3: secretName3
+    secretName4: secretName4
   }
 }
 
@@ -435,7 +440,6 @@ module blogstoragemod './main-12-blobstorage.bicep' = {
 // }
 
 output out_webSiteName string = webSiteName
-//output out_webSiteNameURL string = webappmod.outputs.out_webSiteNameURL
 output out_sqlserverName string = sqlserverName
 output out_sqlDBName string = sqlDBName
 output out_sqlserverFQName string = sqldbmod.outputs.sqlserverfullyQualifiedDomainName
