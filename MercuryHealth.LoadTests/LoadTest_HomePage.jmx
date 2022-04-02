@@ -10,7 +10,7 @@
         <collectionProp name="Arguments.arguments">
           <elementProp name="appToken" elementType="Argument">
             <stringProp name="Argument.name">udv_webHost</stringProp>
-            <stringProp name="Argument.value">${__BeanShell( System.getenv("webHost") )}</stringProp>
+            <stringProp name="Argument.value">${__BeanShell( System.getenv("webapp") )}</stringProp>
             <stringProp name="Argument.desc">Web app URL</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
