@@ -9,7 +9,7 @@
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
         <collectionProp name="Arguments.arguments">
           <elementProp name="appToken" elementType="Argument">
-            <stringProp name="Argument.name">udv_webHost</stringProp>
+            <stringProp name="Argument.name">udv_webapp</stringProp>
             <stringProp name="Argument.value">${__BeanShell( System.getenv("webapp") )}</stringProp>
             <stringProp name="Argument.desc">Web app URL</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
