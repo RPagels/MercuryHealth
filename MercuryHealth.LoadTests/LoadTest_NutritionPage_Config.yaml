@@ -1,0 +1,17 @@
+version: v0.1
+testName: Nutrition_Page_Tests
+testPlan: LoadTest_NutritionPage.jmx
+description: Load test website nutrition page
+engineInstances: 2
+configurationFiles:
+  - 'SampleData-Nutrition.csv'
+failureCriteria:
+  - avg(response_time_ms) > 20000
+  - percentage(error) > 20
+#env:
+#  - name: my-variable
+#    value: my-value
+#secrets:
+#  - name: my-secret
+#    value: https://MercuryHealth.vault.azure.net/secrets/MySecret
+#
