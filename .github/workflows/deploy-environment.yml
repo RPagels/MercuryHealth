@@ -561,7 +561,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # Identify any jobs that must complete successfully before this job will run.
-    needs: [UITesting_Stage_Application]
+    needs: [UITesting_Stage_Application, LoadTesting_Stage_Application_Home]
     environment: ${{ inputs.environment-suffix }}
     steps:
       - name: Approve Deployment
