@@ -25,9 +25,7 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        // Todo: Chris & Randy Stuff to do next!
-        //
-        // Mock setup for Config and so forth and so on...
+        // Todo: Mock setup for Config and so forth and so on...
         // 
         ViewData["myEnvironment"] = Configuration["Environment"];
 
