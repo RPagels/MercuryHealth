@@ -474,7 +474,7 @@ jobs:
             [
               {
                 "name": "webapp",
-                "value": "${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net/Nutritions"
+                "value": "${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net/nutritions"
               }
             ]
 
@@ -533,7 +533,7 @@ jobs:
             [
               {
                 "name": "webapp",
-                "value": "${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net/Exercises"
+                "value": "${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net/exercises"
               }
             ]
 
