@@ -49,7 +49,7 @@ public class NutritionsController : Controller
             nvm.FontColor = "Black";
 
             // Check for text with API in it
-            if (mynutritionrec.Tags == "API Update")
+            if (mynutritionrec.Tags == "API PUT Update")
             {
                 nvm.FontColor = "Red";
             }

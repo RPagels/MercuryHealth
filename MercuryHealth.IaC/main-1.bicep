@@ -332,9 +332,9 @@ module keyvaultmod './main-8-keyvault.bicep' = {
    configStoreConnection: configStoreConnectionString
    appServiceprincipalId: webappmod.outputs.out_appServiceprincipalId
    sqlserverfullyQualifiedDomainName: sqldbmod.outputs.sqlserverfullyQualifiedDomainName
-   webSiteName: webSiteName
    secretName1: secretName1
    secretName2: secretName2
+   funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
    }
    dependsOn:  [
     webappmod

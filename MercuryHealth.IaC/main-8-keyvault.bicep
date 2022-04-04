@@ -2,13 +2,14 @@ param location string = resourceGroup().location
 param sqlserverName string
 param sqlDBName string
 param sqlAdministratorLogin string
-param webSiteName string
+//param webSiteName string
 
 @secure()
 param sqlAdministratorLoginPassword string
 param vaultName string
 param tenant string = subscription().tenantId
 param appServiceprincipalId string
+param funcAppServiceprincipalId string
 //param appInsightsInstrumentationKey string
 param sqlserverfullyQualifiedDomainName string
 
@@ -19,6 +20,20 @@ param accessPolicies array = [
   {
     tenantId: tenant
     objectId: appServiceprincipalId
+    permissions: {
+      keys: [
+        'Get'
+        'List'
+      ]
+      secrets: [
+        'Get'
+        'List'
+      ]
+    }
+  }
+  {
+    tenantId: tenant
+    objectId: funcAppServiceprincipalId
     permissions: {
       keys: [
         'Get'

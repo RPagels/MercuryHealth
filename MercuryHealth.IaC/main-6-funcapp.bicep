@@ -321,3 +321,5 @@ resource mySecret4 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
     value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
   }
 }
+
+output out_funcAppServiceprincipalId string = functionApp.identity.principalId

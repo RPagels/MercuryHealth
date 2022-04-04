@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "3589076736997001791"
+      "templateHash": "16069096213525679008"
     }
   },
   "parameters": {
@@ -947,7 +947,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "12763065051072661775"
+              "templateHash": "13702219478858108242"
             }
           },
           "parameters": {
@@ -1089,20 +1089,20 @@
                       "value": "[parameters('ApimWebServiceURL')]"
                     },
                     {
-                      "name": "AzureWebJobsStorage",
-                      "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', variables('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2021-08-01').keys[0].value)]"
-                    },
-                    {
                       "name": "AzureWebJobsStorageKV",
                       "value": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secretName3'))]"
                     },
                     {
-                      "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                      "name": "AzureWebJobsStorage",
                       "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', variables('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2021-08-01').keys[0].value)]"
                     },
                     {
-                      "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRINGKV",
+                      "name": "WebsiteContentAzureFileConnectionStringKV",
                       "value": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secretName4'))]"
+                    },
+                    {
+                      "name": "WebsiteContentAzureFileConnectionString",
+                      "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', variables('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2021-08-01').keys[0].value)]"
                     },
                     {
                       "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -1129,6 +1129,9 @@
                 "dailyMemoryTimeQuota": 0,
                 "httpsOnly": true,
                 "redundancyMode": "None"
+              },
+              "identity": {
+                "type": "SystemAssigned"
               },
               "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', parameters('functionAppServiceName'))]",
@@ -1258,7 +1261,13 @@
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
               ]
             }
-          ]
+          ],
+          "outputs": {
+            "out_funcAppServiceprincipalId": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.Web/sites', parameters('functionAppName')), '2021-01-15', 'full').identity.principalId]"
+            }
+          }
         }
       },
       "dependsOn": [
@@ -1304,14 +1313,14 @@
           "sqlserverfullyQualifiedDomainName": {
             "value": "[reference(resourceId('Microsoft.Resources/deployments', 'sqldbdeploy'), '2020-06-01').outputs.sqlserverfullyQualifiedDomainName.value]"
           },
-          "webSiteName": {
-            "value": "[variables('webSiteName')]"
-          },
           "secretName1": {
             "value": "[parameters('secretName1')]"
           },
           "secretName2": {
             "value": "[parameters('secretName2')]"
+          },
+          "funcAppServiceprincipalId": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'functionappdeploy'), '2020-06-01').outputs.out_funcAppServiceprincipalId.value]"
           }
         },
         "template": {
@@ -1321,7 +1330,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "16614796202887811859"
+              "templateHash": "9301770012823790414"
             }
           },
           "parameters": {
@@ -1338,9 +1347,6 @@
             "sqlAdministratorLogin": {
               "type": "string"
             },
-            "webSiteName": {
-              "type": "string"
-            },
             "sqlAdministratorLoginPassword": {
               "type": "secureString"
             },
@@ -1352,6 +1358,9 @@
               "defaultValue": "[subscription().tenantId]"
             },
             "appServiceprincipalId": {
+              "type": "string"
+            },
+            "funcAppServiceprincipalId": {
               "type": "string"
             },
             "sqlserverfullyQualifiedDomainName": {
@@ -1366,6 +1375,20 @@
                 {
                   "tenantId": "[parameters('tenant')]",
                   "objectId": "[parameters('appServiceprincipalId')]",
+                  "permissions": {
+                    "keys": [
+                      "Get",
+                      "List"
+                    ],
+                    "secrets": [
+                      "Get",
+                      "List"
+                    ]
+                  }
+                },
+                {
+                  "tenantId": "[parameters('tenant')]",
+                  "objectId": "[parameters('funcAppServiceprincipalId')]",
                   "permissions": {
                     "keys": [
                       "Get",
@@ -1471,6 +1494,7 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName'))]",
+        "[resourceId('Microsoft.Resources/deployments', 'functionappdeploy')]",
         "[resourceId('Microsoft.Resources/deployments', 'sqldbdeploy')]",
         "[resourceId('Microsoft.Resources/deployments', 'webappdeploy')]"
       ]
