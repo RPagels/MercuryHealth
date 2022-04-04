@@ -71,6 +71,8 @@ resource appService 'Microsoft.Web/sites@2021-01-15' = {
   }
 }
 
+param myNewGuid string = newGuid()
+
 resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
   //name: '${webSiteName}/appsettings'
   name: 'appsettings'
@@ -86,6 +88,7 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
     'APPLICATIONINSIGHTS_CONNECTION_STRING': appInsightsConnectionString
     'WebAppUrl': 'https://${appService.name}.azurewebsites.net/'
     'ASPNETCORE_ENVIRONMENT': 'Development'
+    'DEBUG - newGuid()': myNewGuid
   }
 }
 
