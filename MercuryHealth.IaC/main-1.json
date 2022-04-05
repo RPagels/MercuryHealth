@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "13452397547263735350"
+      "templateHash": "11663777036475878170"
     }
   },
   "parameters": {
@@ -110,8 +110,8 @@
   },
   "functions": [],
   "variables": {
-    "sqlAdminLoginName": "[format('AzureAdmin{0}', uniqueString(resourceGroup().id))]",
-    "sqlAdminLoginPassword": "[guid(resourceGroup().id)]",
+    "sqlAdminLoginName": "AzureAdmin",
+    "sqlAdminLoginPassword": "[format('Password.1.!!{0}', uniqueString(resourceGroup().id))]",
     "webAppPlanName": "[format('plan-{0}', uniqueString(resourceGroup().id))]",
     "webSiteName": "[format('app-{0}', uniqueString(resourceGroup().id))]",
     "sqlserverName": "[toLower(format('sql-{0}', uniqueString(resourceGroup().id)))]",
@@ -1760,6 +1760,10 @@
     "out_keyvaultName": {
       "type": "string",
       "value": "[variables('keyvaultName')]"
+    },
+    "out_keyvaultSecretName": {
+      "type": "string",
+      "value": "[parameters('secretName2')]"
     },
     "out_appInsightsApplicationId": {
       "type": "string",

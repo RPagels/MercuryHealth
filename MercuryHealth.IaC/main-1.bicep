@@ -19,7 +19,7 @@ param Deploy_Environment string
 // param sqlAdministratorLoginPassword string
 
 // Generate Azure SQL Credentials
-var sqlAdminLoginName = 'AzureAdmin${uniqueString(resourceGroup().id)}'
+var sqlAdminLoginName = 'AzureAdmin' //'AzureAdmin${uniqueString(resourceGroup().id)}'
 var sqlAdminLoginPassword = 'Password.1.!!${uniqueString(resourceGroup().id)}' //guid(resourceGroup().id)
 
 // Variables for Recommended abbreviations for Azure resource types
@@ -451,6 +451,7 @@ output out_functionAppName string = functionAppName
 output out_apiServiceName string = apiServiceName
 output out_loadTestsName string = loadTestsName
 output out_keyvaultName string = keyvaultName
+output out_keyvaultSecretName string = secretName2
 output out_appInsightsApplicationId string = appinsightsmod.outputs.out_appInsightsApplicationId
 output out_appInsightsAPIApplicationId string = appinsightsmod.outputs.out_appInsightsAPIApplicationId
 output out_releaseAnnotationGuidID string = releaseAnnotationGuid
