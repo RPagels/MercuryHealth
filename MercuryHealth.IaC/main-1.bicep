@@ -7,6 +7,7 @@ param location string = resourceGroup().location
 param createdBy string = 'Randy Pagels' // resourceGroup().managedBy
 param costCenter string = '74f644d3e665'
 param releaseAnnotationGuid string = newGuid()
+param guidValue string = newGuid()
 
 // Data params
 param Deploy_Environment string
@@ -16,6 +17,9 @@ param sqlAdministratorLogin string
 
 @secure()
 param sqlAdministratorLoginPassword string
+
+var sqlAdminLoginPassword = 'AzureAdmin${uniqueString(guidValue)}'
+var sqlAdminLoginName = guid(resourceGroup().id)
 
 // Variables for Recommended abbreviations for Azure resource types
 // https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations
@@ -263,6 +267,8 @@ module webappmod './main-2-webapp.bicep' = {
     // sqlDBName: sqlDBName
     // sqlAdministratorLogin: sqlAdministratorLogin
     // sqlAdministratorLoginPassword: sqlAdministratorLoginPassword
+    sqlAdminLoginName: sqlAdminLoginName
+    sqlAdminLoginPassword: sqlAdminLoginPassword
     appInsightsInstrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
     appInsightsConnectionString: appinsightsmod.outputs.out_appInsightsConnectionString
     defaultTags: defaultTags

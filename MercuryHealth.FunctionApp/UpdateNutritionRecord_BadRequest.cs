@@ -15,9 +15,6 @@ public class UpdateNutritionRecord_BadRequest
     private static string ApimSubscriptionKey = System.Environment.GetEnvironmentVariable("ApimSubscriptionKey");
     private static string ApimWebServiceURL = System.Environment.GetEnvironmentVariable("ApimWebServiceURL");
 
-    // TESTING ONLY
-    //private static string WebAppUrl = System.Environment.GetEnvironmentVariable("WebAppUrl");
-
     private readonly TelemetryClient telemetry;
 
     public UpdateNutritionRecord_BadRequest(TelemetryClient telemetry)

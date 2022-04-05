@@ -18,6 +18,10 @@ param keyvaultName string
 param secretName1 string
 param secretName2 string
 
+// Test ONLY
+param sqlAdminLoginPassword string
+param sqlAdminLoginName string
+
 //@secure()
 // param configStoreConnection string
 // @secure()
@@ -89,6 +93,8 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
     'WebAppUrl': 'https://${appService.name}.azurewebsites.net/'
     'ASPNETCORE_ENVIRONMENT': 'Development'
     'DEBUG - newGuid()': myNewGuid
+    'DEBUG - sqlAdminLoginName': sqlAdminLoginName
+    'DEBUG - sqlAdminLoginPassword': sqlAdminLoginPassword
   }
 }
 
