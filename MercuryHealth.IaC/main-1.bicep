@@ -262,14 +262,6 @@ module webappmod './main-2-webapp.bicep' = {
     Deploy_Environment: Deploy_Environment
     appInsightsName: appInsightsName
     location: location
-    // configStoreConnection: configStoreConnectionString
-    // sqlserverName: sqlserverName
-    // sqlserverfullyQualifiedDomainName: sqldbmod.outputs.sqlserverfullyQualifiedDomainName
-    // sqlDBName: sqlDBName
-    // sqlAdministratorLogin: sqlAdministratorLogin
-    // sqlAdministratorLoginPassword: sqlAdministratorLoginPassword
-    sqlAdminLoginName: sqlAdminLoginName
-    sqlAdminLoginPassword: sqlAdminLoginPassword
     appInsightsInstrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
     appInsightsConnectionString: appinsightsmod.outputs.out_appInsightsConnectionString
     defaultTags: defaultTags
@@ -287,8 +279,8 @@ module sqldbmod './main-3-sqldatabase.bicep' = {
     location: location
     sqlserverName: sqlserverName
     sqlDBName: sqlDBName
-    administratorLogin: sqlAdminLoginName
-    administratorLoginPassword: sqlAdminLoginPassword
+    sqlAdminLoginName: sqlAdminLoginName
+    sqlAdminLoginPassword: sqlAdminLoginPassword
     defaultTags: defaultTags
   }
 }

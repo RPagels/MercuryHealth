@@ -1,19 +1,23 @@
 param sqlserverName string
 param sqlDBName string
-param location string = resourceGroup().location
-param administratorLogin string
-param defaultTags object
 
+// Azure SQL Credentials
 @secure()
-param administratorLoginPassword string
+param sqlAdminLoginPassword string
+@secure()
+param sqlAdminLoginName string
+
+param location string = resourceGroup().location
+// param administratorLogin string
+param defaultTags object
 
 resource sqlServer 'Microsoft.Sql/servers@2021-02-01-preview' = {
   name: sqlserverName
   location: location
   tags: defaultTags
   properties: {
-    administratorLogin: administratorLogin
-    administratorLoginPassword: administratorLoginPassword
+    administratorLogin: sqlAdminLoginName
+    administratorLoginPassword: sqlAdminLoginPassword
   }
 }
 

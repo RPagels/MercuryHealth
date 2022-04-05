@@ -17,17 +17,6 @@ param appInsightsName string
 param keyvaultName string
 param secretName1 string
 param secretName2 string
-
-// Azure SQL Credentials
-@secure()
-param sqlAdminLoginPassword string
-@secure()
-param sqlAdminLoginName string
-
-//@secure()
-// param configStoreConnection string
-// @secure()
-
 param appInsightsInstrumentationKey string
 param appInsightsConnectionString string
 param defaultTags object
@@ -92,8 +81,6 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
     'APPLICATIONINSIGHTS_CONNECTION_STRING': appInsightsConnectionString
     'WebAppUrl': 'https://${appService.name}.azurewebsites.net/'
     'ASPNETCORE_ENVIRONMENT': 'Development'
-    'DEBUG - sqlAdminLoginName': sqlAdminLoginName
-    'DEBUG - sqlAdminLoginPassword': sqlAdminLoginPassword
   }
 }
 
