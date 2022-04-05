@@ -210,7 +210,7 @@ jobs:
           result=$(az keyvault secret show \
                       --name ${{ needs.deploy_infrastructure.outputs.output_keyvaultSecretName }} \
                       --vault-name ${{ needs.deploy_infrastructure.outputs.output_keyVaultName }} \
-                       --query "value"
+                       --query "value")
           echo "::set-output name=SQLConnection::$result"
           # result=$(az monitor app-insights api-key create \
           #             --api-key ${{ needs.deploy_infrastructure.outputs.output_releaseAnnotationGuidID }} \
