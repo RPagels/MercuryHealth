@@ -10,13 +10,16 @@ param sqlAdminLoginName string
 param location string = resourceGroup().location
 param defaultTags object
 
+var sqlAdminLoginName2 = 'AzureAdmin'
+var sqlAdminLoginPassword2 = 'Password.1.!!${uniqueString(resourceGroup().id)}' //guid(resourceGroup().id)
+
 resource sqlServer 'Microsoft.Sql/servers@2021-08-01-preview' = {
   name: sqlserverName
   location: location
   tags: defaultTags
   properties: {
-    administratorLogin: sqlAdminLoginName
-    administratorLoginPassword: sqlAdminLoginPassword
+    administratorLogin: sqlAdminLoginName2
+    administratorLoginPassword: sqlAdminLoginPassword2
   }
 }
 
