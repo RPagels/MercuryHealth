@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "17310300857817324108"
+      "templateHash": "488844058522384892"
     }
   },
   "parameters": {
@@ -31,12 +31,6 @@
     },
     "Deploy_Environment": {
       "type": "string"
-    },
-    "sqlAdministratorLogin": {
-      "type": "secureString"
-    },
-    "sqlAdministratorLoginPassword": {
-      "type": "secureString"
     },
     "secretName1": {
       "type": "string",
@@ -120,8 +114,8 @@
   },
   "functions": [],
   "variables": {
-    "sqlAdminLoginPassword": "[format('AzureAdmin{0}', uniqueString(parameters('guidValue')))]",
-    "sqlAdminLoginName": "[guid(resourceGroup().id)]",
+    "sqlAdminLoginName": "[format('AzureAdmin-{0}', uniqueString(resourceGroup().id))]",
+    "sqlAdminLoginPassword": "[guid(resourceGroup().id)]",
     "webAppPlanName": "[format('plan-{0}', uniqueString(resourceGroup().id))]",
     "webSiteName": "[format('app-{0}', uniqueString(resourceGroup().id))]",
     "sqlserverName": "[toLower(format('sql-{0}', uniqueString(resourceGroup().id)))]",
@@ -343,7 +337,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "5673846131942546001"
+              "templateHash": "17683962742002571130"
             }
           },
           "parameters": {
@@ -380,10 +374,10 @@
               "type": "string"
             },
             "sqlAdminLoginPassword": {
-              "type": "string"
+              "type": "secureString"
             },
             "sqlAdminLoginName": {
-              "type": "string"
+              "type": "secureString"
             },
             "appInsightsInstrumentationKey": {
               "type": "string"
@@ -393,10 +387,6 @@
             },
             "defaultTags": {
               "type": "object"
-            },
-            "myNewGuid": {
-              "type": "string",
-              "defaultValue": "[newGuid()]"
             }
           },
           "functions": [],
@@ -449,7 +439,6 @@
                 "APPLICATIONINSIGHTS_CONNECTION_STRING": "[parameters('appInsightsConnectionString')]",
                 "WebAppUrl": "[format('https://{0}.azurewebsites.net/', parameters('webSiteName'))]",
                 "ASPNETCORE_ENVIRONMENT": "Development",
-                "DEBUG - newGuid()": "[parameters('myNewGuid')]",
                 "DEBUG - sqlAdminLoginName": "[parameters('sqlAdminLoginName')]",
                 "DEBUG - sqlAdminLoginPassword": "[parameters('sqlAdminLoginPassword')]"
               },
@@ -666,10 +655,10 @@
             "value": "[variables('sqlDBName')]"
           },
           "administratorLogin": {
-            "value": "[parameters('sqlAdministratorLogin')]"
+            "value": "[variables('sqlAdminLoginName')]"
           },
           "administratorLoginPassword": {
-            "value": "[parameters('sqlAdministratorLoginPassword')]"
+            "value": "[variables('sqlAdminLoginPassword')]"
           },
           "defaultTags": {
             "value": "[variables('defaultTags')]"
@@ -1314,11 +1303,11 @@
           "sqlDBName": {
             "value": "[variables('sqlDBName')]"
           },
-          "sqlAdministratorLogin": {
-            "value": "[parameters('sqlAdministratorLogin')]"
+          "sqlAdminLoginName": {
+            "value": "[variables('sqlAdminLoginName')]"
           },
-          "sqlAdministratorLoginPassword": {
-            "value": "[parameters('sqlAdministratorLoginPassword')]"
+          "sqlAdminLoginPassword": {
+            "value": "[variables('sqlAdminLoginPassword')]"
           },
           "configStoreConnection": {
             "value": "[listKeys(resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName')), '2021-10-01-preview').value[0].connectionString]"
@@ -1346,7 +1335,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "9301770012823790414"
+              "templateHash": "15837897155830247985"
             }
           },
           "parameters": {
@@ -1359,12 +1348,6 @@
             },
             "sqlDBName": {
               "type": "string"
-            },
-            "sqlAdministratorLogin": {
-              "type": "string"
-            },
-            "sqlAdministratorLoginPassword": {
-              "type": "secureString"
             },
             "vaultName": {
               "type": "string"
@@ -1381,6 +1364,12 @@
             },
             "sqlserverfullyQualifiedDomainName": {
               "type": "string"
+            },
+            "sqlAdminLoginPassword": {
+              "type": "secureString"
+            },
+            "sqlAdminLoginName": {
+              "type": "secureString"
             },
             "configStoreConnection": {
               "type": "string"
@@ -1430,7 +1419,7 @@
             },
             "secretValue2": {
               "type": "string",
-              "defaultValue": "[format('Server=tcp:{0},1433;Initial Catalog={1};Persist Security Info=False;User Id={2}@{3};Password={4};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;', parameters('sqlserverfullyQualifiedDomainName'), parameters('sqlDBName'), parameters('sqlAdministratorLogin'), parameters('sqlserverName'), parameters('sqlAdministratorLoginPassword'))]"
+              "defaultValue": "[format('Server=tcp:{0},1433;Initial Catalog={1};Persist Security Info=False;User Id={2}@{3};Password={4};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;', parameters('sqlserverfullyQualifiedDomainName'), parameters('sqlDBName'), parameters('sqlAdminLoginName'), parameters('sqlserverName'), parameters('sqlAdminLoginPassword'))]"
             },
             "networkAcls": {
               "type": "object",

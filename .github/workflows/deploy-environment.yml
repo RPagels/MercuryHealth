@@ -30,15 +30,15 @@ on:
 #      sql-db-server-name:
 #        description: 'Credentials used to log into SQL for deployment of resources'
 #        required: true
-      sql-db-login:
-        description: 'Credentials used to log into SQL for deployment of resources'
-        required: true
-      sql-db-password:
-        description: 'Credentials used to log into SQL for deployment of resources'
-        required: true
-      sql-connection-string:
-        description: 'Credentials used to log into SQL for deployment of resources'
-        required: true
+#      sql-db-login:
+#        description: 'Credentials used to log into SQL for deployment of resources'
+#        required: true
+#      sql-db-password:
+#        description: 'Credentials used to log into SQL for deployment of resources'
+#        required: true
+#      sql-connection-string:
+#        description: 'Credentials used to log into SQL for deployment of resources'
+#        required: true
 
 jobs:
   ###################################################################
@@ -111,6 +111,7 @@ jobs:
       ###########################################
       # Deploy ARM Template using Bicep DSL
       ###########################################
+#parameters: ./MercuryHealth.IaC/main-1.params.json sqlAdministratorLogin=${{ secrets.sql-db-login }} sqlAdministratorLoginPassword=${{ secrets.sql-db-password }} Deploy_Environment=${{ env.Deploy_Environment }}      
     - name: Infrastructure
       id: Infra
       uses: azure/arm-deploy@v1
@@ -118,7 +119,7 @@ jobs:
       with:
         resourceGroupName: ${{ env.Azure_Resource_GroupName }}
         template: ./MercuryHealth.IaC/main-1.bicep
-        parameters: ./MercuryHealth.IaC/main-1.params.json sqlAdministratorLogin=${{ secrets.sql-db-login }} sqlAdministratorLoginPassword=${{ secrets.sql-db-password }} Deploy_Environment=${{ env.Deploy_Environment }}
+        parameters: ./MercuryHealth.IaC/main-1.params.json Deploy_Environment=${{ env.Deploy_Environment }}
         deploymentMode: Incremental
         failOnStdErr: false
 

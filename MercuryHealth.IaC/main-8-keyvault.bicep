@@ -1,17 +1,23 @@
 param location string = resourceGroup().location
 param sqlserverName string
 param sqlDBName string
-param sqlAdministratorLogin string
+//param sqlAdministratorLogin string
 //param webSiteName string
 
-@secure()
-param sqlAdministratorLoginPassword string
+// @secure()
+// param sqlAdministratorLoginPassword string
 param vaultName string
 param tenant string = subscription().tenantId
 param appServiceprincipalId string
 param funcAppServiceprincipalId string
 //param appInsightsInstrumentationKey string
 param sqlserverfullyQualifiedDomainName string
+
+// Azure SQL Credentials
+@secure()
+param sqlAdminLoginPassword string
+@secure()
+param sqlAdminLoginName string
 
 //@secure()
 param configStoreConnection string
@@ -51,7 +57,7 @@ param accessPolicies array = [
 param secretName1 string
 param secretValue1 string = configStoreConnection
 param secretName2 string
-param secretValue2 string = 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+param secretValue2 string = 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdminLoginName}@${sqlserverName};Password=${sqlAdminLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
 
 param networkAcls object = {
   ipRules: []

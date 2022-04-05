@@ -12,14 +12,15 @@ param guidValue string = newGuid()
 // Data params
 param Deploy_Environment string
 
-@secure()
-param sqlAdministratorLogin string
+// @secure()
+// param sqlAdministratorLogin string
 
-@secure()
-param sqlAdministratorLoginPassword string
+// @secure()
+// param sqlAdministratorLoginPassword string
 
-var sqlAdminLoginPassword = 'AzureAdmin${uniqueString(guidValue)}'
-var sqlAdminLoginName = guid(resourceGroup().id)
+// Azure SQL Credentials
+var sqlAdminLoginName = 'AzureAdmin-${uniqueString(resourceGroup().id)}'
+var sqlAdminLoginPassword = guid(resourceGroup().id)
 
 // Variables for Recommended abbreviations for Azure resource types
 // https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations
@@ -286,8 +287,8 @@ module sqldbmod './main-3-sqldatabase.bicep' = {
     location: location
     sqlserverName: sqlserverName
     sqlDBName: sqlDBName
-    administratorLogin: sqlAdministratorLogin
-    administratorLoginPassword: sqlAdministratorLoginPassword
+    administratorLogin: sqlAdminLoginName
+    administratorLoginPassword: sqlAdminLoginPassword
     defaultTags: defaultTags
   }
 }
@@ -333,8 +334,8 @@ module keyvaultmod './main-8-keyvault.bicep' = {
    vaultName: keyvaultName
    sqlserverName: sqlserverName
    sqlDBName: sqlDBName
-   sqlAdministratorLogin: sqlAdministratorLogin
-   sqlAdministratorLoginPassword: sqlAdministratorLoginPassword
+   sqlAdminLoginName: sqlAdminLoginName
+   sqlAdminLoginPassword: sqlAdminLoginPassword
    configStoreConnection: configStoreConnectionString
    appServiceprincipalId: webappmod.outputs.out_appServiceprincipalId
    sqlserverfullyQualifiedDomainName: sqldbmod.outputs.sqlserverfullyQualifiedDomainName

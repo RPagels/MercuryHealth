@@ -18,8 +18,10 @@ param keyvaultName string
 param secretName1 string
 param secretName2 string
 
-// Test ONLY
+// Azure SQL Credentials
+@secure()
 param sqlAdminLoginPassword string
+@secure()
 param sqlAdminLoginName string
 
 //@secure()
@@ -75,8 +77,6 @@ resource appService 'Microsoft.Web/sites@2021-01-15' = {
   }
 }
 
-param myNewGuid string = newGuid()
-
 resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
   //name: '${webSiteName}/appsettings'
   name: 'appsettings'
@@ -92,7 +92,6 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
     'APPLICATIONINSIGHTS_CONNECTION_STRING': appInsightsConnectionString
     'WebAppUrl': 'https://${appService.name}.azurewebsites.net/'
     'ASPNETCORE_ENVIRONMENT': 'Development'
-    'DEBUG - newGuid()': myNewGuid
     'DEBUG - sqlAdminLoginName': sqlAdminLoginName
     'DEBUG - sqlAdminLoginPassword': sqlAdminLoginPassword
   }
