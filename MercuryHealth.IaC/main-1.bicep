@@ -20,7 +20,7 @@ param Deploy_Environment string
 
 // Generate Azure SQL Credentials
 var sqlAdminLoginName = 'AzureAdmin${uniqueString(resourceGroup().id)}'
-var sqlAdminLoginPassword = guid(resourceGroup().id)
+var sqlAdminLoginPassword = 'Password.1.!!${uniqueString(resourceGroup().id)}' //guid(resourceGroup().id)
 
 // Variables for Recommended abbreviations for Azure resource types
 // https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations
