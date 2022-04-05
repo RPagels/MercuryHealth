@@ -18,8 +18,8 @@ param Deploy_Environment string
 // @secure()
 // param sqlAdministratorLoginPassword string
 
-// Azure SQL Credentials
-var sqlAdminLoginName = 'AzureAdmin-${uniqueString(resourceGroup().id)}'
+// Generate Azure SQL Credentials
+var sqlAdminLoginName = 'AzureAdmin${uniqueString(resourceGroup().id)}'
 var sqlAdminLoginPassword = guid(resourceGroup().id)
 
 // Variables for Recommended abbreviations for Azure resource types
@@ -268,6 +268,8 @@ module webappmod './main-2-webapp.bicep' = {
     keyvaultName: keyvaultName
     secretName1: secretName1
     secretName2: secretName2
+    sqlAdminLoginName: sqlAdminLoginName
+    sqlAdminLoginPassword: sqlAdminLoginPassword
   }
 }
 

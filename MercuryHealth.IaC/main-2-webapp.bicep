@@ -1,14 +1,13 @@
 param skuName string = 'B1'
 //param skuCapacity int = 1
 param location string = resourceGroup().location
-// param sqlserverName string
-// param sqlserverfullyQualifiedDomainName string
-// param sqlDBName string
-// param sqlAdministratorLogin string
 param Deploy_Environment string
 
-//@secure()
-//param sqlAdministratorLoginPassword string
+// Azure SQL Credentials
+@secure()
+param sqlAdminLoginPassword string
+@secure()
+param sqlAdminLoginName string
 
 param webAppPlanName string
 param webSiteName string
@@ -81,6 +80,8 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
     'APPLICATIONINSIGHTS_CONNECTION_STRING': appInsightsConnectionString
     'WebAppUrl': 'https://${appService.name}.azurewebsites.net/'
     'ASPNETCORE_ENVIRONMENT': 'Development'
+    'DebugOnly-sqlAdminLoginPassword=': sqlAdminLoginPassword
+    'DebugOnly-sqlAdminLoginName=': sqlAdminLoginName
   }
 }
 

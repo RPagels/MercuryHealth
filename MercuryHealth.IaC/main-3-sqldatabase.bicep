@@ -8,7 +8,6 @@ param sqlAdminLoginPassword string
 param sqlAdminLoginName string
 
 param location string = resourceGroup().location
-// param administratorLogin string
 param defaultTags object
 
 resource sqlServer 'Microsoft.Sql/servers@2021-02-01-preview' = {
