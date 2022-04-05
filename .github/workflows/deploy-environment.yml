@@ -56,7 +56,7 @@ jobs:
       output_appInsightsApplicationId: ${{ steps.Infra.outputs.out_appInsightsApplicationId }}
       output_appInsightsAPIApplicationId: ${{ steps.Infra.outputs.out_appInsightsAPIApplicationId }}
       output_keyvaultName: ${{ steps.Infra.outputs.out_keyvaultName }}
-      output_keyvaultNameSecretName: ${{ steps.Infra.outputs.out_keyvaultSecretName }}
+      output_keyvaultSecretName: ${{ steps.Infra.outputs.out_keyvaultSecretName }}
       
     name: Deploy Infrastructure
     env:
