@@ -177,8 +177,8 @@ jobs:
          echo 'output_releaseAnnotationGuidID: ${{ needs.deploy_infrastructure.outputs.output_releaseAnnotationGuidID }}'
          echo 'output_appInsightsApplicationId: ${{ needs.deploy_infrastructure.outputs.output_appInsightsApplicationId }}'
          echo 'output_appInsightsAPIApplicationId: ${{ needs.deploy_infrastructure.outputs.output_appInsightsAPIApplicationId }}'
-         echo 'output_keyvaultName: ${{ needs.deploy_infrastructure.outputs.out_keyvaultName }}'
-         echo 'output_keyvaultSecretName: ${{ needs.deploy_infrastructure.outputs.out_keyvaultSecretName }}'
+         echo 'output_keyvaultName: ${{ needs.deploy_infrastructure.outputs.output_keyvaultName }}'
+         echo 'output_keyvaultSecretName: ${{ needs.deploy_infrastructure.outputs.output_keyvaultSecretName }}'
 
     - name: Login to Azure
       uses: azure/login@v1
@@ -208,7 +208,7 @@ jobs:
         inlineScript: |
           az config set extension.use_dynamic_install=yes_without_prompt
           result=$(az keyvault secret show \
-                      --name ${{ needs.deploy_infrastructure.outputs.out_keyvaultSecretName }} \
+                      --name ${{ needs.deploy_infrastructure.outputs.output_keyvaultSecretName }} \
                       --vault-name ${{ needs.deploy_infrastructure.outputs.output_keyVaultName }} \
                        --query "value"
           echo "::set-output name=SQLConnection::$result"
