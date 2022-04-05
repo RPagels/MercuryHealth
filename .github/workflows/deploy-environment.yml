@@ -394,7 +394,7 @@ jobs:
   LoadTesting_Stage_Application_Home:
     # Identify any jobs that must complete successfully before this job will run.
     runs-on: ubuntu-latest
-    if: contains(github.event_name, 'push') && always()
+    if: contains(github.event_name, 'push')
     name: 'Load Test Home'   
     env:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
@@ -462,7 +462,7 @@ jobs:
   LoadTesting_Stage_Application_Nutrition:
     # Identify any jobs that must complete successfully before this job will run.
     runs-on: ubuntu-latest
-    if: contains(github.event_name, 'push') && always()
+    if: contains(github.event_name, 'push')
     name: 'Load Test Nutrition'   
     env:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
@@ -521,7 +521,7 @@ jobs:
   LoadTesting_Stage_Application_Exercise:
     # Identify any jobs that must complete successfully before this job will run.
     runs-on: ubuntu-latest
-    if: contains(github.event_name, 'push') && always()
+    if: contains(github.event_name, 'push')
     name: 'Load Test Exercise'   
     env:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
