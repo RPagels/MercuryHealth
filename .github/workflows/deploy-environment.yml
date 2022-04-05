@@ -144,7 +144,7 @@ jobs:
          echo 'output_appInsightsApplicationId: ${{ steps.Infra.outputs.out_appInsightsApplicationId }}'
          echo 'output_appInsightsAPIApplicationId: ${{ steps.Infra.outputs.out_appInsightsAPIApplicationId }}'
          echo 'output_keyvaultName: ${{ steps.Infra.outputs.out_keyvaultName }}'
-         echo 'output_keyvaultSecretName: ${{ steps.Infra.outputs.out_keyvaultSecretName }}
+         echo 'output_keyvaultSecretName: ${{ steps.Infra.outputs.out_keyvaultSecretName }}'
       
     - name: 'Azure logout'
       run: |
@@ -178,7 +178,7 @@ jobs:
          echo 'output_appInsightsApplicationId: ${{ needs.deploy_infrastructure.outputs.output_appInsightsApplicationId }}'
          echo 'output_appInsightsAPIApplicationId: ${{ needs.deploy_infrastructure.outputs.output_appInsightsAPIApplicationId }}'
          echo 'output_keyvaultName: ${{ needs.deploy_infrastructure.outputs.outputs.out_keyvaultName }}'
-         echo 'output_keyvaultSecretName: ${{ needs.deploy_infrastructure.outputs.outputs.out_keyvaultSecretName }}
+         echo 'output_keyvaultSecretName: ${{ needs.deploy_infrastructure.outputs.outputs.out_keyvaultSecretName }}'
 
     - name: Login to Azure
       uses: azure/login@v1
