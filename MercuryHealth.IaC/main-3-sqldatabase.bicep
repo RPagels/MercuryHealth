@@ -10,7 +10,7 @@ param sqlAdminLoginName string
 param location string = resourceGroup().location
 param defaultTags object
 
-resource sqlServer 'Microsoft.Sql/servers@2021-02-01-preview' = {
+resource sqlServer 'Microsoft.Sql/servers@2021-08-01-preview' = {
   name: sqlserverName
   location: location
   tags: defaultTags
@@ -20,13 +20,25 @@ resource sqlServer 'Microsoft.Sql/servers@2021-02-01-preview' = {
   }
 }
 
+// resource sqlDB 'Microsoft.Sql/servers/databases@2021-08-01-preview' = {
+//   name: '${sqlServer.name}/${sqlDBName}'
+//   location: location
+//   tags: defaultTags
+//   sku: {
+//     name: 'Standard' //'Basic'
+//     tier: 'Standard' //'Basic'
+//   }
+// }
+
 resource sqlDB 'Microsoft.Sql/servers/databases@2021-08-01-preview' = {
   name: '${sqlServer.name}/${sqlDBName}'
   location: location
   tags: defaultTags
   sku: {
-    name: 'Standard' //'Basic'
-    tier: 'Standard' //'Basic'
+    name: 'GP_S_Gen5'
+    tier: 'GeneralPurpose'
+    family: 'Gen5'
+    capacity: 1
   }
 }
 

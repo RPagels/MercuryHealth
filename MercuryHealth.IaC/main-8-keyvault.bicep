@@ -1,16 +1,10 @@
 param location string = resourceGroup().location
 param sqlserverName string
 param sqlDBName string
-//param sqlAdministratorLogin string
-//param webSiteName string
-
-// @secure()
-// param sqlAdministratorLoginPassword string
 param vaultName string
 param tenant string = subscription().tenantId
 param appServiceprincipalId string
 param funcAppServiceprincipalId string
-//param appInsightsInstrumentationKey string
 param sqlserverfullyQualifiedDomainName string
 
 // Azure SQL Credentials

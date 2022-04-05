@@ -7,7 +7,7 @@ param location string = resourceGroup().location
 param createdBy string = 'Randy Pagels' // resourceGroup().managedBy
 param costCenter string = '74f644d3e665'
 param releaseAnnotationGuid string = newGuid()
-param guidValue string = newGuid()
+//param guidValue string = newGuid()
 
 // Data params
 param Deploy_Environment string

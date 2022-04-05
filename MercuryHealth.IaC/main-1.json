@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "9838152080492652179"
+      "templateHash": "13452397547263735350"
     }
   },
   "parameters": {
@@ -22,10 +22,6 @@
       "defaultValue": "74f644d3e665"
     },
     "releaseAnnotationGuid": {
-      "type": "string",
-      "defaultValue": "[newGuid()]"
-    },
-    "guidValue": {
       "type": "string",
       "defaultValue": "[newGuid()]"
     },
@@ -671,7 +667,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "17163912990291680834"
+              "templateHash": "1708066108552661669"
             }
           },
           "parameters": {
@@ -699,7 +695,7 @@
           "resources": [
             {
               "type": "Microsoft.Sql/servers",
-              "apiVersion": "2021-02-01-preview",
+              "apiVersion": "2021-08-01-preview",
               "name": "[parameters('sqlserverName')]",
               "location": "[parameters('location')]",
               "tags": "[parameters('defaultTags')]",
@@ -715,8 +711,10 @@
               "location": "[parameters('location')]",
               "tags": "[parameters('defaultTags')]",
               "sku": {
-                "name": "Standard",
-                "tier": "Standard"
+                "name": "GP_S_Gen5",
+                "tier": "GeneralPurpose",
+                "family": "Gen5",
+                "capacity": 1
               },
               "dependsOn": [
                 "[resourceId('Microsoft.Sql/servers', parameters('sqlserverName'))]"
