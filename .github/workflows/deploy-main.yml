@@ -167,13 +167,13 @@ jobs:
 #        run: |
 #          az logout
           
-  qa:
+  dev:
     if: contains(github.event_name, 'push')
     needs: Build_Application
     uses: ./.github/workflows/deploy-environment.yml
     with:
       resource-group-base-name: 'rg-MercuryHealth'
-      environment-suffix: 'qa'
+      environment-suffix: 'dev'
       resource-group-location: 'eastus2'
       approval-required: true
     secrets:
@@ -183,13 +183,13 @@ jobs:
       #sql-db-server-name: ${{ secrets.SQL_DB_Server_Name }}
       #sql-connection-string: ${{ secrets.SQL_DB_Connection_String }}
 
-  qa2:
+  qa:
       if: contains(github.event_name, 'push')
-      needs: [Build_Application, qa]
+      needs: [Build_Application, dev]
       uses: ./.github/workflows/deploy-environment.yml
       with:
         resource-group-base-name: 'rg-MercuryHealth'
-        environment-suffix: 'qa2'
+        environment-suffix: 'qa'
         resource-group-location: 'eastus2'
         approval-required: true
       secrets:
