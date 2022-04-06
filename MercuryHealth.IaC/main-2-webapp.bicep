@@ -261,29 +261,29 @@ resource standardWebTestPageExercises  'Microsoft.Insights/webtests@2020-10-05-p
 }
 
 // Reference Existing resource
-resource existingkeyvault 'Microsoft.KeyVault/vaults@2021-11-01-preview' existing = {
-  name: keyvaultName
-}
+// resource existingkeyvault 'Microsoft.KeyVault/vaults@2021-11-01-preview' existing = {
+//   name: keyvaultName
+// }
 
-// create secret
-resource mySecret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: secretName1
-  parent: existingkeyvault
-  properties: {
-    contentType: 'text/plain'
-    value: configStoreConnection
-  }
-}
-// create secret
-resource mySecret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: secretName2
-  parent: existingkeyvault
-  properties: {
-    contentType: 'text/plain'
-    //value: 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdminLoginName}@${sqlserverName};Password=${sqlAdminLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
-    value: 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdminLoginName}@${sqlserverName};Password=${sqlAdminLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
-  }
-}
+// // create secret
+// resource mySecret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+//   name: secretName1
+//   parent: existingkeyvault
+//   properties: {
+//     contentType: 'text/plain'
+//     value: configStoreConnection
+//   }
+// }
+// // create secret
+// resource mySecret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+//   name: secretName2
+//   parent: existingkeyvault
+//   properties: {
+//     contentType: 'text/plain'
+//     //value: 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdminLoginName}@${sqlserverName};Password=${sqlAdminLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+//     value: 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdminLoginName}@${sqlserverName};Password=${sqlAdminLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+//   }
+// }
 
 var secretConnectionString = 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdminLoginName}@${sqlserverName};Password=${sqlAdminLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
 

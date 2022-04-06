@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "2627325432733913518"
+      "templateHash": "8651060124437734432"
     }
   },
   "parameters": {
@@ -345,7 +345,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "11313666918947886785"
+              "templateHash": "9435705302303948294"
             }
           },
           "parameters": {
@@ -636,24 +636,6 @@
               "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', parameters('webSiteName'))]"
               ]
-            },
-            {
-              "type": "Microsoft.KeyVault/vaults/secrets",
-              "apiVersion": "2021-11-01-preview",
-              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('secretName1'))]",
-              "properties": {
-                "contentType": "text/plain",
-                "value": "[parameters('configStoreConnection')]"
-              }
-            },
-            {
-              "type": "Microsoft.KeyVault/vaults/secrets",
-              "apiVersion": "2021-11-01-preview",
-              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('secretName2'))]",
-              "properties": {
-                "contentType": "text/plain",
-                "value": "[format('Server=tcp:{0},1433;Initial Catalog={1};Persist Security Info=False;User Id={2}@{3};Password={4};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;', parameters('sqlserverfullyQualifiedDomainName'), parameters('sqlDBName'), parameters('sqlAdminLoginName'), parameters('sqlserverName'), parameters('sqlAdminLoginPassword'))]"
-              }
             }
           ],
           "outputs": {
@@ -1014,7 +996,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "6138669248255335997"
+              "templateHash": "18308579048004550470"
             }
           },
           "parameters": {
@@ -1157,11 +1139,11 @@
                     },
                     {
                       "name": "AzureWebJobsStorage",
-                      "value": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secretName3'))]"
+                      "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', variables('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2021-08-01').keys[0].value)]"
                     },
                     {
                       "name": "WebsiteContentAzureFileConnectionString",
-                      "value": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secretName4'))]"
+                      "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', variables('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2021-08-01').keys[0].value)]"
                     },
                     {
                       "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -1193,7 +1175,8 @@
                 "type": "SystemAssigned"
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', parameters('functionAppServiceName'))]"
+                "[resourceId('Microsoft.Web/serverfarms', parameters('functionAppServiceName'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
               ]
             },
             {
@@ -1293,30 +1276,6 @@
               "name": "[format('{0}/{1}', parameters('functionAppName'), 'Microsoft.ApplicationInsights.AzureWebSites')]",
               "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]"
-              ]
-            },
-            {
-              "type": "Microsoft.KeyVault/vaults/secrets",
-              "apiVersion": "2021-11-01-preview",
-              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('secretName3'))]",
-              "properties": {
-                "contentType": "text/plain",
-                "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', variables('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2021-08-01').keys[0].value)]"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
-              ]
-            },
-            {
-              "type": "Microsoft.KeyVault/vaults/secrets",
-              "apiVersion": "2021-11-01-preview",
-              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('secretName4'))]",
-              "properties": {
-                "contentType": "text/plain",
-                "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', variables('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2021-08-01').keys[0].value)]"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
               ]
             }
           ],

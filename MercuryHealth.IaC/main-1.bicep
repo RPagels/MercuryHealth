@@ -341,10 +341,10 @@ module keyvaultmod './main-8-keyvault.bicep' = {
   //  secretName2: secretName2
    funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
    }
-   dependsOn:  [
-    webappmod
-    functionappmod
-  ]
+  //  dependsOn:  [
+  //   webappmod
+  //   functionappmod
+  // ]
 }
 // param networkAcls object = {
 //   ipRules: []
