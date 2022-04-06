@@ -340,6 +340,7 @@ module keyvaultmod './main-8-keyvault.bicep' = {
    dependsOn:  [
     webappmod
     functionappmod
+    sqldbmod
   ]
 }
 // param networkAcls object = {
