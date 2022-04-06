@@ -87,7 +87,7 @@ resource blobServices 'Microsoft.Storage/storageAccounts/blobServices@2021-04-01
 }
 
 // App Service
-resource appService 'Microsoft.Web/serverfarms@2021-01-15' = {
+resource appService 'Microsoft.Web/serverfarms@2021-03-01' = {
   name: functionAppServiceName
   location: location
   kind: 'functionapp'
@@ -112,7 +112,7 @@ resource appService 'Microsoft.Web/serverfarms@2021-01-15' = {
 }
 
 // Function App
-resource functionApp 'Microsoft.Web/sites@2021-01-15' = {
+resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
   name: functionAppName
   location: location
   kind: 'functionapp'
@@ -186,8 +186,17 @@ resource functionApp 'Microsoft.Web/sites@2021-01-15' = {
   }
 }
 
+resource functionAppConfig0 'Microsoft.Web/sites/config@2021-03-01' = {
+  //name: '${webSiteName}/appsettings'
+  name: 'appsettings'
+  parent: functionApp
+  properties: {
+    'DEBUG-AzureWebJobsStorage': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName3})'
+  }
+}
+
 // Function App Config
-resource functionAppConfig 'Microsoft.Web/sites/config@2021-01-15' = {
+resource functionAppConfig 'Microsoft.Web/sites/config@2021-03-01' = {
   parent: functionApp
   name: 'web'
   properties: {

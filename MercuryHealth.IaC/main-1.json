@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "14523315519335206175"
+      "templateHash": "5431186305343641546"
     }
   },
   "parameters": {
@@ -959,7 +959,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "16472276597324878966"
+              "templateHash": "3093758967073972191"
             }
           },
           "parameters": {
@@ -1042,7 +1042,7 @@
             },
             {
               "type": "Microsoft.Web/serverfarms",
-              "apiVersion": "2021-01-15",
+              "apiVersion": "2021-03-01",
               "name": "[parameters('functionAppServiceName')]",
               "location": "[parameters('location')]",
               "kind": "functionapp",
@@ -1067,7 +1067,7 @@
             },
             {
               "type": "Microsoft.Web/sites",
-              "apiVersion": "2021-01-15",
+              "apiVersion": "2021-03-01",
               "name": "[parameters('functionAppName')]",
               "location": "[parameters('location')]",
               "kind": "functionapp",
@@ -1102,11 +1102,11 @@
                     },
                     {
                       "name": "AzureWebJobsStorage",
-                      "value": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secretName3'))]"
+                      "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', variables('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2021-08-01').keys[0].value)]"
                     },
                     {
                       "name": "WebsiteContentAzureFileConnectionString",
-                      "value": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secretName4'))]"
+                      "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', variables('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2021-08-01').keys[0].value)]"
                     },
                     {
                       "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -1138,12 +1138,24 @@
                 "type": "SystemAssigned"
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', parameters('functionAppServiceName'))]"
+                "[resourceId('Microsoft.Web/serverfarms', parameters('functionAppServiceName'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
               ]
             },
             {
               "type": "Microsoft.Web/sites/config",
-              "apiVersion": "2021-01-15",
+              "apiVersion": "2021-03-01",
+              "name": "[format('{0}/{1}', parameters('functionAppName'), 'appsettings')]",
+              "properties": {
+                "DEBUG-AzureWebJobsStorage": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secretName3'))]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Web/sites/config",
+              "apiVersion": "2021-03-01",
               "name": "[format('{0}/{1}', parameters('functionAppName'), 'web')]",
               "properties": {
                 "numberOfWorkers": -1,
@@ -1268,7 +1280,7 @@
           "outputs": {
             "out_funcAppServiceprincipalId": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.Web/sites', parameters('functionAppName')), '2021-01-15', 'full').identity.principalId]"
+              "value": "[reference(resourceId('Microsoft.Web/sites', parameters('functionAppName')), '2021-03-01', 'full').identity.principalId]"
             }
           }
         }
