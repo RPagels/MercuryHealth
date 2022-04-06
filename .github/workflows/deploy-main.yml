@@ -169,13 +169,13 @@ jobs:
 #        run: |
 #          az logout
           
-  dev4:
+  dev909:
     if: contains(github.event_name, 'push')
     needs: Build_Application
     uses: ./.github/workflows/deploy-environment.yml
     with:
       resource-group-base-name: 'rg-MercuryHealth'
-      environment-suffix: 'dev4'
+      environment-suffix: 'dev909'
       resource-group-location: 'eastus2'
       approval-required: true
     secrets:
@@ -187,7 +187,7 @@ jobs:
 
   qa:
       if: contains(github.event_name, 'push')
-      needs: [Build_Application, dev4]
+      needs: [Build_Application, dev909]
       uses: ./.github/workflows/deploy-environment.yml
       with:
         resource-group-base-name: 'rg-MercuryHealth'
