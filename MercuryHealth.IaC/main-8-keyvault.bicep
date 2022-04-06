@@ -1,20 +1,20 @@
 param location string = resourceGroup().location
-param sqlserverName string
-param sqlDBName string
+//param sqlserverName string
+//param sqlDBName string
 param vaultName string
 param tenant string = subscription().tenantId
 param appServiceprincipalId string
 param funcAppServiceprincipalId string
-param sqlserverfullyQualifiedDomainName string
+//param sqlserverfullyQualifiedDomainName string
 
 // Azure SQL Credentials
-@secure()
-param sqlAdminLoginPassword string
-@secure()
-param sqlAdminLoginName string
+//@secure()
+//param sqlAdminLoginPassword string
+//@secure()
+//param sqlAdminLoginName string
 
 //@secure()
-param configStoreConnection string
+//param configStoreConnection string
 
 param accessPolicies array = [
   {
@@ -48,10 +48,10 @@ param accessPolicies array = [
 ]
 
 //param keyName string = 'prodKey'
-param secretName1 string
-param secretValue1 string = configStoreConnection
-param secretName2 string
-param secretValue2 string = 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdminLoginName}@${sqlserverName};Password=${sqlAdminLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+// param secretName1 string
+// param secretValue1 string = configStoreConnection
+// param secretName2 string
+// param secretValue2 string = 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdminLoginName}@${sqlserverName};Password=${sqlAdminLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
 
 param networkAcls object = {
   ipRules: []
@@ -79,23 +79,23 @@ resource keyvault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
 }
 
 // create secret
-resource mySecret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: secretName1
-  parent: keyvault
-  properties: {
-    contentType: 'text/plain'
-    value: secretValue1
-  }
-}
+// resource mySecret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+//   name: secretName1
+//   parent: keyvault
+//   properties: {
+//     contentType: 'text/plain'
+//     value: secretValue1
+//   }
+// }
 // create secret
-resource mySecret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: secretName2
-  parent: keyvault
-  properties: {
-    contentType: 'text/plain'
-    value: secretValue2
-  }
-}
+// resource mySecret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+//   name: secretName2
+//   parent: keyvault
+//   properties: {
+//     contentType: 'text/plain'
+//     value: secretValue2
+//   }
+// }
 
 // resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
 //   name: '${webSiteName}/appsettings'
@@ -156,6 +156,6 @@ resource mySecret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
 
 output proxyKey object = keyvault
 output keyvaultName string = keyvault.name
-output out_secretName1 string = secretName1
-output out_secretName2 string = secretName2
-output out_secretValue2 string = secretValue2
+// output out_secretName1 string = secretName1
+// output out_secretName2 string = secretName2
+// output out_secretValue2 string = secretValue2

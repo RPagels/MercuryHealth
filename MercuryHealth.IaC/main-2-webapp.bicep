@@ -2,6 +2,9 @@ param skuName string = 'B1'
 //param skuCapacity int = 1
 param location string = resourceGroup().location
 param Deploy_Environment string
+param sqlserverName string
+param sqlserverfullyQualifiedDomainName string
+param sqlDBName string
 
 // Azure SQL Credentials
 @secure()
@@ -19,6 +22,7 @@ param secretName2 string
 param appInsightsInstrumentationKey string
 param appInsightsConnectionString string
 param defaultTags object
+param configStoreConnection string
 
 // Varabiles
 // var standardPlanMaxAdditionalSlots = 2
@@ -256,9 +260,37 @@ resource standardWebTestPageExercises  'Microsoft.Insights/webtests@2020-10-05-p
   }
 }
 
+// Reference Existing resource
+resource existingkeyvault 'Microsoft.KeyVault/vaults@2021-11-01-preview' existing = {
+  name: keyvaultName
+}
+
+// create secret
+resource mySecret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+  name: secretName1
+  parent: existingkeyvault
+  properties: {
+    contentType: 'text/plain'
+    value: configStoreConnection
+  }
+}
+// create secret
+resource mySecret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+  name: secretName2
+  parent: existingkeyvault
+  properties: {
+    contentType: 'text/plain'
+    //value: 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdminLoginName}@${sqlserverName};Password=${sqlAdminLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+    value: 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdminLoginName}@${sqlserverName};Password=${sqlAdminLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+  }
+}
+
+var secretConnectionString = 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdminLoginName}@${sqlserverName};Password=${sqlAdminLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+
 //output out_webSiteNameURL string = appService.name
 output out_appService string = appService.id
 output out_webSiteName string = appService.properties.defaultHostName
 output out_appServiceprincipalId string = appService.identity.principalId
-//output out_sqlConnectionString string = 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+output out_secretName string = secretName2
+output out_secretValue string = secretConnectionString
 

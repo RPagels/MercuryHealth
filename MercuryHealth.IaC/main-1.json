@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "5431186305343641546"
+      "templateHash": "2627325432733913518"
     }
   },
   "parameters": {
@@ -324,6 +324,18 @@
           },
           "sqlAdminLoginPassword": {
             "value": "[variables('sqlAdminLoginPassword')]"
+          },
+          "configStoreConnection": {
+            "value": "[listKeys(resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName')), '2021-10-01-preview').value[0].connectionString]"
+          },
+          "sqlDBName": {
+            "value": "[variables('sqlDBName')]"
+          },
+          "sqlserverfullyQualifiedDomainName": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'sqldbdeploy'), '2020-06-01').outputs.sqlserverfullyQualifiedDomainName.value]"
+          },
+          "sqlserverName": {
+            "value": "[variables('sqlserverName')]"
           }
         },
         "template": {
@@ -333,7 +345,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "3548637278889457322"
+              "templateHash": "11313666918947886785"
             }
           },
           "parameters": {
@@ -346,6 +358,15 @@
               "defaultValue": "[resourceGroup().location]"
             },
             "Deploy_Environment": {
+              "type": "string"
+            },
+            "sqlserverName": {
+              "type": "string"
+            },
+            "sqlserverfullyQualifiedDomainName": {
+              "type": "string"
+            },
+            "sqlDBName": {
               "type": "string"
             },
             "sqlAdminLoginPassword": {
@@ -383,9 +404,15 @@
             },
             "defaultTags": {
               "type": "object"
+            },
+            "configStoreConnection": {
+              "type": "string"
             }
           },
           "functions": [],
+          "variables": {
+            "secretConnectionString": "[format('Server=tcp:{0},1433;Initial Catalog={1};Persist Security Info=False;User Id={2}@{3};Password={4};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;', parameters('sqlserverfullyQualifiedDomainName'), parameters('sqlDBName'), parameters('sqlAdminLoginName'), parameters('sqlserverName'), parameters('sqlAdminLoginPassword'))]"
+          },
           "resources": [
             {
               "type": "Microsoft.Web/serverfarms",
@@ -609,6 +636,24 @@
               "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', parameters('webSiteName'))]"
               ]
+            },
+            {
+              "type": "Microsoft.KeyVault/vaults/secrets",
+              "apiVersion": "2021-11-01-preview",
+              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('secretName1'))]",
+              "properties": {
+                "contentType": "text/plain",
+                "value": "[parameters('configStoreConnection')]"
+              }
+            },
+            {
+              "type": "Microsoft.KeyVault/vaults/secrets",
+              "apiVersion": "2021-11-01-preview",
+              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('secretName2'))]",
+              "properties": {
+                "contentType": "text/plain",
+                "value": "[format('Server=tcp:{0},1433;Initial Catalog={1};Persist Security Info=False;User Id={2}@{3};Password={4};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;', parameters('sqlserverfullyQualifiedDomainName'), parameters('sqlDBName'), parameters('sqlAdminLoginName'), parameters('sqlserverName'), parameters('sqlAdminLoginPassword'))]"
+              }
             }
           ],
           "outputs": {
@@ -623,12 +668,22 @@
             "out_appServiceprincipalId": {
               "type": "string",
               "value": "[reference(resourceId('Microsoft.Web/sites', parameters('webSiteName')), '2021-01-15', 'full').identity.principalId]"
+            },
+            "out_secretName": {
+              "type": "string",
+              "value": "[parameters('secretName2')]"
+            },
+            "out_secretValue": {
+              "type": "string",
+              "value": "[variables('secretConnectionString')]"
             }
           }
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')]"
+        "[resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')]",
+        "[resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName'))]",
+        "[resourceId('Microsoft.Resources/deployments', 'sqldbdeploy')]"
       ]
     },
     {
@@ -959,7 +1014,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "3093758967073972191"
+              "templateHash": "6138669248255335997"
             }
           },
           "parameters": {
@@ -1102,11 +1157,11 @@
                     },
                     {
                       "name": "AzureWebJobsStorage",
-                      "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', variables('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2021-08-01').keys[0].value)]"
+                      "value": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secretName3'))]"
                     },
                     {
                       "name": "WebsiteContentAzureFileConnectionString",
-                      "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', variables('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2021-08-01').keys[0].value)]"
+                      "value": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secretName4'))]"
                     },
                     {
                       "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -1138,19 +1193,7 @@
                 "type": "SystemAssigned"
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', parameters('functionAppServiceName'))]",
-                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
-              ]
-            },
-            {
-              "type": "Microsoft.Web/sites/config",
-              "apiVersion": "2021-03-01",
-              "name": "[format('{0}/{1}', parameters('functionAppName'), 'appsettings')]",
-              "properties": {
-                "DEBUG-AzureWebJobsStorage": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secretName3'))]"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]"
+                "[resourceId('Microsoft.Web/serverfarms', parameters('functionAppServiceName'))]"
               ]
             },
             {
@@ -1307,32 +1350,8 @@
           "vaultName": {
             "value": "[variables('keyvaultName')]"
           },
-          "sqlserverName": {
-            "value": "[variables('sqlserverName')]"
-          },
-          "sqlDBName": {
-            "value": "[variables('sqlDBName')]"
-          },
-          "sqlAdminLoginName": {
-            "value": "[variables('sqlAdminLoginName')]"
-          },
-          "sqlAdminLoginPassword": {
-            "value": "[variables('sqlAdminLoginPassword')]"
-          },
-          "configStoreConnection": {
-            "value": "[listKeys(resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName')), '2021-10-01-preview').value[0].connectionString]"
-          },
           "appServiceprincipalId": {
             "value": "[reference(resourceId('Microsoft.Resources/deployments', 'webappdeploy'), '2020-06-01').outputs.out_appServiceprincipalId.value]"
-          },
-          "sqlserverfullyQualifiedDomainName": {
-            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'sqldbdeploy'), '2020-06-01').outputs.sqlserverfullyQualifiedDomainName.value]"
-          },
-          "secretName1": {
-            "value": "[parameters('secretName1')]"
-          },
-          "secretName2": {
-            "value": "[parameters('secretName2')]"
           },
           "funcAppServiceprincipalId": {
             "value": "[reference(resourceId('Microsoft.Resources/deployments', 'functionappdeploy'), '2020-06-01').outputs.out_funcAppServiceprincipalId.value]"
@@ -1345,19 +1364,13 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "10739914632407388312"
+              "templateHash": "15930176301003847830"
             }
           },
           "parameters": {
             "location": {
               "type": "string",
               "defaultValue": "[resourceGroup().location]"
-            },
-            "sqlserverName": {
-              "type": "string"
-            },
-            "sqlDBName": {
-              "type": "string"
             },
             "vaultName": {
               "type": "string"
@@ -1370,18 +1383,6 @@
               "type": "string"
             },
             "funcAppServiceprincipalId": {
-              "type": "string"
-            },
-            "sqlserverfullyQualifiedDomainName": {
-              "type": "string"
-            },
-            "sqlAdminLoginPassword": {
-              "type": "secureString"
-            },
-            "sqlAdminLoginName": {
-              "type": "secureString"
-            },
-            "configStoreConnection": {
               "type": "string"
             },
             "accessPolicies": {
@@ -1417,20 +1418,6 @@
                 }
               ]
             },
-            "secretName1": {
-              "type": "string"
-            },
-            "secretValue1": {
-              "type": "string",
-              "defaultValue": "[parameters('configStoreConnection')]"
-            },
-            "secretName2": {
-              "type": "string"
-            },
-            "secretValue2": {
-              "type": "string",
-              "defaultValue": "[format('Server=tcp:{0},1433;Initial Catalog={1};Persist Security Info=False;User Id={2}@{3};Password={4};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;', parameters('sqlserverfullyQualifiedDomainName'), parameters('sqlDBName'), parameters('sqlAdminLoginName'), parameters('sqlserverName'), parameters('sqlAdminLoginPassword'))]"
-            },
             "networkAcls": {
               "type": "object",
               "defaultValue": {
@@ -1461,30 +1448,6 @@
                 "enableRbacAuthorization": false,
                 "networkAcls": "[parameters('networkAcls')]"
               }
-            },
-            {
-              "type": "Microsoft.KeyVault/vaults/secrets",
-              "apiVersion": "2021-11-01-preview",
-              "name": "[format('{0}/{1}', parameters('vaultName'), parameters('secretName1'))]",
-              "properties": {
-                "contentType": "text/plain",
-                "value": "[parameters('secretValue1')]"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-              ]
-            },
-            {
-              "type": "Microsoft.KeyVault/vaults/secrets",
-              "apiVersion": "2021-11-01-preview",
-              "name": "[format('{0}/{1}', parameters('vaultName'), parameters('secretName2'))]",
-              "properties": {
-                "contentType": "text/plain",
-                "value": "[parameters('secretValue2')]"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-              ]
             }
           ],
           "outputs": {
@@ -1495,26 +1458,12 @@
             "keyvaultName": {
               "type": "string",
               "value": "[parameters('vaultName')]"
-            },
-            "out_secretName1": {
-              "type": "string",
-              "value": "[parameters('secretName1')]"
-            },
-            "out_secretName2": {
-              "type": "string",
-              "value": "[parameters('secretName2')]"
-            },
-            "out_secretValue2": {
-              "type": "string",
-              "value": "[parameters('secretValue2')]"
             }
           }
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName'))]",
         "[resourceId('Microsoft.Resources/deployments', 'functionappdeploy')]",
-        "[resourceId('Microsoft.Resources/deployments', 'sqldbdeploy')]",
         "[resourceId('Microsoft.Resources/deployments', 'webappdeploy')]"
       ]
     },
@@ -1783,7 +1732,7 @@
     },
     "out_keyvaultSecretValue": {
       "type": "string",
-      "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('keyvaultName')), '2020-06-01').outputs.out_secretValue2.value]"
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'webappdeploy'), '2020-06-01').outputs.out_secretValue.value]"
     },
     "out_appInsightsApplicationId": {
       "type": "string",

@@ -270,6 +270,10 @@ module webappmod './main-2-webapp.bicep' = {
     secretName2: secretName2
     sqlAdminLoginName: sqlAdminLoginName
     sqlAdminLoginPassword: sqlAdminLoginPassword
+    configStoreConnection: configStoreConnectionString
+    sqlDBName: sqlDBName
+    sqlserverfullyQualifiedDomainName: sqldbmod.outputs.sqlserverfullyQualifiedDomainName
+    sqlserverName: sqlserverName
   }
 }
 
@@ -326,21 +330,20 @@ module keyvaultmod './main-8-keyvault.bicep' = {
  params: {
    location: location
    vaultName: keyvaultName
-   sqlserverName: sqlserverName
-   sqlDBName: sqlDBName
-   sqlAdminLoginName: sqlAdminLoginName
-   sqlAdminLoginPassword: sqlAdminLoginPassword
-   configStoreConnection: configStoreConnectionString
+  //  sqlserverName: sqlserverName
+  //  sqlDBName: sqlDBName
+  //  sqlAdminLoginName: sqlAdminLoginName
+  //  sqlAdminLoginPassword: sqlAdminLoginPassword
+  //  configStoreConnection: configStoreConnectionString
    appServiceprincipalId: webappmod.outputs.out_appServiceprincipalId
-   sqlserverfullyQualifiedDomainName: sqldbmod.outputs.sqlserverfullyQualifiedDomainName
-   secretName1: secretName1
-   secretName2: secretName2
+   //sqlserverfullyQualifiedDomainName: sqldbmod.outputs.sqlserverfullyQualifiedDomainName
+  //  secretName1: secretName1
+  //  secretName2: secretName2
    funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
    }
    dependsOn:  [
     webappmod
     functionappmod
-    sqldbmod
   ]
 }
 // param networkAcls object = {
@@ -454,7 +457,7 @@ output out_apiServiceName string = apiServiceName
 output out_loadTestsName string = loadTestsName
 output out_keyvaultName string = keyvaultName
 output out_keyvaultSecretName string = secretName2
-output out_keyvaultSecretValue string = keyvaultmod.outputs.out_secretValue2
+output out_keyvaultSecretValue string = webappmod.outputs.out_secretValue
 output out_appInsightsApplicationId string = appinsightsmod.outputs.out_appInsightsApplicationId
 output out_appInsightsAPIApplicationId string = appinsightsmod.outputs.out_appInsightsAPIApplicationId
 output out_releaseAnnotationGuidID string = releaseAnnotationGuid
