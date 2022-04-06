@@ -158,3 +158,4 @@ output proxyKey object = keyvault
 output keyvaultName string = keyvault.name
 output out_secretName1 string = secretName1
 output out_secretName2 string = secretName2
+output out_secretValue2 string = secretValue2

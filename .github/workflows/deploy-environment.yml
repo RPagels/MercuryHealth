@@ -57,7 +57,8 @@ jobs:
       output_appInsightsAPIApplicationId: ${{ steps.Infra.outputs.out_appInsightsAPIApplicationId }}
       output_keyvaultName: ${{ steps.Infra.outputs.out_keyvaultName }}
       output_keyvaultSecretName: ${{ steps.Infra.outputs.out_keyvaultSecretName }}
-      
+      output_keyvaultSecretValue: ${{ steps.Infra.outputs.out_keyvaultSecretValue }}
+
     name: Deploy Infrastructure
     env:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
@@ -145,6 +146,7 @@ jobs:
          echo 'output_appInsightsAPIApplicationId: ${{ steps.Infra.outputs.out_appInsightsAPIApplicationId }}'
          echo 'output_keyvaultName: ${{ steps.Infra.outputs.out_keyvaultName }}'
          echo 'output_keyvaultSecretName: ${{ steps.Infra.outputs.out_keyvaultSecretName }}'
+         echo 'output_keyvaultSecretValue: ${{ steps.Infra.outputs.out_keyvaultSecretValue }}'
       
     - name: 'Azure logout'
       run: |
@@ -179,6 +181,7 @@ jobs:
          echo 'output_appInsightsAPIApplicationId: ${{ needs.deploy_infrastructure.outputs.output_appInsightsAPIApplicationId }}'
          echo 'output_keyvaultName: ${{ needs.deploy_infrastructure.outputs.output_keyvaultName }}'
          echo 'output_keyvaultSecretName: ${{ needs.deploy_infrastructure.outputs.output_keyvaultSecretName }}'
+         echo 'output_keyvaultSecretValue: ${{ needs.deploy_infrastructure.outputs.output_keyvaultSecretValue }}'
 
     - name: Login to Azure
       uses: azure/login@v1
@@ -201,24 +204,17 @@ jobs:
         name: MercuryHealth.Database
         path: ${{ github.workspace }}/MercuryHealth.Database
 
-    - name: 'Get the Connection String for Database'
-      id: SqlConnectionString
-      uses: Azure/CLI@v1
-      with:
-        inlineScript: |
-          az config set extension.use_dynamic_install=yes_without_prompt
-          result=$(az keyvault secret show \
-                      --name ${{ needs.deploy_infrastructure.outputs.output_keyvaultSecretName }} \
-                      --vault-name ${{ needs.deploy_infrastructure.outputs.output_keyVaultName }} \
-                       --query "value")
-          echo "::set-output name=SQLConnection::$result"
-          # result=$(az monitor app-insights api-key create \
-          #             --api-key ${{ needs.deploy_infrastructure.outputs.output_releaseAnnotationGuidID }} \
-          #             --write-properties WriteAnnotations \
-          #             -g ${{ env.Azure_Resource_GroupName }} \
-          #             --app ${{ needs.deploy_infrastructure.outputs.output_appInsightsApplicationId }} \
-          #             --query "apiKey" --output tsv)
-          #echo "::set-output name=SQLConnection::$result"
+#    - name: 'Get the Connection String for Database'
+#      id: SqlConnectionString
+#      uses: Azure/CLI@v1
+#      with:
+#        inlineScript: |
+#          az config set extension.use_dynamic_install=yes_without_prompt
+#          result=$(az keyvault secret show \
+#                      --name ${{ needs.deploy_infrastructure.outputs.output_keyvaultSecretName }} \
+#                      --vault-name ${{ needs.deploy_infrastructure.outputs.output_keyVaultName }} \
+#                       --query "value")
+#          echo "::set-output name=SQLConnection::$result"
 
     # Deploy Database *.dacpac file
     - name: 'Deploy the database to Azure'
@@ -226,7 +222,7 @@ jobs:
       with:
         server-name: ${{ needs.deploy_infrastructure.outputs.output_sqlserverFQName }}
         #connection-string: ${{ secrets.sql-connection-string }}
-        connection-string: ${{ steps.SqlConnectionString.outputs.SQLConnection }}
+        connection-string: ${{ needs.deploy_infrastructure.outputs.output_keyvaultSecretValue }}
         dacpac-package: './MercuryHealth.Database/MercuryHealth.Database.dacpac'
 
     - name: Download Build Artifacts-Website Application

@@ -339,6 +339,7 @@ module keyvaultmod './main-8-keyvault.bicep' = {
    }
    dependsOn:  [
     webappmod
+    functionappmod
   ]
 }
 // param networkAcls object = {
@@ -452,6 +453,7 @@ output out_apiServiceName string = apiServiceName
 output out_loadTestsName string = loadTestsName
 output out_keyvaultName string = keyvaultName
 output out_keyvaultSecretName string = secretName2
+output out_keyvaultSecretValue string = keyvaultmod.outputs.out_secretValue2
 output out_appInsightsApplicationId string = appinsightsmod.outputs.out_appInsightsApplicationId
 output out_appInsightsAPIApplicationId string = appinsightsmod.outputs.out_appInsightsAPIApplicationId
 output out_releaseAnnotationGuidID string = releaseAnnotationGuid

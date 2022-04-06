@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "11663777036475878170"
+      "templateHash": "14523315519335206175"
     }
   },
   "parameters": {
@@ -1333,7 +1333,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "15837897155830247985"
+              "templateHash": "10739914632407388312"
             }
           },
           "parameters": {
@@ -1491,6 +1491,10 @@
             "out_secretName2": {
               "type": "string",
               "value": "[parameters('secretName2')]"
+            },
+            "out_secretValue2": {
+              "type": "string",
+              "value": "[parameters('secretValue2')]"
             }
           }
         }
@@ -1764,6 +1768,10 @@
     "out_keyvaultSecretName": {
       "type": "string",
       "value": "[parameters('secretName2')]"
+    },
+    "out_keyvaultSecretValue": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('keyvaultName')), '2020-06-01').outputs.out_secretValue2.value]"
     },
     "out_appInsightsApplicationId": {
       "type": "string",
