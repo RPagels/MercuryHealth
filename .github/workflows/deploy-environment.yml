@@ -47,7 +47,6 @@ jobs:
   deploy_infrastructure:
     runs-on: ubuntu-latest
     outputs:
-      #output_webSiteNameURL: ${{ steps.Infra.outputs.out_webSiteNameURL }}
       output_loadTestsName: ${{ steps.Infra.outputs.out_loadTestsName }}
       output_webSiteName: ${{ steps.Infra.outputs.out_webSiteName }}
       output_functionAppName: ${{ steps.Infra.outputs.out_functionAppName }}
