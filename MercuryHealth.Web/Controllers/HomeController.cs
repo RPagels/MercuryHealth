@@ -63,7 +63,7 @@ public class HomeController : Controller
     {
         if (await _featureManager.IsEnabledAsync("PrivacyBeta"))
         {
-            return View(new PrivacyModel { Name = "Privacy Beta set in Controller" });
+            return View(new PrivacyModel { Name = "Privacy Beta" });
         }
         else
         {

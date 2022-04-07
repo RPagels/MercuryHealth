@@ -20,6 +20,10 @@ builder.Host.ConfigureAppConfiguration(builder =>
     //Connect to your App Config Store & Load Configurations using the connection string
     builder.AddAzureAppConfiguration(options =>
     {
+        options.Connect(connectionString).UseFeatureFlags(featureFlagOptions =>
+        {
+            featureFlagOptions.CacheExpirationInterval = TimeSpan.FromSeconds(5);
+        });
         options.Connect(connectionString)
         .ConfigureRefresh(refreshOptions =>
          {
