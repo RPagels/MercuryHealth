@@ -150,22 +150,6 @@ jobs:
         with:
           name: MercuryHealth.LoadTests
           path: ${{ github.workspace }}/MercuryHealth.LoadTests/*.*
-
-#     - name: Upload Build Artifacts-UI Tests runsettings file
-#        if: ${{ github.event_name != 'pull_request' }}
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: MercuryHealth.LoadTests
-#          path: ${{ github.workspace }}/MercuryHealth.LoadTests/TransformJMXFile.ps1
-          
-#      - name: "Azure login"
-#        uses: azure/login@v1
-#        with:
-#          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-#      - name: Azure logout
-#        run: |
-#          az logout
           
   dev:
     if: contains(github.event_name, 'push')
