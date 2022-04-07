@@ -5,7 +5,7 @@ on:
     inputs:
       resource-group-base-name:
         description: 'Resource Group base name'
-        default: 'rg-mercuryhealth-dev'
+        default: 'rg-mercuryhealth'
         required: true
         type: string
       environment-suffix:
@@ -16,7 +16,7 @@ on:
       resource-group-location:
         description: 'Azure region for the deployed resources'
         default: 'eastus'
-        required: false
+        required: true
         type: string
       approval-required:
         description: 'Approval needed to deploy to environment'
