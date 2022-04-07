@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.FeatureManagement.FeatureFilters;
 using MercuryHealth.Web;
 using System.Diagnostics;
+using Microsoft.Extensions.Configuration.AzureAppConfiguration.FeatureManagement;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,31 +21,31 @@ builder.Host.ConfigureAppConfiguration(builder =>
     //Connect to your App Config Store & Load Configurations using the connection string
     builder.AddAzureAppConfiguration(options =>
     {
-        options.Connect(connectionString).UseFeatureFlags(featureFlagOptions =>
-        {
-            featureFlagOptions.CacheExpirationInterval = TimeSpan.FromSeconds(5);
-        });
         options.Connect(connectionString)
+        //.UseFeatureFlags(FeatureFlagOptions =>
+        //{
+        //    FeatureFlagOptions.CacheExpirationInterval = TimeSpan.FromSeconds(10);
+        //});
+        //.Select("_")  // only load a nonexisting dummy keys
         .ConfigureRefresh(refreshOptions =>
          {
-             refreshOptions.Register("MercuryHealth:Settings:Sentinel", refreshAll: true).SetCacheExpiration(TimeSpan.FromSeconds(5));
+             refreshOptions.Register("MercuryHealth:Settings:Sentinel", refreshAll: true).SetCacheExpiration(TimeSpan.FromSeconds(10));
 
              // Set Cache timeout for one value only
-             //refresh.Register("Settings:MetricsDashboard").SetCacheExpiration(TimeSpan.FromSeconds(10));
+             //refreshOptions.Register("Settings:MetricsDashboard").SetCacheExpiration(TimeSpan.FromSeconds(10));
          });
 
     });
 
 });
 
-
 // Add services to the container.
 builder.Services.AddRazorPages();
 
 // Add Azure App Configuration/Feature management services to the container.
-builder.Services.AddFeatureManagement()
-                .UseDisabledFeaturesHandler(new CustomDisabledFeatureHandler())
-                .AddFeatureFilter<PercentageFilter>();
+builder.Services.AddFeatureManagement();
+                //.UseDisabledFeaturesHandler(new CustomDisabledFeatureHandler())
+                //.AddFeatureFilter<PercentageFilter>();
                 //.AddFeatureFilter<TimeWindowFilter>();
 
 // Bind configuration to the Settings object

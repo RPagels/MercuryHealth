@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+//using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MercuryHealth.Web.Data;
 using MercuryHealth.Web.Controllers;
 using MercuryHealth.Web.Models;
@@ -9,11 +9,12 @@ using Moq;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
+using NUnit.Framework;
 
 namespace MercuryHealth.UnitTests;
 
-[TestClass]
-
+//[TestClass]
+[TestFixture]
 public class HomeControlerTests
 {
     private readonly Mock<IFeatureManagerSnapshot> _featureManager;
@@ -32,15 +33,27 @@ public class HomeControlerTests
         _homecontroller = new HomeController(_context, _config.Object, _featureManager.Object);
     }
 
-    [TestMethod]
-    [TestCategory("UnitTests")]
-    public void DummyTest()
+    //[TestMethod]
+    //[TestCategory("UnitTests")]
+    [Test]
+    [Category("UnitTests")]
+    public void DummyTest1()
     {
-        Assert.AreEqual(1, 1);
+        Assert.AreEqual(".Net Rocks!", ".Net Rocks!");
     }
-    
-    [TestMethod]
-    [TestCategory("UnitTests")]
+    //[TestMethod]
+    //[TestCategory("UnitTests")]
+    [Test]
+    [Category("UnitTests")]
+    public void DummyTest2()
+    {
+        Assert.AreEqual("X", "X");
+    }
+
+    //[TestMethod]
+    //[TestCategory("UnitTests")]
+    [Test]
+    [Category("UnitTests")]
     public async Task Privacy_should_return_model_when_true()
     {
         _featureManager.Setup(_fm => _fm.IsEnabledAsync("PrivacyBeta")).Returns(Task.FromResult(true));
@@ -56,8 +69,10 @@ public class HomeControlerTests
         _mockrepository.VerifyAll();
     }
 
-    [TestMethod]
-    [TestCategory("UnitTests")]
+    //[TestMethod]
+    //[TestCategory("UnitTests")]
+    [Test]
+    [Category("UnitTests")]
     public async Task Privacy_should_not_return_model_when_false()
     {
         _featureManager.Setup(_fm => _fm.IsEnabledAsync("PrivacyBeta")).Returns(Task.FromResult(false));
@@ -73,8 +88,10 @@ public class HomeControlerTests
         _mockrepository.VerifyAll();
     }
 
-    [TestMethod]
-    [TestCategory("Unit Tests")]
+    //[TestMethod]
+    //[TestCategory("Unit Tests")]
+    [Test]
+    [Category("UnitTests")]
     public void HomeMetrics()
     {
         //ViewResult result = _homecontroller.Metrics() as ViewResult;
