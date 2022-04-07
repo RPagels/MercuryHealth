@@ -147,7 +147,7 @@ jobs:
          echo 'output_keyvaultName: ${{ steps.Infra.outputs.out_keyvaultName }}'
          echo 'output_keyvaultSecretName: ${{ steps.Infra.outputs.out_keyvaultSecretName }}'
          echo 'output_keyvaultSecretValue: ${{ steps.Infra.outputs.out_keyvaultSecretValue }}'
-         echo 'output_TestMyConnectionString: ${{ output_TestMyConnectionString }}'
+         #echo 'output_TestMyConnectionString: ${{ output_TestMyConnectionString }}'
       
     - name: 'Azure logout'
       run: |
