@@ -29,7 +29,7 @@ builder.Host.ConfigureAppConfiguration(builder =>
         //.Select("_")  // only load a nonexisting dummy keys
         .ConfigureRefresh(refreshOptions =>
          {
-             refreshOptions.Register("MercuryHealth:Settings:Sentinel", refreshAll: true).SetCacheExpiration(TimeSpan.FromSeconds(10));
+             refreshOptions.Register("Settings:Sentinel", refreshAll: true).SetCacheExpiration(TimeSpan.FromSeconds(10));
 
              // Set Cache timeout for one value only
              //refreshOptions.Register("Settings:MetricsDashboard").SetCacheExpiration(TimeSpan.FromSeconds(10));
@@ -43,13 +43,14 @@ builder.Host.ConfigureAppConfiguration(builder =>
 builder.Services.AddRazorPages();
 
 // Add Azure App Configuration/Feature management services to the container.
-builder.Services.AddFeatureManagement();
-                //.UseDisabledFeaturesHandler(new CustomDisabledFeatureHandler())
-                //.AddFeatureFilter<PercentageFilter>();
-                //.AddFeatureFilter<TimeWindowFilter>();
+builder.Services.AddFeatureManagement()
+                .UseDisabledFeaturesHandler(new CustomDisabledFeatureHandler())
+                .AddFeatureFilter<PercentageFilter>()
+                .AddFeatureFilter<TimeWindowFilter>();
 
 // Bind configuration to the Settings object
-builder.Services.Configure<Settings>(builder.Configuration.GetSection("MercuryHealth:Settings"));
+builder.Services.Configure<Settings>(builder.Configuration.GetSection("Settings:Sentinel"));
+builder.Services.AddAzureAppConfiguration();
 
 // Add DBContext services to the container
 builder.Services.AddDbContext<MercuryHealthWebContext>(options =>
@@ -84,8 +85,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 // Use Azure App Configuration middleware for dynamic configuration refresh.
-//app.UseAzureAppConfiguration();
-
+app.UseAzureAppConfiguration();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

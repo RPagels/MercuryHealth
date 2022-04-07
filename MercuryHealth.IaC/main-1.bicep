@@ -64,13 +64,15 @@ param contentType string = 'application/vnd.microsoft.appconfig.ff+json;charset=
 
 // Specifies the names of the key-value resources. 
 param ConfigkeyValueNames array = [
-  'MercuryHealth:Settings:FontSize'
-  'MercuryHealth:Settings:Sentinel'
+  'MercuryHealth:FontSize'
+  'MercuryHealth:FontColor'
+  'Settings:Sentinel'
 ]
 
 // Specifies the values of the key-value resources. It's optional
 param ConfigkeyKeyValues array = [
   '14'
+  '5'
   '1'
 ]
 

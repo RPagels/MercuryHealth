@@ -9,13 +9,11 @@ namespace MercuryHealth.Web.Controllers;
 
 public class HomeController : Controller
 {
-    //private readonly ILogger<HomeController> _logger;
     private readonly MercuryHealthWebContext _context;
     readonly IFeatureManager _featureManager;
 
     public IConfiguration Configuration { get; set; }
 
-    //        public HomeController(ILogger<HomeController> logger)
     public HomeController(MercuryHealthWebContext context, IConfiguration config, IFeatureManagerSnapshot featureManager)
     {
         _featureManager = featureManager;
@@ -52,11 +50,10 @@ public class HomeController : Controller
         ObjAccessLogs.Add(Obj);
 
         // Are you really tired?  Take a break! :)
-        Thread.Sleep(5000);
+        Thread.Sleep(10000);
 
         return View(ObjAccessLogs.ToList());
 
-        //return View();
     }
 
     public async Task<IActionResult> Privacy()
