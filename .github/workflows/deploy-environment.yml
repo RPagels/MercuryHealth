@@ -57,12 +57,13 @@ jobs:
       output_keyvaultName: ${{ steps.Infra.outputs.out_keyvaultName }}
       output_keyvaultSecretName: ${{ steps.Infra.outputs.out_keyvaultSecretName }}
       output_keyvaultSecretValue: ${{ steps.Infra.outputs.out_keyvaultSecretValue }}
+      output_TestMyConnectionString: 'Server=tcp:${{ steps.Infra.outputs.out_sqlserverFQName }},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdminLoginName}@${sqlserverName};Password=${sqlAdminLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
 
     name: Deploy Infrastructure
     env:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
       Deploy_Environment: ${{ inputs.environment-suffix }}
-      #sql-connection-string: 'Server=tcp:${{ needs.deploy_infrastructure.outputs.output_sqlserverFQName }},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdminLoginName}@${sqlserverName};Password=${sqlAdminLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+      ###mysql-connection-string: 'Server=tcp:${{ needs.deploy_infrastructure.outputs.output_sqlserverFQName }},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdminLoginName}@${sqlserverName};Password=${sqlAdminLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
    
     permissions:
       contents: read
@@ -146,6 +147,7 @@ jobs:
          echo 'output_keyvaultName: ${{ steps.Infra.outputs.out_keyvaultName }}'
          echo 'output_keyvaultSecretName: ${{ steps.Infra.outputs.out_keyvaultSecretName }}'
          echo 'output_keyvaultSecretValue: ${{ steps.Infra.outputs.out_keyvaultSecretValue }}'
+         echo 'output_TestMyConnectionString: ${{ output_TestMyConnectionString }}'
       
     - name: 'Azure logout'
       run: |
@@ -181,7 +183,8 @@ jobs:
          echo 'output_keyvaultName: ${{ needs.deploy_infrastructure.outputs.output_keyvaultName }}'
          echo 'output_keyvaultSecretName: ${{ needs.deploy_infrastructure.outputs.output_keyvaultSecretName }}'
          echo 'output_keyvaultSecretValue: ${{ needs.deploy_infrastructure.outputs.output_keyvaultSecretValue }}'
-
+         echo 'output_TestMyConnectionString: ${{ needs.deploy_infrastructure.outputs.output_TestMyConnectionString }}'
+                  
     - name: Login to Azure
       uses: azure/login@v1
       continue-on-error: false
