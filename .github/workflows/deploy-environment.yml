@@ -36,9 +36,9 @@ on:
 #      sql-db-password:
 #        description: 'Credentials used to log into SQL for deployment of resources'
 #        required: true
-#      sql-connection-string:
-#        description: 'Credentials used to log into SQL for deployment of resources'
-#        required: true
+      sql-connection-string:
+        description: 'Credentials used to log into SQL for deployment of resources'
+        required: true
 
 jobs:
   ###################################################################
@@ -62,7 +62,7 @@ jobs:
     env:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
       Deploy_Environment: ${{ inputs.environment-suffix }}
-      sql-connection-string: 'Server=tcp:${{ needs.deploy_infrastructure.outputs.output_sqlserverFQName }},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdminLoginName}@${sqlserverName};Password=${sqlAdminLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+      #sql-connection-string: 'Server=tcp:${{ needs.deploy_infrastructure.outputs.output_sqlserverFQName }},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdminLoginName}@${sqlserverName};Password=${sqlAdminLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
    
     permissions:
       contents: read
@@ -220,8 +220,8 @@ jobs:
       uses: Azure/sql-action@v1.2
       with:
         server-name: ${{ needs.deploy_infrastructure.outputs.output_sqlserverFQName }}
-        #connection-string: ${{ secrets.sql-connection-string }}
-        connection-string: ${{ needs.deploy_infrastructure.outputs.output_keyvaultSecretValue }}
+        connection-string: ${{ secrets.sql-connection-string }}
+        #connection-string: ${{ needs.deploy_infrastructure.outputs.output_keyvaultSecretValue }}
         dacpac-package: './MercuryHealth.Database/MercuryHealth.Database.dacpac'
 
     - name: Download Build Artifacts-Website Application
