@@ -1,7 +1,7 @@
 param skuName string = 'B1'
 //param skuCapacity int = 1
 param location string = resourceGroup().location
-param Deploy_Environment string
+param Deployed_Environment string
 param sqlserverName string
 param sqlserverfullyQualifiedDomainName string
 param sqlDBName string
@@ -76,7 +76,7 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
   properties: {
     'ConnectionStrings:MercuryHealthWebContext': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName2})'
     'ConnectionStrings:AppConfig': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName1})'
-    'Environment': Deploy_Environment
+    'DeployedEnvironment': Deployed_Environment
     'WEBSITE_RUN_FROM_PACKAGE': '1'
     'APPINSIGHTS_INSTRUMENTATIONKEY': appInsightsInstrumentationKey
     'APPINSIGHTS_PROFILERFEATURE_VERSION': '1.0.0'

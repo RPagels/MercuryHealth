@@ -62,7 +62,7 @@ jobs:
     name: Deploy Infrastructure
     env:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
-      Deploy_Environment: ${{ inputs.environment-suffix }}
+      Deployed_Environment: ${{ inputs.environment-suffix }}
       ###mysql-connection-string: 'Server=tcp:${{ needs.deploy_infrastructure.outputs.output_sqlserverFQName }},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdminLoginName}@${sqlserverName};Password=${sqlAdminLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
    
     permissions:
@@ -115,7 +115,6 @@ jobs:
       ###########################################
       # Deploy ARM Template using Bicep DSL
       ###########################################
-#parameters: ./MercuryHealth.IaC/main-1.params.json sqlAdministratorLogin=${{ secrets.sql-db-login }} sqlAdministratorLoginPassword=${{ secrets.sql-db-password }} Deploy_Environment=${{ env.Deploy_Environment }}      
     - name: Infrastructure
       id: Infra
       uses: azure/arm-deploy@v1
@@ -123,7 +122,7 @@ jobs:
       with:
         resourceGroupName: ${{ env.Azure_Resource_GroupName }}
         template: ./MercuryHealth.IaC/main-1.bicep
-        parameters: ./MercuryHealth.IaC/main-1.params.json Deploy_Environment=${{ env.Deploy_Environment }}
+        parameters: ./MercuryHealth.IaC/main-1.params.json Deployed_Environment=${{ env.Deployed_Environment }}
         deploymentMode: Incremental
         failOnStdErr: false
 
@@ -161,7 +160,7 @@ jobs:
     needs: [deploy_infrastructure]
     env:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
-      Deploy_Environment: ${{ inputs.environment-suffix }}
+      Deployed_Environment: ${{ inputs.environment-suffix }}
 
     permissions:
       contents: read

@@ -27,7 +27,7 @@ public class HomeController : Controller
     {
         // Todo: Mock setup for Config and so forth and so on...
         // 
-        ViewData["myEnvironment"] = Configuration["Environment"];
+        ViewData["myEnvironment"] = Configuration["DeployedEnvironment"];
 
         List<AccessLogs> ObjAccessLogs = new List<AccessLogs>();
 

@@ -2,7 +2,7 @@ version: v0.1
 testName: Exercise_Page_Tests
 testPlan: LoadTest_ExercisePage.jmx
 description: Load test website exercise page
-engineInstances: 2
+engineInstances: 1
 configurationFiles:
   - 'SampleData-Nutrition.csv'
 failureCriteria:

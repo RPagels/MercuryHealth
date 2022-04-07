@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "8651060124437734432"
+      "templateHash": "7685385089743385052"
     }
   },
   "parameters": {
@@ -25,7 +25,7 @@
       "type": "string",
       "defaultValue": "[newGuid()]"
     },
-    "Deploy_Environment": {
+    "Deployed_Environment": {
       "type": "string"
     },
     "secretName1": {
@@ -111,7 +111,7 @@
   "functions": [],
   "variables": {
     "sqlAdminLoginName": "AzureAdmin",
-    "sqlAdminLoginPassword": "[format('Password.1.!!{0}', uniqueString(resourceGroup().id))]",
+    "sqlAdminLoginPassword": "Password.1.!!",
     "webAppPlanName": "[format('plan-{0}', uniqueString(resourceGroup().id))]",
     "webSiteName": "[format('app-{0}', uniqueString(resourceGroup().id))]",
     "sqlserverName": "[toLower(format('sql-{0}', uniqueString(resourceGroup().id)))]",
@@ -128,7 +128,7 @@
     "blobstorageName": "[format('stablob{0}', uniqueString(resourceGroup().id))]",
     "dashboardName": "[format('dashboard-{0}', uniqueString(resourceGroup().id))]",
     "defaultTags": {
-      "Env": "[parameters('Deploy_Environment')]",
+      "Env": "[parameters('Deployed_Environment')]",
       "App": "Mercury Health",
       "CostCenter": "[parameters('costCenter')]",
       "CreatedBy": "[parameters('createdBy')]"
@@ -292,8 +292,8 @@
           "resourceGroupName": {
             "value": "[resourceGroup().name]"
           },
-          "Deploy_Environment": {
-            "value": "[parameters('Deploy_Environment')]"
+          "Deployed_Environment": {
+            "value": "[parameters('Deployed_Environment')]"
           },
           "appInsightsName": {
             "value": "[variables('appInsightsName')]"
@@ -345,7 +345,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "9435705302303948294"
+              "templateHash": "13721387801468234394"
             }
           },
           "parameters": {
@@ -357,7 +357,7 @@
               "type": "string",
               "defaultValue": "[resourceGroup().location]"
             },
-            "Deploy_Environment": {
+            "Deployed_Environment": {
               "type": "string"
             },
             "sqlserverName": {
@@ -454,7 +454,7 @@
               "properties": {
                 "ConnectionStrings:MercuryHealthWebContext": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secretName2'))]",
                 "ConnectionStrings:AppConfig": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secretName1'))]",
-                "Environment": "[parameters('Deploy_Environment')]",
+                "DeployedEnvironment": "[parameters('Deployed_Environment')]",
                 "WEBSITE_RUN_FROM_PACKAGE": "1",
                 "APPINSIGHTS_INSTRUMENTATIONKEY": "[parameters('appInsightsInstrumentationKey')]",
                 "APPINSIGHTS_PROFILERFEATURE_VERSION": "1.0.0",
@@ -636,6 +636,24 @@
               "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', parameters('webSiteName'))]"
               ]
+            },
+            {
+              "type": "Microsoft.KeyVault/vaults/secrets",
+              "apiVersion": "2021-11-01-preview",
+              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('secretName1'))]",
+              "properties": {
+                "contentType": "text/plain",
+                "value": "[parameters('configStoreConnection')]"
+              }
+            },
+            {
+              "type": "Microsoft.KeyVault/vaults/secrets",
+              "apiVersion": "2021-11-01-preview",
+              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('secretName2'))]",
+              "properties": {
+                "contentType": "text/plain",
+                "value": "[format('Server=tcp:{0},1433;Initial Catalog={1};Persist Security Info=False;User Id={2}@{3};Password={4};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;', parameters('sqlserverfullyQualifiedDomainName'), parameters('sqlDBName'), parameters('sqlAdminLoginName'), parameters('sqlserverName'), parameters('sqlAdminLoginPassword'))]"
+              }
             }
           ],
           "outputs": {

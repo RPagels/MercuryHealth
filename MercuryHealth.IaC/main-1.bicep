@@ -10,7 +10,7 @@ param releaseAnnotationGuid string = newGuid()
 //param guidValue string = newGuid()
 
 // Data params
-param Deploy_Environment string
+param Deployed_Environment string
 
 // @secure()
 // param sqlAdministratorLogin string
@@ -43,7 +43,7 @@ var dashboardName = 'dashboard-${uniqueString(resourceGroup().id)}'
 
 // Tags
 var defaultTags = {
-  'Env': Deploy_Environment
+  'Env': Deployed_Environment
   'App': 'Mercury Health'
   'CostCenter': costCenter
   'CreatedBy': createdBy
@@ -259,7 +259,7 @@ module webappmod './main-2-webapp.bicep' = {
     webAppPlanName: webAppPlanName
     webSiteName: webSiteName
     resourceGroupName: resourceGroup().name
-    Deploy_Environment: Deploy_Environment
+    Deployed_Environment: Deployed_Environment
     appInsightsName: appInsightsName
     location: location
     appInsightsInstrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
