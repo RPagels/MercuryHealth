@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using MercuryHealth.Web.Data;
 using MercuryHealth.Web.Models;
 using Microsoft.ApplicationInsights;
+using Microsoft.Extensions.Options;
 
 namespace MercuryHealth.Web.Controllers;
 
@@ -16,16 +17,21 @@ public class ExercisesController : Controller
 {
     private readonly MercuryHealthWebContext _context;
     private readonly TelemetryClient telemetry;
+    private readonly Settings _settings;
 
-    public ExercisesController(MercuryHealthWebContext context, TelemetryClient telemetry)
+    public ExercisesController(MercuryHealthWebContext context, TelemetryClient telemetry, IOptionsSnapshot<Settings> settings)
     {
         _context = context;
+        _settings = settings.Value;
         this.telemetry = telemetry;
     }
 
     // GET: Exercises
     public async Task<IActionResult> Index()
     {
+        ViewData["FontSize"] = _settings.FontSize;
+        ViewData["FontColor"] = _settings.FontColor;
+
         //return View(await _context.Exercises.ToListAsync());
         // Keep color logic out of the ViewPage, per MVC pattern, use a ViewModel.
         var exercises = from n in _context.Exercises select n;
@@ -43,7 +49,7 @@ public class ExercisesController : Controller
             evm.Description = myexerciserec.Description;
             evm.MusclesInvolved = myexerciserec.MusclesInvolved;
             evm.Equipment = myexerciserec.Equipment;
-            evm.FontColor = "Black";
+            evm.FontColor = _settings.FontColor; //"Black";
 
             // Check for text with API in it
             if (myexerciserec.Equipment == "API Update")

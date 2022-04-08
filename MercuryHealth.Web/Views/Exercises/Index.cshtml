@@ -11,7 +11,7 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table"  style="font-size: @Configuration["MercuryHealth:FontSize"]px;">
+<table class="table" style="font-size:@ViewData["FontSize"]px;color:@ViewData["FontColor"]; ">
     <thead>
         <tr>
             <th>

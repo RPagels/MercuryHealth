@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using MercuryHealth.Web.Data;
 using MercuryHealth.Web.Models;
 using Microsoft.ApplicationInsights;
+using Microsoft.Extensions.Options;
 
 namespace MercuryHealth.Web.Controllers;
 
@@ -16,16 +17,21 @@ public class NutritionsController : Controller
 {
     private readonly MercuryHealthWebContext _context;
     private readonly TelemetryClient telemetry;
+    private readonly Settings _settings;
 
-    public NutritionsController(MercuryHealthWebContext context, TelemetryClient telemetry)
+    public NutritionsController(MercuryHealthWebContext context, TelemetryClient telemetry, IOptionsSnapshot<Settings> settings)
     {
         _context = context;
+        _settings = settings.Value;
         this.telemetry = telemetry;
     }
 
     // GET: Nutritions /  TEST
     public async Task<IActionResult> Index()
     {
+        ViewData["FontSize"] = _settings.FontSize;
+        ViewData["FontColor"] = _settings.FontColor;
+
         // Keep color logic out of the ViewPage, per MVC pattern, use a ViewModel.
         var nutritions = from n in _context.Nutrition select n;
 
@@ -46,7 +52,7 @@ public class NutritionsController : Controller
             nvm.Quantity = mynutritionrec.Quantity;
             nvm.SodiumInGrams = mynutritionrec.SodiumInGrams;
             nvm.Tags = mynutritionrec.Tags;
-            nvm.FontColor = "Black";
+            nvm.FontColor = _settings.FontColor; //"Black";
 
             // Check for text with API in it
             if (mynutritionrec.Tags == "API PUT Update")

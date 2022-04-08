@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement;
 using Microsoft.FeatureManagement.Mvc;
 using System.Diagnostics;
+using Microsoft.Extensions.Options;
 
 namespace MercuryHealth.Web.Controllers;
 
@@ -11,13 +12,15 @@ public class HomeController : Controller
 {
     private readonly MercuryHealthWebContext _context;
     readonly IFeatureManager _featureManager;
+    private readonly Settings _settings;
 
     public IConfiguration Configuration { get; set; }
 
-    public HomeController(MercuryHealthWebContext context, IConfiguration config, IFeatureManagerSnapshot featureManager)
+    public HomeController(MercuryHealthWebContext context, IConfiguration config, IFeatureManagerSnapshot featureManager, IOptionsSnapshot<Settings> settings)
     {
         _featureManager = featureManager;
         _context = context;
+        _settings = settings.Value;
         Configuration = config;
     }
 
@@ -25,7 +28,9 @@ public class HomeController : Controller
     {
         // Todo: Mock setup for Config and so forth and so on...
         // 
-        ViewData["myEnvironment"] = Configuration["DeployedEnvironment"];
+        ViewData["myenvironment"] = Configuration["deployedenvironment"];
+        ViewData["FontSize"] = _settings.FontSize;
+        ViewData["FontColor"] = _settings.FontColor;
 
         List<AccessLogs> ObjAccessLogs = new List<AccessLogs>();
 
@@ -70,7 +75,7 @@ public class HomeController : Controller
 
     // Check for Feature Flag
     // If Feature Flag is disabled, the entire method is disabled.
-    [FeatureGate(nameof(MyFeatureFlags.MetricsDashboard))]
+    [FeatureGate("MetricsDashboard")]
     public IActionResult Metrics()
     {
         return View();

@@ -29,7 +29,7 @@ builder.Host.ConfigureAppConfiguration(builder =>
         //.Select("_")  // only load a nonexisting dummy keys
         .ConfigureRefresh(refreshOptions =>
          {
-             refreshOptions.Register("Settings:Sentinel", refreshAll: true).SetCacheExpiration(TimeSpan.FromSeconds(10));
+             refreshOptions.Register("Settings:Sentinel", refreshAll: true).SetCacheExpiration(TimeSpan.FromMinutes(1));
 
              // Set Cache timeout for one value only
              //refreshOptions.Register("Settings:MetricsDashboard").SetCacheExpiration(TimeSpan.FromSeconds(10));
@@ -49,7 +49,7 @@ builder.Services.AddFeatureManagement()
                 .AddFeatureFilter<TimeWindowFilter>();
 
 // Bind configuration to the Settings object
-builder.Services.Configure<Settings>(builder.Configuration.GetSection("Settings:Sentinel"));
+builder.Services.Configure<NuGet.Configuration.Settings>(builder.Configuration.GetSection("Settings:Sentinel"));
 builder.Services.AddAzureAppConfiguration();
 
 // Add DBContext services to the container
