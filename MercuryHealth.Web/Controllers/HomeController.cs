@@ -12,15 +12,16 @@ public class HomeController : Controller
 {
     private readonly MercuryHealthWebContext _context;
     readonly IFeatureManager _featureManager;
-    private readonly Settings _settings;
+    //private readonly Settings _settings;
 
     public IConfiguration Configuration { get; set; }
 
-    public HomeController(MercuryHealthWebContext context, IConfiguration config, IFeatureManagerSnapshot featureManager, IOptionsSnapshot<Settings> settings)
+    //public HomeController(MercuryHealthWebContext context, IConfiguration config, IFeatureManagerSnapshot featureManager, IOptionsSnapshot<Settings> settings)
+    public HomeController(MercuryHealthWebContext context, IConfiguration config, IFeatureManagerSnapshot featureManager)
     {
         _featureManager = featureManager;
         _context = context;
-        _settings = settings.Value;
+        //_settings = settings.Value;
         Configuration = config;
     }
 
@@ -28,9 +29,9 @@ public class HomeController : Controller
     {
         // Todo: Mock setup for Config and so forth and so on...
         // 
-        ViewData["myenvironment"] = Configuration["deployedenvironment"];
-        ViewData["FontSize"] = _settings.FontSize;
-        ViewData["FontColor"] = _settings.FontColor;
+        //ViewData["myenvironment"] = Configuration["deployedenvironment"];
+        //ViewData["FontSize"] = _settings.FontSize;
+        //ViewData["FontColor"] = _settings.FontColor;
 
         List<AccessLogs> ObjAccessLogs = new List<AccessLogs>();
 

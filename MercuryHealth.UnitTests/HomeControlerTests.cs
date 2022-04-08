@@ -23,7 +23,7 @@ public class HomeControlerTests
     private readonly Mock<IConfiguration> _config;
     private readonly MockRepository _mockrepository = new MockRepository(MockBehavior.Strict);
     private readonly HomeController _homecontroller;
-    private readonly IOptionsSnapshot<Settings> _settings;
+    //private readonly IOptionsSnapshot<Settings> _settings;
 
     public HomeControlerTests()
     {
@@ -31,8 +31,8 @@ public class HomeControlerTests
         _context = new MercuryHealthWebContext(builder.Options);
         _featureManager = _mockrepository.Create<IFeatureManagerSnapshot>();
         _config = _mockrepository.Create<IConfiguration>();
-        //_settings = settings.Value;
-        _homecontroller = new HomeController(_context, _config.Object, _featureManager.Object, _settings);
+        //_homecontroller = new HomeController(_context, _config.Object, _featureManager.Object, _settings);
+        _homecontroller = new HomeController(_context, _config.Object, _featureManager.Object);
     }
 
     //[TestMethod]

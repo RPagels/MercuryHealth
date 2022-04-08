@@ -1,14 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using MercuryHealth.Web.Data;
 using Microsoft.FeatureManagement;
-using Microsoft.Extensions.Azure;
-using NuGet.Configuration;
-using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.FeatureManagement.FeatureFilters;
 using MercuryHealth.Web;
-using System.Diagnostics;
-using Microsoft.Extensions.Configuration.AzureAppConfiguration.FeatureManagement;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,16 +16,11 @@ builder.Host.ConfigureAppConfiguration(builder =>
     builder.AddAzureAppConfiguration(options =>
     {
         options.Connect(connectionString)
-        //.UseFeatureFlags(FeatureFlagOptions =>
-        //{
-        //    FeatureFlagOptions.CacheExpirationInterval = TimeSpan.FromSeconds(10);
-        //});
-        //.Select("_")  // only load a nonexisting dummy keys
         .ConfigureRefresh(refreshOptions =>
          {
              refreshOptions.Register("Settings:Sentinel", refreshAll: true).SetCacheExpiration(TimeSpan.FromMinutes(1));
 
-             // Set Cache timeout for one value only
+             // Optional - Set Cache timeout for one value only
              //refreshOptions.Register("Settings:MetricsDashboard").SetCacheExpiration(TimeSpan.FromSeconds(10));
          });
 
