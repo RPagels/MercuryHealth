@@ -3,5 +3,5 @@ public class Settings
 {
     public long FontSize { get; set; }
     public string? FontColor { get; set; }
-    public string? BackGroundColor { get; set; }
+    public string? BackgroundColor { get; set; }
 }

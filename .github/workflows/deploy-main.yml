@@ -84,7 +84,7 @@ jobs:
       ###########################################
       - name: dotnet run unit tests
         run: |
-         echo 'Todo: Fix IOptionsSnapshot<Settings> in HomeControlerTests.cs
+         echo 'Todo: Fix IOptionsSnapshot<Settings> in HomeControlerTests.cs'
 
       #run: dotnet test MercuryHealth.UnitTests/MercuryHealth.UnitTests.csproj
 

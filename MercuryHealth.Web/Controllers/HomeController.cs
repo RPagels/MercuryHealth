@@ -30,7 +30,7 @@ public class HomeController : Controller
         ViewData["myenvironment"] = _configuration["deployedenvironment"];
         ViewData["FontSize"] = _settings.FontSize;
         ViewData["FontColor"] = _settings.FontColor;
-        ViewData["BackGroundColor"] = _settings.BackGroundColor;
+        ViewData["BackgroundColor"] = _settings.BackgroundColor;
 
         List<AccessLogs> ObjAccessLogs = new List<AccessLogs>();
 

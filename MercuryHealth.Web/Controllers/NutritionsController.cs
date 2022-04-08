@@ -28,7 +28,7 @@ public class NutritionsController : Controller
     {
         ViewData["FontSize"] = _settings.FontSize;
         ViewData["FontColor"] = _settings.FontColor;
-        ViewData["BackGroundColor"] = _settings.BackGroundColor;
+        ViewData["BackgroundColor"] = _settings.BackgroundColor;
 
         // Keep color logic out of the ViewPage, per MVC pattern, use a ViewModel.
         var nutritions = from n in _context.Nutrition select n;
