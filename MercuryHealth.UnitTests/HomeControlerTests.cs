@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using Microsoft.Extensions.Options;
 
 namespace MercuryHealth.UnitTests;
 
@@ -22,15 +23,16 @@ public class HomeControlerTests
     private readonly Mock<IConfiguration> _config;
     private readonly MockRepository _mockrepository = new MockRepository(MockBehavior.Strict);
     private readonly HomeController _homecontroller;
+    private readonly IOptionsSnapshot<Settings> _settings;
 
     public HomeControlerTests()
     {
         var builder = new DbContextOptionsBuilder<MercuryHealthWebContext>().UseInMemoryDatabase($"MercuryHealth{Guid.NewGuid()}");
         _context = new MercuryHealthWebContext(builder.Options);
-
         _featureManager = _mockrepository.Create<IFeatureManagerSnapshot>();
         _config = _mockrepository.Create<IConfiguration>();
-        _homecontroller = new HomeController(_context, _config.Object, _featureManager.Object);
+        //_settings = settings.Value;
+        _homecontroller = new HomeController(_context, _config.Object, _featureManager.Object, _settings);
     }
 
     //[TestMethod]
