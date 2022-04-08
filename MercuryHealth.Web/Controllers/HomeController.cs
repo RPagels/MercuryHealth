@@ -12,26 +12,25 @@ public class HomeController : Controller
 {
     private readonly MercuryHealthWebContext _context;
     readonly IFeatureManager _featureManager;
-    //private readonly Settings _settings;
+    private readonly Settings _settings;
+    private readonly IConfiguration _configuration;
 
-    public IConfiguration Configuration { get; set; }
-
-    //public HomeController(MercuryHealthWebContext context, IConfiguration config, IFeatureManagerSnapshot featureManager, IOptionsSnapshot<Settings> settings)
-    public HomeController(MercuryHealthWebContext context, IConfiguration config, IFeatureManagerSnapshot featureManager)
+    public HomeController(MercuryHealthWebContext context, IConfiguration Configuration, IFeatureManagerSnapshot featureManager, IOptionsSnapshot<Settings> settings)
     {
         _featureManager = featureManager;
         _context = context;
-        //_settings = settings.Value;
-        Configuration = config;
+        _settings = settings.Value;
+        _configuration = Configuration;
     }
 
     public IActionResult Index()
     {
         // Todo: Mock setup for Config and so forth and so on...
         // 
-        //ViewData["myenvironment"] = Configuration["deployedenvironment"];
-        //ViewData["FontSize"] = _settings.FontSize;
-        //ViewData["FontColor"] = _settings.FontColor;
+        ViewData["myenvironment"] = _configuration["deployedenvironment"];
+        ViewData["FontSize"] = _settings.FontSize;
+        ViewData["FontColor"] = _settings.FontColor;
+        ViewData["BackGroundColor"] = _settings.BackGroundColor;
 
         List<AccessLogs> ObjAccessLogs = new List<AccessLogs>();
 
@@ -56,13 +55,27 @@ public class HomeController : Controller
         ObjAccessLogs.Add(Obj);
 
         // Are you really tired?  Take a break! :)
-        Thread.Sleep(10000);
+        Thread.Sleep(5000);
 
         return View(ObjAccessLogs.ToList());
 
     }
 
     public async Task<IActionResult> Privacy()
+    {
+        if (await _featureManager.IsEnabledAsync("PrivacyBeta"))
+        {
+            return View(new PrivacyModel { Name = "Privacy Beta" });
+        }
+        else
+        {
+            return View(new PrivacyModel { Name = "Privacy" });
+        }
+    }
+
+    //[FeatureGate("PrivacyBeta")]
+    [FeatureGate(MyFeatureFlags.PrivacyBeta)]
+    public async Task<IActionResult> PrivacyBeta()
     {
         if (await _featureManager.IsEnabledAsync("PrivacyBeta"))
         {

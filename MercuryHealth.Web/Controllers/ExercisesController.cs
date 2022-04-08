@@ -19,18 +19,19 @@ public class ExercisesController : Controller
     private readonly TelemetryClient telemetry;
     private readonly Settings _settings;
 
-    public ExercisesController(MercuryHealthWebContext context, TelemetryClient telemetry, IOptionsSnapshot<Settings> settings)
+    //public ExercisesController(MercuryHealthWebContext context, TelemetryClient telemetry, IOptionsSnapshot<Settings> settings)
+    public ExercisesController(MercuryHealthWebContext context, TelemetryClient telemetry)
     {
         _context = context;
-        _settings = settings.Value;
+        //_settings = settings.Value;
         this.telemetry = telemetry;
     }
 
     // GET: Exercises
     public async Task<IActionResult> Index()
     {
-        ViewData["FontSize"] = _settings.FontSize;
-        ViewData["FontColor"] = _settings.FontColor;
+        //ViewData["FontSize"] = _settings.FontSize;
+        //ViewData["FontColor"] = _settings.FontColor;
 
         //return View(await _context.Exercises.ToListAsync());
         // Keep color logic out of the ViewPage, per MVC pattern, use a ViewModel.
@@ -49,7 +50,7 @@ public class ExercisesController : Controller
             evm.Description = myexerciserec.Description;
             evm.MusclesInvolved = myexerciserec.MusclesInvolved;
             evm.Equipment = myexerciserec.Equipment;
-            evm.FontColor = _settings.FontColor; //"Black";
+            evm.FontColor = "Black";  //_settings.FontColor; //"Black";
 
             // Check for text with API in it
             if (myexerciserec.Equipment == "API Update")

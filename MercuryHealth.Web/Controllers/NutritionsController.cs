@@ -1,10 +1,5 @@
 ﻿#nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MercuryHealth.Web.Data;
 using MercuryHealth.Web.Models;
@@ -18,12 +13,14 @@ public class NutritionsController : Controller
     private readonly MercuryHealthWebContext _context;
     private readonly TelemetryClient telemetry;
     private readonly Settings _settings;
+    private readonly IConfiguration _configuration;
 
-    public NutritionsController(MercuryHealthWebContext context, TelemetryClient telemetry, IOptionsSnapshot<Settings> settings)
+    public NutritionsController(MercuryHealthWebContext context, TelemetryClient telemetry, IConfiguration Configuration, IOptionsSnapshot<Settings> settings)
     {
         _context = context;
         _settings = settings.Value;
         this.telemetry = telemetry;
+        _configuration = Configuration;
     }
 
     // GET: Nutritions /  TEST
@@ -31,6 +28,7 @@ public class NutritionsController : Controller
     {
         ViewData["FontSize"] = _settings.FontSize;
         ViewData["FontColor"] = _settings.FontColor;
+        ViewData["BackGroundColor"] = _settings.BackGroundColor;
 
         // Keep color logic out of the ViewPage, per MVC pattern, use a ViewModel.
         var nutritions = from n in _context.Nutrition select n;

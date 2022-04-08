@@ -66,13 +66,15 @@ param contentType string = 'application/vnd.microsoft.appconfig.ff+json;charset=
 param ConfigkeyValueNames array = [
   'App:Settings:FontSize'
   'App:Settings:FontColor'
-  'Settings:Sentinel'
+  'App:Settings:BackgroundColor'
+  'App:Settings:Sentinel'
 ]
 
-// Specifies the values of the key-value resources. It's optional
+// Specifies the values of the key-value resources. #000=Black, #FFF=White
 param ConfigkeyKeyValues array = [
-  '14'
-  'Green'
+  '18'
+  '#16537e'
+  'yellow'
   '1'
 ]
 

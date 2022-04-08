@@ -1,4 +1,6 @@
-﻿@model IEnumerable<MercuryHealth.Web.Models.AccessLogs>
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@model IEnumerable<MercuryHealth.Web.Models.AccessLogs>
 
 @{
     ViewData["Title"] = "Home Page";

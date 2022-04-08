@@ -1,6 +1,6 @@
 ﻿namespace MercuryHealth.Web
 {
-    public enum Settings
+    public enum MyFeatureFlags
     {
         PrivacyBeta,
         CaptureNutritionColor,
