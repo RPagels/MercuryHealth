@@ -25,8 +25,7 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        // Todo: Mock setup for Config and so forth and so on...
-        // 
+        // Save App Configuration Settings
         ViewData["myenvironment"] = _configuration["deployedenvironment"];
         ViewData["FontSize"] = _settings.FontSize;
         ViewData["FontColor"] = _settings.FontColor;

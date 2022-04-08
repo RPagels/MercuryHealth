@@ -3,6 +3,7 @@ using MercuryHealth.Web.Data;
 using Microsoft.FeatureManagement;
 using Microsoft.FeatureManagement.FeatureFilters;
 using MercuryHealth.Web;
+using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
