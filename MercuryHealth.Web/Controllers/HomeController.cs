@@ -12,24 +12,26 @@ public class HomeController : Controller
 {
     private readonly MercuryHealthWebContext _context;
     readonly IFeatureManager _featureManager;
-    private readonly Settings _settings;
+    private readonly PageSettings _pageSettings;
     private readonly IConfiguration _configuration;
 
-    public HomeController(MercuryHealthWebContext context, IConfiguration Configuration, IFeatureManagerSnapshot featureManager, IOptionsSnapshot<Settings> settings)
+    public HomeController(MercuryHealthWebContext context, IOptionsSnapshot<PageSettings> pageSettings, IConfiguration Configuration, IFeatureManagerSnapshot featureManager)
     {
         _featureManager = featureManager;
         _context = context;
-        _settings = settings.Value;
+        _pageSettings = pageSettings.Value;
         _configuration = Configuration;
     }
 
     public IActionResult Index()
     {
-        // Save App Configuration Settings
+        // Save App Configuration Dynamic Update Settings
+        ViewData["FontSize"] = _pageSettings.FontSize;
+        ViewData["FontColor"] = _pageSettings.FontColor;
+        ViewData["BackgroundColor"] = _pageSettings.BackgroundColor;
+
+        // Save App Service Configuration Settings
         ViewData["myenvironment"] = _configuration["deployedenvironment"];
-        ViewData["FontSize"] = _settings.FontSize;
-        ViewData["FontColor"] = _settings.FontColor;
-        ViewData["BackgroundColor"] = _settings.BackgroundColor;
 
         List<AccessLogs> ObjAccessLogs = new List<AccessLogs>();
 

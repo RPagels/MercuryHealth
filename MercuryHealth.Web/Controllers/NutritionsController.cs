@@ -12,13 +12,13 @@ public class NutritionsController : Controller
 {
     private readonly MercuryHealthWebContext _context;
     private readonly TelemetryClient telemetry;
-    private readonly Settings _settings;
+    private readonly PageSettings _pageSettings;
     private readonly IConfiguration _configuration;
 
-    public NutritionsController(MercuryHealthWebContext context, TelemetryClient telemetry, IConfiguration Configuration, IOptionsSnapshot<Settings> settings)
+    public NutritionsController(MercuryHealthWebContext context, TelemetryClient telemetry, IConfiguration Configuration, IOptionsSnapshot<PageSettings> pageSettings)
     {
         _context = context;
-        _settings = settings.Value;
+        _pageSettings = pageSettings.Value;
         this.telemetry = telemetry;
         _configuration = Configuration;
     }
@@ -26,9 +26,10 @@ public class NutritionsController : Controller
     // GET: Nutritions /  TEST
     public async Task<IActionResult> Index()
     {
-        ViewData["FontSize"] = _settings.FontSize;
-        ViewData["FontColor"] = _settings.FontColor;
-        ViewData["BackgroundColor"] = _settings.BackgroundColor;
+        // Save App Configuration Dynamic Update Settings
+        ViewData["FontSize"] = _pageSettings.FontSize;
+        ViewData["FontColor"] = _pageSettings.FontColor;
+        ViewData["BackgroundColor"] = _pageSettings.BackgroundColor;
 
         // Keep color logic out of the ViewPage, per MVC pattern, use a ViewModel.
         var nutritions = from n in _context.Nutrition select n;
@@ -50,10 +51,10 @@ public class NutritionsController : Controller
             nvm.Quantity = mynutritionrec.Quantity;
             nvm.SodiumInGrams = mynutritionrec.SodiumInGrams;
             nvm.Tags = mynutritionrec.Tags;
-            nvm.FontColor = _settings.FontColor; //"Black";
+            nvm.FontColor = _pageSettings.FontColor; //"Black";
 
             // Check for text with API in it
-            if (mynutritionrec.Tags == "API PUT Update")
+            if (mynutritionrec.Tags == "API Update")
             {
                 nvm.FontColor = "Red";
             }

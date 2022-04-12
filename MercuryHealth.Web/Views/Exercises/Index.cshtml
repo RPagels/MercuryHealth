@@ -6,16 +6,14 @@
     ViewData["Title"] = "Exercises";
 }
 
-<h1 style="background-color:@Configuration["App:Settings:BackgroundColor"]">Exercises-Configuration</h1>
-<h1 style="background-color:@ViewData["App:Settings:BackgroundColor"]">Exercises-ViewData</h1>
+@*<h1 style="background-color:@Configuration["App:Settings:BackgroundColor"]">Exercises-Configuration</h1>*@
+<h1 style="background-color:@ViewData["BackgroundColor"]">Exercises</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" style="font-size:@ViewData["FontSize"]px;">Create New</a>
 </p>
-<table class="table" style="font-size:@Configuration["App:Settings:FontSize"]px;color:@Configuration["App:Settings:FontColor"]">
-
-@*<table class="table" style="font-size:@ViewData["FontSize"]px;color:@ViewData["FontColor"]; ">
-*@    <thead>
+<table class="table" style="font-size:@ViewData["FontSize"]px;color:@ViewData["FontColor"];">
+    <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Name)

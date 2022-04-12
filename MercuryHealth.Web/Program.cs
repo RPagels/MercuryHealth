@@ -3,6 +3,7 @@ using MercuryHealth.Web.Data;
 using Microsoft.FeatureManagement;
 using Microsoft.FeatureManagement.FeatureFilters;
 using MercuryHealth.Web;
+using MercuryHealth.Web.Controllers;
 using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,27 +12,9 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("AppConfig");
 
 // Add Azure App Configuration/Feature management services to the container.
-//builder.Host.ConfigureAppConfiguration(builder =>
-//{
-//    //Connect to your App Config Store & Load Configurations using the connection string
-//    builder.AddAzureAppConfiguration(options =>
-//    {
-//        options.Connect(connectionString)
-//        .ConfigureRefresh(refreshOptions =>
-//         {
-//             refreshOptions.Register("Settings:Sentinel", refreshAll: true).SetCacheExpiration(TimeSpan.FromMinutes(1));
-
-//             // Optional - Set Cache timeout for one value only
-//             //refreshOptions.Register("Settings:MetricsDashboard").SetCacheExpiration(TimeSpan.FromSeconds(10));
-//         });
-
-//    });
-
-//});
-
-    builder.Host.ConfigureAppConfiguration(builder =>
+builder.Host.ConfigureAppConfiguration(builder =>
     {
-            //Connect to your App Config Store using the connection string
+            // Connect to your App Config Store using the connection string
             builder.AddAzureAppConfiguration(options =>
         {
             options.Connect(connectionString)
@@ -39,7 +22,7 @@ var connectionString = builder.Configuration.GetConnectionString("AppConfig");
                     .ConfigureRefresh(refresh =>
                     {
                         refresh.Register("App:Settings:Sentinel", refreshAll: true)
-                            .SetCacheExpiration(new TimeSpan(0, 0, 30)); //TimeSpan.FromSeconds(10)
+                            .SetCacheExpiration(TimeSpan.FromSeconds(10));
                     });
         });
     })
@@ -47,23 +30,16 @@ var connectionString = builder.Configuration.GetConnectionString("AppConfig");
     {
         // Add MVC views and Controller services to the container.
         services.AddControllersWithViews();
-    });
+});
 
-// Works great!!!
-//builder.Host.ConfigureAppConfiguration(builder =>
-//    {
-//        //Connect to your App Config Store using the connection string
-//        builder.AddAzureAppConfiguration(connectionString);
-//    })
-//        .ConfigureServices(services =>
-//        {
-//            // Add MVC views and Controller services to the container.
-//            services.AddControllersWithViews();
-//        });
+// Add services to the container.
+builder.Services.Configure<PageSettings>(builder.Configuration.GetSection("App:Settings"));
+builder.Services.AddRazorPages();
+builder.Services.AddAzureAppConfiguration();
 
 // Bind configuration to the Settings object
-builder.Services.Configure<NuGet.Configuration.Settings>(builder.Configuration.GetSection("App:Settings"));
-builder.Services.AddAzureAppConfiguration();
+//builder.Services.AddAzureAppConfiguration(); 
+//builder.Services.Configure<NuGet.Configuration.Settings>(builder.Configuration.GetSection("App:Settings"));
 
 // Add Azure App Configuration/Feature management services to the container.
 builder.Services.AddFeatureManagement()
@@ -81,19 +57,22 @@ builder.Services.AddHealthChecks()
     .AddDbContextCheck<MercuryHealthWebContext>();
 
 // Add services to the container.
-builder.Services.AddRazorPages();
+//builder.Services.AddRazorPages();
 
 // Add MVC views and Controller services to the container.
 //builder.Services.AddControllersWithViews();
 
 // Add Azure Application Insights services to the container
-builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
+builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+// Use Azure App Configuration middleware for dynamic configuration refresh.
+app.UseAzureAppConfiguration();
 
 // Setup Health Probe Endpoint
 app.MapHealthChecks("/healthy");
@@ -106,8 +85,6 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-// Use Azure App Configuration middleware for dynamic configuration refresh.
-app.UseAzureAppConfiguration();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

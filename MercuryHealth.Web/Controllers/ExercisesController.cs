@@ -17,21 +17,23 @@ public class ExercisesController : Controller
 {
     private readonly MercuryHealthWebContext _context;
     private readonly TelemetryClient telemetry;
-    private readonly Settings _settings;
+    private readonly PageSettings _pageSettings;
 
-    //public ExercisesController(MercuryHealthWebContext context, TelemetryClient telemetry, IOptionsSnapshot<Settings> settings)
-    public ExercisesController(MercuryHealthWebContext context, TelemetryClient telemetry)
+    public ExercisesController(MercuryHealthWebContext context, TelemetryClient telemetry, IOptionsSnapshot<PageSettings> pageSettings)
+    //public ExercisesController(MercuryHealthWebContext context, TelemetryClient telemetry)
     {
         _context = context;
-        //_settings = settings.Value;
+        _pageSettings = pageSettings.Value;
         this.telemetry = telemetry;
     }
 
     // GET: Exercises
     public async Task<IActionResult> Index()
     {
-        //ViewData["FontSize"] = _settings.FontSize;
-        //ViewData["FontColor"] = _settings.FontColor;
+        // Save App Configuration Dynamic Update Settings
+        ViewData["FontSize"] = _pageSettings.FontSize;
+        ViewData["FontColor"] = _pageSettings.FontColor;
+        ViewData["BackgroundColor"] = _pageSettings.BackgroundColor;
 
         //return View(await _context.Exercises.ToListAsync());
         // Keep color logic out of the ViewPage, per MVC pattern, use a ViewModel.
@@ -50,7 +52,7 @@ public class ExercisesController : Controller
             evm.Description = myexerciserec.Description;
             evm.MusclesInvolved = myexerciserec.MusclesInvolved;
             evm.Equipment = myexerciserec.Equipment;
-            evm.FontColor = "Black";  //_settings.FontColor; //"Black";
+            evm.FontColor = _pageSettings.FontColor; //"Black";
 
             // Check for text with API in it
             if (myexerciserec.Equipment == "API Update")

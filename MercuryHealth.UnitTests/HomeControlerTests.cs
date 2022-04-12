@@ -1,4 +1,5 @@
 //using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MercuryHealth.Web;
 using MercuryHealth.Web.Data;
 using MercuryHealth.Web.Controllers;
 using MercuryHealth.Web.Models;
@@ -31,7 +32,7 @@ public class HomeControlerTests
         _featureManager = _mockrepository.Create<IFeatureManagerSnapshot>();
         _config = _mockrepository.Create<IConfiguration>();
         //_settings = Settings;
-        _homecontroller = new HomeController(_context, _config.Object, _featureManager.Object, _settings);
+        _homecontroller = new HomeController(_context, _settings, _config.Object, _featureManager.Object);
         //_homecontroller = new HomeController(_context, _config.Object, _featureManager.Object);
     }
 

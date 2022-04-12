@@ -6,15 +6,16 @@
     ViewData["Title"] = "Nutrition";
 }
 
-<h1 style="background-color:@Configuration["App:Settings:BackgroundColor"]">Nutrition-Configuration</h1>
-<h1 style="background-color:@ViewData["BackgroundColor"]">Nutrition-ViewData</h1>
+@*<h1 style="background-color:@Configuration["App:Settings:BackgroundColor"]">Nutrition-Configuration</h1>
+*@
+<h1 style="background-color:@ViewData["BackgroundColor"]">Nutrition</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" style="font-size:@ViewData["FontSize"]px;">Create New</a>
 </p>
-<table class="table" style="font-size:@Configuration["App:Settings:FontSize"]px;color:@Configuration["App:Settings:FontColor"]">
-
-@*<table class="table" style="font-size:@ViewData["FontSize"]px;color:@ViewData["FontColor"]; ">*@
+@*<table class="table" style="font-size:@Configuration["App:Settings:FontSize"]px;color:@Configuration["App:Settings:FontColor"]">
+*@
+<table class="table" style="font-size:@ViewData["FontSize"]px;color:@ViewData["FontColor"]; ">
     <thead>
         <tr>
             <th>
