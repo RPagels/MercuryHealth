@@ -4,56 +4,58 @@
 
 @{
     ViewData["Title"] = "Home Page";
-}
+//}
 
-    <div id="HeaderBackground" class="text-center">
-        <br />
-        <h1 class="display-4">Welcome to Mercury Health</h1>
-        <p class="lead">The mission of Mercury Health is to help improve longevity and quality of life through healthy activity.</p>
+<div id="HeaderBackground" class="text-center">
+    <br />
+    <h1 class="display-4">Welcome to Mercury Health</h1>
+    <p class="lead">The mission of Mercury Health is to help improve longevity and quality of life through healthy activity.</p>
 
-        <p class="lead">
-            @foreach (var obj in Model)
-            {
-                <div><h3>Think Positive! Stay Focused! Breathe! Be Awesome!</h3></div>
-                <br />
-                <br />
-                <div>Environment: <b>@ViewData["myEnvironment"]</b></div>
-                <div style="font-size: 14px;">Total visits: <b>@Html.DisplayFor(modelItem => obj.Visits)</b>   |   Last visit: <b>@Html.DisplayFor(modelItem => obj.AccessDate)</b></div>
+    <p class="lead">
+        @foreach (var obj in Model)
+        {
+            <div><h3>Think Positive! Stay Focused! Breathe! Be Awesome!</h3></div>
+            <br />
+            <br />
+            <div>Environment: <b>@ViewData["myEnvironment"]</b></div>
+            <div style="font-size: 14px;">Total visits: <b>@Html.DisplayFor(modelItem => obj.Visits)</b>   |   Last visit: <b>@Html.DisplayFor(modelItem => obj.AccessDate)</b></div>
 
-            }
+        }
+    </p>
+    <br />
+    <br />
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Exercise</h2>
+        <p>
+            Physical activity is a very important part of a healthy lifestyle. Our advanced tracking tools enable two-way auto syncing with all the popular activity trackers.
+            <br /><br />
+            <a href="/Exercises/Create" class="btn btn-primary btn-large">Create Exercise</a>
         </p>
-        <br />
+    </div>
+    <div class="col-md-4">
+        <h2>Nutrition</h2>
+        <p>
+            A well crafted diet can help you accomplish your health goals. Start logging all your meals with our logging tools. We combine the power of AI to enable food and activity loggin faster and easier.
+            <br /><br />
+            <a href="/Nutritions/Create" class="btn btn-primary btn-large">Create Nutrition</a>
+        </p>
+    </div>
+    <div class="col-md-4">
+        <h2>Metrics</h2>
+        <p>
+            Nutrition Metrics can help you lose weight and have more energy.  The Metrics dashboard is a collection of health stats across your Nutrition and Exercise activity.
+            <br /><br />
+            <a href="/Metrics/Create" class="btn btn-primary btn-large">View Metrics</a>
+        </p>
+    </div>
+</div>
 
-        </div>
+    @*<div class="text-center">
+        <p>Mercury Health 2019 is built using .Net Core 3. Learn all about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    </div>*@
 
-        <div class="row">
-            <div class="col-md-4">
-                <h2>Exercise</h2>
-                <p>
-                    Physical activity is a very important part of a healthy lifestyle. Our advanced tracking tools enable two-way auto syncing with all the popular activity trackers.
-                    <br /><br />
-                    <a href="/Exercises/Create" class="btn btn-primary btn-large">Create Exercise</a>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <h2>Nutrition</h2>
-                <p>
-                    A well crafted diet can help you accomplish your health goals. Start logging all your meals with our logging tools. We combine the power of AI to enable food and activity loggin faster and easier.
-                    <br /><br />
-                    <a href="/Nutritions/Create" class="btn btn-primary btn-large">Create Nutrition</a>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <h2>Metrics</h2>
-                <p>
-                    Nutrition Metrics can help you lose weight and have more energy.  The Metrics dashboard is a collection of health stats across your Nutrition and Exercise activity.
-                    <br /><br />
-                    <a href="/Metrics/Create" class="btn btn-primary btn-large">View Metrics</a>
-                </p>
-            </div>
-        </div>
 
-        @*<div class="text-center">
-            <p>Mercury Health 2019 is built using .Net Core 3. Learn all about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-        </div>*@
-
+}

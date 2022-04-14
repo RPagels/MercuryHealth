@@ -183,6 +183,94 @@ resource configStoreName_appconfig_featureflags_3 'Microsoft.AppConfiguration/co
 // END - Setup Config Store
 ////////////////////////////////////////
 
+////////////////////////////////////////
+// START - Key Vault
+////////////////////////////////////////
+
+// Create Azure KeyVault
+module keyvaultmod './main-8-keyvault.bicep' = {
+  name: keyvaultName
+  params: {
+    location: location
+    vaultName: keyvaultName
+   //  sqlserverName: sqlserverName
+   //  sqlDBName: sqlDBName
+   //  sqlAdminLoginName: sqlAdminLoginName
+   //  sqlAdminLoginPassword: sqlAdminLoginPassword
+   //  configStoreConnection: configStoreConnectionString
+    appServiceprincipalId: webappmod.outputs.out_appServiceprincipalId
+    //sqlserverfullyQualifiedDomainName: sqldbmod.outputs.sqlserverfullyQualifiedDomainName
+   //  secretName1: secretName1
+   //  secretName2: secretName2
+    funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
+    }
+   //  dependsOn:  [
+   //   webappmod
+   //   functionappmod
+   // ]
+ }
+ // param networkAcls object = {
+ //   ipRules: []
+ //   virtualNetworkRules: []
+ // }
+ // resource keyvaultmod 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
+ //   name: keyvaultName
+ //   location: location
+ //   properties: {
+ //     sku: {
+ //       family: 'A'
+ //       name: 'standard'
+ //     }
+ //     tenantId: subscription().tenantId
+ //     enableSoftDelete: false
+ //     enabledForDeployment: true
+ //     enabledForDiskEncryption: true
+ //     enabledForTemplateDeployment: true
+ //     softDeleteRetentionInDays: 90
+ //     enableRbacAuthorization: true
+ //     networkAcls: networkAcls
+ //     accessPolicies:[
+ //       {
+ //         objectId: webappmod.outputs.out_appServiceprincipalId
+ //         permissions: {
+ //           keys: [
+ //             'list'
+ //             'get'
+ //           ]
+ //           secrets: [
+ //             'list'
+ //             'get'
+ //           ]
+ //         }
+ //         tenantId: subscription().tenantId
+ //       }
+ //     ]
+ //   }
+ //   dependsOn:  [
+ //     webappmod
+ //   ]
+ // }
+ // resource secret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+ //   name: secretName1
+ //   parent: keyvaultmod
+ //   properties: {
+ //     contentType: 'text/plain'
+ //     value: configStoreConnectionString
+ //   }
+ // }
+ // resource secret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+ //   name: secretName2
+ //   parent: keyvaultmod
+ //   properties: {
+ //     contentType: 'text/plain'
+ //     value: 'Server=tcp:${sqldbmod.outputs.sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+ //   }
+ // }
+ 
+ ////////////////////////////////////////
+ // END - Key Vault
+ ////////////////////////////////////////
+ 
 // AppConfiguration - Avoid outputs for secrets - Look up secrets dynamically
 // https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/scenarios-secrets
 // Note: This is why ConfigStore isn't it's own module...MUST be in the main
@@ -323,94 +411,6 @@ module functionappmod './main-6-funcapp.bicep' = {
     secretName4: secretName4
   }
 }
-
-////////////////////////////////////////
-// START - Key Vault
-////////////////////////////////////////
-
-// Create Azure KeyVault
-module keyvaultmod './main-8-keyvault.bicep' = {
- name: keyvaultName
- params: {
-   location: location
-   vaultName: keyvaultName
-  //  sqlserverName: sqlserverName
-  //  sqlDBName: sqlDBName
-  //  sqlAdminLoginName: sqlAdminLoginName
-  //  sqlAdminLoginPassword: sqlAdminLoginPassword
-  //  configStoreConnection: configStoreConnectionString
-   appServiceprincipalId: webappmod.outputs.out_appServiceprincipalId
-   //sqlserverfullyQualifiedDomainName: sqldbmod.outputs.sqlserverfullyQualifiedDomainName
-  //  secretName1: secretName1
-  //  secretName2: secretName2
-   funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
-   }
-  //  dependsOn:  [
-  //   webappmod
-  //   functionappmod
-  // ]
-}
-// param networkAcls object = {
-//   ipRules: []
-//   virtualNetworkRules: []
-// }
-// resource keyvaultmod 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
-//   name: keyvaultName
-//   location: location
-//   properties: {
-//     sku: {
-//       family: 'A'
-//       name: 'standard'
-//     }
-//     tenantId: subscription().tenantId
-//     enableSoftDelete: false
-//     enabledForDeployment: true
-//     enabledForDiskEncryption: true
-//     enabledForTemplateDeployment: true
-//     softDeleteRetentionInDays: 90
-//     enableRbacAuthorization: true
-//     networkAcls: networkAcls
-//     accessPolicies:[
-//       {
-//         objectId: webappmod.outputs.out_appServiceprincipalId
-//         permissions: {
-//           keys: [
-//             'list'
-//             'get'
-//           ]
-//           secrets: [
-//             'list'
-//             'get'
-//           ]
-//         }
-//         tenantId: subscription().tenantId
-//       }
-//     ]
-//   }
-//   dependsOn:  [
-//     webappmod
-//   ]
-// }
-// resource secret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-//   name: secretName1
-//   parent: keyvaultmod
-//   properties: {
-//     contentType: 'text/plain'
-//     value: configStoreConnectionString
-//   }
-// }
-// resource secret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-//   name: secretName2
-//   parent: keyvaultmod
-//   properties: {
-//     contentType: 'text/plain'
-//     value: 'Server=tcp:${sqldbmod.outputs.sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
-//   }
-// }
-
-////////////////////////////////////////
-// END - Key Vault
-////////////////////////////////////////
 
 // Create Azure Load Tests
 module loadtestsmod './main-9-loadtests.bicep' = {
