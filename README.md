@@ -11,6 +11,7 @@ The amazing Mercury Health development team has embraced a DevOps approach and i
 
 # Build & Deploy Status
 [![Deploy-Main](https://github.com/RPagels/MercuryHealth/actions/workflows/deploy-main.yml/badge.svg)](https://github.com/RPagels/MercuryHealth/actions/workflows/deploy-main.yml)
+
 [![Build_And_Deploy_To_Azure](https://github.com/RPagels/MercuryHealth/actions/workflows/Build_And_Deploy_To_Azure.yml/badge.svg)](https://github.com/RPagels/MercuryHealth/actions/workflows/Build_And_Deploy_To_Azure.yml)
 
 # Mercury Health Resources
