@@ -7,12 +7,12 @@ https://status.dev.azure.com/
 The amazing Mercury Health development team has embraced a DevOps approach and is using continuous integration for builds and unit tests. If everything passes they use release management for continuous deployment that deploys to various environments and runs UI automation and load tests from coast to coast.
 
 # Security Scan Status
-[![CodeQL](https://github.com/RPagels/MercuryHealth/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/RPagels/MercuryHealth/actions/workflows/codeql-analysis.yml)
+[![CodeQL](https://github.com/RPagels/MercuryHealth/actions/workflows/codeql-analysis.yml/badge.svg?branch=master)](https://github.com/RPagels/MercuryHealth/actions/workflows/codeql-analysis.yml)
 
 # Build & Deploy Status
-[![Deploy-Main](https://github.com/RPagels/MercuryHealth/actions/workflows/deploy-main.yml/badge.svg)](https://github.com/RPagels/MercuryHealth/actions/workflows/deploy-main.yml)
+[![Deploy-Main](https://github.com/RPagels/MercuryHealth/actions/workflows/deploy-main.yml/badge.svg?branch=master)](https://github.com/RPagels/MercuryHealth/actions/workflows/deploy-main.yml)
 
-[![Build_And_Deploy_To_Azure](https://github.com/RPagels/MercuryHealth/actions/workflows/Build_And_Deploy_To_Azure.yml/badge.svg)](https://github.com/RPagels/MercuryHealth/actions/workflows/Build_And_Deploy_To_Azure.yml)
+[![Build_And_Deploy_To_Azure](https://github.com/RPagels/MercuryHealth/actions/workflows/Build_And_Deploy_To_Azure.yml/badge.svg?branch=master)](https://github.com/RPagels/MercuryHealth/actions/workflows/Build_And_Deploy_To_Azure.yml)
 
 # Mercury Health Resources
 ### Team Resources
