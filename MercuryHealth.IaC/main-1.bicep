@@ -72,7 +72,7 @@ param ConfigkeyValueNames array = [
 
 // Specifies the values of the key-value resources. #000=Black, #FFF=White
 param ConfigkeyKeyValues array = [
-  '14'
+  '13'
   'black'
   'white'
   '1'

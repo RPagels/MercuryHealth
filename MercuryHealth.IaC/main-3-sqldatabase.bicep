@@ -13,7 +13,7 @@ param defaultTags object
 //var sqlAdminLoginName2 = 'AzureAdmin'
 //var sqlAdminLoginPassword2 = 'Password.1.!!${uniqueString(resourceGroup().id)}' //guid(resourceGroup().id)
 
-resource sqlServer 'Microsoft.Sql/servers@2021-08-01-preview' = {
+resource sqlServer 'Microsoft.Sql/servers@2021-11-01-preview' = {
   name: sqlserverName
   location: location
   tags: defaultTags
@@ -33,7 +33,7 @@ resource sqlServer 'Microsoft.Sql/servers@2021-08-01-preview' = {
 //   }
 // }
 
-resource sqlDB 'Microsoft.Sql/servers/databases@2021-08-01-preview' = {
+resource sqlDB 'Microsoft.Sql/servers/databases@2021-11-01-preview' = {
   name: '${sqlServer.name}/${sqlDBName}'
   location: location
   tags: defaultTags
@@ -43,9 +43,13 @@ resource sqlDB 'Microsoft.Sql/servers/databases@2021-08-01-preview' = {
     family: 'Gen5'
     capacity: 1
   }
+  properties: {
+    requestedBackupStorageRedundancy: 'Local'
+    zoneRedundant: false
+  }
 }
 
-resource sqlserverName_AllowAllWindowsAzureIps 'Microsoft.Sql/servers/firewallRules@2021-02-01-preview' = {
+resource sqlserverName_AllowAllWindowsAzureIps 'Microsoft.Sql/servers/firewallRules@2021-11-01-preview' = {
   name: '${sqlServer.name}/AllowAllWindowsAzureIps'
   properties: {
     endIpAddress: '0.0.0.0'

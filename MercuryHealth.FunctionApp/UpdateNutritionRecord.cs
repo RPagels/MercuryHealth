@@ -51,7 +51,7 @@ public class UpdateNutritionRecord
 
             // Update a fields
             nutrition.Tags = "API PUT Update";
-            nutrition.ProteinInGrams = Convert.ToDecimal("0.123456");
+            nutrition.ProteinInGrams = Convert.ToDecimal("0.1234567890");
             nutrition.Calories = 110;
             nutrition.MealTime = DateTime.Now;
 
