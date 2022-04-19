@@ -42,7 +42,8 @@ public class MyAppVersion
         // Add #of of seconds from Midnight
         myModifedDate = myModifedDate.AddSeconds(numOfSecs);
 
-        string ReturnDateTimeFromVersion = myModifedDate.ToShortDateString() + " at " + myModifedDate.ToShortTimeString();
+        //string ReturnDateTimeFromVersion = myModifedDate.ToShortDateString() + " at " + myModifedDate.ToShortTimeString();
+        string ReturnDateTimeFromVersion = myModifedDate.ToLongDateString() + " at " + myModifedDate.ToShortTimeString();
 
         return ReturnDateTimeFromVersion;
 

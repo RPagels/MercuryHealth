@@ -126,6 +126,10 @@ resource config 'Microsoft.AppConfiguration/configurationStores@2021-10-01-previ
   name: configStoreName
   location: location
   tags: defaultTags
+  properties: {
+    enablePurgeProtection: false
+    softDeleteRetentionInDays: 0
+  }
   sku: {
     name: 'Standard'
   }

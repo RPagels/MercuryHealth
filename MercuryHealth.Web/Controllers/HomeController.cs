@@ -74,8 +74,8 @@ public class HomeController : Controller
         }
     }
 
-    //[FeatureGate("PrivacyBeta")]
-    [FeatureGate(MyFeatureFlags.PrivacyBeta)]
+    // Can completetly disable the class if flag turned off
+    //[FeatureGate(MyFeatureFlags.PrivacyBeta)]
     public async Task<IActionResult> PrivacyBeta()
     {
         if (await _featureManager.IsEnabledAsync("PrivacyBeta"))
@@ -91,9 +91,16 @@ public class HomeController : Controller
     // Check for Feature Flag
     // If Feature Flag is disabled, the entire method is disabled.
     [FeatureGate("MetricsDashboard")]
-    public IActionResult Metrics()
+    public async Task<IActionResult> Metrics()
     {
-        return View();
+        if (await _featureManager.IsEnabledAsync("MetricsDashboard"))
+        {
+            return View(new PrivacyModel { Name = "Metrics Beta" });
+        }
+        else
+        {
+            return View(new PrivacyModel { Name = "Metrics" });
+        }
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -1,5 +1,3 @@
-//using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MercuryHealth.Web;
 using MercuryHealth.Web.Data;
 using MercuryHealth.Web.Controllers;
 using MercuryHealth.Web.Models;
@@ -23,7 +21,7 @@ public class HomeControlerTests
     private readonly Mock<IConfiguration> _config;
     private readonly MockRepository _mockrepository = new MockRepository(MockBehavior.Strict);
     private readonly HomeController _homecontroller;
-    private readonly IOptionsSnapshot<Settings> _settings;
+    private readonly Mock<IOptionsSnapshot<PageSettings>> _pageSettings;
 
     public HomeControlerTests()
     {
@@ -31,30 +29,19 @@ public class HomeControlerTests
         _context = new MercuryHealthWebContext(builder.Options);
         _featureManager = _mockrepository.Create<IFeatureManagerSnapshot>();
         _config = _mockrepository.Create<IConfiguration>();
-        //_settings = Settings;
-        _homecontroller = new HomeController(_context, _settings, _config.Object, _featureManager.Object);
-        //_homecontroller = new HomeController(_context, _config.Object, _featureManager.Object);
+        
+        _pageSettings = _mockrepository.Create<IOptionsSnapshot<PageSettings>>();
+
+        _homecontroller = new HomeController(_context, _pageSettings.Object, _config.Object, _featureManager.Object);
     }
 
-    //[TestMethod]
-    //[TestCategory("UnitTests")]
     [Test]
     [Category("UnitTests")]
-    public void DummyTest1()
+    public void DummyTest()
     {
         Assert.AreEqual(".Net Rocks!", ".Net Rocks!");
     }
-    //[TestMethod]
-    //[TestCategory("UnitTests")]
-    [Test]
-    [Category("UnitTests")]
-    public void DummyTest2()
-    {
-        Assert.AreEqual("X", "X");
-    }
 
-    //[TestMethod]
-    //[TestCategory("UnitTests")]
     [Test]
     [Category("UnitTests")]
     public async Task Privacy_should_return_model_when_true()
@@ -72,8 +59,6 @@ public class HomeControlerTests
         _mockrepository.VerifyAll();
     }
 
-    //[TestMethod]
-    //[TestCategory("UnitTests")]
     [Test]
     [Category("UnitTests")]
     public async Task Privacy_should_not_return_model_when_false()
@@ -91,18 +76,37 @@ public class HomeControlerTests
         _mockrepository.VerifyAll();
     }
 
-    //[TestMethod]
-    //[TestCategory("Unit Tests")]
     [Test]
     [Category("UnitTests")]
-    public void HomeMetrics()
+    public async Task Metrics_should_return_model_when_false()
     {
-        //ViewResult result = _homecontroller.Metrics() as ViewResult;
-        //var viewName = result.ViewName;
+        _featureManager.Setup(_fm => _fm.IsEnabledAsync("MetricsDashboard")).Returns(Task.FromResult(false));
 
-        //// checking that homecontroller.index goes to the page
-        //Assert.AreEqual("", viewName);
-        //_mockrepository.VerifyAll();
+        ViewResult result = await _homecontroller.Metrics() as ViewResult;
+        var viewName = result.ViewName;
+        var model = result.Model as MetricsModel;
+
+        // checking that homecontroller.index goes to the page
+        Assert.IsNotNull(model);
+        Assert.AreEqual("Metrics Beta", model.Name);
+
+        _mockrepository.VerifyAll();
     }
 
+    [Test]
+    [Category("UnitTests")]
+    public async Task Metrics_should_not_return_model_when_false()
+    {
+        _featureManager.Setup(_fm => _fm.IsEnabledAsync("MetricsDashboard")).Returns(Task.FromResult(false));
+
+        ViewResult result = await _homecontroller.Metrics() as ViewResult;
+        var viewName = result.ViewName;
+        var model = result.Model as MetricsModel;
+
+        // checking that homecontroller.index goes to the page
+        Assert.IsNotNull(model);
+        Assert.AreEqual("Metrics", model.Name);
+
+        _mockrepository.VerifyAll();
+    }
 }
