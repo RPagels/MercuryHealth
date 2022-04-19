@@ -128,7 +128,7 @@ resource config 'Microsoft.AppConfiguration/configurationStores@2021-10-01-previ
   tags: defaultTags
   properties: {
     enablePurgeProtection: false
-    softDeleteRetentionInDays: 0
+    softDeleteRetentionInDays: 1
   }
   sku: {
     name: 'Standard'
