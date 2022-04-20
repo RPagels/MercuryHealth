@@ -325,7 +325,8 @@ resource apiManagementProducts 'Microsoft.ApiManagement/service/products@2021-08
 }
 
 resource appInsightsAPIManagement 'Microsoft.ApiManagement/service/loggers@2021-08-01' = {
-  name: '${apiServiceName}/${appInsightsName}' //MercuryHealth-applicationinsights'
+  parent: apiManagement
+  name: 'MercuryHealth-applicationinsights' //${apiServiceName}/${appInsightsName}' //MercuryHealth-applicationinsights'
   properties: {
     loggerType: 'applicationInsights'
     description: 'Mercury Health Application Insights instance.'

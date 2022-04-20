@@ -84,8 +84,8 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
     'APPLICATIONINSIGHTS_CONNECTION_STRING': appInsightsConnectionString
     'WebAppUrl': 'https://${appService.name}.azurewebsites.net/'
     'ASPNETCORE_ENVIRONMENT': 'Development'
-    'DebugOnly-sqlAdminLoginPassword=': sqlAdminLoginPassword
-    'DebugOnly-sqlAdminLoginName=': sqlAdminLoginName
+    //'DebugOnly-sqlAdminLoginPassword=': sqlAdminLoginPassword
+    //'DebugOnly-sqlAdminLoginName=': sqlAdminLoginName
   }
 }
 
