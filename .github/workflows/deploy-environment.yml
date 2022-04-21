@@ -160,43 +160,43 @@ jobs:
   ###################################################################
   # Deployment Stage - Infrastructure
   ###################################################################
-  build-docker-image:
-    runs-on: ubuntu-latest
-    name: Build Docker Image
-    env:
-      Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
-      Deployed_Environment: ${{ inputs.environment-suffix }}
+  # build-docker-image:
+  #   runs-on: ubuntu-latest
+  #   name: Build Docker Image
+  #   env:
+  #     Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
+  #     Deployed_Environment: ${{ inputs.environment-suffix }}
 
-    permissions:
-      contents: read
-      packages: write
+  #   permissions:
+  #     contents: read
+  #     packages: write
 
-    # Identify any jobs that must complete successfully before this job will run.
-    steps:
-    - name: Docker Image
-      run: |
-          echo 'Step 1'
+  #   # Identify any jobs that must complete successfully before this job will run.
+  #   steps:
+  #   - name: Docker Image
+  #     run: |
+  #         echo 'Step 1'
 
   ###################################################################
   # Deployment Stage - Infrastructure
   ###################################################################
-  push-docker-image:
-    runs-on: ubuntu-latest
-    name: Push Docker Image
-    needs: [build-docker-image]
-    env:
-      Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
-      Deployed_Environment: ${{ inputs.environment-suffix }}
+  # push-docker-image:
+  #   runs-on: ubuntu-latest
+  #   name: Push Docker Image
+  #   needs: [build-docker-image]
+  #   env:
+  #     Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
+  #     Deployed_Environment: ${{ inputs.environment-suffix }}
 
-    permissions:
-      contents: read
-      packages: write
+  #   permissions:
+  #     contents: read
+  #     packages: write
 
-    # Identify any jobs that must complete successfully before this job will run.
-    steps:
-    - name: Push Docker Image
-      run: |
-          echo 'Step 1'
+  #   # Identify any jobs that must complete successfully before this job will run.
+  #   steps:
+  #   - name: Push Docker Image
+  #     run: |
+  #         echo 'Step 1'
 
   ###################################################################
   # Deployment Stage - Application / Database 

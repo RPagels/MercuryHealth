@@ -318,8 +318,9 @@ resource apiManagementProducts 'Microsoft.ApiManagement/service/products@2021-08
   name: 'Development'
   properties: {
     approvalRequired: false
-    state: 'published'
-    //description: 'Mercury Health - Developers'
+    state: 'notPublished'
+    
+    description: 'Product used for Mercury Health Development Teams'
     displayName: 'Mercury Health - Developers' //apiSubscriptionName
   }
 }
