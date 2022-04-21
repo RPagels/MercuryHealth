@@ -1,6 +1,6 @@
 # DevOps (Demo Script)
 
-![Alt text](media/devOps-467x160.png)
+![Alt text](devOps-467x160.png)
 
 ## Demo Overview
 
