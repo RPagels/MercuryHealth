@@ -12,7 +12,7 @@ DevOps is the union of People, Process and our Products to enable continuous del
     an agile fashion for a software project.  This includes things like, bugs, user stories,impediments etc.
 
 2.  Source Control. ADO has 2 source control systems.  A centralized version control
-    system and a distributed version control system.  The distributed version control system is git.  Not some weird microsoft only version of git, but just the open source version of git, implemented in VSTS.
+    system and a distributed version control system.  The distributed version control system is git.  Not some weird microsoft only version of git, but just the open source version of git, implemented in ADO.
 
 3.  Build (Continuous Integration).  A automated build system that can be easily customized 
     to do anything.  This build system can build any language on any platform
