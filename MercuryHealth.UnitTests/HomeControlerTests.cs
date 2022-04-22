@@ -31,6 +31,10 @@ public class HomeControlerTests
         _config = _mockrepository.Create<IConfiguration>();
         
         _pageSettings = _mockrepository.Create<IOptionsSnapshot<PageSettings>>();
+        var myPageSettings = new PageSettings();
+        myPageSettings.FontSize = 12;
+
+        _pageSettings.Setup(x => myPageSettings);
 
         _homecontroller = new HomeController(_context, _pageSettings.Object, _config.Object, _featureManager.Object);
     }
