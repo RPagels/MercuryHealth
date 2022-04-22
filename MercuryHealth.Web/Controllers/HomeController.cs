@@ -95,11 +95,11 @@ public class HomeController : Controller
     {
         if (await _featureManager.IsEnabledAsync("MetricsDashboard"))
         {
-            return View(new PrivacyModel { Name = "Metrics Beta" });
+            return View(new MetricsModel { Name = "Metrics Beta" });
         }
         else
         {
-            return View(new PrivacyModel { Name = "Metrics" });
+            return View(new MetricsModel { Name = "Metrics" });
         }
     }
 

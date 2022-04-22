@@ -34,7 +34,8 @@ public class HomeControlerTests
         var myPageSettings = new PageSettings();
         myPageSettings.FontSize = 12;
 
-        _pageSettings.Setup(x => myPageSettings);
+        //_pageSettings.Setup(x => myPageSettings);
+        _pageSettings.Setup(x => x.Value).Returns(myPageSettings);
 
         _homecontroller = new HomeController(_context, _pageSettings.Object, _config.Object, _featureManager.Object);
     }
@@ -91,8 +92,9 @@ public class HomeControlerTests
         var model = result.Model as MetricsModel;
 
         // checking that homecontroller.index goes to the page
-        Assert.IsNotNull(model);
-        Assert.AreEqual("Metrics Beta", model.Name);
+        //Assert.IsNotNull(model);
+        Assert.IsInstanceOf<MetricsModel>(result.Model);
+        Assert.AreEqual("Metrics", model.Name);
 
         _mockrepository.VerifyAll();
     }
@@ -108,7 +110,8 @@ public class HomeControlerTests
         var model = result.Model as MetricsModel;
 
         // checking that homecontroller.index goes to the page
-        Assert.IsNotNull(model);
+        //Assert.IsNotNull(model);
+        Assert.IsInstanceOf<MetricsModel>(result.Model);
         Assert.AreEqual("Metrics", model.Name);
 
         _mockrepository.VerifyAll();
