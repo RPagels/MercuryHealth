@@ -108,7 +108,7 @@ resource standardWebTestPageHome  'Microsoft.Insights/webtests@2020-10-05-previe
   name: 'Page Home'
   location: location
   tags: {
-    'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
+    'hidden-link:${subscription().id}/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
    }
   kind: 'ping'
   properties: {
@@ -160,7 +160,7 @@ resource standardWebTestPageNutritions  'Microsoft.Insights/webtests@2020-10-05-
   name: 'Page Nutritions'
   location: location
   tags: {
-    'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
+    'hidden-link:${subscription().id}/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
   }
   kind: 'ping'
   properties: {
@@ -212,7 +212,7 @@ resource standardWebTestPageExercises  'Microsoft.Insights/webtests@2020-10-05-p
   name: 'Page Exercises'
   location: location
   tags: {
-     'hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
+     'hidden-link:${subscription().id}/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${appInsightsName}': 'Resource'
   }
   kind: 'ping'
   properties: {
