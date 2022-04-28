@@ -151,7 +151,29 @@ jobs:
          echo 'output_keyvaultName: ${{ steps.Infra.outputs.out_keyvaultName }}'
          echo 'output_keyvaultSecretName: ${{ steps.Infra.outputs.out_keyvaultSecretName }}'
          echo 'output_keyvaultSecretValue: ${{ steps.Infra.outputs.out_keyvaultSecretValue }}'
-         
+
+##########################################################
+# DB Deploy during IaC - TESTING ONLY
+##########################################################
+    - name: Download Build Artifact-Database
+      uses: actions/download-artifact@v2
+      continue-on-error: false
+      with:
+        name: MercuryHealth.Database
+        path: ${{ github.workspace }}/MercuryHealth.Database
+
+    # Deploy Database *.dacpac file
+    - name: 'Deploy the database to Azure'
+      uses: Azure/sql-action@v1.2
+      with:
+        server-name: ${{ steps.Infra.outputs.output_sqlserverFQName }}
+        #connection-string: ${{ secrets.sql-connection-string }}
+        connection-string: ${{ steps.Infra.outputs.output_keyvaultSecretValue }}
+        dacpac-package: './MercuryHealth.Database/MercuryHealth.Database.dacpac'
+##########################################################
+# DB Deploy during IaC - TESTING ONLY
+##########################################################
+
     - name: 'Azure logout'
       run: |
         az logout
@@ -244,12 +266,12 @@ jobs:
         inlineScript: |
           az group lock delete --name DontDeleteMe --resource-group ${{ env.Azure_Resource_GroupName }}
 
-    - name: Download Build Artifact-Database
-      uses: actions/download-artifact@v2
-      continue-on-error: false
-      with:
-        name: MercuryHealth.Database
-        path: ${{ github.workspace }}/MercuryHealth.Database
+    #- name: Download Build Artifact-Database
+    #  uses: actions/download-artifact@v2
+    #  continue-on-error: false
+    #  with:
+    #    name: MercuryHealth.Database
+    #    path: ${{ github.workspace }}/MercuryHealth.Database
 
 #    - name: 'Get the Connection String for Database'
 #      id: SqlConnectionString
@@ -264,13 +286,13 @@ jobs:
 #          echo "::set-output name=SQLConnection::$result"
 
     # Deploy Database *.dacpac file
-    - name: 'Deploy the database to Azure'
-      uses: Azure/sql-action@v1.2
-      with:
-        server-name: ${{ needs.deploy_infrastructure.outputs.output_sqlserverFQName }}
-        connection-string: ${{ secrets.sql-connection-string }}
-        #connection-string: ${{ needs.deploy_infrastructure.outputs.output_keyvaultSecretValue }}
-        dacpac-package: './MercuryHealth.Database/MercuryHealth.Database.dacpac'
+    #- name: 'Deploy the database to Azure'
+    #  uses: Azure/sql-action@v1.2
+    #  with:
+    #    server-name: ${{ needs.deploy_infrastructure.outputs.output_sqlserverFQName }}
+    #    connection-string: ${{ secrets.sql-connection-string }}
+    #    #connection-string: ${{ needs.deploy_infrastructure.outputs.output_keyvaultSecretValue }}
+    #    dacpac-package: './MercuryHealth.Database/MercuryHealth.Database.dacpac'
 
     - name: Download Build Artifacts-Website Application
       uses: actions/download-artifact@v2
