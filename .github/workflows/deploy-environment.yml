@@ -114,6 +114,14 @@ jobs:
 #      run: |
 #        bicep build ./MercuryHealth.IaC/main-1.bicep --outdir ./MercuryHealth.IaC
 
+    - name: Purge soft-deleted instance of APIM, if exists
+      if: contains(github.event_name, 'push')
+      uses: Azure/CLI@v1
+      continue-on-error: true
+      with:
+        inlineScript: |
+          az rest --method delete --header "Accept=application/json" -u 'https://management.azure.com/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/providers/Microsoft.ApiManagement/locations/${{ inputs.resource-group-location }}/deletedservices/apim-randy-purgetesting?api-version=2021-08-01'
+
 #// Check if exists 1st. If not, Purge a soft-deleted instance of APIM
 #az rest --method delete --header "Accept=application/json" -u 'https://management.azure.com/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/providers/Microsoft.ApiManagement/locations/eastus2/deletedservices/apim-4av6wwkty4xb6?api-version=2021-08-01'
 
