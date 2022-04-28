@@ -71,8 +71,6 @@ jobs:
           dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './uitests'
           dotnet build MercuryHealth.FunctionApp/MercuryHealth.FunctionApp.csproj --configuration ${{ env.buildConfiguration }} --no-restore
           dotnet publish MercuryHealth.FunctionApp/MercuryHealth.FunctionApp.csproj --configuration ${{ env.buildConfiguration }} -o './functionapp'
-#          dotnet build MercuryHealth.API/MercuryHealth.API.csproj --configuration ${{ env.buildConfiguration }} --no-restore
-#          dotnet publish MercuryHealth.API/MercuryHealth.API.csproj --configuration ${{ env.buildConfiguration }} -o './api'
 
       - name: dotnet retore database
         run: dotnet restore MercuryHealth.Database/MercuryHealth.Database.csproj
@@ -108,13 +106,6 @@ jobs:
         with:
           name: MercuryHealth.Database
           path: ${{ github.workspace }}/database
-
-#      - name: Upload Build Artifacts-API
-#        if: ${{ github.event_name != 'pull_request' }}
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: MercuryHealth.API
-#          path: ${{ github.workspace }}/api
 
       - name: Upload Build Artifacts-UI Tests
         if: ${{ github.event_name != 'pull_request' }}
@@ -165,7 +156,7 @@ jobs:
       sql-db-login: ${{ secrets.SQL_DB_LOGIN }}
       sql-db-password: ${{ secrets.SQL_DB_PASSWORD }}
       #sql-db-server-name: ${{ secrets.SQL_DB_Server_Name }}
-      sql-connection-string: ${{ secrets.SQL_DB_Connection_String_Dev }}
+      #sql-connection-string: ${{ secrets.SQL_DB_Connection_String_Dev }}
 
   qa:
       if: contains(github.event_name, 'push')
@@ -181,4 +172,4 @@ jobs:
         sql-db-login: ${{ secrets.SQL_DB_LOGIN }}
         sql-db-password: ${{ secrets.SQL_DB_PASSWORD }}
         #sql-db-server-name: ${{ secrets.SQL_DB_Server_Name }}
-        sql-connection-string: ${{ secrets.SQL_DB_Connection_String_QA }}
+        #sql-connection-string: ${{ secrets.SQL_DB_Connection_String_QA }}
