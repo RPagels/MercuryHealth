@@ -64,6 +64,7 @@ jobs:
     env:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
       Deployed_Environment: ${{ inputs.environment-suffix }}
+      APIM_PurgeName: 'apim-*'
    
     permissions:
       contents: read
@@ -114,7 +115,7 @@ jobs:
       with:
         inlineScript: |
           az rest --method get --header "Accept=application/json" -u 'https://management.azure.com/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/providers/Microsoft.ApiManagement/deletedservices?api-version=2021-08-01'
-          az rest --method delete --header "Accept=application/json" -u 'https://management.azure.com/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/providers/Microsoft.ApiManagement/locations/${{ inputs.resource-group-location }}/deletedservices/${{ steps.Infra.outputs.output_apiServiceName }}?api-version=2021-08-01'
+          az rest --method delete --header "Accept=application/json" -u 'https://management.azure.com/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/providers/Microsoft.ApiManagement/locations/${{ inputs.resource-group-location }}/deletedservices/${{ env.APIM_PurgeName }}?api-version=2021-08-01'
 
       ###########################################
       # Deploy ARM Template using Bicep DSL
