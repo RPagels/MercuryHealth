@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "5804867030244334243"
+      "templateHash": "9801773198033341487"
     }
   },
   "parameters": {
@@ -255,7 +255,8 @@
       "name": "[format('{0}/{1}', variables('apiServiceName'), 'Development')]",
       "properties": {
         "approvalRequired": false,
-        "state": "published",
+        "state": "notPublished",
+        "description": "Product used for Mercury Health Development Teams",
         "displayName": "Mercury Health - Developers"
       },
       "dependsOn": [
@@ -484,7 +485,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "12925268967502822292"
+              "templateHash": "17249787654168027414"
             }
           },
           "parameters": {
@@ -612,7 +613,7 @@
               "name": "Page Home",
               "location": "[parameters('location')]",
               "tags": {
-                "[format('hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/{0}/providers/microsoft.insights/components/{1}', parameters('resourceGroupName'), parameters('appInsightsName'))]": "Resource"
+                "[format('hidden-link:{0}/resourceGroups/{1}/providers/microsoft.insights/components/{2}', subscription().id, parameters('resourceGroupName'), parameters('appInsightsName'))]": "Resource"
               },
               "kind": "ping",
               "properties": {
@@ -668,7 +669,7 @@
               "name": "Page Nutritions",
               "location": "[parameters('location')]",
               "tags": {
-                "[format('hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/{0}/providers/microsoft.insights/components/{1}', parameters('resourceGroupName'), parameters('appInsightsName'))]": "Resource"
+                "[format('hidden-link:{0}/resourceGroups/{1}/providers/microsoft.insights/components/{2}', subscription().id, parameters('resourceGroupName'), parameters('appInsightsName'))]": "Resource"
               },
               "kind": "ping",
               "properties": {
@@ -724,7 +725,7 @@
               "name": "Page Exercises",
               "location": "[parameters('location')]",
               "tags": {
-                "[format('hidden-link:/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/resourceGroups/{0}/providers/microsoft.insights/components/{1}', parameters('resourceGroupName'), parameters('appInsightsName'))]": "Resource"
+                "[format('hidden-link:{0}/resourceGroups/{1}/providers/microsoft.insights/components/{2}', subscription().id, parameters('resourceGroupName'), parameters('appInsightsName'))]": "Resource"
               },
               "kind": "ping",
               "properties": {
@@ -789,7 +790,7 @@
               "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('secretName2'))]",
               "properties": {
                 "contentType": "text/plain",
-                "value": "[format('Server=tcp:{0},1433;Initial Catalog={1};Persist Security Info=False;User Id={2}@{3};Password={4};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;', parameters('sqlserverfullyQualifiedDomainName'), parameters('sqlDBName'), parameters('sqlAdminLoginName'), parameters('sqlserverName'), parameters('sqlAdminLoginPassword'))]"
+                "value": "[variables('secretConnectionString')]"
               }
             }
           ],
@@ -806,11 +807,7 @@
               "type": "string",
               "value": "[reference(resourceId('Microsoft.Web/sites', parameters('webSiteName')), '2021-01-15', 'full').identity.principalId]"
             },
-            "out_secretName": {
-              "type": "string",
-              "value": "[parameters('secretName2')]"
-            },
-            "out_secretValue": {
+            "out_secretConnectionString": {
               "type": "string",
               "value": "[variables('secretConnectionString')]"
             }
@@ -1643,13 +1640,9 @@
       "type": "string",
       "value": "[variables('keyvaultName')]"
     },
-    "out_keyvaultSecretName": {
+    "out_secretConnectionString": {
       "type": "string",
-      "value": "[parameters('secretName2')]"
-    },
-    "out_keyvaultSecretValue": {
-      "type": "string",
-      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'webappdeploy'), '2020-06-01').outputs.out_secretValue.value]"
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'webappdeploy'), '2020-06-01').outputs.out_secretConnectionString.value]"
     },
     "out_appInsightsApplicationId": {
       "type": "string",

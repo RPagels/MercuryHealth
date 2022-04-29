@@ -208,52 +208,69 @@ module keyvaultmod './main-8-keyvault.bicep' = {
    //  secretName2: secretName2
     funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
     }
-   //  dependsOn:  [
-   //   webappmod
-   //   functionappmod
-   // ]
+    dependsOn:  [
+     webappmod
+     functionappmod
+   ]
  }
- // param networkAcls object = {
- //   ipRules: []
- //   virtualNetworkRules: []
- // }
- // resource keyvaultmod 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
- //   name: keyvaultName
- //   location: location
- //   properties: {
- //     sku: {
- //       family: 'A'
- //       name: 'standard'
- //     }
- //     tenantId: subscription().tenantId
- //     enableSoftDelete: false
- //     enabledForDeployment: true
- //     enabledForDiskEncryption: true
- //     enabledForTemplateDeployment: true
- //     softDeleteRetentionInDays: 90
- //     enableRbacAuthorization: true
- //     networkAcls: networkAcls
- //     accessPolicies:[
- //       {
- //         objectId: webappmod.outputs.out_appServiceprincipalId
- //         permissions: {
- //           keys: [
- //             'list'
- //             'get'
- //           ]
- //           secrets: [
- //             'list'
- //             'get'
- //           ]
- //         }
- //         tenantId: subscription().tenantId
- //       }
- //     ]
- //   }
- //   dependsOn:  [
- //     webappmod
- //   ]
- // }
+
+//  param networkAcls object = {
+//    ipRules: []
+//    virtualNetworkRules: []
+//  }
+//  resource keyvault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
+//    name: keyvaultName
+//    location: location
+//    properties: {
+//      sku: {
+//        family: 'A'
+//        name: 'standard'
+//      }
+//      tenantId: subscription().tenantId
+//      enableSoftDelete: false
+//      enabledForDeployment: true
+//      enabledForDiskEncryption: true
+//      enabledForTemplateDeployment: true
+//      softDeleteRetentionInDays: 90
+//      enableRbacAuthorization: true
+//      networkAcls: networkAcls
+//      accessPolicies:[
+//        {
+//         tenantId: subscription().tenantId
+//         objectId: webappmod.outputs.out_appServiceprincipalId
+//          permissions: {
+//            keys: [
+//              'list'
+//              'get'
+//            ]
+//            secrets: [
+//              'list'
+//              'get'
+//            ]
+//           }
+//        }
+//        {
+//           tenantId: subscription().tenantId
+//           objectId: functionappmod.outputs.out_funcAppServiceprincipalId
+//            permissions: {
+//              keys: [
+//                'list'
+//                'get'
+//              ]
+//              secrets: [
+//                'list'
+//                'get'
+//              ]
+//            }
+//         }
+//      ]
+//    }
+//    dependsOn:  [
+//      webappmod
+//      functionappmod
+//    ]
+//  }
+
  // resource secret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
  //   name: secretName1
  //   parent: keyvaultmod
@@ -373,6 +390,9 @@ module webappmod './main-2-webapp.bicep' = {
     sqlserverfullyQualifiedDomainName: sqldbmod.outputs.sqlserverfullyQualifiedDomainName
     sqlserverName: sqlserverName
   }
+  // dependsOn:  [
+  //   keyvaultmod
+  // ]
 }
 
 // Create SQL database
@@ -416,6 +436,9 @@ module functionappmod './main-6-funcapp.bicep' = {
     secretName3: secretName3
     secretName4: secretName4
   }
+  // dependsOn:  [
+  //   keyvaultmod
+  // ]
 }
 
 // Create Azure Load Tests
