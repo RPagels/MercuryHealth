@@ -5,6 +5,7 @@ using Microsoft.FeatureManagement.FeatureFilters;
 using MercuryHealth.Web;
 using MercuryHealth.Web.Controllers;
 using Azure.Identity;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +34,7 @@ builder.Host.ConfigureAppConfiguration(builder =>
 });
 
 // Add services to the container.
+builder.Services.AddFeatureManagement(); 
 builder.Services.Configure<PageSettings>(builder.Configuration.GetSection("App:Settings"));
 builder.Services.AddRazorPages();
 builder.Services.AddAzureAppConfiguration();
@@ -42,10 +44,10 @@ builder.Services.AddAzureAppConfiguration();
 //builder.Services.Configure<NuGet.Configuration.Settings>(builder.Configuration.GetSection("App:Settings"));
 
 // Add Azure App Configuration/Feature management services to the container.
-builder.Services.AddFeatureManagement()
-                .UseDisabledFeaturesHandler(new CustomDisabledFeatureHandler())
-                .AddFeatureFilter<PercentageFilter>()
-                .AddFeatureFilter<TimeWindowFilter>();
+//builder.Services.AddFeatureManagement();
+                //.UseDisabledFeaturesHandler(new CustomDisabledFeatureHandler())
+                //.AddFeatureFilter<PercentageFilter>()
+                //.AddFeatureFilter<TimeWindowFilter>();
 
 // Add DBContext services to the container
 builder.Services.AddDbContext<MercuryHealthWebContext>(options =>
