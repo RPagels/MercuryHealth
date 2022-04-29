@@ -141,7 +141,10 @@ jobs:
         with:
           name: MercuryHealth.LoadTests
           path: ${{ github.workspace }}/MercuryHealth.LoadTests/*.*
-          
+
+###########################################
+# Deploy to Environments
+###########################################
   dev:
     if: contains(github.event_name, 'push')
     needs: Build_Application
@@ -152,6 +155,7 @@ jobs:
       resource-group-location: 'eastus2'
       approval-required: true
     secrets:
+      azure-subscription: ${{ secrets.AZURE_SUBSCRIPTION }}
       azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
       sql-db-login: ${{ secrets.SQL_DB_LOGIN }}
       sql-db-password: ${{ secrets.SQL_DB_PASSWORD }}
@@ -168,6 +172,24 @@ jobs:
         resource-group-location: 'eastus2'
         approval-required: true
       secrets:
+        azure-subscription: ${{ secrets.AZURE_SUBSCRIPTION }}
+        azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+        sql-db-login: ${{ secrets.SQL_DB_LOGIN }}
+        sql-db-password: ${{ secrets.SQL_DB_PASSWORD }}
+        #sql-db-server-name: ${{ secrets.SQL_DB_Server_Name }}
+        #sql-connection-string: ${{ secrets.SQL_DB_Connection_String_QA }}
+
+  prod:
+      if: contains(github.event_name, 'push')
+      needs: [Build_Application, qa]
+      uses: ./.github/workflows/deploy-environment.yml
+      with:
+        resource-group-base-name: 'rg-MercuryHealth'
+        environment-suffix: 'prod'
+        resource-group-location: 'eastus2'
+        approval-required: true
+      secrets:
+        azure-subscription: ${{ secrets.AZURE_SUBSCRIPTION }}
         azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
         sql-db-login: ${{ secrets.SQL_DB_LOGIN }}
         sql-db-password: ${{ secrets.SQL_DB_PASSWORD }}
