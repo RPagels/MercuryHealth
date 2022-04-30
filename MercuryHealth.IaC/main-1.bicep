@@ -187,6 +187,11 @@ resource configStoreName_appconfig_featureflags_3 'Microsoft.AppConfiguration/co
 // END - Setup Config Store
 ////////////////////////////////////////
 
+// AppConfiguration - Avoid outputs for secrets - Look up secrets dynamically
+// https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/scenarios-secrets
+// Note: This is why ConfigStore isn't it's own module...MUST be in the main
+var configStoreConnectionString = listKeys(config.id, config.apiVersion).value[0].connectionString
+
 ////////////////////////////////////////
 // START - Key Vault
 ////////////////////////////////////////
@@ -204,8 +209,10 @@ module keyvaultmod './main-8-keyvault.bicep' = {
    //  configStoreConnection: configStoreConnectionString
     appServiceprincipalId: webappmod.outputs.out_appServiceprincipalId
     //sqlserverfullyQualifiedDomainName: sqldbmod.outputs.sqlserverfullyQualifiedDomainName
-   //  secretName1: secretName1
-   //  secretName2: secretName2
+    secretName1: secretName1
+    secretName2: secretName2
+    configStoreConnection: configStoreConnectionString
+    secretConnectionString: webappmod.outputs.out_secretConnectionString
     funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
     }
     dependsOn:  [
@@ -295,7 +302,7 @@ module keyvaultmod './main-8-keyvault.bicep' = {
 // AppConfiguration - Avoid outputs for secrets - Look up secrets dynamically
 // https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/scenarios-secrets
 // Note: This is why ConfigStore isn't it's own module...MUST be in the main
-var configStoreConnectionString = listKeys(config.id, config.apiVersion).value[0].connectionString
+//var configStoreConnectionString = listKeys(config.id, config.apiVersion).value[0].connectionString
 
 @minLength(1)
 param publisherEmail string = 'rpagels@microsoft.com'

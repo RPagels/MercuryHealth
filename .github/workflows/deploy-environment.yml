@@ -69,7 +69,7 @@ jobs:
       Deployed_Environment: ${{ inputs.environment-suffix }}
       APIM_PurgeNameDev: 'apim-fq3ruuhxgjony'
       APIM_PurgeNameQA: 'apim-4av6wwkty4xb6'
-      APIM_PurgeNameProd: 'apim-4av6wwkty4xb6'
+      APIM_PurgeNameProd: 'apim-3gsbqvhdrf5ge'
    
     permissions:
       contents: read
@@ -149,7 +149,7 @@ jobs:
     - name: DEBUG ONLY Display Output Variables
       run: |
          echo 'output_loadTestsName: ${{ steps.Infra.outputs.out_loadTestsName }}'
-         echo 'output_apiServiceName: ${{ steps.Infra.outputs.output_apiServiceName }}'
+         echo 'output_apiServiceName: ${{ steps.Infra.outputs.out_apiServiceName }}'
          echo 'output_webSiteName: ${{ steps.Infra.outputs.out_webSiteName }}'
          echo 'output_functionAppName: ${{ steps.Infra.outputs.out_functionAppName }}'
          echo 'output_sqlserverFQName: ${{ steps.Infra.outputs.out_sqlserverFQName }}'

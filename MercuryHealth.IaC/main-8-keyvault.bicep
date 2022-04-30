@@ -6,15 +6,18 @@ param tenant string = subscription().tenantId
 param appServiceprincipalId string
 param funcAppServiceprincipalId string
 //param sqlserverfullyQualifiedDomainName string
-
+param secretName1 string
+param secretName2 string
 // Azure SQL Credentials
 //@secure()
 //param sqlAdminLoginPassword string
 //@secure()
 //param sqlAdminLoginName string
 
-//@secure()
-//param configStoreConnection string
+@secure()
+param configStoreConnection string
+@secure()
+param secretConnectionString string
 
 param accessPolicies array = [
   {
@@ -78,6 +81,24 @@ resource keyvault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
   }
 }
 
+// create secret
+resource mySecret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+  name: '${vaultName}/${secretName1}'
+  // parent: existingkeyvault
+  properties: {
+    contentType: 'text/plain'
+    value: configStoreConnection
+  }
+}
+// create secret
+resource mySecret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+  name: '${vaultName}/${secretName2}'
+  //parent: existingkeyvault
+  properties: {
+    contentType: 'text/plain'
+    value: secretConnectionString
+  }
+}
 // create secret
 // resource mySecret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
 //   name: secretName1

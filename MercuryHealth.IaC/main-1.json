@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "9801773198033341487"
+      "templateHash": "13144572736489305223"
     }
   },
   "parameters": {
@@ -299,6 +299,18 @@
           "appServiceprincipalId": {
             "value": "[reference(resourceId('Microsoft.Resources/deployments', 'webappdeploy'), '2020-06-01').outputs.out_appServiceprincipalId.value]"
           },
+          "secretName1": {
+            "value": "[parameters('secretName1')]"
+          },
+          "secretName2": {
+            "value": "[parameters('secretName2')]"
+          },
+          "configStoreConnection": {
+            "value": "[listKeys(resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName')), '2021-10-01-preview').value[0].connectionString]"
+          },
+          "secretConnectionString": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'webappdeploy'), '2020-06-01').outputs.out_secretConnectionString.value]"
+          },
           "funcAppServiceprincipalId": {
             "value": "[reference(resourceId('Microsoft.Resources/deployments', 'functionappdeploy'), '2020-06-01').outputs.out_funcAppServiceprincipalId.value]"
           }
@@ -310,7 +322,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "15930176301003847830"
+              "templateHash": "15041868100493262383"
             }
           },
           "parameters": {
@@ -330,6 +342,18 @@
             },
             "funcAppServiceprincipalId": {
               "type": "string"
+            },
+            "secretName1": {
+              "type": "string"
+            },
+            "secretName2": {
+              "type": "string"
+            },
+            "configStoreConnection": {
+              "type": "secureString"
+            },
+            "secretConnectionString": {
+              "type": "secureString"
             },
             "accessPolicies": {
               "type": "array",
@@ -394,6 +418,24 @@
                 "enableRbacAuthorization": false,
                 "networkAcls": "[parameters('networkAcls')]"
               }
+            },
+            {
+              "type": "Microsoft.KeyVault/vaults/secrets",
+              "apiVersion": "2021-11-01-preview",
+              "name": "[format('{0}/{1}', parameters('vaultName'), parameters('secretName1'))]",
+              "properties": {
+                "contentType": "text/plain",
+                "value": "[parameters('configStoreConnection')]"
+              }
+            },
+            {
+              "type": "Microsoft.KeyVault/vaults/secrets",
+              "apiVersion": "2021-11-01-preview",
+              "name": "[format('{0}/{1}', parameters('vaultName'), parameters('secretName2'))]",
+              "properties": {
+                "contentType": "text/plain",
+                "value": "[parameters('secretConnectionString')]"
+              }
             }
           ],
           "outputs": {
@@ -409,6 +451,7 @@
         }
       },
       "dependsOn": [
+        "[resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName'))]",
         "[resourceId('Microsoft.Resources/deployments', 'functionappdeploy')]",
         "[resourceId('Microsoft.Resources/deployments', 'webappdeploy')]"
       ]
@@ -485,7 +528,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "17249787654168027414"
+              "templateHash": "6800854446320660909"
             }
           },
           "parameters": {
@@ -774,24 +817,6 @@
               "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', parameters('webSiteName'))]"
               ]
-            },
-            {
-              "type": "Microsoft.KeyVault/vaults/secrets",
-              "apiVersion": "2021-11-01-preview",
-              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('secretName1'))]",
-              "properties": {
-                "contentType": "text/plain",
-                "value": "[parameters('configStoreConnection')]"
-              }
-            },
-            {
-              "type": "Microsoft.KeyVault/vaults/secrets",
-              "apiVersion": "2021-11-01-preview",
-              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('secretName2'))]",
-              "properties": {
-                "contentType": "text/plain",
-                "value": "[variables('secretConnectionString')]"
-              }
             }
           ],
           "outputs": {
