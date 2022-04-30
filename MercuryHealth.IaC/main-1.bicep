@@ -205,16 +205,16 @@ module keyvaultmod './main-8-keyvault.bicep' = {
     appServiceprincipalId: webappmod.outputs.out_appServiceprincipalId
     secretName1: secretName1
     secretName2: secretName2
-    secretName3: secretName3
-    secretName4: secretName4
+    // secretName3: secretName3
+    // secretName4: secretName4
     configStoreConnection: configStoreConnectionString
     secretConnectionString: webappmod.outputs.out_secretConnectionString
-    secretAzureWebJobsStorage: functionappmod.outputs.out_AzureWebJobsStorage
-    funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
+    //secretAzureWebJobsStorage: functionappmod.outputs.out_AzureWebJobsStorage
+    //funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
     }
     dependsOn:  [
      webappmod
-     functionappmod
+     //functionappmod
    ]
  }
 

@@ -4,12 +4,12 @@ param location string = resourceGroup().location
 param vaultName string
 param tenant string = subscription().tenantId
 param appServiceprincipalId string
-param funcAppServiceprincipalId string
+//param funcAppServiceprincipalId string
 //param sqlserverfullyQualifiedDomainName string
 param secretName1 string
 param secretName2 string
-param secretName3 string
-param secretName4 string
+// param secretName3 string
+// param secretName4 string
 // Azure SQL Credentials
 //@secure()
 //param sqlAdminLoginPassword string
@@ -20,8 +20,8 @@ param secretName4 string
 param configStoreConnection string
 @secure()
 param secretConnectionString string
-@secure()
-param secretAzureWebJobsStorage string
+// @secure()
+// param secretAzureWebJobsStorage string
 
 param accessPolicies array = [
   {
@@ -38,20 +38,20 @@ param accessPolicies array = [
       ]
     }
   }
-  {
-    tenantId: tenant
-    objectId: funcAppServiceprincipalId
-    permissions: {
-      keys: [
-        'Get'
-        'List'
-      ]
-      secrets: [
-        'Get'
-        'List'
-      ]
-    }
-  }
+  // {
+  //   tenantId: tenant
+  //   objectId: funcAppServiceprincipalId
+  //   permissions: {
+  //     keys: [
+  //       'Get'
+  //       'List'
+  //     ]
+  //     secrets: [
+  //       'Get'
+  //       'List'
+  //     ]
+  //   }
+  // }
 ]
 
 param networkAcls object = {
@@ -98,23 +98,23 @@ resource mySecret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
   }
 }
 // create secret for Func App
-resource mySecret3 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: '${vaultName}/${secretName3}'
-  //parent: existingkeyvault
-  properties: {
-    contentType: 'text/plain'
-    value: secretAzureWebJobsStorage
-  }
-}
-// create secret for Func App
-resource mySecret4 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: '${vaultName}/${secretName4}'
-  //parent: existingkeyvault
-  properties: {
-    contentType: 'text/plain'
-    value: secretAzureWebJobsStorage
-  }
-}
+// resource mySecret3 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+//   name: '${vaultName}/${secretName3}'
+//   //parent: existingkeyvault
+//   properties: {
+//     contentType: 'text/plain'
+//     value: secretAzureWebJobsStorage
+//   }
+// }
+// // create secret for Func App
+// resource mySecret4 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+//   name: '${vaultName}/${secretName4}'
+//   //parent: existingkeyvault
+//   properties: {
+//     contentType: 'text/plain'
+//     value: secretAzureWebJobsStorage
+//   }
+// }
 // create secret
 // resource mySecret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
 //   name: secretName1
