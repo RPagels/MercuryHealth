@@ -317,6 +317,10 @@ resource mySecret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
     contentType: 'text/plain'
     value: configStoreConnectionString
   }
+  dependsOn:  [
+    webappmod
+    functionappmod
+  ]
 }
 // create secret for Web App
 resource mySecret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
@@ -326,6 +330,10 @@ resource mySecret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
     contentType: 'text/plain'
     value: webappmod.outputs.out_secretConnectionString
   }
+  dependsOn:  [
+    webappmod
+    functionappmod
+  ]
 }
 
  ////////////////////////////////////////
@@ -472,9 +480,6 @@ module functionappmod './main-6-funcapp.bicep' = {
     secretName3: secretName3
     secretName4: secretName4
   }
-  // dependsOn:  [
-  //   keyvaultmod
-  // ]
 }
 
 // Create Azure Load Tests
