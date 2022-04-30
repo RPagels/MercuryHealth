@@ -144,13 +144,13 @@ jobs:
 ###########################################
 # Deploy to Environments
 ###########################################
-  dev-demo2:
+  dev-demo:
     #if: contains(github.event_name, 'push')
     needs: Build_Application
     uses: ./.github/workflows/deploy-environment-single.yml
     with:
       resource-group-base-name: 'rg-MercuryHealth'
-      environment-suffix: 'dev-demo2'
+      environment-suffix: 'dev-demo'
       resource-group-location: 'eastus2'
       approval-required: true
     secrets:

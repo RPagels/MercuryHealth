@@ -35,7 +35,7 @@ var appInsightsWorkspaceName = 'appw-${uniqueString(resourceGroup().id)}'
 var appInsightsAlertName = 'ResponseTime-${uniqueString(resourceGroup().id)}'
 var functionAppName = 'func-${uniqueString(resourceGroup().id)}'
 var functionAppServiceName = 'funcplan-${uniqueString(resourceGroup().id)}'
-var apiServiceName = 'apim-${uniqueString(resourceGroup().id)}'
+var apiServiceName = 'apimv2-${uniqueString(resourceGroup().id)}'
 var loadTestsName = 'loadtests-${uniqueString(resourceGroup().id)}'
 var keyvaultName = 'kv-${uniqueString(resourceGroup().id)}'
 var blobstorageName = 'stablob${uniqueString(resourceGroup().id)}'
@@ -319,7 +319,6 @@ resource mySecret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
   }
   dependsOn:  [
     webappmod
-    functionappmod
   ]
 }
 // create secret for Web App
@@ -332,7 +331,6 @@ resource mySecret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
   }
   dependsOn:  [
     webappmod
-    functionappmod
   ]
 }
 //create secret for Func App
@@ -342,6 +340,9 @@ resource mySecret3 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
     contentType: 'text/plain'
     value: functionappmod.outputs.out_AzureWebJobsStorage
   }
+  dependsOn:  [
+    functionappmod
+  ]
 }
 // create secret for Func App
 resource mySecret4 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
@@ -350,6 +351,9 @@ resource mySecret4 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
     contentType: 'text/plain'
     value: functionappmod.outputs.out_AzureWebJobsStorage
   }
+  dependsOn:  [
+    functionappmod
+  ]
 }
  ////////////////////////////////////////
  // END - Key Vault
@@ -452,6 +456,7 @@ module webappmod './main-2-webapp.bicep' = {
     sqlserverfullyQualifiedDomainName: sqldbmod.outputs.sqlserverfullyQualifiedDomainName
     sqlserverName: sqlserverName
   }
+
 }
 
 // Create SQL database
@@ -506,17 +511,6 @@ module loadtestsmod './main-9-loadtests.bicep' = {
     defaultTags: defaultTags
   }
 }
-
-// // Create APIM.
-//  NOTE: APIM + Azure KeyVault, can be in it's own RG + Pipeline
-// module apiservicesmod './main-7-apimanagement.bicep' = {
-//   name: apiServiceName
-//   params: {
-//     location: location
-//     apiServiceName: apiServiceName
-//     defaultTags: defaultTags
-//   }
-// }
 
 module blogstoragemod './main-12-blobstorage.bicep' = {
   name: blobstorageName
