@@ -12,8 +12,8 @@ param sqlAdminLoginPassword string
 @secure()
 param sqlAdminLoginName string
 
-@secure()
-param sqlAdminLoginPassword2 string
+// @secure()
+// param sqlAdminLoginPassword2 string
 
 param webAppPlanName string
 param webSiteName string
@@ -89,7 +89,7 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
     'ASPNETCORE_ENVIRONMENT': 'Development'
     'DebugOnly-sqlAdminLoginPassword=': sqlAdminLoginPassword
     'DebugOnly-sqlAdminLoginName=': sqlAdminLoginName
-    'DebugOnly-sqlAdminLoginName2=': sqlAdminLoginPassword2
+    //'DebugOnly-sqlAdminLoginPassword2=': sqlAdminLoginPassword2
   }
 }
 

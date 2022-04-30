@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "6625652588564501171"
+      "templateHash": "11625427829142329483"
     }
   },
   "parameters": {
@@ -115,8 +115,7 @@
   "functions": [],
   "variables": {
     "sqlAdminLoginName": "AzureAdmin",
-    "sqlAdminLoginPassword": "Password.1.!!",
-    "sqlAdminLoginPassword2": "[format('{0}.!!.{1}', base64(uniqueString(resourceGroup().id)), uniqueString(resourceGroup().id))]",
+    "sqlAdminLoginPassword": "[format('{0}.!&!.{1}', substring(base64(uniqueString(resourceGroup().id)), 0, 10), uniqueString(resourceGroup().id))]",
     "webAppPlanName": "[format('plan-{0}', uniqueString(resourceGroup().id))]",
     "webSiteName": "[format('app-{0}', uniqueString(resourceGroup().id))]",
     "sqlserverName": "[toLower(format('sql-{0}', uniqueString(resourceGroup().id)))]",
@@ -545,9 +544,6 @@
           "sqlAdminLoginPassword": {
             "value": "[variables('sqlAdminLoginPassword')]"
           },
-          "sqlAdminLoginPassword2": {
-            "value": "[variables('sqlAdminLoginPassword2')]"
-          },
           "sqlDBName": {
             "value": "[variables('sqlDBName')]"
           },
@@ -565,7 +561,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "9100223107701930093"
+              "templateHash": "5283352241367601587"
             }
           },
           "parameters": {
@@ -593,9 +589,6 @@
               "type": "secureString"
             },
             "sqlAdminLoginName": {
-              "type": "secureString"
-            },
-            "sqlAdminLoginPassword2": {
               "type": "secureString"
             },
             "webAppPlanName": {
@@ -683,8 +676,7 @@
                 "WebAppUrl": "[format('https://{0}.azurewebsites.net/', parameters('webSiteName'))]",
                 "ASPNETCORE_ENVIRONMENT": "Development",
                 "DebugOnly-sqlAdminLoginPassword=": "[parameters('sqlAdminLoginPassword')]",
-                "DebugOnly-sqlAdminLoginName=": "[parameters('sqlAdminLoginName')]",
-                "DebugOnly-sqlAdminLoginName2=": "[parameters('sqlAdminLoginPassword2')]"
+                "DebugOnly-sqlAdminLoginName=": "[parameters('sqlAdminLoginName')]"
               },
               "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', parameters('webSiteName'))]"
@@ -920,7 +912,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "1381513218881810171"
+              "templateHash": "15081827046054640125"
             }
           },
           "parameters": {
@@ -930,10 +922,10 @@
             "sqlDBName": {
               "type": "string"
             },
-            "sqlAdminLoginPassword": {
+            "sqlAdminLoginName": {
               "type": "secureString"
             },
-            "sqlAdminLoginName": {
+            "sqlAdminLoginPassword": {
               "type": "secureString"
             },
             "location": {

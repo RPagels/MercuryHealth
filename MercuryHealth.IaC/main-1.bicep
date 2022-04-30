@@ -19,9 +19,9 @@ param Deployed_Environment string
 // param sqlAdministratorLoginPassword string
 
 // Generate Azure SQL Credentials
-var sqlAdminLoginName = 'AzureAdmin' //'AzureAdmin${uniqueString(resourceGroup().id)}'
-var sqlAdminLoginPassword = 'Password.1.!!' //base64(guid(resourceGroup().id))
-var sqlAdminLoginPassword2 = '${base64(uniqueString(resourceGroup().id))}.!!.${uniqueString(resourceGroup().id)}'
+var sqlAdminLoginName = 'AzureAdmin'
+//var sqlAdminLoginPassword = 'Password.1.!!'
+var sqlAdminLoginPassword = '${substring(base64(uniqueString(resourceGroup().id)), 0, 10)}.!&!.${uniqueString(resourceGroup().id)}'
 
 // Variables for Recommended abbreviations for Azure resource types
 // https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations
@@ -389,15 +389,10 @@ module webappmod './main-2-webapp.bicep' = {
     secretName2: secretName2
     sqlAdminLoginName: sqlAdminLoginName
     sqlAdminLoginPassword: sqlAdminLoginPassword
-    sqlAdminLoginPassword2: sqlAdminLoginPassword2
-    //configStoreConnection: configStoreConnectionString
     sqlDBName: sqlDBName
     sqlserverfullyQualifiedDomainName: sqldbmod.outputs.sqlserverfullyQualifiedDomainName
     sqlserverName: sqlserverName
   }
-  // dependsOn:  [
-  //   keyvaultmod
-  // ]
 }
 
 // Create SQL database

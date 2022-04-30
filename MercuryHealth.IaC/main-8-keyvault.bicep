@@ -54,12 +54,6 @@ param accessPolicies array = [
   }
 ]
 
-//param keyName string = 'prodKey'
-// param secretName1 string
-// param secretValue1 string = configStoreConnection
-// param secretName2 string
-// param secretValue2 string = 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdminLoginName}@${sqlserverName};Password=${sqlAdminLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
-
 param networkAcls object = {
   ipRules: []
   virtualNetworkRules: []

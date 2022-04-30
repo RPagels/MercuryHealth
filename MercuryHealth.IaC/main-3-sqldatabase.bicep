@@ -3,15 +3,12 @@ param sqlDBName string
 
 // Azure SQL Credentials
 @secure()
-param sqlAdminLoginPassword string
-@secure()
 param sqlAdminLoginName string
+@secure()
+param sqlAdminLoginPassword string
 
 param location string = resourceGroup().location
 param defaultTags object
-
-//var sqlAdminLoginName2 = 'AzureAdmin'
-//var sqlAdminLoginPassword2 = 'Password.1.!!${uniqueString(resourceGroup().id)}' //guid(resourceGroup().id)
 
 resource sqlServer 'Microsoft.Sql/servers@2021-11-01-preview' = {
   name: sqlserverName
