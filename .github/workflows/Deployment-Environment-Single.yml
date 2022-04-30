@@ -1,0 +1,610 @@
+name: Deployment-Environment-Single
+
+on:
+  workflow_call:
+    inputs:
+      resource-group-base-name:
+        description: 'Resource Group base name'
+        default: 'rg-mercuryhealth'
+        required: true
+        type: string
+      environment-suffix:
+        description: 'The suffix to be used for the current environment'
+        default: 'dev'
+        required: true
+        type: string
+      resource-group-location:
+        description: 'Azure region for the deployed resources'
+        default: 'eastus'
+        required: true
+        type: string
+      approval-required:
+        description: 'Approval needed to deploy to environment'
+        default: true
+        required: true
+        type: boolean        
+    secrets:
+      azure-subscription:
+        description: 'Credentials used to log into Azure for deployment of resources'
+        required: true
+      azure-credentials:
+        description: 'Credentials used to log into Azure for deployment of resources'
+        required: true
+      sql-db-login:
+        description: 'Credentials used to log into SQL for deployment of resources'
+        required: true
+      sql-db-password:
+        description: 'Credentials used to log into SQL for deployment of resources'
+        required: true
+
+jobs:
+  ###################################################################
+  # Deployment Stage - Infrastructure
+  ###################################################################
+  deploy_infrastructure:
+    runs-on: ubuntu-latest
+    outputs:
+      output_loadTestsName: ${{ steps.Infra.outputs.out_loadTestsName }}
+      output_apiServiceName: ${{ steps.Infra.outputs.out_apiServiceName }}
+      output_webSiteName: ${{ steps.Infra.outputs.out_webSiteName }}
+      output_functionAppName: ${{ steps.Infra.outputs.out_functionAppName }}
+      output_sqlserverFQName: ${{ steps.Infra.outputs.out_sqlserverFQName }}
+      output_releaseAnnotationGuidID: ${{ steps.Infra.outputs.out_releaseAnnotationGuidID }}
+      output_appInsightsApplicationId: ${{ steps.Infra.outputs.out_appInsightsApplicationId }}
+      output_appInsightsAPIApplicationId: ${{ steps.Infra.outputs.out_appInsightsAPIApplicationId }}
+      #output_keyvaultName: ${{ steps.Infra.outputs.out_keyvaultName }}
+      #output_keyvaultSecretName: ${{ steps.Infra.outputs.out_keyvaultSecretName }}
+      output_secretConnectionString: ${{ steps.Infra.outputs.out_secretConnectionString }}
+      #output_TestMyConnectionString: 'Server=tcp:${{ steps.Infra.outputs.out_sqlserverFQName }},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdminLoginName}@${sqlserverName};Password=${sqlAdminLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+
+    name: Deploy Infrastructure
+    env:
+      Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
+      Deployed_Environment: ${{ inputs.environment-suffix }}
+      APIM_PurgeNameDev: 'apim-fq3ruuhxgjony'
+      APIM_PurgeNameQA: 'apim-4av6wwkty4xb6'
+      APIM_PurgeNameProd: 'apim-3gsbqvhdrf5ge'
+   
+    permissions:
+      contents: read
+      packages: write
+
+    # Identify any jobs that must complete successfully before this job will run.
+    steps:
+    - name: Login to Azure
+      uses: azure/login@v1
+      continue-on-error: false
+      with:
+        creds: ${{ secrets.azure-credentials }}
+
+    - name: Ensure Resource Group Exists
+      uses: Azure/CLI@v1
+      continue-on-error: true
+      with:
+        inlineScript: |
+          #!/bin/bash
+          az group create --name ${{ env.Azure_Resource_GroupName }} --location ${{ inputs.resource-group-location }}
+
+    - name: Ensure Resource Group is UnLocked
+      if: contains(github.event_name, 'push')
+      uses: Azure/CLI@v1
+      continue-on-error: true
+      with:
+        inlineScript: |
+          az group lock delete --name DontDeleteMe --resource-group ${{ env.Azure_Resource_GroupName }}
+
+    - name: Download Build Artifact-Infrastructure
+      uses: actions/download-artifact@v2
+      continue-on-error: false
+      with:
+        name: MercuryHealth.IaC
+        path: ${{ github.workspace }}/MercuryHealth.IaC
+
+    - name: Install Bicep
+      run: |
+        curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
+        chmod +x ./bicep
+        sudo mv ./bicep /usr/local/bin/bicep
+        bicep --version
+
+    - name: Purge soft-deleted instance of APIM, if exists
+      if: contains(github.event_name, 'push')
+      uses: Azure/CLI@v1
+      continue-on-error: true
+      with:
+        inlineScript: |
+          az rest --method get --header "Accept=application/json" -u 'https://management.azure.com/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/providers/Microsoft.ApiManagement/deletedservices?api-version=2021-08-01'
+          az rest --method delete --header "Accept=application/json" -u 'https://management.azure.com/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/providers/Microsoft.ApiManagement/locations/${{ inputs.resource-group-location }}/deletedservices/${{ env.APIM_PurgeNameDev }}?api-version=2021-08-01'
+          az rest --method delete --header "Accept=application/json" -u 'https://management.azure.com/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/providers/Microsoft.ApiManagement/locations/${{ inputs.resource-group-location }}/deletedservices/${{ env.APIM_PurgeNameQA }}?api-version=2021-08-01'
+          az rest --method delete --header "Accept=application/json" -u 'https://management.azure.com/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/providers/Microsoft.ApiManagement/locations/${{ inputs.resource-group-location }}/deletedservices/${{ env.APIM_PurgeNameProd }}?api-version=2021-08-01'
+
+      ###########################################
+      # Deploy ARM Template using Bicep DSL
+      ###########################################
+    - name: Infrastructure
+      id: Infra
+      uses: azure/arm-deploy@v1
+      continue-on-error: false
+      with:
+        resourceGroupName: ${{ env.Azure_Resource_GroupName }}
+        template: ./MercuryHealth.IaC/main-1.bicep
+        parameters: ./MercuryHealth.IaC/main-1.params.json Deployed_Environment=${{ env.Deployed_Environment }}
+        deploymentMode: Incremental
+        failOnStdErr: false
+
+    - name: Ensure Resource Group is Locked
+      if: contains(github.event_name, 'push')
+      uses: Azure/CLI@v1
+      continue-on-error: true
+      with:
+        inlineScript: |
+          az group lock create --lock-type CanNotDelete --name DontDeleteMe --resource-group ${{ env.Azure_Resource_GroupName }} --notes 'Prevent deletion of the resource group'
+
+    - name: DEBUG ONLY Display Output Variables
+      run: |
+         echo 'output_loadTestsName: ${{ steps.Infra.outputs.out_loadTestsName }}'
+         echo 'output_apiServiceName: ${{ steps.Infra.outputs.out_apiServiceName }}'
+         echo 'output_webSiteName: ${{ steps.Infra.outputs.out_webSiteName }}'
+         echo 'output_functionAppName: ${{ steps.Infra.outputs.out_functionAppName }}'
+         echo 'output_sqlserverFQName: ${{ steps.Infra.outputs.out_sqlserverFQName }}'
+         echo 'output_releaseAnnotationGuidID: ${{ steps.Infra.outputs.out_releaseAnnotationGuidID }}'
+         echo 'output_appInsightsApplicationId: ${{ steps.Infra.outputs.out_appInsightsApplicationId }}'
+         echo 'output_appInsightsAPIApplicationId: ${{ steps.Infra.outputs.out_appInsightsAPIApplicationId }}'
+         echo 'output_keyvaultName: ${{ steps.Infra.outputs.out_keyvaultName }}'
+         #echo 'output_keyvaultSecretName: ${{ steps.Infra.outputs.out_keyvaultSecretName }}'
+         echo 'output_secretConnectionString: ${{ steps.Infra.outputs.out_secretConnectionString }}'
+
+    ##########################################################
+    # DB Deploy during IaC
+    # Note: the output: steps.Infra.outputs.out_secretConnectionString doesn't transfer to stage: deploy_application
+    ##########################################################
+    - name: Download Build Artifact-Database
+      uses: actions/download-artifact@v2
+      continue-on-error: false
+      with:
+        name: MercuryHealth.Database
+        path: ${{ github.workspace }}/MercuryHealth.Database
+
+    # Deploy Database *.dacpac file
+    - name: 'Deploy the database to Azure'
+      uses: Azure/sql-action@v1.2
+      with:
+        server-name: ${{ steps.Infra.outputs.out_sqlserverFQName }}
+        #connection-string: ${{ secrets.sql-connection-string }}
+        connection-string: ${{ steps.Infra.outputs.out_secretConnectionString }}
+        dacpac-package: './MercuryHealth.Database/MercuryHealth.Database.dacpac'
+
+    - name: 'Azure logout'
+      run: |
+        az logout
+
+  ###################################################################
+  # Deployment Stage - Application / Database 
+  ###################################################################
+  deploy_application:
+    runs-on: ubuntu-latest
+    name: Deploy Application
+    needs: [deploy_infrastructure]
+    env:
+      Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
+      Deployed_Environment: ${{ inputs.environment-suffix }}
+
+    permissions:
+      contents: read
+      packages: write
+
+    # Identify any jobs that must complete successfully before this job will run.
+    steps:
+ 
+    - name: DEBUG ONLY Display Output Variables
+      run: |
+         echo 'output_loadTestsName: ${{ needs.deploy_infrastructure.outputs.output_loadTestsName }}'
+         echo 'output_webSiteName: ${{ needs.deploy_infrastructure.outputs.output_webSiteName }}'
+         echo 'output_functionAppName: ${{ needs.deploy_infrastructure.outputs.output_functionAppName }}'
+         echo 'output_sqlserverFQName: ${{ needs.deploy_infrastructure.outputs.output_sqlserverFQName }}'
+         echo 'output_releaseAnnotationGuidID: ${{ needs.deploy_infrastructure.outputs.output_releaseAnnotationGuidID }}'
+         echo 'output_appInsightsApplicationId: ${{ needs.deploy_infrastructure.outputs.output_appInsightsApplicationId }}'
+         echo 'output_appInsightsAPIApplicationId: ${{ needs.deploy_infrastructure.outputs.output_appInsightsAPIApplicationId }}'
+         echo 'output_keyvaultName: ${{ needs.deploy_infrastructure.outputs.output_keyvaultName }}'
+         #echo 'output_keyvaultSecretName: ${{ needs.deploy_infrastructure.outputs.output_keyvaultSecretName }}'
+         echo 'output_secretConnectionString: ${{ needs.deploy_infrastructure.outputs.output_secretConnectionString }}'
+         #echo 'output_TestMyConnectionString: ${{ needs.deploy_infrastructure.outputs.output_TestMyConnectionString }}'
+
+    - name: Login to Azure
+      uses: azure/login@v1
+      continue-on-error: false
+      with:
+        creds: ${{ secrets.azure-credentials }}
+
+    - name: Ensure Resource Group is UnLocked
+      if: contains(github.event_name, 'push')
+      uses: Azure/CLI@v1
+      continue-on-error: true
+      with:
+        inlineScript: |
+          az group lock delete --name DontDeleteMe --resource-group ${{ env.Azure_Resource_GroupName }}
+
+    #- name: Download Build Artifact-Database
+    #  uses: actions/download-artifact@v2
+    #  continue-on-error: false
+    #  with:
+    #    name: MercuryHealth.Database
+    #    path: ${{ github.workspace }}/MercuryHealth.Database
+
+    # Deploy Database *.dacpac file
+    #- name: 'Deploy the database to Azure'
+    #  uses: Azure/sql-action@v1.2
+    #  with:
+    #    server-name: ${{ needs.deploy_infrastructure.outputs.output_sqlserverFQName }}
+    #    connection-string: ${{ secrets.sql-connection-string }}
+    #    #connection-string: ${{ needs.deploy_infrastructure.outputs.output_secretConnectionString }}
+    #    dacpac-package: './MercuryHealth.Database/MercuryHealth.Database.dacpac'
+
+    - name: Download Build Artifacts-Website Application
+      uses: actions/download-artifact@v2
+      continue-on-error: false
+      with:
+        name: MercuryHealth.Website
+        path: ${{ github.workspace }}/MercuryHealth.Website
+
+    - name: 'Deploy Website Application'
+      uses: azure/webapps-deploy@v2
+      with:
+          app-name: ${{ needs.deploy_infrastructure.outputs.output_webSiteName }}
+          #slot-name: 'Dev'
+          package: './MercuryHealth.Website'
+          
+    - name: Download Build Artifacts-Function Application
+      uses: actions/download-artifact@v2
+      continue-on-error: false
+      with:
+        name: MercuryHealth.FunctionApp
+        path: ${{ github.workspace }}/MercuryHealth.FunctionApp
+
+    # Deploy Function Application
+    - name: 'Deploy Function Application'
+      uses: Azure/functions-action@v1
+      with:
+        app-name: ${{ needs.deploy_infrastructure.outputs.output_functionAppName }}
+        slot-name: 'production'
+        package: './MercuryHealth.FunctionApp'
+
+    - name: 'Generate Temporary API Key For App Insights'
+      id: AIKeyGen
+      uses: Azure/CLI@v1
+      with:
+        inlineScript: |
+          az config set extension.use_dynamic_install=yes_without_prompt
+          result=$(az monitor app-insights api-key create \
+                      --api-key ${{ needs.deploy_infrastructure.outputs.output_releaseAnnotationGuidID }} \
+                      --write-properties WriteAnnotations \
+                      -g ${{ env.Azure_Resource_GroupName }} \
+                      --app ${{ needs.deploy_infrastructure.outputs.output_appInsightsApplicationId }} \
+                      --query "apiKey" --output tsv)
+          echo "::set-output name=aiKey::$result"
+        
+    - name: 'Annotate Deployment'
+      uses: wictorwilen/application-insights-action@v1
+      id: annotation
+      with:
+        applicationId: ${{ needs.deploy_infrastructure.outputs.output_appInsightsAPIApplicationId }}
+        apiKey: ${{ steps.AIKeyGen.outputs.aiKey }}
+        releaseName: ${{ github.event_name }}
+        message: ${{ github.event.head_commit.message }}
+        actor: ${{ github.actor }}
+
+    - name: Remove Temporary API Key For App Insights
+      uses: Azure/CLI@v1
+      with:
+        inlineScript: |
+          az config set extension.use_dynamic_install=yes_without_prompt
+          az monitor app-insights api-key delete \
+                      --api-key ${{ needs.deploy_infrastructure.outputs.output_releaseAnnotationGuidID }} \
+                      -g ${{ env.Azure_Resource_GroupName }} \
+                      --app ${{ needs.deploy_infrastructure.outputs.output_appInsightsApplicationId }} 
+
+    - name: Ensure Resource Group is Locked
+      if: contains(github.event_name, 'push')
+      uses: Azure/CLI@v1
+      continue-on-error: true
+      with:
+        inlineScript: |
+          az group lock create --lock-type CanNotDelete --name DontDeleteMe --resource-group ${{ env.Azure_Resource_GroupName }} --notes 'Prevent deletion of the resource group'
+
+    - name: 'Azure logout'
+      run: |
+        az logout
+          
+###################################################################
+# CD Stage - UI Testing                         
+###################################################################
+  UITesting_Stage_Application:
+    if: contains(github.event_name, 'push')
+
+    name: Playwright UI Tests
+    
+    env:
+      dotnet_version: '6.x.x'
+      buildConfiguration: 'Release'
+
+    # The type of runner that the job will run on - windows-latest
+    runs-on: ubuntu-latest
+
+    # Identify any jobs that must complete successfully before this job will run.
+    needs: [deploy_infrastructure, deploy_application]
+    timeout-minutes: 10
+        
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.dotnet_version }}
+
+      - name: DEBUG ONLY Display Output Variables
+        run: |
+           echo 'output_webSiteName: ${{ needs.deploy_infrastructure.outputs.output_webSiteName }}'
+         
+      # Download Artifacts under $GITHUB_WORKSPACE, so your job can access it
+      - name: Download Build Artifacts-Playwright Tests
+        continue-on-error: false
+        uses: actions/download-artifact@v2
+        with:
+          name: MercuryHealth.UITests
+          path: ${{ github.workspace }}/MercuryHealth.UITests
+
+      # Update Runsettings with Website URL
+      - name: Update Runsettings with Website URL
+        uses: Azure/powershell@v1
+        continue-on-error: false
+        id: setWebsiteUrl
+        env:
+          POWERSHELL_TELEMETRY_OPTOUT: 1
+        with:
+          inlineScript: MercuryHealth.UITests/TransformRunSettings.ps1 -website_url 'https://${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net/'
+          # Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".
+          azPSVersion: 3.4.0
+          # Select the value of the ErrorActionPreference variable for executing the script. Options: stop, continue, silentlyContinue. Default is Stop.
+          errorActionPreference: continue
+
+#      - name: 
+#        continue-on-error: true
+#        run: |
+#         dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }}
+#         dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './MercuryHealth.UITests'
+
+      - name: Playwright Tests all on Browsers
+        continue-on-error: false
+        run: |
+         dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }}
+         dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './MercuryHealth.UITests'
+         dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj --filter "TestCategory=Playwright_Tests_Chromium|TestCategory=Playwright_Tests_FireFox" -l "console;verbosity=normal" -l "trx;LogFileName=TestResults.trx" --settings MercuryHealth.UITests/MercuryHealthTests.runsettings
+
+      - name: 'Upload Playwright Test Results-ScreenShots'
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: MercuryHealth.UITestsResults
+          path: ${{ github.workspace }}/MercuryHealth.UITests/*.png
+          retention-days: 30
+
+      - name: 'Upload Playwright Test Results-Report'
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: MercuryHealth.UITestsResults
+          path: ${{ github.workspace }}/MercuryHealth.UITests/TestResults/
+          retention-days: 30
+          
+##################################################################
+# CD Stage - Load and Performance Testing >>> Home Page          #
+##################################################################
+  LoadTesting_Stage_Application_Home:
+    # Identify any jobs that must complete successfully before this job will run.
+    runs-on: ubuntu-latest
+    if: contains(github.event_name, 'push')
+    name: 'Load Test Home'   
+    env:
+      Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
+           
+    # Identify any jobs that must complete successfully before this job will run.
+    needs: [deploy_infrastructure, deploy_application, UITesting_Stage_Application]
+    steps:
+      - name: 'Checkout GitHub Actions'
+        uses: actions/checkout@v2
+
+      - name: DEBUG ONLY Display Output Variables
+        run: |
+           echo 'output_loadTestsName: ${{ needs.deploy_infrastructure.outputs.output_loadTestsName }}'
+           
+      # Download Artifacts under $GITHUB_WORKSPACE, so your job can access it
+      - name: 'Download Build Artifacts-Load Tests'
+        uses: actions/download-artifact@v2
+        with:
+          name: MercuryHealth.LoadTests
+          path: ${{ github.workspace }}/MercuryHealth.LoadTests
+          
+      - name: 'Login to Azure'
+        uses: azure/login@v1
+        continue-on-error: false
+        with:
+          creds: ${{ secrets.azure-credentials }}
+
+      # Assign the Load Test Contributor or Load Test Owner role to your Azure account
+#      - name: Assign Azure Role to Load Test Service
+#        uses: Azure/CLI@v1
+#        continue-on-error: true
+#        with:
+#          inlineScript: |
+#            #!/bin/bash
+#            az role assignment create --assignee "rpagels@microsoft.com" --role "Load Test Contributor" --resource-group ${{ env.Azure_Resource_GroupName }}
+
+      # VERY Important. Do not use end slash for webHost value. "/"
+      - name: 'Azure Load Testing'
+        uses: azure/load-testing@v1
+        continue-on-error: true
+        with:
+          loadTestConfigFile: './MercuryHealth.LoadTests/LoadTest_HomePage_Config.yaml'
+          loadTestResource: ${{needs.deploy_infrastructure.outputs.output_loadTestsName}}
+          resourceGroup: ${{ env.Azure_Resource_GroupName }}
+          env: |
+            [
+              {
+                "name": "webapp",
+                "value": "${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net"
+              }
+            ]
+
+      - name: 'Upload Load Test Results'
+        uses: actions/upload-artifact@v2
+        continue-on-error: true
+        with:
+          name: MercuryHealth.LoadTestsResults
+          path: ${{ github.workspace }}/MercuryHealth.LoadTests
+          retention-days: 30
+          
+      - name: 'Azure logout'
+        run: |
+          az logout
+
+  LoadTesting_Stage_Application_Nutrition:
+    # Identify any jobs that must complete successfully before this job will run.
+    runs-on: ubuntu-latest
+    if: contains(github.event_name, 'push')
+    name: 'Load Test Nutrition'   
+    env:
+      Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
+           
+    # Identify any jobs that must complete successfully before this job will run.
+    needs: [deploy_infrastructure, deploy_application, UITesting_Stage_Application]
+    steps:
+      - name: 'Checkout GitHub Actions'
+        uses: actions/checkout@v2
+
+      - name: DEBUG ONLY Display Output Variables
+        run: |
+           echo 'output_loadTestsName: ${{ needs.deploy_infrastructure.outputs.output_loadTestsName }}'
+           
+      # Download Artifacts under $GITHUB_WORKSPACE, so your job can access it
+      - name: 'Download Build Artifacts-Load Tests'
+        uses: actions/download-artifact@v2
+        with:
+          name: MercuryHealth.LoadTests
+          path: ${{ github.workspace }}/MercuryHealth.LoadTests
+          
+      - name: 'Login to Azure'
+        uses: azure/login@v1
+        continue-on-error: false
+        with:
+          creds: ${{ secrets.azure-credentials }}
+
+      # VERY Important. Do not use end slash for webHost value. "/"
+      - name: 'Azure Load Testing'
+        uses: azure/load-testing@v1
+        continue-on-error: false
+        with:
+          loadTestConfigFile: './MercuryHealth.LoadTests/LoadTest_NutritionPage_Config.yaml'
+          loadTestResource: ${{needs.deploy_infrastructure.outputs.output_loadTestsName}}
+          resourceGroup: ${{ env.Azure_Resource_GroupName }}
+          env: |
+            [
+              {
+                "name": "webapp",
+                "value": "${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net"
+              }
+            ]
+
+      - name: 'Upload Load Test Results'
+        uses: actions/upload-artifact@v2
+        continue-on-error: true
+        with:
+          name: MercuryHealth.LoadTestsResults
+          path: ${{ github.workspace }}/MercuryHealth.LoadTests
+          retention-days: 30
+          
+      - name: 'Azure logout'
+        run: |
+          az logout
+
+  LoadTesting_Stage_Application_Exercise:
+    # Identify any jobs that must complete successfully before this job will run.
+    runs-on: ubuntu-latest
+    if: contains(github.event_name, 'push')
+    name: 'Load Test Exercise'   
+    env:
+      Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
+           
+    # Identify any jobs that must complete successfully before this job will run.
+    needs: [deploy_infrastructure, deploy_application, UITesting_Stage_Application]
+    steps:
+      - name: 'Checkout GitHub Actions'
+        uses: actions/checkout@v2
+
+      - name: DEBUG ONLY Display Output Variables
+        run: |
+           echo 'output_loadTestsName: ${{ needs.deploy_infrastructure.outputs.output_loadTestsName }}'
+           
+      # Download Artifacts under $GITHUB_WORKSPACE, so your job can access it
+      - name: 'Download Build Artifacts-Load Tests'
+        uses: actions/download-artifact@v2
+        with:
+          name: MercuryHealth.LoadTests
+          path: ${{ github.workspace }}/MercuryHealth.LoadTests
+          
+      - name: 'Login to Azure'
+        uses: azure/login@v1
+        continue-on-error: false
+        with:
+          creds: ${{ secrets.azure-credentials }}
+
+      # VERY Important. Do not use end slash for webHost value. "/"
+      - name: 'Azure Load Testing'
+        uses: azure/load-testing@v1
+        continue-on-error: false
+        with:
+          loadTestConfigFile: './MercuryHealth.LoadTests/LoadTest_ExercisePage_Config.yaml'
+          loadTestResource: ${{needs.deploy_infrastructure.outputs.output_loadTestsName}}
+          resourceGroup: ${{ env.Azure_Resource_GroupName }}
+          env: |
+            [
+              {
+                "name": "webapp",
+                "value": "${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net"
+              }
+            ]
+
+      - name: 'Upload Load Test Results'
+        uses: actions/upload-artifact@v2
+        continue-on-error: true
+        with:
+          name: MercuryHealth.LoadTestsResults
+          path: ${{ github.workspace }}/MercuryHealth.LoadTests
+          retention-days: 30
+          
+      - name: 'Azure logout'
+        run: |
+          az logout
+
+###################################################################
+# CD Stage - Dev  
+###################################################################
+  Approval_Stage_Application:
+    if: contains(github.event_name, 'push') && (inputs.approval-required == true) && always()
+
+    name: Approve Deployment
+    
+    # Identify any jobs that must complete successfully before this job will run.
+    runs-on: ubuntu-latest
+
+    # Identify any jobs that must complete successfully before this job will run.
+    needs: [UITesting_Stage_Application, LoadTesting_Stage_Application_Home, LoadTesting_Stage_Application_Nutrition, LoadTesting_Stage_Application_Exercise]
+    environment:
+      name: ${{ inputs.environment-suffix }}
+      url: ${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net
+    steps:
+      - name: Approve Deployment
+        run: |
+          echo 'Approve Deployment'
