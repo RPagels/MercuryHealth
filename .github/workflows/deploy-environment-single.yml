@@ -86,7 +86,7 @@ jobs:
           az group create --name ${{ env.Azure_Resource_GroupName }} --location ${{ inputs.resource-group-location }}
 
     - name: Ensure Resource Group is UnLocked
-      if: contains(github.event_name, 'push')
+      #if: contains(github.event_name, 'push')
       uses: Azure/CLI@v1
       continue-on-error: true
       with:
@@ -108,7 +108,7 @@ jobs:
         bicep --version
 
     - name: Purge soft-deleted instance of APIM, if exists
-      if: contains(github.event_name, 'push')
+      #if: contains(github.event_name, 'push')
       uses: Azure/CLI@v1
       continue-on-error: true
       with:
@@ -133,7 +133,7 @@ jobs:
         failOnStdErr: false
 
     - name: Ensure Resource Group is Locked
-      if: contains(github.event_name, 'push')
+      #if: contains(github.event_name, 'push')
       uses: Azure/CLI@v1
       continue-on-error: true
       with:
@@ -217,7 +217,7 @@ jobs:
         creds: ${{ secrets.azure-credentials }}
 
     - name: Ensure Resource Group is UnLocked
-      if: contains(github.event_name, 'push')
+      #if: contains(github.event_name, 'push')
       uses: Azure/CLI@v1
       continue-on-error: true
       with:
@@ -304,7 +304,7 @@ jobs:
                       --app ${{ needs.deploy_infrastructure.outputs.output_appInsightsApplicationId }} 
 
     - name: Ensure Resource Group is Locked
-      if: contains(github.event_name, 'push')
+      #if: contains(github.event_name, 'push')
       uses: Azure/CLI@v1
       continue-on-error: true
       with:
@@ -319,7 +319,7 @@ jobs:
 # CD Stage - UI Testing                         
 ###################################################################
   UITesting_Stage_Application:
-    if: contains(github.event_name, 'push')
+    #if: contains(github.event_name, 'push')
 
     name: Playwright UI Tests
     
@@ -405,7 +405,7 @@ jobs:
   LoadTesting_Stage_Application_Home:
     # Identify any jobs that must complete successfully before this job will run.
     runs-on: ubuntu-latest
-    if: contains(github.event_name, 'push')
+    #if: contains(github.event_name, 'push')
     name: 'Load Test Home'   
     env:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
@@ -473,7 +473,7 @@ jobs:
   LoadTesting_Stage_Application_Nutrition:
     # Identify any jobs that must complete successfully before this job will run.
     runs-on: ubuntu-latest
-    if: contains(github.event_name, 'push')
+    #if: contains(github.event_name, 'push')
     name: 'Load Test Nutrition'   
     env:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
@@ -532,7 +532,7 @@ jobs:
   LoadTesting_Stage_Application_Exercise:
     # Identify any jobs that must complete successfully before this job will run.
     runs-on: ubuntu-latest
-    if: contains(github.event_name, 'push')
+    #if: contains(github.event_name, 'push')
     name: 'Load Test Exercise'   
     env:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
@@ -592,7 +592,8 @@ jobs:
 # CD Stage - Dev  
 ###################################################################
   Approval_Stage_Application:
-    if: contains(github.event_name, 'push') && (inputs.approval-required == true) && always()
+    #if: contains(github.event_name, 'push') && (inputs.approval-required == true) && always()
+    if: (inputs.approval-required == true) && always()
 
     name: Approve Deployment
     
