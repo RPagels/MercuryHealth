@@ -145,7 +145,7 @@ jobs:
 # Deploy to Environments
 ###########################################
   dev-demo:
-    if: contains(github.event_name, 'push')
+    #if: contains(github.event_name, 'push')
     needs: Build_Application
     uses: ./.github/workflows/deploy-environment-single.yml
     with:

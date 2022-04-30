@@ -89,7 +89,7 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
     'ASPNETCORE_ENVIRONMENT': 'Development'
     'DebugOnly-sqlAdminLoginPassword=': sqlAdminLoginPassword
     'DebugOnly-sqlAdminLoginName=': sqlAdminLoginName
-    //'DebugOnly-sqlAdminLoginPassword2=': sqlAdminLoginPassword2
+    'DebugOnly-sqlConnectionString=': secretConnectionString
   }
 }
 
