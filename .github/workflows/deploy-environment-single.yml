@@ -62,6 +62,7 @@ jobs:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
       Deployed_Environment: ${{ inputs.environment-suffix }}
       APIM_PurgeNameDev: 'apim-fq3ruuhxgjony'
+      APIM_PurgeNameDevDemo: 'apim-f4egainwbm35aq'
       APIM_PurgeNameQA: 'apim-4av6wwkty4xb6'
       APIM_PurgeNameProd: 'apim-3gsbqvhdrf5ge'
    
@@ -115,6 +116,7 @@ jobs:
         inlineScript: |
           az rest --method get --header "Accept=application/json" -u 'https://management.azure.com/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/providers/Microsoft.ApiManagement/deletedservices?api-version=2021-08-01'
           az rest --method delete --header "Accept=application/json" -u 'https://management.azure.com/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/providers/Microsoft.ApiManagement/locations/${{ inputs.resource-group-location }}/deletedservices/${{ env.APIM_PurgeNameDev }}?api-version=2021-08-01'
+          az rest --method delete --header "Accept=application/json" -u 'https://management.azure.com/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/providers/Microsoft.ApiManagement/locations/${{ inputs.resource-group-location }}/deletedservices/${{ env.APIM_PurgeNameDevDemo }}?api-version=2021-08-01'
           az rest --method delete --header "Accept=application/json" -u 'https://management.azure.com/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/providers/Microsoft.ApiManagement/locations/${{ inputs.resource-group-location }}/deletedservices/${{ env.APIM_PurgeNameQA }}?api-version=2021-08-01'
           az rest --method delete --header "Accept=application/json" -u 'https://management.azure.com/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/providers/Microsoft.ApiManagement/locations/${{ inputs.resource-group-location }}/deletedservices/${{ env.APIM_PurgeNameProd }}?api-version=2021-08-01'
 
