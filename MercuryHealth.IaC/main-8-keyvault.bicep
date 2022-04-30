@@ -8,8 +8,8 @@ param appServiceprincipalId string
 //param sqlserverfullyQualifiedDomainName string
 param secretName1 string
 param secretName2 string
-// param secretName3 string
-// param secretName4 string
+param secretName3 string
+param secretName4 string
 // Azure SQL Credentials
 //@secure()
 //param sqlAdminLoginPassword string
@@ -20,8 +20,8 @@ param secretName2 string
 param configStoreConnection string
 @secure()
 param secretConnectionString string
-// @secure()
-// param secretAzureWebJobsStorage string
+@secure()
+param secretAzureWebJobsStorage string
 
 param accessPolicies array = [
   {
@@ -82,7 +82,6 @@ resource keyvault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
 // create secret for Web App
 resource mySecret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
   name: '${vaultName}/${secretName1}'
-  // parent: existingkeyvault
   properties: {
     contentType: 'text/plain'
     value: configStoreConnection
@@ -91,30 +90,27 @@ resource mySecret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
 // create secret for Web App
 resource mySecret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
   name: '${vaultName}/${secretName2}'
-  //parent: existingkeyvault
   properties: {
     contentType: 'text/plain'
     value: secretConnectionString
   }
 }
+//create secret for Func App
+resource mySecret3 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+  name: '${vaultName}/${secretName3}'
+  properties: {
+    contentType: 'text/plain'
+    value: secretAzureWebJobsStorage
+  }
+}
 // create secret for Func App
-// resource mySecret3 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-//   name: '${vaultName}/${secretName3}'
-//   //parent: existingkeyvault
-//   properties: {
-//     contentType: 'text/plain'
-//     value: secretAzureWebJobsStorage
-//   }
-// }
-// // create secret for Func App
-// resource mySecret4 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-//   name: '${vaultName}/${secretName4}'
-//   //parent: existingkeyvault
-//   properties: {
-//     contentType: 'text/plain'
-//     value: secretAzureWebJobsStorage
-//   }
-// }
+resource mySecret4 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+  name: '${vaultName}/${secretName4}'
+  properties: {
+    contentType: 'text/plain'
+    value: secretAzureWebJobsStorage
+  }
+}
 // create secret
 // resource mySecret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
 //   name: secretName1

@@ -147,13 +147,13 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
         }        
         {
           name: 'AzureWebJobsStorage'
-          value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
-          //value: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName3})'
+          //value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
+          value: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName3})'
         }
         {
           name: 'WebsiteContentAzureFileConnectionString'
-          value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
-          //value: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName4})'
+          //value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
+          value: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName4})'
         }
         {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
@@ -295,7 +295,7 @@ resource functionAppServiceAppSettings 'Microsoft.Web/sites/siteextensions@2021-
 //   name: keyvaultName
 // }
 
-//var secretAzureWebJobsStorage = 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
+var secretAzureWebJobsStorage = 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
 
 // create secret
 // resource mySecret3 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
@@ -319,4 +319,4 @@ resource functionAppServiceAppSettings 'Microsoft.Web/sites/siteextensions@2021-
 // }
 
 output out_funcAppServiceprincipalId string = functionApp.identity.principalId
-//output out_AzureWebJobsStorage string = secretAzureWebJobsStorage
+output out_AzureWebJobsStorage string = secretAzureWebJobsStorage

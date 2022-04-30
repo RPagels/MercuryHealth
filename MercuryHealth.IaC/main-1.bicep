@@ -335,7 +335,22 @@ resource mySecret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
     functionappmod
   ]
 }
-
+//create secret for Func App
+resource mySecret3 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+  name: '${keyvaultName}/${secretName3}'
+  properties: {
+    contentType: 'text/plain'
+    value: functionappmod.outputs.out_AzureWebJobsStorage
+  }
+}
+// create secret for Func App
+resource mySecret4 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+  name: '${keyvaultName}/${secretName4}'
+  properties: {
+    contentType: 'text/plain'
+    value: functionappmod.outputs.out_AzureWebJobsStorage
+  }
+}
  ////////////////////////////////////////
  // END - Key Vault
  ////////////////////////////////////////

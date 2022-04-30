@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "13885024724147447377"
+      "templateHash": "17461568434258301668"
     }
   },
   "parameters": {
@@ -289,7 +289,9 @@
         "value": "[listKeys(resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName')), '2021-10-01-preview').value[0].connectionString]"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName'))]"
+        "[resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName'))]",
+        "[resourceId('Microsoft.Resources/deployments', 'functionappdeploy')]",
+        "[resourceId('Microsoft.Resources/deployments', 'webappdeploy')]"
       ]
     },
     {
@@ -301,7 +303,32 @@
         "value": "[reference(resourceId('Microsoft.Resources/deployments', 'webappdeploy'), '2020-06-01').outputs.out_secretConnectionString.value]"
       },
       "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', 'functionappdeploy')]",
         "[resourceId('Microsoft.Resources/deployments', 'webappdeploy')]"
+      ]
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2021-11-01-preview",
+      "name": "[format('{0}/{1}', variables('keyvaultName'), parameters('secretName3'))]",
+      "properties": {
+        "contentType": "text/plain",
+        "value": "[reference(resourceId('Microsoft.Resources/deployments', 'functionappdeploy'), '2020-06-01').outputs.out_AzureWebJobsStorage.value]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', 'functionappdeploy')]"
+      ]
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2021-11-01-preview",
+      "name": "[format('{0}/{1}', variables('keyvaultName'), parameters('secretName4'))]",
+      "properties": {
+        "contentType": "text/plain",
+        "value": "[reference(resourceId('Microsoft.Resources/deployments', 'functionappdeploy'), '2020-06-01').outputs.out_AzureWebJobsStorage.value]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', 'functionappdeploy')]"
       ]
     },
     {
@@ -1082,7 +1109,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "18308579048004550470"
+              "templateHash": "2955221902936897628"
             }
           },
           "parameters": {
@@ -1225,11 +1252,11 @@
                     },
                     {
                       "name": "AzureWebJobsStorage",
-                      "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', variables('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2021-08-01').keys[0].value)]"
+                      "value": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secretName3'))]"
                     },
                     {
                       "name": "WebsiteContentAzureFileConnectionString",
-                      "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', variables('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2021-08-01').keys[0].value)]"
+                      "value": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secretName4'))]"
                     },
                     {
                       "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -1261,8 +1288,7 @@
                 "type": "SystemAssigned"
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', parameters('functionAppServiceName'))]",
-                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+                "[resourceId('Microsoft.Web/serverfarms', parameters('functionAppServiceName'))]"
               ]
             },
             {
@@ -1369,6 +1395,10 @@
             "out_funcAppServiceprincipalId": {
               "type": "string",
               "value": "[reference(resourceId('Microsoft.Web/sites', parameters('functionAppName')), '2021-03-01', 'full').identity.principalId]"
+            },
+            "out_AzureWebJobsStorage": {
+              "type": "string",
+              "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', variables('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2021-08-01').keys[0].value)]"
             }
           }
         }
