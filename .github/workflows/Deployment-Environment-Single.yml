@@ -30,12 +30,12 @@ on:
       azure-credentials:
         description: 'Credentials used to log into Azure for deployment of resources'
         required: true
-      sql-db-login:
-        description: 'Credentials used to log into SQL for deployment of resources'
-        required: true
-      sql-db-password:
-        description: 'Credentials used to log into SQL for deployment of resources'
-        required: true
+      #sql-db-login:
+      #  description: 'Credentials used to log into SQL for deployment of resources'
+      #  required: true
+      #sql-db-password:
+      #  description: 'Credentials used to log into SQL for deployment of resources'
+      #  required: true
 
 jobs:
   ###################################################################
