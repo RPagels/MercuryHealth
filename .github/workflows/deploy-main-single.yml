@@ -147,16 +147,16 @@ jobs:
   dev-demo:
     if: contains(github.event_name, 'push')
     needs: Build_Application
-    uses: ./.github/workflows/deploy-environment.yml
+    uses: ./.github/workflows/deploy-environment-single.yml
     with:
       resource-group-base-name: 'rg-MercuryHealth'
-      environment-suffix: 'dev'
+      environment-suffix: 'dev-demo'
       resource-group-location: 'eastus2'
       approval-required: true
     secrets:
       azure-subscription: ${{ secrets.AZURE_SUBSCRIPTION }}
       azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
-      sql-db-login: ${{ secrets.SQL_DB_LOGIN }}
-      sql-db-password: ${{ secrets.SQL_DB_PASSWORD }}
+      #sql-db-login: ${{ secrets.SQL_DB_LOGIN }}
+      #sql-db-password: ${{ secrets.SQL_DB_PASSWORD }}
       #sql-db-server-name: ${{ secrets.SQL_DB_Server_Name }}
       #sql-connection-string: ${{ secrets.SQL_DB_Connection_String_Dev }}
