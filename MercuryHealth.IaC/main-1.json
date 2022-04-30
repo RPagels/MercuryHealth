@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "13144572736489305223"
+      "templateHash": "6625652588564501171"
     }
   },
   "parameters": {
@@ -116,6 +116,7 @@
   "variables": {
     "sqlAdminLoginName": "AzureAdmin",
     "sqlAdminLoginPassword": "Password.1.!!",
+    "sqlAdminLoginPassword2": "[format('{0}.!!.{1}', base64(uniqueString(resourceGroup().id)), uniqueString(resourceGroup().id))]",
     "webAppPlanName": "[format('plan-{0}', uniqueString(resourceGroup().id))]",
     "webSiteName": "[format('app-{0}', uniqueString(resourceGroup().id))]",
     "sqlserverName": "[toLower(format('sql-{0}', uniqueString(resourceGroup().id)))]",
@@ -305,11 +306,20 @@
           "secretName2": {
             "value": "[parameters('secretName2')]"
           },
+          "secretName3": {
+            "value": "[parameters('secretName3')]"
+          },
+          "secretName4": {
+            "value": "[parameters('secretName4')]"
+          },
           "configStoreConnection": {
             "value": "[listKeys(resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName')), '2021-10-01-preview').value[0].connectionString]"
           },
           "secretConnectionString": {
             "value": "[reference(resourceId('Microsoft.Resources/deployments', 'webappdeploy'), '2020-06-01').outputs.out_secretConnectionString.value]"
+          },
+          "secretAzureWebJobsStorage": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'functionappdeploy'), '2020-06-01').outputs.out_AzureWebJobsStorage.value]"
           },
           "funcAppServiceprincipalId": {
             "value": "[reference(resourceId('Microsoft.Resources/deployments', 'functionappdeploy'), '2020-06-01').outputs.out_funcAppServiceprincipalId.value]"
@@ -322,7 +332,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "15041868100493262383"
+              "templateHash": "12250639001046840687"
             }
           },
           "parameters": {
@@ -349,10 +359,19 @@
             "secretName2": {
               "type": "string"
             },
+            "secretName3": {
+              "type": "string"
+            },
+            "secretName4": {
+              "type": "string"
+            },
             "configStoreConnection": {
               "type": "secureString"
             },
             "secretConnectionString": {
+              "type": "secureString"
+            },
+            "secretAzureWebJobsStorage": {
               "type": "secureString"
             },
             "accessPolicies": {
@@ -436,6 +455,24 @@
                 "contentType": "text/plain",
                 "value": "[parameters('secretConnectionString')]"
               }
+            },
+            {
+              "type": "Microsoft.KeyVault/vaults/secrets",
+              "apiVersion": "2021-11-01-preview",
+              "name": "[format('{0}/{1}', parameters('vaultName'), parameters('secretName3'))]",
+              "properties": {
+                "contentType": "text/plain",
+                "value": "[parameters('secretAzureWebJobsStorage')]"
+              }
+            },
+            {
+              "type": "Microsoft.KeyVault/vaults/secrets",
+              "apiVersion": "2021-11-01-preview",
+              "name": "[format('{0}/{1}', parameters('vaultName'), parameters('secretName4'))]",
+              "properties": {
+                "contentType": "text/plain",
+                "value": "[parameters('secretAzureWebJobsStorage')]"
+              }
             }
           ],
           "outputs": {
@@ -508,8 +545,8 @@
           "sqlAdminLoginPassword": {
             "value": "[variables('sqlAdminLoginPassword')]"
           },
-          "configStoreConnection": {
-            "value": "[listKeys(resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName')), '2021-10-01-preview').value[0].connectionString]"
+          "sqlAdminLoginPassword2": {
+            "value": "[variables('sqlAdminLoginPassword2')]"
           },
           "sqlDBName": {
             "value": "[variables('sqlDBName')]"
@@ -528,7 +565,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "6800854446320660909"
+              "templateHash": "9100223107701930093"
             }
           },
           "parameters": {
@@ -556,6 +593,9 @@
               "type": "secureString"
             },
             "sqlAdminLoginName": {
+              "type": "secureString"
+            },
+            "sqlAdminLoginPassword2": {
               "type": "secureString"
             },
             "webAppPlanName": {
@@ -587,9 +627,6 @@
             },
             "defaultTags": {
               "type": "object"
-            },
-            "configStoreConnection": {
-              "type": "string"
             }
           },
           "functions": [],
@@ -644,7 +681,10 @@
                 "APPINSIGHTS_SNAPSHOTFEATURE_VERSION": "1.0.0",
                 "APPLICATIONINSIGHTS_CONNECTION_STRING": "[parameters('appInsightsConnectionString')]",
                 "WebAppUrl": "[format('https://{0}.azurewebsites.net/', parameters('webSiteName'))]",
-                "ASPNETCORE_ENVIRONMENT": "Development"
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "DebugOnly-sqlAdminLoginPassword=": "[parameters('sqlAdminLoginPassword')]",
+                "DebugOnly-sqlAdminLoginName=": "[parameters('sqlAdminLoginName')]",
+                "DebugOnly-sqlAdminLoginName2=": "[parameters('sqlAdminLoginPassword2')]"
               },
               "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', parameters('webSiteName'))]"
@@ -841,7 +881,6 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')]",
-        "[resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName'))]",
         "[resourceId('Microsoft.Resources/deployments', 'sqldbdeploy')]"
       ]
     },
@@ -1177,7 +1216,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "6138669248255335997"
+              "templateHash": "2955221902936897628"
             }
           },
           "parameters": {
@@ -1457,36 +1496,16 @@
               "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]"
               ]
-            },
-            {
-              "type": "Microsoft.KeyVault/vaults/secrets",
-              "apiVersion": "2021-11-01-preview",
-              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('secretName3'))]",
-              "properties": {
-                "contentType": "text/plain",
-                "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', variables('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2021-08-01').keys[0].value)]"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
-              ]
-            },
-            {
-              "type": "Microsoft.KeyVault/vaults/secrets",
-              "apiVersion": "2021-11-01-preview",
-              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('secretName4'))]",
-              "properties": {
-                "contentType": "text/plain",
-                "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', variables('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2021-08-01').keys[0].value)]"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
-              ]
             }
           ],
           "outputs": {
             "out_funcAppServiceprincipalId": {
               "type": "string",
               "value": "[reference(resourceId('Microsoft.Web/sites', parameters('functionAppName')), '2021-03-01', 'full').identity.principalId]"
+            },
+            "out_AzureWebJobsStorage": {
+              "type": "string",
+              "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', variables('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2021-08-01').keys[0].value)]"
             }
           }
         }

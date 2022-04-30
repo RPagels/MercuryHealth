@@ -12,6 +12,9 @@ param sqlAdminLoginPassword string
 @secure()
 param sqlAdminLoginName string
 
+@secure()
+param sqlAdminLoginPassword2 string
+
 param webAppPlanName string
 param webSiteName string
 param resourceGroupName string
@@ -22,7 +25,7 @@ param secretName2 string
 param appInsightsInstrumentationKey string
 param appInsightsConnectionString string
 param defaultTags object
-param configStoreConnection string
+//param configStoreConnection string
 
 // Varabiles
 // var standardPlanMaxAdditionalSlots = 2
@@ -84,8 +87,9 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
     'APPLICATIONINSIGHTS_CONNECTION_STRING': appInsightsConnectionString
     'WebAppUrl': 'https://${appService.name}.azurewebsites.net/'
     'ASPNETCORE_ENVIRONMENT': 'Development'
-    //'DebugOnly-sqlAdminLoginPassword=': sqlAdminLoginPassword
-    //'DebugOnly-sqlAdminLoginName=': sqlAdminLoginName
+    'DebugOnly-sqlAdminLoginPassword=': sqlAdminLoginPassword
+    'DebugOnly-sqlAdminLoginName=': sqlAdminLoginName
+    'DebugOnly-sqlAdminLoginName2=': sqlAdminLoginPassword2
   }
 }
 

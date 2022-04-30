@@ -20,7 +20,8 @@ param Deployed_Environment string
 
 // Generate Azure SQL Credentials
 var sqlAdminLoginName = 'AzureAdmin' //'AzureAdmin${uniqueString(resourceGroup().id)}'
-var sqlAdminLoginPassword = 'Password.1.!!' //guid(resourceGroup().id)
+var sqlAdminLoginPassword = 'Password.1.!!' //base64(guid(resourceGroup().id))
+var sqlAdminLoginPassword2 = '${base64(uniqueString(resourceGroup().id))}.!!.${uniqueString(resourceGroup().id)}'
 
 // Variables for Recommended abbreviations for Azure resource types
 // https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations
@@ -35,7 +36,6 @@ var appInsightsAlertName = 'ResponseTime-${uniqueString(resourceGroup().id)}'
 var functionAppName = 'func-${uniqueString(resourceGroup().id)}'
 var functionAppServiceName = 'funcplan-${uniqueString(resourceGroup().id)}'
 var apiServiceName = 'apim-${uniqueString(resourceGroup().id)}'
-//var apiSubscriptionName = 'apimsub-${uniqueString(resourceGroup().id)}'
 var loadTestsName = 'loadtests-${uniqueString(resourceGroup().id)}'
 var keyvaultName = 'kv-${uniqueString(resourceGroup().id)}'
 var blobstorageName = 'stablob${uniqueString(resourceGroup().id)}'
@@ -202,17 +202,14 @@ module keyvaultmod './main-8-keyvault.bicep' = {
   params: {
     location: location
     vaultName: keyvaultName
-   //  sqlserverName: sqlserverName
-   //  sqlDBName: sqlDBName
-   //  sqlAdminLoginName: sqlAdminLoginName
-   //  sqlAdminLoginPassword: sqlAdminLoginPassword
-   //  configStoreConnection: configStoreConnectionString
     appServiceprincipalId: webappmod.outputs.out_appServiceprincipalId
-    //sqlserverfullyQualifiedDomainName: sqldbmod.outputs.sqlserverfullyQualifiedDomainName
     secretName1: secretName1
     secretName2: secretName2
+    secretName3: secretName3
+    secretName4: secretName4
     configStoreConnection: configStoreConnectionString
     secretConnectionString: webappmod.outputs.out_secretConnectionString
+    secretAzureWebJobsStorage: functionappmod.outputs.out_AzureWebJobsStorage
     funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
     }
     dependsOn:  [
@@ -392,7 +389,8 @@ module webappmod './main-2-webapp.bicep' = {
     secretName2: secretName2
     sqlAdminLoginName: sqlAdminLoginName
     sqlAdminLoginPassword: sqlAdminLoginPassword
-    configStoreConnection: configStoreConnectionString
+    sqlAdminLoginPassword2: sqlAdminLoginPassword2
+    //configStoreConnection: configStoreConnectionString
     sqlDBName: sqlDBName
     sqlserverfullyQualifiedDomainName: sqldbmod.outputs.sqlserverfullyQualifiedDomainName
     sqlserverName: sqlserverName
@@ -486,22 +484,18 @@ module blogstoragemod './main-12-blobstorage.bicep' = {
 //   }
 // }
 
+// Output Params used for IaC deployment in pipeline
 output out_webSiteName string = webSiteName
 output out_sqlserverName string = sqlserverName
 output out_sqlDBName string = sqlDBName
 output out_sqlserverFQName string = sqldbmod.outputs.sqlserverfullyQualifiedDomainName
-//output out_sqlConnectionString string = webappmod.outputs.out_sqlConnectionString
 output out_configStoreName string = configStoreName
 output out_appInsightsName string = appInsightsName
 output out_functionAppName string = functionAppName
 output out_apiServiceName string = apiServiceName
 output out_loadTestsName string = loadTestsName
 output out_keyvaultName string = keyvaultName
-//output out_keyvaultSecretName string = secretName2
 output out_secretConnectionString string = webappmod.outputs.out_secretConnectionString
 output out_appInsightsApplicationId string = appinsightsmod.outputs.out_appInsightsApplicationId
 output out_appInsightsAPIApplicationId string = appinsightsmod.outputs.out_appInsightsAPIApplicationId
 output out_releaseAnnotationGuidID string = releaseAnnotationGuid
-
-//test only
-//output out_apiManagementKey string = apiManagement.properties.gatewayUrl

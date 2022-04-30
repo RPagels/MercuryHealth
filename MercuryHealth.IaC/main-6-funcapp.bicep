@@ -295,23 +295,28 @@ resource functionAppServiceAppSettings 'Microsoft.Web/sites/siteextensions@2021-
 //   name: keyvaultName
 // }
 
+var secretAzureWebJobsStorage = 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
+
 // create secret
-resource mySecret3 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: '${keyvaultName}/${secretName3}'
-  //parent: existingkeyvault
-  properties: {
-    contentType: 'text/plain'
-    value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
-  }
-}
+// resource mySecret3 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+//   name: '${keyvaultName}/${secretName3}'
+//   //parent: existingkeyvault
+//   properties: {
+//     contentType: 'text/plain'
+//     //value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
+//     value: secretAzureWebJobsStorage
+//   }
+// }
 // create secret
-resource mySecret4 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: '${keyvaultName}/${secretName4}'
-  //parent: existingkeyvault
-  properties: {
-    contentType: 'text/plain'
-    value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
-  }
-}
+// resource mySecret4 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+//   name: '${keyvaultName}/${secretName4}'
+//   //parent: existingkeyvault
+//   properties: {
+//     contentType: 'text/plain'
+//     //value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
+//     value: secretAzureWebJobsStorage
+//   }
+// }
 
 output out_funcAppServiceprincipalId string = functionApp.identity.principalId
+output out_AzureWebJobsStorage string = secretAzureWebJobsStorage
