@@ -197,101 +197,137 @@ var configStoreConnectionString = listKeys(config.id, config.apiVersion).value[0
 ////////////////////////////////////////
 
 // Create Azure KeyVault
-module keyvaultmod './main-8-keyvault.bicep' = {
-  name: keyvaultName
-  params: {
-    location: location
-    vaultName: keyvaultName
-    appServiceprincipalId: webappmod.outputs.out_appServiceprincipalId
-    secretName1: secretName1
-    secretName2: secretName2
-    // secretName3: secretName3
-    // secretName4: secretName4
-    configStoreConnection: configStoreConnectionString
-    secretConnectionString: webappmod.outputs.out_secretConnectionString
-    //secretAzureWebJobsStorage: functionappmod.outputs.out_AzureWebJobsStorage
-    //funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
-    }
-    dependsOn:  [
-     webappmod
-     //functionappmod
-   ]
- }
-
-//  param networkAcls object = {
-//    ipRules: []
-//    virtualNetworkRules: []
-//  }
-//  resource keyvault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
-//    name: keyvaultName
-//    location: location
-//    properties: {
-//      sku: {
-//        family: 'A'
-//        name: 'standard'
-//      }
-//      tenantId: subscription().tenantId
-//      enableSoftDelete: false
-//      enabledForDeployment: true
-//      enabledForDiskEncryption: true
-//      enabledForTemplateDeployment: true
-//      softDeleteRetentionInDays: 90
-//      enableRbacAuthorization: true
-//      networkAcls: networkAcls
-//      accessPolicies:[
-//        {
-//         tenantId: subscription().tenantId
-//         objectId: webappmod.outputs.out_appServiceprincipalId
-//          permissions: {
-//            keys: [
-//              'list'
-//              'get'
-//            ]
-//            secrets: [
-//              'list'
-//              'get'
-//            ]
-//           }
-//        }
-//        {
-//           tenantId: subscription().tenantId
-//           objectId: functionappmod.outputs.out_funcAppServiceprincipalId
-//            permissions: {
-//              keys: [
-//                'list'
-//                'get'
-//              ]
-//              secrets: [
-//                'list'
-//                'get'
-//              ]
-//            }
-//         }
-//      ]
-//    }
-//    dependsOn:  [
+// module keyvaultmod './main-8-keyvault.bicep' = {
+//   name: keyvaultName
+//   params: {
+//     location: location
+//     vaultName: keyvaultName
+//     appServiceprincipalId: webappmod.outputs.out_appServiceprincipalId
+//     secretName1: secretName1
+//     secretName2: secretName2
+//     // secretName3: secretName3
+//     // secretName4: secretName4
+//     configStoreConnection: configStoreConnectionString
+//     secretConnectionString: webappmod.outputs.out_secretConnectionString
+//     //secretAzureWebJobsStorage: functionappmod.outputs.out_AzureWebJobsStorage
+//     //funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
+//     }
+//     dependsOn:  [
 //      webappmod
-//      functionappmod
+//      //functionappmod
 //    ]
 //  }
 
- // resource secret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
- //   name: secretName1
- //   parent: keyvaultmod
- //   properties: {
- //     contentType: 'text/plain'
- //     value: configStoreConnectionString
- //   }
- // }
- // resource secret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
- //   name: secretName2
- //   parent: keyvaultmod
- //   properties: {
- //     contentType: 'text/plain'
- //     value: 'Server=tcp:${sqldbmod.outputs.sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
- //   }
- // }
+//  param accessPolicies array = [
+//   {
+//     tenantId: subscription().tenantId
+//     objectId: webappmod.outputs.out_appServiceprincipalId
+//     permissions: {
+//       keys: [
+//         'Get'
+//         'List'
+//       ]
+//       secrets: [
+//         'Get'
+//         'List'
+//       ]
+//     }
+//   }
+
+param networkAcls object = {
+  ipRules: []
+  virtualNetworkRules: []
+}
+
+resource keyvault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
+  name: keyvaultName
+  location: location
+  properties: {
+    sku: {
+      family: 'A'
+      name: 'standard'
+    }
+    tenantId: subscription().tenantId
+    enableSoftDelete: false
+    enabledForDeployment: true
+    enabledForDiskEncryption: true
+    enabledForTemplateDeployment: true
+    softDeleteRetentionInDays: 90
+    enableRbacAuthorization: true
+    networkAcls: networkAcls
+    accessPolicies:[
+      {
+      tenantId: subscription().tenantId
+      objectId: webappmod.outputs.out_appServiceprincipalId
+        permissions: {
+          keys: [
+            'list'
+            'get'
+          ]
+          secrets: [
+            'list'
+            'get'
+          ]
+        }
+      }
+      {
+        tenantId: subscription().tenantId
+        objectId: functionappmod.outputs.out_funcAppServiceprincipalId
+          permissions: {
+            keys: [
+              'list'
+              'get'
+            ]
+            secrets: [
+              'list'
+              'get'
+            ]
+          }
+      }
+    ]
+  }
+  dependsOn:  [
+    webappmod
+    functionappmod
+  ]
+}
+
+//  resource secret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+//    name: secretName1
+//    parent: keyvaultmod
+//    properties: {
+//      contentType: 'text/plain'
+//      value: configStoreConnectionString
+//    }
+//  }
+//  resource secret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+//    name: secretName2
+//    parent: keyvaultmod
+//    properties: {
+//      contentType: 'text/plain'
+//      value: 'Server=tcp:${sqldbmod.outputs.sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+//    }
+//  }
  
+// create secret for Web App
+resource mySecret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+  name: '${keyvaultName}/${secretName1}'
+  // parent: existingkeyvault
+  properties: {
+    contentType: 'text/plain'
+    value: configStoreConnectionString
+  }
+}
+// create secret for Web App
+resource mySecret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+  name: '${keyvaultName}/${secretName2}'
+  //parent: existingkeyvault
+  properties: {
+    contentType: 'text/plain'
+    value: webappmod.outputs.out_secretConnectionString
+  }
+}
+
  ////////////////////////////////////////
  // END - Key Vault
  ////////////////////////////////////////
