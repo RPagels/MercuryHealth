@@ -1,7 +1,4 @@
 // The following will create an Azure APIM instance
-//
-// DELETE https://management.azure.com/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/providers/Microsoft.ApiManagement/locations/eastus/deletedservices/apiService-ixveii3svqyh6?api-version=2020-06-01-preview
-//
 
 param location string = resourceGroup().location
 param apiServiceName string
@@ -37,5 +34,36 @@ resource apiManagement 'Microsoft.ApiManagement/service@2021-08-01' = {
   }
   identity: {
     type: 'SystemAssigned'
+  }
+}
+
+resource petStoreApiExample 'Microsoft.ApiManagement/service/apis@2021-08-01' = {
+  name: '${apiManagement.name}/PetStoreSwaggerImportExample'
+  properties: {
+    format: 'swagger-link-json'
+    value: 'http://petstore.swagger.io/v2/swagger.json'
+    path: 'examplepetstore'
+  }
+}
+
+resource exampleApi 'Microsoft.ApiManagement/service/apis@2021-08-01' = {
+  name: '${apiManagement.name}/exampleApi'
+  properties: {
+    displayName: 'Example API Name'
+    description: 'Description for example API'
+    serviceUrl: 'https://example.net'
+    path: 'exampleapipath'
+    protocols: [
+      'https'
+    ]
+  }
+}
+
+resource MercuryHealthApiExample 'Microsoft.ApiManagement/service/apis@2021-08-01' = {
+  name: '${apiManagement.name}/MercuryHealthSwaggerImportExample'
+  properties: {
+    format:'openapi+json'
+    value: 'https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json'
+    path: 'MercuryHealthApiExample'
   }
 }

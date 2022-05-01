@@ -270,20 +270,20 @@ resource keyvault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
           ]
         }
       }
-      // {
-      //   tenantId: subscription().tenantId
-      //   objectId: functionappmod.outputs.out_funcAppServiceprincipalId
-      //     permissions: {
-      //       keys: [
-      //         'list'
-      //         'get'
-      //       ]
-      //       secrets: [
-      //         'list'
-      //         'get'
-      //       ]
-      //     }
-      // }
+      {
+        tenantId: subscription().tenantId
+        objectId: functionappmod.outputs.out_funcAppServiceprincipalId
+          permissions: {
+            keys: [
+              'list'
+              'get'
+            ]
+            secrets: [
+              'list'
+              'get'
+            ]
+          }
+      }
     ]
   }
   dependsOn:  [
@@ -336,31 +336,31 @@ resource mySecret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
   // ]
 }
 //create secret for Func App
-// resource mySecret3 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-//   name: secretName3
-//   //name: '${keyvaultName}/${secretName3}'
-//   parent: keyvault
-//   properties: {
-//     contentType: 'text/plain'
-//     value: functionappmod.outputs.out_AzureWebJobsStorage
-//   }
-//   // dependsOn:  [
-//   //   keyvault
-//   // ]
-// }
-// create secret for Func App
-// resource mySecret4 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-//   name: secretName4
-//   //name: '${keyvaultName}/${secretName4}'
-//   parent: keyvault
-//   properties: {
-//     contentType: 'text/plain'
-//     value: functionappmod.outputs.out_AzureWebJobsStorage
-//   }
-//   // dependsOn:  [
-//   //   keyvault
-//   // ]
-// }
+resource mySecret3 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+  name: secretName3
+  //name: '${keyvaultName}/${secretName3}'
+  parent: keyvault
+  properties: {
+    contentType: 'text/plain'
+    value: functionappmod.outputs.out_AzureWebJobsStorage
+  }
+  // dependsOn:  [
+  //   keyvault
+  // ]
+}
+//create secret for Func App
+resource mySecret4 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+  name: secretName4
+  //name: '${keyvaultName}/${secretName4}'
+  parent: keyvault
+  properties: {
+    contentType: 'text/plain'
+    value: functionappmod.outputs.out_AzureWebJobsStorage
+  }
+  // dependsOn:  [
+  //   keyvault
+  // ]
+}
 
  ////////////////////////////////////////
  // END - Key Vault
@@ -432,12 +432,34 @@ resource appInsightsAPIManagement 'Microsoft.ApiManagement/service/loggers@2021-
   ]
 }
 
+resource petStoreApiExample 'Microsoft.ApiManagement/service/apis@2021-08-01' = {
+  name: 'PetStoreSwaggerImportExample'
+  //name: '${apiManagement.name}/PetStoreSwaggerImportExample'
+  parent: apiManagement
+  properties: {
+    format: 'swagger-link-json'
+    value: 'http://petstore.swagger.io/v2/swagger.json'
+    path: 'examplepetstore'
+  }
+}
+
+resource exampleApi 'Microsoft.ApiManagement/service/apis@2021-08-01' = {
+  name: 'ExampleApi'
+  //name: '${apiManagement.name}/exampleApi'
+  parent: apiManagement
+  properties: {
+    displayName: 'Example API Name'
+    description: 'Description for example API'
+    serviceUrl: 'https://example.net'
+    path: 'exampleapipath'
+    protocols: [
+      'https'
+    ]
+  }
+}
+
 // API Management - Avoid outputs for secrets - Look up secrets dynamically
 // Note: This is why API Management isn't it's own module...MUST be in the main
-// resource apiManagement 'Microsoft.ApiManagement/service@2020-12-01' existing = {
-//   name: apiServiceName
-// }
-
 var ApimSubscriptionKeyString = apiManagementSubscription.listSecrets().primaryKey
 
 // Create Web App

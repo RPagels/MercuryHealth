@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "17461568434258301668"
+      "templateHash": "16543628378080866994"
     }
   },
   "parameters": {
@@ -133,11 +133,10 @@
     "appInsightsAlertName": "[format('ResponseTime-{0}', uniqueString(resourceGroup().id))]",
     "functionAppName": "[format('func-{0}', uniqueString(resourceGroup().id))]",
     "functionAppServiceName": "[format('funcplan-{0}', uniqueString(resourceGroup().id))]",
-    "apiServiceName": "[format('apim-{0}', uniqueString(resourceGroup().id))]",
+    "apiServiceName": "[format('apimv2-{0}', uniqueString(resourceGroup().id))]",
     "loadTestsName": "[format('loadtests-{0}', uniqueString(resourceGroup().id))]",
     "keyvaultName": "[format('kv-{0}', uniqueString(resourceGroup().id))]",
     "blobstorageName": "[format('stablob{0}', uniqueString(resourceGroup().id))]",
-    "dashboardName": "[format('dashboard-{0}', uniqueString(resourceGroup().id))]",
     "defaultTags": {
       "Env": "[parameters('Deployed_Environment')]",
       "App": "Mercury Health",
@@ -242,7 +241,7 @@
         "enabledForDiskEncryption": true,
         "enabledForTemplateDeployment": true,
         "softDeleteRetentionInDays": 90,
-        "enableRbacAuthorization": true,
+        "enableRbacAuthorization": false,
         "networkAcls": "[parameters('networkAcls')]",
         "accessPolicies": [
           {
@@ -290,8 +289,7 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName'))]",
-        "[resourceId('Microsoft.Resources/deployments', 'functionappdeploy')]",
-        "[resourceId('Microsoft.Resources/deployments', 'webappdeploy')]"
+        "[resourceId('Microsoft.KeyVault/vaults', variables('keyvaultName'))]"
       ]
     },
     {
@@ -303,7 +301,7 @@
         "value": "[reference(resourceId('Microsoft.Resources/deployments', 'webappdeploy'), '2020-06-01').outputs.out_secretConnectionString.value]"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Resources/deployments', 'functionappdeploy')]",
+        "[resourceId('Microsoft.KeyVault/vaults', variables('keyvaultName'))]",
         "[resourceId('Microsoft.Resources/deployments', 'webappdeploy')]"
       ]
     },
@@ -316,7 +314,8 @@
         "value": "[reference(resourceId('Microsoft.Resources/deployments', 'functionappdeploy'), '2020-06-01').outputs.out_AzureWebJobsStorage.value]"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Resources/deployments', 'functionappdeploy')]"
+        "[resourceId('Microsoft.Resources/deployments', 'functionappdeploy')]",
+        "[resourceId('Microsoft.KeyVault/vaults', variables('keyvaultName'))]"
       ]
     },
     {
@@ -328,7 +327,8 @@
         "value": "[reference(resourceId('Microsoft.Resources/deployments', 'functionappdeploy'), '2020-06-01').outputs.out_AzureWebJobsStorage.value]"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Resources/deployments', 'functionappdeploy')]"
+        "[resourceId('Microsoft.Resources/deployments', 'functionappdeploy')]",
+        "[resourceId('Microsoft.KeyVault/vaults', variables('keyvaultName'))]"
       ]
     },
     {
@@ -390,6 +390,36 @@
       "dependsOn": [
         "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]",
         "[resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')]"
+      ]
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/apis",
+      "apiVersion": "2021-08-01",
+      "name": "[format('{0}/{1}', variables('apiServiceName'), 'PetStoreSwaggerImportExample')]",
+      "properties": {
+        "format": "swagger-link-json",
+        "value": "http://petstore.swagger.io/v2/swagger.json",
+        "path": "examplepetstore"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/apis",
+      "apiVersion": "2021-08-01",
+      "name": "[format('{0}/{1}', variables('apiServiceName'), 'ExampleApi')]",
+      "properties": {
+        "displayName": "Example API Name",
+        "description": "Description for example API",
+        "serviceUrl": "https://example.net",
+        "path": "exampleapipath",
+        "protocols": [
+          "https"
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]"
       ]
     },
     {
@@ -1109,7 +1139,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "2955221902936897628"
+              "templateHash": "14644701189303094575"
             }
           },
           "parameters": {
@@ -1166,6 +1196,7 @@
               "sku": {
                 "name": "Standard_LRS"
               },
+              "tags": "[parameters('defaultTags')]",
               "kind": "StorageV2",
               "properties": {
                 "supportsHttpsTrafficOnly": true,
@@ -1378,14 +1409,6 @@
                 "siteName": "[parameters('functionAppName')]",
                 "hostNameType": "Verified"
               },
-              "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]"
-              ]
-            },
-            {
-              "type": "Microsoft.Web/sites/siteextensions",
-              "apiVersion": "2021-03-01",
-              "name": "[format('{0}/{1}', parameters('functionAppName'), 'Microsoft.ApplicationInsights.AzureWebSites')]",
               "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]"
               ]
