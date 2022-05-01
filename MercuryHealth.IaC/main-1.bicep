@@ -430,7 +430,6 @@ resource appInsightsAPIManagement 'Microsoft.ApiManagement/service/loggers@2021-
   dependsOn:  [
     appinsightsmod
   ]
-  
 }
 
 // API Management - Avoid outputs for secrets - Look up secrets dynamically
@@ -507,6 +506,10 @@ module functionappmod './main-6-funcapp.bicep' = {
     secretName3: secretName3
     secretName4: secretName4
   }
+  dependsOn:  [
+    appinsightsmod
+  ]
+  
 }
 
 // Create Azure Load Tests
