@@ -248,7 +248,7 @@ resource keyvault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
       name: 'standard'
     }
     tenantId: subscription().tenantId
-    enableSoftDelete: false
+    enableSoftDelete: true
     enabledForDeployment: true
     enabledForDiskEncryption: true
     enabledForTemplateDeployment: true
