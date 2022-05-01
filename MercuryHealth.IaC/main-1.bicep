@@ -288,7 +288,7 @@ resource keyvault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
   }
   dependsOn:  [
     webappmod
-    //functionappmod
+    functionappmod
   ]
 }
 
