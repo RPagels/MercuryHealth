@@ -318,7 +318,7 @@ resource mySecret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
     value: configStoreConnectionString
   }
   dependsOn:  [
-    webappmod
+    keyvault
   ]
 }
 // create secret for Web App
@@ -330,7 +330,7 @@ resource mySecret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
     value: webappmod.outputs.out_secretConnectionString
   }
   dependsOn:  [
-    webappmod
+    keyvault
   ]
 }
 //create secret for Func App
@@ -341,7 +341,7 @@ resource mySecret3 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
     value: functionappmod.outputs.out_AzureWebJobsStorage
   }
   dependsOn:  [
-    functionappmod
+    keyvault
   ]
 }
 // create secret for Func App
@@ -352,7 +352,7 @@ resource mySecret4 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
     value: functionappmod.outputs.out_AzureWebJobsStorage
   }
   dependsOn:  [
-    functionappmod
+    keyvault
   ]
 }
  ////////////////////////////////////////
