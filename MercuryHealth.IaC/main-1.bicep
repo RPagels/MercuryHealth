@@ -270,25 +270,25 @@ resource keyvault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
           ]
         }
       }
-      {
-        tenantId: subscription().tenantId
-        objectId: functionappmod.outputs.out_funcAppServiceprincipalId
-          permissions: {
-            keys: [
-              'list'
-              'get'
-            ]
-            secrets: [
-              'list'
-              'get'
-            ]
-          }
-      }
+      // {
+      //   tenantId: subscription().tenantId
+      //   objectId: functionappmod.outputs.out_funcAppServiceprincipalId
+      //     permissions: {
+      //       keys: [
+      //         'list'
+      //         'get'
+      //       ]
+      //       secrets: [
+      //         'list'
+      //         'get'
+      //       ]
+      //     }
+      // }
     ]
   }
   dependsOn:  [
     webappmod
-    functionappmod
+    //functionappmod
   ]
 }
 
@@ -336,31 +336,32 @@ resource mySecret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
   // ]
 }
 //create secret for Func App
-resource mySecret3 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: secretName3
-  //name: '${keyvaultName}/${secretName3}'
-  parent: keyvault
-  properties: {
-    contentType: 'text/plain'
-    value: functionappmod.outputs.out_AzureWebJobsStorage
-  }
-  // dependsOn:  [
-  //   keyvault
-  // ]
-}
+// resource mySecret3 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+//   name: secretName3
+//   //name: '${keyvaultName}/${secretName3}'
+//   parent: keyvault
+//   properties: {
+//     contentType: 'text/plain'
+//     value: functionappmod.outputs.out_AzureWebJobsStorage
+//   }
+//   // dependsOn:  [
+//   //   keyvault
+//   // ]
+// }
 // create secret for Func App
-resource mySecret4 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: secretName4
-  //name: '${keyvaultName}/${secretName4}'
-  parent: keyvault
-  properties: {
-    contentType: 'text/plain'
-    value: functionappmod.outputs.out_AzureWebJobsStorage
-  }
-  // dependsOn:  [
-  //   keyvault
-  // ]
-}
+// resource mySecret4 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+//   name: secretName4
+//   //name: '${keyvaultName}/${secretName4}'
+//   parent: keyvault
+//   properties: {
+//     contentType: 'text/plain'
+//     value: functionappmod.outputs.out_AzureWebJobsStorage
+//   }
+//   // dependsOn:  [
+//   //   keyvault
+//   // ]
+// }
+
  ////////////////////////////////////////
  // END - Key Vault
  ////////////////////////////////////////
