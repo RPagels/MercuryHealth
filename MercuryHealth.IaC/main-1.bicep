@@ -39,7 +39,7 @@ var apiServiceName = 'apimv2-${uniqueString(resourceGroup().id)}'
 var loadTestsName = 'loadtests-${uniqueString(resourceGroup().id)}'
 var keyvaultName = 'kv-${uniqueString(resourceGroup().id)}'
 var blobstorageName = 'stablob${uniqueString(resourceGroup().id)}'
-var dashboardName = 'dashboard-${uniqueString(resourceGroup().id)}'
+//var dashboardName = 'dashboard-${uniqueString(resourceGroup().id)}'
 
 // Tags
 var defaultTags = {

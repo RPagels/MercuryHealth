@@ -1,0 +1,705 @@
+openapi: 3.0.1
+info:
+  title: Mercury Health
+  description: A sample API that uses a Mercury Health as an example to demonstrate features.
+  version: '1.0'
+servers:
+  - url: https://apim-fq3ruuhxgjony.azure-api.net
+paths:
+  /api/Exercises:
+    get:
+      tags:
+        - Exercises
+      summary: /api/Exercises - GET
+      description: /api/Exercises - GET
+      operationId: get-api-exercises
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiExercisesGet200TextPlainResponse'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiExercisesGet200ApplicationJsonResponse'
+              example:
+                - id: 0
+                  name: string
+                  description: string
+                  videoUrl: string
+                  musclesInvolved: string
+                  equipment: string
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiExercisesGet200TextJsonResponse'
+              example:
+                - id: 0
+                  name: string
+                  description: string
+                  videoUrl: string
+                  musclesInvolved: string
+                  equipment: string
+    post:
+      tags:
+        - Exercises
+      summary: /api/Exercises - POST
+      description: /api/Exercises - POST
+      operationId: post-api-exercises
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/Exercises'
+            example:
+              id: 0
+              name: string
+              description: string
+              videoUrl: string
+              musclesInvolved: string
+              equipment: string
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Exercises'
+            example:
+              id: 0
+              name: string
+              description: string
+              videoUrl: string
+              musclesInvolved: string
+              equipment: string
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Exercises'
+            example:
+              id: 0
+              name: string
+              description: string
+              videoUrl: string
+              musclesInvolved: string
+              equipment: string
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/Exercises'
+            example:
+              id: 0
+              name: string
+              description: string
+              videoUrl: string
+              musclesInvolved: string
+              equipment: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Exercises'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exercises'
+              example:
+                id: 0
+                name: string
+                description: string
+                videoUrl: string
+                musclesInvolved: string
+                equipment: string
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Exercises'
+              example:
+                id: 0
+                name: string
+                description: string
+                videoUrl: string
+                musclesInvolved: string
+                equipment: string
+  '/api/Exercises/{id}':
+    get:
+      tags:
+        - Exercises
+      summary: '/api/Exercises/{id} - GET'
+      description: '/api/Exercises/{id} - GET'
+      operationId: get-api-exercises-id
+      parameters:
+        - name: id
+          in: path
+          description: Format - int32.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Exercises'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exercises'
+              example:
+                id: 0
+                name: string
+                description: string
+                videoUrl: string
+                musclesInvolved: string
+                equipment: string
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Exercises'
+              example:
+                id: 0
+                name: string
+                description: string
+                videoUrl: string
+                musclesInvolved: string
+                equipment: string
+    put:
+      tags:
+        - Exercises
+      summary: '/api/Exercises/{id} - PUT'
+      description: '/api/Exercises/{id} - PUT'
+      operationId: put-api-exercises-id
+      parameters:
+        - name: id
+          in: path
+          description: Format - int32.
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/Exercises'
+            example:
+              id: 0
+              name: string
+              description: string
+              videoUrl: string
+              musclesInvolved: string
+              equipment: string
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Exercises'
+            example:
+              id: 0
+              name: string
+              description: string
+              videoUrl: string
+              musclesInvolved: string
+              equipment: string
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Exercises'
+            example:
+              id: 0
+              name: string
+              description: string
+              videoUrl: string
+              musclesInvolved: string
+              equipment: string
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/Exercises'
+            example:
+              id: 0
+              name: string
+              description: string
+              videoUrl: string
+              musclesInvolved: string
+              equipment: string
+      responses:
+        '200':
+          description: Success
+    delete:
+      tags:
+        - Exercises
+      summary: '/api/Exercises/{id} - DELETE'
+      description: '/api/Exercises/{id} - DELETE'
+      operationId: delete-api-exercises-id
+      parameters:
+        - name: id
+          in: path
+          description: Format - int32.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Exercises'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exercises'
+              example:
+                id: 0
+                name: string
+                description: string
+                videoUrl: string
+                musclesInvolved: string
+                equipment: string
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Exercises'
+              example:
+                id: 0
+                name: string
+                description: string
+                videoUrl: string
+                musclesInvolved: string
+                equipment: string
+  /api/Nutritions:
+    get:
+      tags:
+        - Nutritions
+      summary: /api/Nutritions - GET
+      description: /api/Nutritions - GET
+      operationId: get-api-nutritions
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiNutritionsGet200TextPlainResponse'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiNutritionsGet200ApplicationJsonResponse'
+              example:
+                - id: 0
+                  description: string
+                  quantity: 0
+                  mealTime: string
+                  tags: string
+                  calories: 0
+                  proteinInGrams: 0
+                  fatInGrams: 0
+                  carbohydratesInGrams: 0
+                  sodiumInGrams: 0
+                  color: string
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiNutritionsGet200TextJsonResponse'
+              example:
+                - id: 0
+                  description: string
+                  quantity: 0
+                  mealTime: string
+                  tags: string
+                  calories: 0
+                  proteinInGrams: 0
+                  fatInGrams: 0
+                  carbohydratesInGrams: 0
+                  sodiumInGrams: 0
+                  color: string
+    post:
+      tags:
+        - Nutritions
+      summary: /api/Nutritions - POST
+      description: /api/Nutritions - POST
+      operationId: post-api-nutritions
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/Nutrition'
+            example:
+              id: 0
+              description: string
+              quantity: 0
+              mealTime: string
+              tags: string
+              calories: 0
+              proteinInGrams: 0
+              fatInGrams: 0
+              carbohydratesInGrams: 0
+              sodiumInGrams: 0
+              color: string
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Nutrition'
+            example:
+              id: 0
+              description: string
+              quantity: 0
+              mealTime: string
+              tags: string
+              calories: 0
+              proteinInGrams: 0
+              fatInGrams: 0
+              carbohydratesInGrams: 0
+              sodiumInGrams: 0
+              color: string
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Nutrition'
+            example:
+              id: 0
+              description: string
+              quantity: 0
+              mealTime: string
+              tags: string
+              calories: 0
+              proteinInGrams: 0
+              fatInGrams: 0
+              carbohydratesInGrams: 0
+              sodiumInGrams: 0
+              color: string
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/Nutrition'
+            example:
+              id: 0
+              description: string
+              quantity: 0
+              mealTime: string
+              tags: string
+              calories: 0
+              proteinInGrams: 0
+              fatInGrams: 0
+              carbohydratesInGrams: 0
+              sodiumInGrams: 0
+              color: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Nutrition'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Nutrition'
+              example:
+                id: 0
+                description: string
+                quantity: 0
+                mealTime: string
+                tags: string
+                calories: 0
+                proteinInGrams: 0
+                fatInGrams: 0
+                carbohydratesInGrams: 0
+                sodiumInGrams: 0
+                color: string
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Nutrition'
+              example:
+                id: 0
+                description: string
+                quantity: 0
+                mealTime: string
+                tags: string
+                calories: 0
+                proteinInGrams: 0
+                fatInGrams: 0
+                carbohydratesInGrams: 0
+                sodiumInGrams: 0
+                color: string
+  '/api/Nutritions/{id}':
+    get:
+      tags:
+        - Nutritions
+      summary: '/api/Nutritions/{id} - GET'
+      description: '/api/Nutritions/{id} - GET'
+      operationId: get-api-nutritions-id
+      parameters:
+        - name: id
+          in: path
+          description: Format - int32.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Nutrition'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Nutrition'
+              example:
+                id: 0
+                description: string
+                quantity: 0
+                mealTime: string
+                tags: string
+                calories: 0
+                proteinInGrams: 0
+                fatInGrams: 0
+                carbohydratesInGrams: 0
+                sodiumInGrams: 0
+                color: string
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Nutrition'
+              example:
+                id: 0
+                description: string
+                quantity: 0
+                mealTime: string
+                tags: string
+                calories: 0
+                proteinInGrams: 0
+                fatInGrams: 0
+                carbohydratesInGrams: 0
+                sodiumInGrams: 0
+                color: string
+    put:
+      tags:
+        - Nutritions
+      summary: '/api/Nutritions/{id} - PUT'
+      description: '/api/Nutritions/{id} - PUT'
+      operationId: put-api-nutritions-id
+      parameters:
+        - name: id
+          in: path
+          description: Format - int32.
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/Nutrition'
+            example:
+              id: 0
+              description: string
+              quantity: 0
+              mealTime: string
+              tags: string
+              calories: 0
+              proteinInGrams: 0
+              fatInGrams: 0
+              carbohydratesInGrams: 0
+              sodiumInGrams: 0
+              color: string
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Nutrition'
+            example:
+              id: 0
+              description: string
+              quantity: 0
+              mealTime: string
+              tags: string
+              calories: 0
+              proteinInGrams: 0
+              fatInGrams: 0
+              carbohydratesInGrams: 0
+              sodiumInGrams: 0
+              color: string
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Nutrition'
+            example:
+              id: 0
+              description: string
+              quantity: 0
+              mealTime: string
+              tags: string
+              calories: 0
+              proteinInGrams: 0
+              fatInGrams: 0
+              carbohydratesInGrams: 0
+              sodiumInGrams: 0
+              color: string
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/Nutrition'
+            example:
+              id: 0
+              description: string
+              quantity: 0
+              mealTime: string
+              tags: string
+              calories: 0
+              proteinInGrams: 0
+              fatInGrams: 0
+              carbohydratesInGrams: 0
+              sodiumInGrams: 0
+              color: string
+      responses:
+        '200':
+          description: Success
+    delete:
+      tags:
+        - Nutritions
+      summary: '/api/Nutritions/{id} - DELETE'
+      description: '/api/Nutritions/{id} - DELETE'
+      operationId: delete-api-nutritions-id
+      parameters:
+        - name: id
+          in: path
+          description: Format - int32.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Nutrition'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Nutrition'
+              example:
+                id: 0
+                description: string
+                quantity: 0
+                mealTime: string
+                tags: string
+                calories: 0
+                proteinInGrams: 0
+                fatInGrams: 0
+                carbohydratesInGrams: 0
+                sodiumInGrams: 0
+                color: string
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Nutrition'
+              example:
+                id: 0
+                description: string
+                quantity: 0
+                mealTime: string
+                tags: string
+                calories: 0
+                proteinInGrams: 0
+                fatInGrams: 0
+                carbohydratesInGrams: 0
+                sodiumInGrams: 0
+                color: string
+  /api/Privacy:
+    post:
+      summary: /api/Privacy - POST
+      description: /api/Privacy - POST
+      operationId: post-api-privacy
+      responses:
+        '200':
+          description: ''
+components:
+  schemas:
+    Exercises:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        description:
+          type: string
+        videoUrl:
+          type: string
+        musclesInvolved:
+          type: string
+        equipment:
+          type: string
+      additionalProperties: false
+    Nutrition:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        description:
+          type: string
+        quantity:
+          type: number
+          format: float
+        mealTime:
+          type: string
+          format: date-time
+        tags:
+          type: string
+        calories:
+          type: integer
+          format: int32
+        proteinInGrams:
+          type: number
+          format: double
+        fatInGrams:
+          type: number
+          format: double
+        carbohydratesInGrams:
+          type: number
+          format: double
+        sodiumInGrams:
+          type: number
+          format: double
+        color:
+          type: string
+      additionalProperties: false
+    ApiExercisesGet200TextPlainResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/Exercises'
+    ApiExercisesGet200ApplicationJsonResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/Exercises'
+    ApiExercisesGet200TextJsonResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/Exercises'
+    ApiNutritionsGet200TextPlainResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/Nutrition'
+    ApiNutritionsGet200ApplicationJsonResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/Nutrition'
+    ApiNutritionsGet200TextJsonResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/Nutrition'
+  securitySchemes:
+    apiKeyHeader:
+      type: apiKey
+      name: Ocp-Apim-Subscription-Key
+      in: header
+    apiKeyQuery:
+      type: apiKey
+      name: subscription-key
+      in: query
+security:
+  - apiKeyHeader: [ ]
+  - apiKeyQuery: [ ]
