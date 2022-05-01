@@ -248,7 +248,7 @@ resource keyvault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
       name: 'standard'
     }
     tenantId: subscription().tenantId
-    enableSoftDelete: true
+    enableSoftDelete: false
     enabledForDeployment: true
     enabledForDiskEncryption: true
     enabledForTemplateDeployment: true
@@ -311,49 +311,55 @@ resource keyvault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
  
 // create secret for Web App
 resource mySecret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: '${keyvaultName}/${secretName1}'
-  // parent: existingkeyvault
+  name: secretName1
+  //name: '${keyvaultName}/${secretName1}'
+  parent: keyvault
   properties: {
     contentType: 'text/plain'
     value: configStoreConnectionString
   }
-  dependsOn:  [
-    keyvault
-  ]
+  // dependsOn:  [
+  //   keyvault
+  // ]
 }
 // create secret for Web App
 resource mySecret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: '${keyvaultName}/${secretName2}'
-  //parent: existingkeyvault
+  name: secretName2
+  //name: '${keyvaultName}/${secretName2}'
+  parent: keyvault
   properties: {
     contentType: 'text/plain'
     value: webappmod.outputs.out_secretConnectionString
   }
-  dependsOn:  [
-    keyvault
-  ]
+  // dependsOn:  [
+  //   keyvault
+  // ]
 }
 //create secret for Func App
 resource mySecret3 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: '${keyvaultName}/${secretName3}'
+  name: secretName3
+  //name: '${keyvaultName}/${secretName3}'
+  parent: keyvault
   properties: {
     contentType: 'text/plain'
     value: functionappmod.outputs.out_AzureWebJobsStorage
   }
-  dependsOn:  [
-    keyvault
-  ]
+  // dependsOn:  [
+  //   keyvault
+  // ]
 }
 // create secret for Func App
 resource mySecret4 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: '${keyvaultName}/${secretName4}'
+  name: secretName4
+  //name: '${keyvaultName}/${secretName4}'
+  parent: keyvault
   properties: {
     contentType: 'text/plain'
     value: functionappmod.outputs.out_AzureWebJobsStorage
   }
-  dependsOn:  [
-    keyvault
-  ]
+  // dependsOn:  [
+  //   keyvault
+  // ]
 }
  ////////////////////////////////////////
  // END - Key Vault
