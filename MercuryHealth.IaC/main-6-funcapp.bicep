@@ -37,6 +37,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' = {
   sku: {
     name: 'Standard_LRS'
   }
+  tags: defaultTags
   kind: 'StorageV2'
   properties: {
     supportsHttpsTrafficOnly: true
@@ -44,32 +45,6 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' = {
     accessTier: 'Hot'
   }
 }
-// resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
-//   name: storageAccountName
-//   location: location
-//   tags: defaultTags
-//   sku: {
-//     name: 'Standard_LRS'
-//   }
-//   kind: 'StorageV2'
-//   properties: {
-//     supportsHttpsTrafficOnly: true
-//     encryption: {
-//       services: {
-//         file: {
-//           keyType: 'Account'
-//           enabled: true
-//         }
-//         blob: {
-//           keyType: 'Account'
-//           enabled: true
-//         }
-//       }
-//       keySource: 'Microsoft.Storage'
-//     }
-//     accessTier: 'Hot'
-//   }
-// }
 
 // Blob Services for Storage Account
 resource blobServices 'Microsoft.Storage/storageAccounts/blobServices@2021-04-01' = {
@@ -186,15 +161,6 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
   }
 }
 
-// resource functionAppConfig0 'Microsoft.Web/sites/config@2021-03-01' = {
-//   //name: '${webSiteName}/appsettings'
-//   name: 'appsettings'
-//   parent: functionApp
-//   properties: {
-//     'DEBUG-AzureWebJobsStorage': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName3})'
-//   }
-// }
-
 // Function App Config
 resource functionAppConfig 'Microsoft.Web/sites/config@2021-03-01' = {
   parent: functionApp
@@ -282,13 +248,10 @@ resource functionAppBinding 'Microsoft.Web/sites/hostNameBindings@2021-01-15' = 
   }
 }
 
-resource functionAppServiceAppSettings 'Microsoft.Web/sites/siteextensions@2021-03-01' = {
-  parent: functionApp
-  name: 'Microsoft.ApplicationInsights.AzureWebSites'
-  // dependsOn: [
-  //   appInsights
-  // ]
-}
+// resource functionAppServiceAppSettings 'Microsoft.Web/sites/siteextensions@2021-03-01' = {
+//   parent: functionApp
+//   name: 'Microsoft.ApplicationInsights.AzureWebSites'
+// }
 
 // Reference Existing resource
 // resource existingkeyvault 'Microsoft.KeyVault/vaults@2021-11-01-preview' existing = {
