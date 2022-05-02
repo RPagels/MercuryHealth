@@ -26,9 +26,9 @@ on:
         required: true
         type: boolean        
     secrets:
-      azure-subscription:
-        description: 'Credentials used to log into Azure for deployment of resources'
-        required: true
+#      azure-subscription:
+#        description: 'Credentials used to log into Azure for deployment of resources'
+#        required: true
       azure-credentials:
         description: 'Credentials used to log into Azure for deployment of resources'
         required: true
@@ -121,10 +121,10 @@ jobs:
       continue-on-error: true
       with:
         inlineScript: |
-          az rest --method get --header "Accept=application/json" -u 'https://management.azure.com/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/providers/Microsoft.ApiManagement/deletedservices?api-version=2021-08-01'
-          az rest --method delete --header "Accept=application/json" -u 'https://management.azure.com/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/providers/Microsoft.ApiManagement/locations/${{ inputs.resource-group-location }}/deletedservices/${{ env.APIM_PurgeNameDev }}?api-version=2021-08-01'
-          az rest --method delete --header "Accept=application/json" -u 'https://management.azure.com/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/providers/Microsoft.ApiManagement/locations/${{ inputs.resource-group-location }}/deletedservices/${{ env.APIM_PurgeNameQA }}?api-version=2021-08-01'
-          az rest --method delete --header "Accept=application/json" -u 'https://management.azure.com/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/providers/Microsoft.ApiManagement/locations/${{ inputs.resource-group-location }}/deletedservices/${{ env.APIM_PurgeNameProd }}?api-version=2021-08-01'
+          az rest --method get --header "Accept=application/json" -u 'https://management.azure.com/subscriptions/{subscriptionId}/providers/Microsoft.ApiManagement/deletedservices?api-version=2021-08-01'
+          az rest --method delete --header "Accept=application/json" -u 'https://management.azure.com/subscriptions/{subscriptionId}/providers/Microsoft.ApiManagement/locations/${{ inputs.resource-group-location }}/deletedservices/${{ env.APIM_PurgeNameDev }}?api-version=2021-08-01'
+          az rest --method delete --header "Accept=application/json" -u 'https://management.azure.com/subscriptions/{subscriptionId}/providers/Microsoft.ApiManagement/locations/${{ inputs.resource-group-location }}/deletedservices/${{ env.APIM_PurgeNameQA }}?api-version=2021-08-01'
+          az rest --method delete --header "Accept=application/json" -u 'https://management.azure.com/subscriptions/{subscriptionId}/providers/Microsoft.ApiManagement/locations/${{ inputs.resource-group-location }}/deletedservices/${{ env.APIM_PurgeNameProd }}?api-version=2021-08-01'
 
       ###########################################
       # Deploy ARM Template using Bicep DSL
