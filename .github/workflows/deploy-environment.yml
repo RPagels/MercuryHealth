@@ -198,7 +198,7 @@ jobs:
       Deployed_Environment: ${{ inputs.environment-suffix }}
       
     environment:
-      name: ${{ inputs.environment-suffix }}
+      name: appdeploy #${{ inputs.environment-suffix }}
       url: 'https://${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net/' 
 
     permissions:
