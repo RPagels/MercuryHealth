@@ -198,7 +198,7 @@ jobs:
       Deployed_Environment: ${{ inputs.environment-suffix }}
       
     environment:
-      name: appdeploy #${{ inputs.environment-suffix }}
+      name: Azure #${{ inputs.environment-suffix }}
       url: 'https://${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net/' 
 
     permissions:
@@ -218,9 +218,7 @@ jobs:
          echo 'output_appInsightsApplicationId: ${{ needs.deploy_infrastructure.outputs.output_appInsightsApplicationId }}'
          echo 'output_appInsightsAPIApplicationId: ${{ needs.deploy_infrastructure.outputs.output_appInsightsAPIApplicationId }}'
          echo 'output_keyvaultName: ${{ needs.deploy_infrastructure.outputs.output_keyvaultName }}'
-         #echo 'output_keyvaultSecretName: ${{ needs.deploy_infrastructure.outputs.output_keyvaultSecretName }}'
          echo 'output_secretConnectionString: ${{ needs.deploy_infrastructure.outputs.output_secretConnectionString }}'
-         #echo 'output_TestMyConnectionString: ${{ needs.deploy_infrastructure.outputs.output_TestMyConnectionString }}'
 
     - name: Login to Azure
       uses: azure/login@v1
