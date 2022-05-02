@@ -32,12 +32,12 @@ on:
       azure-credentials:
         description: 'Credentials used to log into Azure for deployment of resources'
         required: true
-      sql-db-login:
-        description: 'Credentials used to log into SQL for deployment of resources'
-        required: true
-      sql-db-password:
-        description: 'Credentials used to log into SQL for deployment of resources'
-        required: true
+#      sql-db-login:
+#        description: 'Credentials used to log into SQL for deployment of resources'
+#        required: true
+#      sql-db-password:
+#        description: 'Credentials used to log into SQL for deployment of resources'
+#        required: true
 #      sql-db-server-name:
 #        description: 'Credentials used to log into SQL for deployment of resources'
 #        required: true
@@ -196,6 +196,8 @@ jobs:
     env:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
       Deployed_Environment: ${{ inputs.environment-suffix }}
+      name: ${{ inputs.environment-suffix }}
+      url: ${{ needs.deploy_infrastructure.outputs.output_webSiteName }}
 
     permissions:
       contents: read
