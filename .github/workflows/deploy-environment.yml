@@ -197,7 +197,7 @@ jobs:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
       Deployed_Environment: ${{ inputs.environment-suffix }}
       name: ${{ inputs.environment-suffix }}
-      url: ${{ needs.deploy_infrastructure.outputs.output_webSiteName }}
+      url: 'https://${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net/' 
 
     permissions:
       contents: read
