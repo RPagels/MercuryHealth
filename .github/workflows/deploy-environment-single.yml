@@ -1,4 +1,4 @@
-name: deploy-environment-single
+name: Deploy-Environment-Single
 
 on:
   workflow_call:
