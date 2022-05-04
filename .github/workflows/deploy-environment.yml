@@ -140,6 +140,14 @@ jobs:
         deploymentMode: Incremental
         failOnStdErr: false
 
+    - name: Ensure API Management is Locked
+      #if: contains(github.event_name, 'push')
+      uses: Azure/CLI@v1
+      continue-on-error: true
+      with:
+        inlineScript: |
+          az lock create --name DontDeleteMe --lock-type CanNotDelete --resource-group ${{ env.Azure_Resource_GroupName }} --resource-name ${{ steps.Infra.outputs.out_apiServiceName }} --resource-type Microsoft.ApiManagement/service
+
     - name: Ensure Resource Group is Locked
       if: contains(github.event_name, 'push')
       uses: Azure/CLI@v1
@@ -321,6 +329,11 @@ jobs:
         inlineScript: |
           az group lock create --lock-type CanNotDelete --name DontDeleteMe --resource-group ${{ env.Azure_Resource_GroupName }} --notes 'Prevent deletion of the resource group'
 
+    - name: Perform a Health Check on App Service (check for 15 min max!)
+      continue-on-error: false
+      run: |
+        curl --retry 30 --retry-delay 30 'https://${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net/healthy' 
+          
     - name: 'Azure logout'
       run: |
         az logout
@@ -385,11 +398,6 @@ jobs:
 #        run: |
 #         dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }}
 #         dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './MercuryHealth.UITests'
-
-      - name: Perform a Health Check on App Service (check for 15 min max!)
-        continue-on-error: false
-        run: |
-          curl --retry 30 --retry-delay 30 'https://${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net/healthy' 
 
       - name: Playwright Tests all on Browsers
         continue-on-error: false
