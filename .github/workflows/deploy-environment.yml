@@ -332,7 +332,7 @@ jobs:
     - name: Perform a Health Check on App Service (check for 15 min max!)
       continue-on-error: false
       run: |
-        curl --retry 30 --retry-delay 30 'https://${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net/healthy' 
+        curl --retry 30 --retry-delay 60 --retry-max-time 30 'https://${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net/healthy' 
           
     - name: 'Azure logout'
       run: |
