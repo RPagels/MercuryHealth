@@ -46,19 +46,6 @@ resource petStoreApiExample 'Microsoft.ApiManagement/service/apis@2021-08-01' = 
   }
 }
 
-resource exampleApi 'Microsoft.ApiManagement/service/apis@2021-08-01' = {
-  name: '${apiManagement.name}/exampleApi'
-  properties: {
-    displayName: 'Example API Name'
-    description: 'Description for example API'
-    serviceUrl: 'https://example.net'
-    path: 'exampleapipath'
-    protocols: [
-      'https'
-    ]
-  }
-}
-
 resource MercuryHealthApiExample 'Microsoft.ApiManagement/service/apis@2021-08-01' = {
   name: '${apiManagement.name}/MercuryHealthSwaggerImportExample'
   properties: {
