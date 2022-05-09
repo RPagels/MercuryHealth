@@ -325,10 +325,10 @@ jobs:
         inlineScript: |
           az group lock create --lock-type CanNotDelete --name DontDeleteMe --resource-group ${{ env.Azure_Resource_GroupName }} --notes 'Prevent deletion of the resource group'
 
-    - name: Perform a Health Check on App Service (check for 15 min max!)
+    - name: Perform a Health Check on App Service (check for 60 min max!)
       continue-on-error: false
       run: |
-        curl --retry 30 --retry-delay 60 --retry-max-time 30 'https://${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net/healthy'
+        curl --retry 60 --retry-delay 60 'https://${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net/healthy'
      
     - name: 'Azure logout'
       run: |
