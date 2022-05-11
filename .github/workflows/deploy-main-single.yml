@@ -150,7 +150,7 @@ jobs:
     uses: ./.github/workflows/deploy-environment-single.yml
     with:
       resource-group-base-name: 'rg-MercuryHealth'
-      environment-suffix: 'single-try-7'
+      environment-suffix: 'single-try-8'
       resource-group-location: 'eastus2'
       approval-required: true
     secrets:
