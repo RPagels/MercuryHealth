@@ -157,7 +157,7 @@ resource configStoreName_keyValueNames 'Microsoft.AppConfiguration/configuration
 // }]
 
 // Feature Flag 1
-resource configStoreName_appconfig_featureflags_1 'Microsoft.AppConfiguration/configurationStores/keyValues@2020-07-01-preview' = {
+resource configStoreName_appconfig_featureflags_1 'Microsoft.AppConfiguration/configurationStores/keyValues@2021-10-01-preview' = {
   parent: config
   name: '.appconfig.featureflag~2F${FeatureFlagKey1}$${FeatureFlagLabel1}'
   properties: {
@@ -166,7 +166,7 @@ resource configStoreName_appconfig_featureflags_1 'Microsoft.AppConfiguration/co
   }
 }
 // Feature Flag 2
-resource configStoreName_appconfig_featureflags_2 'Microsoft.AppConfiguration/configurationStores/keyValues@2020-07-01-preview' = {
+resource configStoreName_appconfig_featureflags_2 'Microsoft.AppConfiguration/configurationStores/keyValues@2021-10-01-preview' = {
   parent: config
   name: '.appconfig.featureflag~2F${FeatureFlagKey2}$${FeatureFlagLabel2}'
   properties: {
@@ -175,7 +175,7 @@ resource configStoreName_appconfig_featureflags_2 'Microsoft.AppConfiguration/co
   }
 }
 // Feature Flag 3
-resource configStoreName_appconfig_featureflags_3 'Microsoft.AppConfiguration/configurationStores/keyValues@2020-07-01-preview' = {
+resource configStoreName_appconfig_featureflags_3 'Microsoft.AppConfiguration/configurationStores/keyValues@2021-10-01-preview' = {
   parent: config
   name: '.appconfig.featureflag~2F${FeatureFlagKey3}$${FeatureFlagLabel3}'
   properties: {
@@ -378,7 +378,7 @@ param publisherName string = 'Randy Pagels'
 param sku string = 'Consumption'
 param skuCount int = 0 // Must be Zero for Consumption
 
-resource apiManagement 'Microsoft.ApiManagement/service@2021-08-01' = {
+resource apiManagement 'Microsoft.ApiManagement/service@2021-12-01-preview' = {
   name: apiServiceName
   location: location
   tags: defaultTags
@@ -395,7 +395,7 @@ resource apiManagement 'Microsoft.ApiManagement/service@2021-08-01' = {
   }
 }
 
-resource apiManagementSubscription 'Microsoft.ApiManagement/service/subscriptions@2021-08-01' = {
+resource apiManagementSubscription 'Microsoft.ApiManagement/service/subscriptions@2021-12-01-preview' = {
   parent: apiManagement
   name: 'Developers' //apiSubscriptionName
   properties: {
@@ -404,7 +404,7 @@ resource apiManagementSubscription 'Microsoft.ApiManagement/service/subscription
   }
 }
 
-resource apiManagementProducts 'Microsoft.ApiManagement/service/products@2021-08-01' = {
+resource apiManagementProducts 'Microsoft.ApiManagement/service/products@2021-12-01-preview' = {
   parent: apiManagement
   name: 'Development'
   properties: {
@@ -416,7 +416,7 @@ resource apiManagementProducts 'Microsoft.ApiManagement/service/products@2021-08
   }
 }
 
-resource appInsightsAPIManagement 'Microsoft.ApiManagement/service/loggers@2021-08-01' = {
+resource appInsightsAPIManagement 'Microsoft.ApiManagement/service/loggers@2021-12-01-preview' = {
   parent: apiManagement
   name: 'MercuryHealth-applicationinsights' //${apiServiceName}/${appInsightsName}' //MercuryHealth-applicationinsights'
   properties: {
@@ -432,7 +432,7 @@ resource appInsightsAPIManagement 'Microsoft.ApiManagement/service/loggers@2021-
   ]
 }
 
-resource petStoreApiExample 'Microsoft.ApiManagement/service/apis@2021-08-01' = {
+resource petStoreApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
   name: 'PetStoreSwaggerImportExample'
   //name: '${apiManagement.name}/PetStoreSwaggerImportExample'
   parent: apiManagement
@@ -443,7 +443,7 @@ resource petStoreApiExample 'Microsoft.ApiManagement/service/apis@2021-08-01' = 
   }
 }
 
-resource exampleApi 'Microsoft.ApiManagement/service/apis@2021-08-01' = {
+resource exampleApi 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
   name: 'ExampleApi'
   //name: '${apiManagement.name}/exampleApi'
   parent: apiManagement

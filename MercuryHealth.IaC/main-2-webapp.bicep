@@ -44,7 +44,7 @@ param defaultTags object
 //   }
 // }
 
-resource appServicePlan 'Microsoft.Web/serverfarms@2021-01-15' = {
+resource appServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
   name: webAppPlanName // app serivce plan name
   location: location // Azure Region
   tags: defaultTags
@@ -54,7 +54,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2021-01-15' = {
   }
 }
 
-resource appService 'Microsoft.Web/sites@2021-01-15' = {
+resource appService 'Microsoft.Web/sites@2021-03-01' = {
   name: webSiteName // Globally unique app serivce name
   location: location
   kind: 'app'

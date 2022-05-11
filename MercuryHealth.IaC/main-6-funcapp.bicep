@@ -31,7 +31,7 @@ var storageAccountName = 'sta${uniqueString(resourceGroup().id)}'
 // }
 
 // Storage Account
-resource storageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' = {
+resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' = {
   name: storageAccountName
   location: location
   sku: {
@@ -47,7 +47,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' = {
 }
 
 // Blob Services for Storage Account
-resource blobServices 'Microsoft.Storage/storageAccounts/blobServices@2021-04-01' = {
+resource blobServices 'Microsoft.Storage/storageAccounts/blobServices@2021-09-01' = {
   parent: storageAccount
   name: 'default'
   properties: {
@@ -239,7 +239,7 @@ resource functionAppConfig 'Microsoft.Web/sites/config@2021-03-01' = {
 }
 
 // Function App Binding
-resource functionAppBinding 'Microsoft.Web/sites/hostNameBindings@2021-01-15' = {
+resource functionAppBinding 'Microsoft.Web/sites/hostNameBindings@2021-03-01' = {
   parent: functionApp
   name: '${functionApp.name}.azurewebsites.net'
   properties: {
