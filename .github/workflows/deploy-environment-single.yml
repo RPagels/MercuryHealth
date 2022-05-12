@@ -286,6 +286,7 @@ jobs:
     - name: 'Generate Temporary API Key For App Insights'
       id: AIKeyGen
       uses: Azure/CLI@v1
+      continue-on-error: true
       with:
         inlineScript: |
           az config set extension.use_dynamic_install=yes_without_prompt
@@ -299,6 +300,7 @@ jobs:
         
     - name: 'Annotate Deployment'
       uses: wictorwilen/application-insights-action@v1
+      continue-on-error: true
       id: annotation
       with:
         applicationId: ${{ needs.deploy_infrastructure.outputs.output_appInsightsAPIApplicationId }}
@@ -309,6 +311,7 @@ jobs:
 
     - name: Remove Temporary API Key For App Insights
       uses: Azure/CLI@v1
+      continue-on-error: true
       with:
         inlineScript: |
           az config set extension.use_dynamic_install=yes_without_prompt
