@@ -50,8 +50,8 @@ var defaultTags = {
 }
 
 // KeyVault Secret Names
-param secretName1 string = 'ConnectionStringsAppConfig'
-param secretName2 string = 'ConnectionStringsMercuryHealthWebContext'
+param secret_configStoreConnectionName string = 'ConnectionStringsAppConfig'
+param secret_ConnectionStringName string = 'ConnectionStringsMercuryHealthWebContext'
 param secretName3 string = 'AzureWebJobsStorage'
 param secretName4 string = 'WebsiteContentAzureFileConnectionString'
 
@@ -197,26 +197,27 @@ var configStoreConnectionString = listKeys(config.id, config.apiVersion).value[0
 ////////////////////////////////////////
 
 // Create Azure KeyVault
-// module keyvaultmod './main-8-keyvault.bicep' = {
-//   name: keyvaultName
-//   params: {
-//     location: location
-//     vaultName: keyvaultName
-//     appServiceprincipalId: webappmod.outputs.out_appServiceprincipalId
-//     secretName1: secretName1
-//     secretName2: secretName2
-//     // secretName3: secretName3
-//     // secretName4: secretName4
-//     configStoreConnection: configStoreConnectionString
-//     secretConnectionString: webappmod.outputs.out_secretConnectionString
-//     //secretAzureWebJobsStorage: functionappmod.outputs.out_AzureWebJobsStorage
-//     //funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
-//     }
-//     dependsOn:  [
-//      webappmod
-//      //functionappmod
-//    ]
-//  }
+module keyvaultmod './main-8-keyvault.bicep' = {
+  name: keyvaultName
+  params: {
+    location: location
+    vaultName: keyvaultName
+    // appServiceprincipalId: webappmod.outputs.out_appServiceprincipalId
+    // secretName1: secretName1
+    // secretName2: secretName2
+    // secretName3: secretName3
+    // secretName4: secretName4
+
+    // configStoreConnection: configStoreConnectionString
+    // secretConnectionString: webappmod.outputs.out_secretConnectionString
+    //secretAzureWebJobsStorage: functionappmod.outputs.out_AzureWebJobsStorage
+    //funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
+    }
+  //   dependsOn:  [
+  //    webappmod
+  //    functionappmod
+  //  ]
+ }
 
 //  param accessPolicies array = [
 //   {
@@ -234,63 +235,63 @@ var configStoreConnectionString = listKeys(config.id, config.apiVersion).value[0
 //     }
 //   }
 
-param networkAcls object = {
-  ipRules: []
-  virtualNetworkRules: []
-}
+// param networkAcls object = {
+//   ipRules: []
+//   virtualNetworkRules: []
+// }
 
-resource keyvault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
-  name: keyvaultName
-  location: location
-  properties: {
-    sku: {
-      family: 'A'
-      name: 'standard'
-    }
-    tenantId: subscription().tenantId
-    enableSoftDelete: false
-    enabledForDeployment: true
-    enabledForDiskEncryption: true
-    enabledForTemplateDeployment: true
-    softDeleteRetentionInDays: 90
-    enableRbacAuthorization: false
-    networkAcls: networkAcls
-    accessPolicies:[
-      {
-      tenantId: subscription().tenantId
-      objectId: webappmod.outputs.out_appServiceprincipalId
-        permissions: {
-          keys: [
-            'list'
-            'get'
-          ]
-          secrets: [
-            'list'
-            'get'
-          ]
-        }
-      }
-      {
-        tenantId: subscription().tenantId
-        objectId: functionappmod.outputs.out_funcAppServiceprincipalId
-          permissions: {
-            keys: [
-              'list'
-              'get'
-            ]
-            secrets: [
-              'list'
-              'get'
-            ]
-          }
-      }
-    ]
-  }
-  dependsOn:  [
-    webappmod
-    functionappmod
-  ]
-}
+// resource keyvault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
+//   name: keyvaultName
+//   location: location
+//   properties: {
+//     sku: {
+//       family: 'A'
+//       name: 'standard'
+//     }
+//     tenantId: subscription().tenantId
+//     enableSoftDelete: false
+//     enabledForDeployment: true
+//     enabledForDiskEncryption: true
+//     enabledForTemplateDeployment: true
+//     softDeleteRetentionInDays: 90
+//     enableRbacAuthorization: false
+//     networkAcls: networkAcls
+//     accessPolicies:[
+//       {
+//       tenantId: subscription().tenantId
+//       objectId: webappmod.outputs.out_appServiceprincipalId
+//         permissions: {
+//           keys: [
+//             'list'
+//             'get'
+//           ]
+//           secrets: [
+//             'list'
+//             'get'
+//           ]
+//         }
+//       }
+//       {
+//         tenantId: subscription().tenantId
+//         objectId: functionappmod.outputs.out_funcAppServiceprincipalId
+//           permissions: {
+//             keys: [
+//               'list'
+//               'get'
+//             ]
+//             secrets: [
+//               'list'
+//               'get'
+//             ]
+//           }
+//       }
+//     ]
+//   }
+//   dependsOn:  [
+//     webappmod
+//     functionappmod
+//   ]
+// }
 
 //  resource secret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
 //    name: secretName1
@@ -310,57 +311,57 @@ resource keyvault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
 //  }
  
 // create secret for Web App
-resource mySecret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: secretName1
-  //name: '${keyvaultName}/${secretName1}'
-  parent: keyvault
-  properties: {
-    contentType: 'text/plain'
-    value: configStoreConnectionString
-  }
-  // dependsOn:  [
-  //   keyvault
-  // ]
-}
+// resource mySecret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+//   name: secretName1
+//   //name: '${keyvaultName}/${secretName1}'
+//   parent: keyvault
+//   properties: {
+//     contentType: 'text/plain'
+//     value: configStoreConnectionString
+//   }
+//   // dependsOn:  [
+//   //   keyvault
+//   // ]
+// }
 // create secret for Web App
-resource mySecret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: secretName2
-  //name: '${keyvaultName}/${secretName2}'
-  parent: keyvault
-  properties: {
-    contentType: 'text/plain'
-    value: webappmod.outputs.out_secretConnectionString
-  }
-  // dependsOn:  [
-  //   keyvault
-  // ]
-}
+// resource mySecret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+//   name: secretName2
+//   //name: '${keyvaultName}/${secretName2}'
+//   parent: keyvault
+//   properties: {
+//     contentType: 'text/plain'
+//     value: webappmod.outputs.out_secretConnectionString
+//   }
+//   // dependsOn:  [
+//   //   keyvault
+//   // ]
+// }
 //create secret for Func App
-resource mySecret3 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: secretName3
-  //name: '${keyvaultName}/${secretName3}'
-  parent: keyvault
-  properties: {
-    contentType: 'text/plain'
-    value: functionappmod.outputs.out_AzureWebJobsStorage
-  }
-  // dependsOn:  [
-  //   keyvault
-  // ]
-}
+// resource mySecret3 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+//   name: secretName3
+//   //name: '${keyvaultName}/${secretName3}'
+//   parent: keyvault
+//   properties: {
+//     contentType: 'text/plain'
+//     value: functionappmod.outputs.out_AzureWebJobsStorage
+//   }
+//   // dependsOn:  [
+//   //   keyvault
+//   // ]
+// }
 //create secret for Func App
-resource mySecret4 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: secretName4
-  //name: '${keyvaultName}/${secretName4}'
-  parent: keyvault
-  properties: {
-    contentType: 'text/plain'
-    value: functionappmod.outputs.out_AzureWebJobsStorage
-  }
-  // dependsOn:  [
-  //   keyvault
-  // ]
-}
+// resource mySecret4 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+//   name: secretName4
+//   //name: '${keyvaultName}/${secretName4}'
+//   parent: keyvault
+//   properties: {
+//     contentType: 'text/plain'
+//     value: functionappmod.outputs.out_AzureWebJobsStorage
+//   }
+//   // dependsOn:  [
+//   //   keyvault
+//   // ]
+// }
 
  ////////////////////////////////////////
  // END - Key Vault
@@ -443,21 +444,6 @@ resource petStoreApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-pre
   }
 }
 
-resource exampleApi 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
-  name: 'ExampleApi'
-  //name: '${apiManagement.name}/exampleApi'
-  parent: apiManagement
-  properties: {
-    displayName: 'Example API Name'
-    description: 'Description for example API'
-    serviceUrl: 'https://example.net'
-    path: 'exampleapipath'
-    protocols: [
-      'https'
-    ]
-  }
-}
-
 // API Management - Avoid outputs for secrets - Look up secrets dynamically
 // Note: This is why API Management isn't it's own module...MUST be in the main
 var ApimSubscriptionKeyString = apiManagementSubscription.listSecrets().primaryKey
@@ -475,9 +461,9 @@ module webappmod './main-2-webapp.bicep' = {
     appInsightsInstrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
     appInsightsConnectionString: appinsightsmod.outputs.out_appInsightsConnectionString
     defaultTags: defaultTags
-    keyvaultName: keyvaultName
-    secretName1: secretName1
-    secretName2: secretName2
+    // keyvaultName: keyvaultName
+    // secretName1: secretName1
+    // secretName2: secretName2
     sqlAdminLoginName: sqlAdminLoginName
     sqlAdminLoginPassword: sqlAdminLoginPassword
     sqlDBName: sqlDBName
@@ -560,6 +546,28 @@ module blogstoragemod './main-12-blobstorage.bicep' = {
 //     dashboardName: dashboardName
 //   }
 // }
+
+// Create Azure KeyVault
+module configsettingsmod './main-13-configsettings.bicep' = {
+  name: keyvaultName
+  params: {
+    //location: location
+    keyvaultName: keyvaultName
+    secret_configStoreConnectionName: secret_configStoreConnectionName
+    secret_configStoreConnectionValue: configStoreConnectionString
+    secret_ConnectionStringName: secret_ConnectionStringName
+    secret_ConnectionStringValue: webappmod.outputs.out_secretConnectionString
+    appServiceprincipalId: webappmod.outputs.out_appServiceprincipalId
+    webappName: webSiteName
+    functionAppName: functionAppName
+    }
+    dependsOn:  [
+     keyvaultmod
+     webappmod
+     functionappmod
+   ]
+ }
+
 
 // Output Params used for IaC deployment in pipeline
 output out_webSiteName string = webSiteName

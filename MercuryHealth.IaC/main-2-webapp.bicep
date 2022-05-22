@@ -19,9 +19,9 @@ param webAppPlanName string
 param webSiteName string
 param resourceGroupName string
 param appInsightsName string
-param keyvaultName string
-param secretName1 string
-param secretName2 string
+// param keyvaultName string
+// param secretName1 string
+// param secretName2 string
 param appInsightsInstrumentationKey string
 param appInsightsConnectionString string
 param defaultTags object
@@ -77,8 +77,8 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
   name: 'appsettings'
   parent: appService
   properties: {
-    'ConnectionStrings:MercuryHealthWebContext': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName2})'
-    'ConnectionStrings:AppConfig': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName1})'
+//    'ConnectionStrings:MercuryHealthWebContext': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName2})'
+//    'ConnectionStrings:AppConfig': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName1})'
     'DeployedEnvironment': Deployed_Environment
     'WEBSITE_RUN_FROM_PACKAGE': '1'
     'APPINSIGHTS_INSTRUMENTATIONKEY': appInsightsInstrumentationKey
