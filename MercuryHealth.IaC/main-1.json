@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "16543628378080866994"
+      "templateHash": "17913846445431668343"
     }
   },
   "parameters": {
@@ -28,21 +28,17 @@
     "Deployed_Environment": {
       "type": "string"
     },
-    "secretName1": {
+    "secret_configStoreConnectionName": {
       "type": "string",
       "defaultValue": "ConnectionStringsAppConfig"
     },
-    "secretName2": {
+    "secret_ConnectionStringName": {
       "type": "string",
       "defaultValue": "ConnectionStringsMercuryHealthWebContext"
     },
-    "secretName3": {
+    "secret_AzureWebJobsStorageName": {
       "type": "string",
       "defaultValue": "AzureWebJobsStorage"
-    },
-    "secretName4": {
-      "type": "string",
-      "defaultValue": "WebsiteContentAzureFileConnectionString"
     },
     "contentType": {
       "type": "string",
@@ -93,13 +89,6 @@
       "type": "string",
       "defaultValue": "Nutrition Color"
     },
-    "networkAcls": {
-      "type": "object",
-      "defaultValue": {
-        "ipRules": [],
-        "virtualNetworkRules": []
-      }
-    },
     "publisherEmail": {
       "type": "string",
       "defaultValue": "rpagels@microsoft.com",
@@ -133,7 +122,7 @@
     "appInsightsAlertName": "[format('ResponseTime-{0}', uniqueString(resourceGroup().id))]",
     "functionAppName": "[format('func-{0}', uniqueString(resourceGroup().id))]",
     "functionAppServiceName": "[format('funcplan-{0}', uniqueString(resourceGroup().id))]",
-    "apiServiceName": "[format('apimv2-{0}', uniqueString(resourceGroup().id))]",
+    "apiServiceName": "[format('apim-{0}', uniqueString(resourceGroup().id))]",
     "loadTestsName": "[format('loadtests-{0}', uniqueString(resourceGroup().id))]",
     "keyvaultName": "[format('kv-{0}', uniqueString(resourceGroup().id))]",
     "blobstorageName": "[format('stablob{0}', uniqueString(resourceGroup().id))]",
@@ -191,7 +180,7 @@
     },
     {
       "type": "Microsoft.AppConfiguration/configurationStores/keyValues",
-      "apiVersion": "2020-07-01-preview",
+      "apiVersion": "2021-10-01-preview",
       "name": "[format('{0}/{1}', variables('configStoreName'), format('.appconfig.featureflag~2F{0}${1}', parameters('FeatureFlagKey1'), parameters('FeatureFlagLabel1')))]",
       "properties": {
         "value": "[string(variables('FeatureFlagValue1'))]",
@@ -203,7 +192,7 @@
     },
     {
       "type": "Microsoft.AppConfiguration/configurationStores/keyValues",
-      "apiVersion": "2020-07-01-preview",
+      "apiVersion": "2021-10-01-preview",
       "name": "[format('{0}/{1}', variables('configStoreName'), format('.appconfig.featureflag~2F{0}${1}', parameters('FeatureFlagKey2'), parameters('FeatureFlagLabel2')))]",
       "properties": {
         "value": "[string(variables('FeatureFlagValue2'))]",
@@ -215,7 +204,7 @@
     },
     {
       "type": "Microsoft.AppConfiguration/configurationStores/keyValues",
-      "apiVersion": "2020-07-01-preview",
+      "apiVersion": "2021-10-01-preview",
       "name": "[format('{0}/{1}', variables('configStoreName'), format('.appconfig.featureflag~2F{0}${1}', parameters('FeatureFlagKey3'), parameters('FeatureFlagLabel3')))]",
       "properties": {
         "value": "[string(variables('FeatureFlagValue3'))]",
@@ -226,114 +215,8 @@
       ]
     },
     {
-      "type": "Microsoft.KeyVault/vaults",
-      "apiVersion": "2021-11-01-preview",
-      "name": "[variables('keyvaultName')]",
-      "location": "[parameters('location')]",
-      "properties": {
-        "sku": {
-          "family": "A",
-          "name": "standard"
-        },
-        "tenantId": "[subscription().tenantId]",
-        "enableSoftDelete": false,
-        "enabledForDeployment": true,
-        "enabledForDiskEncryption": true,
-        "enabledForTemplateDeployment": true,
-        "softDeleteRetentionInDays": 90,
-        "enableRbacAuthorization": false,
-        "networkAcls": "[parameters('networkAcls')]",
-        "accessPolicies": [
-          {
-            "tenantId": "[subscription().tenantId]",
-            "objectId": "[reference(resourceId('Microsoft.Resources/deployments', 'webappdeploy'), '2020-06-01').outputs.out_appServiceprincipalId.value]",
-            "permissions": {
-              "keys": [
-                "list",
-                "get"
-              ],
-              "secrets": [
-                "list",
-                "get"
-              ]
-            }
-          },
-          {
-            "tenantId": "[subscription().tenantId]",
-            "objectId": "[reference(resourceId('Microsoft.Resources/deployments', 'functionappdeploy'), '2020-06-01').outputs.out_funcAppServiceprincipalId.value]",
-            "permissions": {
-              "keys": [
-                "list",
-                "get"
-              ],
-              "secrets": [
-                "list",
-                "get"
-              ]
-            }
-          }
-        ]
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Resources/deployments', 'functionappdeploy')]",
-        "[resourceId('Microsoft.Resources/deployments', 'webappdeploy')]"
-      ]
-    },
-    {
-      "type": "Microsoft.KeyVault/vaults/secrets",
-      "apiVersion": "2021-11-01-preview",
-      "name": "[format('{0}/{1}', variables('keyvaultName'), parameters('secretName1'))]",
-      "properties": {
-        "contentType": "text/plain",
-        "value": "[listKeys(resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName')), '2021-10-01-preview').value[0].connectionString]"
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName'))]",
-        "[resourceId('Microsoft.KeyVault/vaults', variables('keyvaultName'))]"
-      ]
-    },
-    {
-      "type": "Microsoft.KeyVault/vaults/secrets",
-      "apiVersion": "2021-11-01-preview",
-      "name": "[format('{0}/{1}', variables('keyvaultName'), parameters('secretName2'))]",
-      "properties": {
-        "contentType": "text/plain",
-        "value": "[reference(resourceId('Microsoft.Resources/deployments', 'webappdeploy'), '2020-06-01').outputs.out_secretConnectionString.value]"
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.KeyVault/vaults', variables('keyvaultName'))]",
-        "[resourceId('Microsoft.Resources/deployments', 'webappdeploy')]"
-      ]
-    },
-    {
-      "type": "Microsoft.KeyVault/vaults/secrets",
-      "apiVersion": "2021-11-01-preview",
-      "name": "[format('{0}/{1}', variables('keyvaultName'), parameters('secretName3'))]",
-      "properties": {
-        "contentType": "text/plain",
-        "value": "[reference(resourceId('Microsoft.Resources/deployments', 'functionappdeploy'), '2020-06-01').outputs.out_AzureWebJobsStorage.value]"
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Resources/deployments', 'functionappdeploy')]",
-        "[resourceId('Microsoft.KeyVault/vaults', variables('keyvaultName'))]"
-      ]
-    },
-    {
-      "type": "Microsoft.KeyVault/vaults/secrets",
-      "apiVersion": "2021-11-01-preview",
-      "name": "[format('{0}/{1}', variables('keyvaultName'), parameters('secretName4'))]",
-      "properties": {
-        "contentType": "text/plain",
-        "value": "[reference(resourceId('Microsoft.Resources/deployments', 'functionappdeploy'), '2020-06-01').outputs.out_AzureWebJobsStorage.value]"
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Resources/deployments', 'functionappdeploy')]",
-        "[resourceId('Microsoft.KeyVault/vaults', variables('keyvaultName'))]"
-      ]
-    },
-    {
       "type": "Microsoft.ApiManagement/service",
-      "apiVersion": "2021-08-01",
+      "apiVersion": "2021-12-01-preview",
       "name": "[variables('apiServiceName')]",
       "location": "[parameters('location')]",
       "tags": "[variables('defaultTags')]",
@@ -351,7 +234,7 @@
     },
     {
       "type": "Microsoft.ApiManagement/service/subscriptions",
-      "apiVersion": "2021-08-01",
+      "apiVersion": "2021-12-01-preview",
       "name": "[format('{0}/{1}', variables('apiServiceName'), 'Developers')]",
       "properties": {
         "scope": "/apis",
@@ -363,7 +246,7 @@
     },
     {
       "type": "Microsoft.ApiManagement/service/products",
-      "apiVersion": "2021-08-01",
+      "apiVersion": "2021-12-01-preview",
       "name": "[format('{0}/{1}', variables('apiServiceName'), 'Development')]",
       "properties": {
         "approvalRequired": false,
@@ -377,7 +260,7 @@
     },
     {
       "type": "Microsoft.ApiManagement/service/loggers",
-      "apiVersion": "2021-08-01",
+      "apiVersion": "2021-12-01-preview",
       "name": "[format('{0}/{1}', variables('apiServiceName'), 'MercuryHealth-applicationinsights')]",
       "properties": {
         "loggerType": "applicationInsights",
@@ -394,7 +277,7 @@
     },
     {
       "type": "Microsoft.ApiManagement/service/apis",
-      "apiVersion": "2021-08-01",
+      "apiVersion": "2021-12-01-preview",
       "name": "[format('{0}/{1}', variables('apiServiceName'), 'PetStoreSwaggerImportExample')]",
       "properties": {
         "format": "swagger-link-json",
@@ -406,21 +289,111 @@
       ]
     },
     {
-      "type": "Microsoft.ApiManagement/service/apis",
-      "apiVersion": "2021-08-01",
-      "name": "[format('{0}/{1}', variables('apiServiceName'), 'ExampleApi')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('keyvaultName')]",
       "properties": {
-        "displayName": "Example API Name",
-        "description": "Description for example API",
-        "serviceUrl": "https://example.net",
-        "path": "exampleapipath",
-        "protocols": [
-          "https"
-        ]
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]"
-      ]
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "vaultName": {
+            "value": "[variables('keyvaultName')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.4.1008.15138",
+              "templateHash": "16512519603075575390"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string",
+              "defaultValue": "[resourceGroup().location]"
+            },
+            "vaultName": {
+              "type": "string"
+            },
+            "tenant": {
+              "type": "string",
+              "defaultValue": "[subscription().tenantId]"
+            },
+            "object": {
+              "type": "string",
+              "defaultValue": "[subscription().subscriptionId]"
+            },
+            "accessPolicies": {
+              "type": "array",
+              "defaultValue": [
+                {
+                  "tenantId": "[parameters('tenant')]",
+                  "objectId": "[parameters('object')]",
+                  "permissions": {
+                    "keys": [
+                      "Get",
+                      "List"
+                    ],
+                    "secrets": [
+                      "Get",
+                      "List"
+                    ]
+                  }
+                }
+              ]
+            },
+            "networkAcls": {
+              "type": "object",
+              "defaultValue": {
+                "ipRules": [],
+                "virtualNetworkRules": []
+              }
+            }
+          },
+          "functions": [],
+          "resources": [
+            {
+              "type": "Microsoft.KeyVault/vaults",
+              "apiVersion": "2021-11-01-preview",
+              "name": "[parameters('vaultName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "tenantId": "[parameters('tenant')]",
+                "sku": {
+                  "family": "A",
+                  "name": "standard"
+                },
+                "enableSoftDelete": false,
+                "accessPolicies": "[parameters('accessPolicies')]",
+                "enabledForDeployment": true,
+                "enabledForDiskEncryption": true,
+                "enabledForTemplateDeployment": true,
+                "softDeleteRetentionInDays": 90,
+                "enableRbacAuthorization": false,
+                "networkAcls": "[parameters('networkAcls')]"
+              }
+            }
+          ],
+          "outputs": {
+            "proxyKey": {
+              "type": "object",
+              "value": "[reference(resourceId('Microsoft.KeyVault/vaults', parameters('vaultName')), '2021-11-01-preview', 'full')]"
+            },
+            "keyvaultName": {
+              "type": "string",
+              "value": "[parameters('vaultName')]"
+            }
+          }
+        }
+      }
     },
     {
       "type": "Microsoft.Resources/deployments",
@@ -459,15 +432,6 @@
           "defaultTags": {
             "value": "[variables('defaultTags')]"
           },
-          "keyvaultName": {
-            "value": "[variables('keyvaultName')]"
-          },
-          "secretName1": {
-            "value": "[parameters('secretName1')]"
-          },
-          "secretName2": {
-            "value": "[parameters('secretName2')]"
-          },
           "sqlAdminLoginName": {
             "value": "[variables('sqlAdminLoginName')]"
           },
@@ -491,13 +455,13 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "12251762563259152317"
+              "templateHash": "15104096612305384564"
             }
           },
           "parameters": {
             "skuName": {
               "type": "string",
-              "defaultValue": "B1"
+              "defaultValue": "S1"
             },
             "location": {
               "type": "string",
@@ -533,15 +497,6 @@
             "appInsightsName": {
               "type": "string"
             },
-            "keyvaultName": {
-              "type": "string"
-            },
-            "secretName1": {
-              "type": "string"
-            },
-            "secretName2": {
-              "type": "string"
-            },
             "appInsightsInstrumentationKey": {
               "type": "string"
             },
@@ -559,7 +514,7 @@
           "resources": [
             {
               "type": "Microsoft.Web/serverfarms",
-              "apiVersion": "2021-01-15",
+              "apiVersion": "2021-03-01",
               "name": "[parameters('webAppPlanName')]",
               "location": "[parameters('location')]",
               "tags": "[parameters('defaultTags')]",
@@ -570,7 +525,7 @@
             },
             {
               "type": "Microsoft.Web/sites",
-              "apiVersion": "2021-01-15",
+              "apiVersion": "2021-03-01",
               "name": "[parameters('webSiteName')]",
               "location": "[parameters('location')]",
               "kind": "app",
@@ -595,8 +550,6 @@
               "apiVersion": "2021-03-01",
               "name": "[format('{0}/{1}', parameters('webSiteName'), 'appsettings')]",
               "properties": {
-                "ConnectionStrings:MercuryHealthWebContext": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secretName2'))]",
-                "ConnectionStrings:AppConfig": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secretName1'))]",
                 "DeployedEnvironment": "[parameters('Deployed_Environment')]",
                 "WEBSITE_RUN_FROM_PACKAGE": "1",
                 "APPINSIGHTS_INSTRUMENTATIONKEY": "[parameters('appInsightsInstrumentationKey')]",
@@ -793,7 +746,7 @@
             },
             "out_appServiceprincipalId": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.Web/sites', parameters('webSiteName')), '2021-01-15', 'full').identity.principalId]"
+              "value": "[reference(resourceId('Microsoft.Web/sites', parameters('webSiteName')), '2021-03-01', 'full').identity.principalId]"
             },
             "out_secretConnectionString": {
               "type": "string",
@@ -1117,7 +1070,7 @@
             "value": "[variables('defaultTags')]"
           },
           "ApimSubscriptionKey": {
-            "value": "[listSecrets(resourceId('Microsoft.ApiManagement/service/subscriptions', variables('apiServiceName'), 'Developers'), '2021-08-01').primaryKey]"
+            "value": "[listSecrets(resourceId('Microsoft.ApiManagement/service/subscriptions', variables('apiServiceName'), 'Developers'), '2021-12-01-preview').primaryKey]"
           },
           "ApimWebServiceURL": {
             "value": "[reference(resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))).gatewayUrl]"
@@ -1126,10 +1079,10 @@
             "value": "[variables('keyvaultName')]"
           },
           "secretName3": {
-            "value": "[parameters('secretName3')]"
+            "value": "[parameters('secret_AzureWebJobsStorageName')]"
           },
           "secretName4": {
-            "value": "[parameters('secretName4')]"
+            "value": "[parameters('secret_AzureWebJobsStorageName')]"
           }
         },
         "template": {
@@ -1139,7 +1092,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "14644701189303094575"
+              "templateHash": "335006406659071618"
             }
           },
           "parameters": {
@@ -1190,7 +1143,7 @@
           "resources": [
             {
               "type": "Microsoft.Storage/storageAccounts",
-              "apiVersion": "2021-08-01",
+              "apiVersion": "2021-09-01",
               "name": "[variables('storageAccountName')]",
               "location": "[parameters('location')]",
               "sku": {
@@ -1206,7 +1159,7 @@
             },
             {
               "type": "Microsoft.Storage/storageAccounts/blobServices",
-              "apiVersion": "2021-04-01",
+              "apiVersion": "2021-09-01",
               "name": "[format('{0}/{1}', variables('storageAccountName'), 'default')]",
               "properties": {
                 "cors": {
@@ -1283,11 +1236,11 @@
                     },
                     {
                       "name": "AzureWebJobsStorage",
-                      "value": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secretName3'))]"
+                      "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', variables('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2021-09-01').keys[0].value)]"
                     },
                     {
                       "name": "WebsiteContentAzureFileConnectionString",
-                      "value": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secretName4'))]"
+                      "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', variables('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2021-09-01').keys[0].value)]"
                     },
                     {
                       "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -1319,7 +1272,8 @@
                 "type": "SystemAssigned"
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', parameters('functionAppServiceName'))]"
+                "[resourceId('Microsoft.Web/serverfarms', parameters('functionAppServiceName'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
               ]
             },
             {
@@ -1403,7 +1357,7 @@
             },
             {
               "type": "Microsoft.Web/sites/hostNameBindings",
-              "apiVersion": "2021-01-15",
+              "apiVersion": "2021-03-01",
               "name": "[format('{0}/{1}', parameters('functionAppName'), format('{0}.azurewebsites.net', parameters('functionAppName')))]",
               "properties": {
                 "siteName": "[parameters('functionAppName')]",
@@ -1421,7 +1375,7 @@
             },
             "out_AzureWebJobsStorage": {
               "type": "string",
-              "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', variables('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2021-08-01').keys[0].value)]"
+              "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', variables('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2021-09-01').keys[0].value)]"
             }
           }
         }
@@ -1557,6 +1511,205 @@
           ]
         }
       }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('keyvaultName')]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "keyvaultName": {
+            "value": "[variables('keyvaultName')]"
+          },
+          "secret_configStoreConnectionName": {
+            "value": "[parameters('secret_configStoreConnectionName')]"
+          },
+          "secret_configStoreConnectionValue": {
+            "value": "[listKeys(resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName')), '2021-10-01-preview').value[0].connectionString]"
+          },
+          "secret_ConnectionStringName": {
+            "value": "[parameters('secret_ConnectionStringName')]"
+          },
+          "secret_ConnectionStringValue": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'webappdeploy'), '2020-06-01').outputs.out_secretConnectionString.value]"
+          },
+          "appServiceprincipalId": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'webappdeploy'), '2020-06-01').outputs.out_appServiceprincipalId.value]"
+          },
+          "webappName": {
+            "value": "[variables('webSiteName')]"
+          },
+          "functionAppName": {
+            "value": "[variables('functionAppName')]"
+          },
+          "funcAppServiceprincipalId": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'functionappdeploy'), '2020-06-01').outputs.out_funcAppServiceprincipalId.value]"
+          },
+          "secret_AzureWebJobsStorageName": {
+            "value": "[parameters('secret_AzureWebJobsStorageName')]"
+          },
+          "secret_AzureWebJobsStorageValue": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'functionappdeploy'), '2020-06-01').outputs.out_AzureWebJobsStorage.value]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.4.1008.15138",
+              "templateHash": "11341725219059755065"
+            }
+          },
+          "parameters": {
+            "keyvaultName": {
+              "type": "string"
+            },
+            "secret_configStoreConnectionName": {
+              "type": "string"
+            },
+            "secret_ConnectionStringName": {
+              "type": "string"
+            },
+            "webappName": {
+              "type": "string"
+            },
+            "functionAppName": {
+              "type": "string"
+            },
+            "secret_AzureWebJobsStorageName": {
+              "type": "string"
+            },
+            "secret_configStoreConnectionValue": {
+              "type": "secureString"
+            },
+            "secret_ConnectionStringValue": {
+              "type": "secureString"
+            },
+            "appServiceprincipalId": {
+              "type": "secureString"
+            },
+            "funcAppServiceprincipalId": {
+              "type": "secureString"
+            },
+            "secret_AzureWebJobsStorageValue": {
+              "type": "secureString"
+            },
+            "tenant": {
+              "type": "string",
+              "defaultValue": "[subscription().tenantId]"
+            },
+            "accessPolicies": {
+              "type": "array",
+              "defaultValue": [
+                {
+                  "tenantId": "[parameters('tenant')]",
+                  "objectId": "[parameters('appServiceprincipalId')]",
+                  "permissions": {
+                    "keys": [
+                      "Get",
+                      "List"
+                    ],
+                    "secrets": [
+                      "Get",
+                      "List"
+                    ]
+                  }
+                },
+                {
+                  "tenantId": "[parameters('tenant')]",
+                  "objectId": "[parameters('funcAppServiceprincipalId')]",
+                  "permissions": {
+                    "keys": [
+                      "Get",
+                      "List"
+                    ],
+                    "secrets": [
+                      "Get",
+                      "List"
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "functions": [],
+          "resources": [
+            {
+              "type": "Microsoft.KeyVault/vaults/accessPolicies",
+              "apiVersion": "2021-11-01-preview",
+              "name": "[format('{0}/{1}', parameters('keyvaultName'), 'add')]",
+              "properties": {
+                "accessPolicies": "[parameters('accessPolicies')]"
+              }
+            },
+            {
+              "type": "Microsoft.KeyVault/vaults/secrets",
+              "apiVersion": "2021-11-01-preview",
+              "name": "[format('{0}/{1}', reference(resourceId('Microsoft.KeyVault/vaults', parameters('keyvaultName')), '2021-11-01-preview', 'full'), parameters('secret_configStoreConnectionName'))]",
+              "properties": {
+                "value": "[parameters('secret_configStoreConnectionValue')]"
+              }
+            },
+            {
+              "type": "Microsoft.KeyVault/vaults/secrets",
+              "apiVersion": "2021-11-01-preview",
+              "name": "[format('{0}/{1}', reference(resourceId('Microsoft.KeyVault/vaults', parameters('keyvaultName')), '2021-11-01-preview', 'full'), parameters('secret_ConnectionStringName'))]",
+              "properties": {
+                "contentType": "text/plain",
+                "value": "[parameters('secret_ConnectionStringValue')]"
+              }
+            },
+            {
+              "type": "Microsoft.KeyVault/vaults/secrets",
+              "apiVersion": "2021-11-01-preview",
+              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('secret_AzureWebJobsStorageName'))]",
+              "properties": {
+                "contentType": "text/plain",
+                "value": "[parameters('secret_AzureWebJobsStorageValue')]"
+              }
+            },
+            {
+              "type": "Microsoft.KeyVault/vaults/secrets",
+              "apiVersion": "2021-11-01-preview",
+              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('secret_AzureWebJobsStorageName'))]",
+              "properties": {
+                "contentType": "text/plain",
+                "value": "[parameters('secret_AzureWebJobsStorageValue')]"
+              }
+            },
+            {
+              "type": "Microsoft.Web/sites/config",
+              "apiVersion": "2021-03-01",
+              "name": "[format('{0}/{1}', parameters('webappName'), 'appsettings')]",
+              "properties": {
+                "ConnectionStrings:MercuryHealthWebContext": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secret_configStoreConnectionName'))]",
+                "ConnectionStrings:AppConfig": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secret_ConnectionStringName'))]"
+              }
+            },
+            {
+              "type": "Microsoft.Web/sites/config",
+              "apiVersion": "2021-03-01",
+              "name": "[format('{0}/{1}', parameters('functionAppName'), 'appsettings')]",
+              "properties": {
+                "ConnectionStrings:AzureWebJobsStorage": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secret_AzureWebJobsStorageName'))]",
+                "ConnectionStrings:WebsiteContentAzureFileConnectionString": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secret_AzureWebJobsStorageName'))]"
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName'))]",
+        "[resourceId('Microsoft.Resources/deployments', 'functionappdeploy')]",
+        "[resourceId('Microsoft.Resources/deployments', variables('keyvaultName'))]",
+        "[resourceId('Microsoft.Resources/deployments', 'webappdeploy')]"
+      ]
     }
   ],
   "outputs": {

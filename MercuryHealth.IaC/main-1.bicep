@@ -52,8 +52,7 @@ var defaultTags = {
 // KeyVault Secret Names
 param secret_configStoreConnectionName string = 'ConnectionStringsAppConfig'
 param secret_ConnectionStringName string = 'ConnectionStringsMercuryHealthWebContext'
-param secretName3 string = 'AzureWebJobsStorage'
-param secretName4 string = 'WebsiteContentAzureFileConnectionString'
+param secret_AzureWebJobsStorageName string = 'AzureWebJobsStorage'
 
 ////////////////////////////////////////
 // BEGIN - Create Config Store
@@ -511,8 +510,8 @@ module functionappmod './main-6-funcapp.bicep' = {
     ApimSubscriptionKey: ApimSubscriptionKeyString
     ApimWebServiceURL: apiManagement.properties.gatewayUrl
     keyvaultName: keyvaultName
-    secretName3: secretName3
-    secretName4: secretName4
+    secretName3: secret_AzureWebJobsStorageName
+    secretName4: secret_AzureWebJobsStorageName
   }
   dependsOn:  [
     appinsightsmod
@@ -551,7 +550,6 @@ module blogstoragemod './main-12-blobstorage.bicep' = {
 module configsettingsmod './main-13-configsettings.bicep' = {
   name: keyvaultName
   params: {
-    //location: location
     keyvaultName: keyvaultName
     secret_configStoreConnectionName: secret_configStoreConnectionName
     secret_configStoreConnectionValue: configStoreConnectionString
@@ -560,6 +558,9 @@ module configsettingsmod './main-13-configsettings.bicep' = {
     appServiceprincipalId: webappmod.outputs.out_appServiceprincipalId
     webappName: webSiteName
     functionAppName: functionAppName
+    funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
+    secret_AzureWebJobsStorageName: secret_AzureWebJobsStorageName
+    secret_AzureWebJobsStorageValue: functionappmod.outputs.out_AzureWebJobsStorage
     }
     dependsOn:  [
      keyvaultmod
