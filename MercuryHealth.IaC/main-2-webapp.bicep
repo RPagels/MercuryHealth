@@ -295,7 +295,6 @@ var secretConnectionString = 'Server=tcp:${sqlserverfullyQualifiedDomainName},14
 
 output out_appService string = appService.id
 output out_webSiteName string = appService.properties.defaultHostName
-output out_appServiceName string = appService.name
+//output out_appServiceName string = appService.name
 output out_appServiceprincipalId string = appService.identity.principalId
 output out_secretConnectionString string = secretConnectionString
-

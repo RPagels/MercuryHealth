@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "7386794515107028385"
+      "templateHash": "6159854814668095384"
     }
   },
   "parameters": {
@@ -316,7 +316,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "16512519603075575390"
+              "templateHash": "9025432387763981902"
             }
           },
           "parameters": {
@@ -330,29 +330,6 @@
             "tenant": {
               "type": "string",
               "defaultValue": "[subscription().tenantId]"
-            },
-            "object": {
-              "type": "string",
-              "defaultValue": "[subscription().subscriptionId]"
-            },
-            "accessPolicies": {
-              "type": "array",
-              "defaultValue": [
-                {
-                  "tenantId": "[parameters('tenant')]",
-                  "objectId": "[parameters('object')]",
-                  "permissions": {
-                    "keys": [
-                      "Get",
-                      "List"
-                    ],
-                    "secrets": [
-                      "Get",
-                      "List"
-                    ]
-                  }
-                }
-              ]
             },
             "networkAcls": {
               "type": "object",
@@ -376,7 +353,6 @@
                   "name": "standard"
                 },
                 "enableSoftDelete": false,
-                "accessPolicies": "[parameters('accessPolicies')]",
                 "enabledForDeployment": true,
                 "enabledForDiskEncryption": true,
                 "enabledForTemplateDeployment": true,
@@ -459,7 +435,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "4756679758452973459"
+              "templateHash": "15104096612305384564"
             }
           },
           "parameters": {
@@ -747,10 +723,6 @@
             "out_webSiteName": {
               "type": "string",
               "value": "[reference(resourceId('Microsoft.Web/sites', parameters('webSiteName'))).defaultHostName]"
-            },
-            "out_appServiceName": {
-              "type": "string",
-              "value": "[parameters('webSiteName')]"
             },
             "out_appServiceprincipalId": {
               "type": "string",
@@ -1565,9 +1537,6 @@
           },
           "Deployed_Environment": {
             "value": "[parameters('Deployed_Environment')]"
-          },
-          "appServiceName": {
-            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'webappdeploy'), '2020-06-01').outputs.out_appServiceName.value]"
           }
         },
         "template": {
@@ -1577,7 +1546,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "10762375329217730638"
+              "templateHash": "5080150135110424998"
             }
           },
           "parameters": {
@@ -1609,9 +1578,6 @@
               "type": "string"
             },
             "Deployed_Environment": {
-              "type": "string"
-            },
-            "appServiceName": {
               "type": "string"
             },
             "secret_configStoreConnectionValue": {
@@ -1726,7 +1692,8 @@
                 "APPINSIGHTS_SNAPSHOTFEATURE_VERSION": "1.0.0",
                 "APPLICATIONINSIGHTS_CONNECTION_STRING": "[parameters('appInsightsConnectionString')]",
                 "WebAppUrl": "[format('https://{0}.azurewebsites.net/', parameters('webappName'))]",
-                "ASPNETCORE_ENVIRONMENT": "Development"
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "DebugOnly-secret_ConnectionStringValue=": "[parameters('secret_ConnectionStringValue')]"
               },
               "dependsOn": [
                 "[resourceId('Microsoft.KeyVault/vaults/secrets', parameters('keyvaultName'), parameters('secret_configStoreConnectionName'))]",
@@ -1740,10 +1707,12 @@
               "kind": "string",
               "properties": {
                 "AzureWebJobsStorage": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secret_AzureWebJobsStorageName'))]",
-                "WebsiteContentAzureFileConnectionString": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secret_WebsiteContentAzureFileConnectionStringName'))]"
+                "WebsiteContentAzureFileConnectionString": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secret_WebsiteContentAzureFileConnectionStringName'))]",
+                "DebugOnly-secret_ConnectionStringValue=": "[parameters('secret_AzureWebJobsStorageValue')]"
               },
               "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults/secrets', parameters('keyvaultName'), parameters('secret_AzureWebJobsStorageName'))]"
+                "[resourceId('Microsoft.KeyVault/vaults/secrets', parameters('keyvaultName'), parameters('secret_AzureWebJobsStorageName'))]",
+                "[resourceId('Microsoft.KeyVault/vaults/secrets', parameters('keyvaultName'), parameters('secret_WebsiteContentAzureFileConnectionStringName'))]"
               ]
             }
           ]

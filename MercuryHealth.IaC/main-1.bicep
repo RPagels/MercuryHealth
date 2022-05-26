@@ -566,7 +566,7 @@ module configsettingsmod './main-13-configsettings.bicep' = {
     appInsightsInstrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
     appInsightsConnectionString: appinsightsmod.outputs.out_appInsightsConnectionString
     Deployed_Environment: Deployed_Environment
-    appServiceName: webappmod.outputs.out_appServiceName
+    //appServiceName: webappmod.outputs.out_appServiceName
 
     }
     dependsOn:  [

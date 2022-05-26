@@ -8,7 +8,7 @@ param secret_WebsiteContentAzureFileConnectionStringName string
 param appInsightsInstrumentationKey string
 param appInsightsConnectionString string
 param Deployed_Environment string
-param appServiceName string
+//param appServiceName string
 
 //param location string = resourceGroup().location
 //param vaultName string
@@ -132,6 +132,9 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
     'APPLICATIONINSIGHTS_CONNECTION_STRING': appInsightsConnectionString
     'WebAppUrl': 'https://${existing_appService.name}.azurewebsites.net/'
     'ASPNETCORE_ENVIRONMENT': 'Development'
+    // 'DebugOnly-sqlAdminLoginPassword=': sqlAdminLoginPassword
+    // 'DebugOnly-sqlAdminLoginName=': sqlAdminLoginName
+    'DebugOnly-secret_ConnectionStringValue=': secret_ConnectionStringValue
   }
   dependsOn: [
     secret1
@@ -151,8 +154,10 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
   properties: {
     'AzureWebJobsStorage': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secret_AzureWebJobsStorageName})'
     'WebsiteContentAzureFileConnectionString': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secret_WebsiteContentAzureFileConnectionStringName})'
+    'DebugOnly-secret_ConnectionStringValue=': secret_AzureWebJobsStorageValue
   }
   dependsOn: [
     secret3
+    secret4
   ]
 }
