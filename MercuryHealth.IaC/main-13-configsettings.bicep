@@ -4,6 +4,7 @@ param secret_ConnectionStringName string
 param webappName string
 param functionAppName string
 param secret_AzureWebJobsStorageName string
+param secret_WebsiteContentAzureFileConnectionStringName string
 param appInsightsInstrumentationKey string
 param appInsightsConnectionString string
 param Deployed_Environment string
@@ -102,16 +103,15 @@ resource secret3 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
     value: secret_AzureWebJobsStorageValue
   }
 }
-// NOT NEEDED....DELETE IT AND ALL REFERENCES
 // create secret for Func App
-// resource secret4 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-//   name: '${keyvaultName}/${secret_AzureWebJobsStorageName}'
-//   properties: {
-//     contentType: 'text/plain'
-//     value: secret_AzureWebJobsStorageValue
-//   }
-// }
-
+resource secret4 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+  name: secret_WebsiteContentAzureFileConnectionStringName
+  parent: existing_keyvault
+  properties: {
+    contentType: 'text/plain'
+    value: secret_AzureWebJobsStorageValue
+  }
+}
 // Reference Existing resource
 resource existing_appService 'Microsoft.Web/sites@2021-03-01' existing = {
   name: webappName
@@ -130,7 +130,7 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
     'APPINSIGHTS_PROFILERFEATURE_VERSION': '1.0.0'
     'APPINSIGHTS_SNAPSHOTFEATURE_VERSION': '1.0.0'
     'APPLICATIONINSIGHTS_CONNECTION_STRING': appInsightsConnectionString
-    'WebAppUrl': 'https://${appServiceName}.azurewebsites.net/'
+    'WebAppUrl': 'https://${existing_appService.name}.azurewebsites.net/'
     'ASPNETCORE_ENVIRONMENT': 'Development'
   }
   dependsOn: [
@@ -150,6 +150,7 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
   parent: existing_funcAppService
   properties: {
     'AzureWebJobsStorage': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secret_AzureWebJobsStorageName})'
+    'WebsiteContentAzureFileConnectionString': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secret_WebsiteContentAzureFileConnectionStringName})'
   }
   dependsOn: [
     secret3
