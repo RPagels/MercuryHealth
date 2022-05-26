@@ -4,6 +4,10 @@ param secret_ConnectionStringName string
 param webappName string
 param functionAppName string
 param secret_AzureWebJobsStorageName string
+param appInsightsInstrumentationKey string
+param appInsightsConnectionString string
+param Deployed_Environment string
+param appServiceName string
 
 //param location string = resourceGroup().location
 //param vaultName string
@@ -120,6 +124,14 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
   properties: {
     'ConnectionStrings:MercuryHealthWebContext': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secret_configStoreConnectionName})'
     'ConnectionStrings:AppConfig': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secret_ConnectionStringName})'
+    'DeployedEnvironment': Deployed_Environment
+    'WEBSITE_RUN_FROM_PACKAGE': '1'
+    'APPINSIGHTS_INSTRUMENTATIONKEY': appInsightsInstrumentationKey
+    'APPINSIGHTS_PROFILERFEATURE_VERSION': '1.0.0'
+    'APPINSIGHTS_SNAPSHOTFEATURE_VERSION': '1.0.0'
+    'APPLICATIONINSIGHTS_CONNECTION_STRING': appInsightsConnectionString
+    'WebAppUrl': 'https://${appServiceName}.azurewebsites.net/'
+    'ASPNETCORE_ENVIRONMENT': 'Development'
   }
   dependsOn: [
     secret1
