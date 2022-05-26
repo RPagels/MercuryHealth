@@ -72,12 +72,12 @@ resource keyvaultaccessmod 'Microsoft.KeyVault/vaults/accessPolicies@2021-11-01-
 }
 
 // Create KeyVault Secrets
-// resource secret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-//   name: '${existing_keyvault}/${secret_configStoreConnectionName}'
-//   properties: {
-//     value: secret_configStoreConnectionValue
-//   }
-// }
+resource secret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+  name: '${existing_keyvault}/${secret_configStoreConnectionName}'
+  properties: {
+    value: secret_configStoreConnectionValue
+  }
+}
 
 // create secret for Web App
 // resource secret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
