@@ -25,10 +25,7 @@ param secret_AzureWebJobsStorageValue string
 
 param tenant string = subscription().tenantId
 
-
-// ******************************************
-// Create KeyVault accessPolicies
-// ******************************************
+// Define KeyVault accessPolicies
 param accessPolicies array = [
   {
     tenantId: tenant
@@ -65,6 +62,7 @@ resource existing_keyvault 'Microsoft.KeyVault/vaults@2021-11-01-preview' existi
   name: keyvaultName
 }
 
+// Create KeyVault accessPolicies
 resource keyvaultaccessmod 'Microsoft.KeyVault/vaults/accessPolicies@2021-11-01-preview' = {
   name: 'add'
   parent: existing_keyvault
@@ -72,7 +70,6 @@ resource keyvaultaccessmod 'Microsoft.KeyVault/vaults/accessPolicies@2021-11-01-
     accessPolicies: accessPolicies
   }
 }
-
 
 // Create KeyVault Secrets
 resource secret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
@@ -91,7 +88,7 @@ resource secret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
   }
 }
 //create secret for Func App
-resource mySecret3 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+resource secret3 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
   name: '${keyvaultName}/${secret_AzureWebJobsStorageName}'
   properties: {
     contentType: 'text/plain'
@@ -99,7 +96,7 @@ resource mySecret3 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
   }
 }
 // create secret for Func App
-resource mySecret4 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+resource secret4 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
   name: '${keyvaultName}/${secret_AzureWebJobsStorageName}'
   properties: {
     contentType: 'text/plain'
@@ -107,13 +104,12 @@ resource mySecret4 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
   }
 }
 
-
-// Create Web sites/config 'appsettings' - Web App
 // Reference Existing resource
 resource existing_appService 'Microsoft.Web/sites@2021-03-01' existing = {
   name: webappName
 }
 
+// Create Web sites/config 'appsettings' - Web App
 resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
   name: 'appsettings'
   parent: existing_appService
@@ -128,12 +124,21 @@ resource existing_funcAppService 'Microsoft.Web/sites@2021-03-01' existing = {
   name: functionAppName
 }
 // Create Web sites/config 'appsettings' - Function App
-resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
-  name: 'appsettings'
-  parent: existing_funcAppService
-  properties: {
-    'ConnectionStrings:AzureWebJobsStorage': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secret_AzureWebJobsStorageName})'
-    'ConnectionStrings:WebsiteContentAzureFileConnectionString': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secret_AzureWebJobsStorageName})'
-    }
-}
-
+// resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
+//   name: 'appsettings'
+//   parent: existing_funcAppService
+//   properties: {
+//     siteConfig: {
+//       appSettings: [
+//         {
+//           name: 'AzureWebJobsStorage'
+//           value: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secret_AzureWebJobsStorageName})'
+//         }
+//         {
+//           name: 'WebsiteContentAzureFileConnectionString'
+//           value: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secret_AzureWebJobsStorageName})'
+//         }
+//       ]
+//     }
+//   }
+// }

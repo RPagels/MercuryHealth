@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "7876271853533710689"
+      "templateHash": "7878721793094420861"
     }
   },
   "parameters": {
@@ -1554,7 +1554,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "11341725219059755065"
+              "templateHash": "13472493511244707655"
             }
           },
           "parameters": {
@@ -1681,15 +1681,6 @@
               "properties": {
                 "ConnectionStrings:MercuryHealthWebContext": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secret_configStoreConnectionName'))]",
                 "ConnectionStrings:AppConfig": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secret_ConnectionStringName'))]"
-              }
-            },
-            {
-              "type": "Microsoft.Web/sites/config",
-              "apiVersion": "2021-03-01",
-              "name": "[format('{0}/{1}', parameters('functionAppName'), 'appsettings')]",
-              "properties": {
-                "ConnectionStrings:AzureWebJobsStorage": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secret_AzureWebJobsStorageName'))]",
-                "ConnectionStrings:WebsiteContentAzureFileConnectionString": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secret_AzureWebJobsStorageName'))]"
               }
             }
           ]
