@@ -562,7 +562,7 @@ module configsettingsmod './main-13-configsettings.bicep' = {
     funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
     secret_AzureWebJobsStorageName: secret_AzureWebJobsStorageName
     secret_AzureWebJobsStorageValue: functionappmod.outputs.out_AzureWebJobsStorage
-    secret_WebsiteContentAzureFileConnectionString: secret_WebsiteContentAzureFileConnectionString
+    secret_WebsiteContentAzureFileConnectionStringName: secret_WebsiteContentAzureFileConnectionString
     appInsightsInstrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
     appInsightsConnectionString: appinsightsmod.outputs.out_appInsightsConnectionString
     Deployed_Environment: Deployed_Environment
