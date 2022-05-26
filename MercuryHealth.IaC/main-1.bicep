@@ -547,27 +547,27 @@ module blogstoragemod './main-12-blobstorage.bicep' = {
 // }
 
 // Create Azure KeyVault
-module configsettingsmod './main-13-configsettings.bicep' = {
-  name: keyvaultName
-  params: {
-    keyvaultName: keyvaultName
-    secret_configStoreConnectionName: secret_configStoreConnectionName
-    secret_configStoreConnectionValue: configStoreConnectionString
-    secret_ConnectionStringName: secret_ConnectionStringName
-    secret_ConnectionStringValue: webappmod.outputs.out_secretConnectionString
-    appServiceprincipalId: webappmod.outputs.out_appServiceprincipalId
-    webappName: webSiteName
-    functionAppName: functionAppName
-    funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
-    secret_AzureWebJobsStorageName: secret_AzureWebJobsStorageName
-    secret_AzureWebJobsStorageValue: functionappmod.outputs.out_AzureWebJobsStorage
-    }
-    dependsOn:  [
-     keyvaultmod
-     webappmod
-     functionappmod
-   ]
- }
+// module configsettingsmod './main-13-configsettings.bicep' = {
+//   name: keyvaultName
+//   params: {
+//     keyvaultName: keyvaultName
+//     secret_configStoreConnectionName: secret_configStoreConnectionName
+//     secret_configStoreConnectionValue: configStoreConnectionString
+//     secret_ConnectionStringName: secret_ConnectionStringName
+//     secret_ConnectionStringValue: webappmod.outputs.out_secretConnectionString
+//     appServiceprincipalId: webappmod.outputs.out_appServiceprincipalId
+//     webappName: webSiteName
+//     functionAppName: functionAppName
+//     funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
+//     secret_AzureWebJobsStorageName: secret_AzureWebJobsStorageName
+//     secret_AzureWebJobsStorageValue: functionappmod.outputs.out_AzureWebJobsStorage
+//     }
+//     dependsOn:  [
+//      keyvaultmod
+//      webappmod
+//      functionappmod
+//    ]
+//  }
 
 
 // Output Params used for IaC deployment in pipeline

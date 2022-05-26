@@ -120,16 +120,16 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
           name: 'ApimWebServiceURL'
           value: ApimWebServiceURL
         }        
-        {
-          name: 'AzureWebJobsStorage'
-          value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
+        //{
+          //name: 'AzureWebJobsStorage'
+          //value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
           //value: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName3})'
-        }
-        {
-          name: 'WebsiteContentAzureFileConnectionString'
-          value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
+        //}
+        //{
+          //name: 'WebsiteContentAzureFileConnectionString'
+          //value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
           //value: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName4})'
-        }
+        //}
         {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
           value: appInsightsInstrumentationKey
