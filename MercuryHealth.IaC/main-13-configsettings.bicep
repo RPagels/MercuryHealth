@@ -72,37 +72,37 @@ resource keyvaultaccessmod 'Microsoft.KeyVault/vaults/accessPolicies@2021-11-01-
 }
 
 // Create KeyVault Secrets
-resource secret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: '${existing_keyvault}/${secret_configStoreConnectionName}'
-  properties: {
-    value: secret_configStoreConnectionValue
-  }
-}
+// resource secret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+//   name: '${existing_keyvault}/${secret_configStoreConnectionName}'
+//   properties: {
+//     value: secret_configStoreConnectionValue
+//   }
+// }
 
 // create secret for Web App
-resource secret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: '${existing_keyvault}/${secret_ConnectionStringName}'
-  properties: {
-    contentType: 'text/plain'
-    value: secret_ConnectionStringValue
-  }
-}
+// resource secret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+//   name: '${existing_keyvault}/${secret_ConnectionStringName}'
+//   properties: {
+//     contentType: 'text/plain'
+//     value: secret_ConnectionStringValue
+//   }
+// }
 //create secret for Func App
-resource secret3 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: '${keyvaultName}/${secret_AzureWebJobsStorageName}'
-  properties: {
-    contentType: 'text/plain'
-    value: secret_AzureWebJobsStorageValue
-  }
-}
+// resource secret3 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+//   name: '${keyvaultName}/${secret_AzureWebJobsStorageName}'
+//   properties: {
+//     contentType: 'text/plain'
+//     value: secret_AzureWebJobsStorageValue
+//   }
+// }
 // create secret for Func App
-resource secret4 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: '${keyvaultName}/${secret_AzureWebJobsStorageName}'
-  properties: {
-    contentType: 'text/plain'
-    value: secret_AzureWebJobsStorageValue
-  }
-}
+// resource secret4 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+//   name: '${keyvaultName}/${secret_AzureWebJobsStorageName}'
+//   properties: {
+//     contentType: 'text/plain'
+//     value: secret_AzureWebJobsStorageValue
+//   }
+// }
 
 // Reference Existing resource
 resource existing_appService 'Microsoft.Web/sites@2021-03-01' existing = {
@@ -110,14 +110,14 @@ resource existing_appService 'Microsoft.Web/sites@2021-03-01' existing = {
 }
 
 // Create Web sites/config 'appsettings' - Web App
-resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
-  name: 'appsettings'
-  parent: existing_appService
-  properties: {
-    'ConnectionStrings:MercuryHealthWebContext': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secret_configStoreConnectionName})'
-    'ConnectionStrings:AppConfig': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secret_ConnectionStringName})'
-  }
-}
+// resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
+//   name: 'appsettings'
+//   parent: existing_appService
+//   properties: {
+//     'ConnectionStrings:MercuryHealthWebContext': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secret_configStoreConnectionName})'
+//     'ConnectionStrings:AppConfig': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secret_ConnectionStringName})'
+//   }
+// }
 
 // Reference Existing resource
 resource existing_funcAppService 'Microsoft.Web/sites@2021-03-01' existing = {
