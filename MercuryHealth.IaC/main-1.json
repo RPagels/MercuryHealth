@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "7878721793094420861"
+      "templateHash": "7506230609906579698"
     }
   },
   "parameters": {
@@ -1554,7 +1554,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "13472493511244707655"
+              "templateHash": "12458505349508643955"
             }
           },
           "parameters": {
@@ -1642,7 +1642,7 @@
             {
               "type": "Microsoft.KeyVault/vaults/secrets",
               "apiVersion": "2021-11-01-preview",
-              "name": "[format('{0}/{1}', reference(resourceId('Microsoft.KeyVault/vaults', parameters('keyvaultName')), '2021-11-01-preview', 'full'), parameters('secret_configStoreConnectionName'))]",
+              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('secret_configStoreConnectionName'))]",
               "properties": {
                 "value": "[parameters('secret_configStoreConnectionValue')]"
               }
@@ -1650,19 +1650,10 @@
             {
               "type": "Microsoft.KeyVault/vaults/secrets",
               "apiVersion": "2021-11-01-preview",
-              "name": "[format('{0}/{1}', reference(resourceId('Microsoft.KeyVault/vaults', parameters('keyvaultName')), '2021-11-01-preview', 'full'), parameters('secret_ConnectionStringName'))]",
+              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('secret_ConnectionStringName'))]",
               "properties": {
                 "contentType": "text/plain",
                 "value": "[parameters('secret_ConnectionStringValue')]"
-              }
-            },
-            {
-              "type": "Microsoft.KeyVault/vaults/secrets",
-              "apiVersion": "2021-11-01-preview",
-              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('secret_AzureWebJobsStorageName'))]",
-              "properties": {
-                "contentType": "text/plain",
-                "value": "[parameters('secret_AzureWebJobsStorageValue')]"
               }
             },
             {
@@ -1681,7 +1672,23 @@
               "properties": {
                 "ConnectionStrings:MercuryHealthWebContext": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secret_configStoreConnectionName'))]",
                 "ConnectionStrings:AppConfig": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secret_ConnectionStringName'))]"
-              }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults/secrets', parameters('keyvaultName'), parameters('secret_configStoreConnectionName'))]",
+                "[resourceId('Microsoft.KeyVault/vaults/secrets', parameters('keyvaultName'), parameters('secret_ConnectionStringName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Web/sites/config",
+              "apiVersion": "2021-03-01",
+              "name": "[format('{0}/{1}', parameters('functionAppName'), 'appsettings')]",
+              "kind": "string",
+              "properties": {
+                "AzureWebJobsStorage": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secret_AzureWebJobsStorageName'))]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults/secrets', parameters('keyvaultName'), parameters('secret_AzureWebJobsStorageName'))]"
+              ]
             }
           ]
         }
