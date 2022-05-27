@@ -37,7 +37,7 @@ resource apiManagement 'Microsoft.ApiManagement/service@2021-08-01' = {
   }
 }
 
-resource petStoreApiExample 'Microsoft.ApiManagement/service/apis@2021-08-01' = {
+resource petStoreApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
   name: '${apiManagement.name}/PetStoreSwaggerImportExample'
   properties: {
     format: 'swagger-link-json'
@@ -46,7 +46,7 @@ resource petStoreApiExample 'Microsoft.ApiManagement/service/apis@2021-08-01' = 
   }
 }
 
-resource MercuryHealthApiExample 'Microsoft.ApiManagement/service/apis@2021-08-01' = {
+resource MercuryHealthApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
   name: '${apiManagement.name}/MercuryHealthSwaggerImportExample'
   properties: {
     format:'openapi+json'

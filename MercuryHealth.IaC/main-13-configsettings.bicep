@@ -162,6 +162,7 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
     'APPINSIGHTS_INSTRUMENTATIONKEY': appInsightsInstrumentationKey
     'APPLICATIONINSIGHTS_CONNECTION_STRING': appInsightsConnectionString
     'FUNCTIONS_WORKER_RUNTIME': 'dotnet'
+    'FUNCTIONS_EXTENSION_VERSION': '~4'
   }
   dependsOn: [
     secret3
