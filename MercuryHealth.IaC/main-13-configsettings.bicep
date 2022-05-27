@@ -172,17 +172,17 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
 }
 
 // Reference Existing resource
-resource existing_apimservice 'Microsoft.Web/sites@2021-03-01' existing = {
-  name: apiServiceName
-}
-resource MercuryHealthApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
-  name: '${existing_apimservice.name}/MercuryHealthSwaggerImportExample'
-  properties: {
-    format: 'swagger-link-json' //'openapi+json' //swagger-json' //'openapi-link' //'openapi+json-link' //openapi+json' //'openapi'
-    value: 'https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json'
-    path: ''
-    displayName: 'Mercury Health'
-    serviceUrl: 'https://${existing_appService.name}.azurewebsites.net/'
-  }
-}
+// resource existing_apimservice 'Microsoft.Web/sites@2021-03-01' existing = {
+//   name: apiServiceName
+// }
+// resource MercuryHealthApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
+//   name: '${existing_apimservice.name}/MercuryHealthSwaggerImportExample'
+//   properties: {
+//     format: 'swagger-link-json' //'openapi+json' //swagger-json' //'openapi-link' //'openapi+json-link' //openapi+json' //'openapi'
+//     value: 'https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json'
+//     path: ''
+//     displayName: 'Mercury Health'
+//     serviceUrl: 'https://${existing_appService.name}.azurewebsites.net/'
+//   }
+// }
 // trynext    swagger-link-json

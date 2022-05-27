@@ -293,18 +293,18 @@ jobs:
         slot-name: 'production'
         package: './MercuryHealth.FunctionApp'
 
-    #- name: Deploy MercuryHealth API
-    #  uses: Azure/CLI@v1
-    #  continue-on-error: true
-    #  with:
-    #    inlineScript: |
-    #      az apim api import -g ${{ env.Azure_Resource_GroupName }} \
-    #         --service-name ${{ needs.deploy_infrastructure.outputs.output_apiServiceName }} \
-    #         --path examplemercuryhealth \
-    #         --specification-url 'https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json' \
-    #         --specification-format OpenApiJson \
-    #         --service-url 'https://${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net/' \
-    #         --display-name 'Mercury Health'
+    - name: Deploy MercuryHealth API
+      uses: Azure/CLI@v1
+      continue-on-error: true
+      with:
+        inlineScript: |
+          az apim api import -g ${{ env.Azure_Resource_GroupName }} \
+             --service-name ${{ needs.deploy_infrastructure.outputs.output_apiServiceName }} \
+             --path examplemercuryhealth \
+             --specification-url 'https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json' \
+             --specification-format OpenApiJson \
+             --service-url 'https://${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net/' \
+             --display-name 'Mercury Health'
           
     - name: 'Generate Temporary API Key For App Insights'
       id: AIKeyGen
