@@ -66,7 +66,7 @@ jobs:
         run: |
           dotnet restore
           dotnet build MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} --no-restore
-          dotnet publish MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} -o './website' /p:FileVersion="${{ steps.setBuildNumber.outputs.BuildNumber }}" /p:Version="${{ steps.setBuildNumber.outputs.BuildNumber }}" /p:AssemblyVersion="${{ steps.setBuildNumber.outputs.BuildNumber }}"
+          dotnet publish MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} -o './web' /p:FileVersion="${{ steps.setBuildNumber.outputs.BuildNumber }}" /p:Version="${{ steps.setBuildNumber.outputs.BuildNumber }}" /p:AssemblyVersion="${{ steps.setBuildNumber.outputs.BuildNumber }}"
           dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} --no-restore
           dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './uitests'
           dotnet build MercuryHealth.FunctionApp/MercuryHealth.FunctionApp.csproj --configuration ${{ env.buildConfiguration }} --no-restore
@@ -90,14 +90,14 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: MercuryHealth.Website
-          path: ${{ github.workspace }}/website
+          path: ${{ github.workspace }}/web
 
       - name: Upload API file
         if: ${{ github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v2
         with:
           name: MercuryHealth.Website
-          path: ${{ github.workspace }}/MercuryHealth.Website/MercuryHealth.openapi.yaml
+          path: ${{ github.workspace }}/MercuryHealth.Web/MercuryHealth.openapi.yaml
           
       - name: Upload Build Artifacts-FunctionApp
         if: ${{ github.event_name != 'pull_request' }}
