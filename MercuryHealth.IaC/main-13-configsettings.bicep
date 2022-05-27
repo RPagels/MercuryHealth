@@ -178,11 +178,11 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
 // resource MercuryHealthApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
 //   name: '${existing_apimservice.name}/MercuryHealthSwaggerImportExample'
 //   properties: {
-//     format: 'swagger-link-json' //'openapi+json' //swagger-json' //'openapi-link' //'openapi+json-link' //openapi+json' //'openapi'
+//     format: 'openapi'
 //     value: 'https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json'
 //     path: ''
 //     displayName: 'Mercury Health'
 //     serviceUrl: 'https://${existing_appService.name}.azurewebsites.net/'
 //   }
 // }
-// trynext    swagger-link-json
+
