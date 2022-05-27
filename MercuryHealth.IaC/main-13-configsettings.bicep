@@ -8,6 +8,8 @@ param secret_WebsiteContentAzureFileConnectionStringName string
 param appInsightsInstrumentationKey string
 param appInsightsConnectionString string
 param Deployed_Environment string
+param ApimSubscriptionKey string
+param ApimWebServiceURL string
 //param appServiceName string
 
 //param location string = resourceGroup().location
@@ -155,6 +157,11 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
     'AzureWebJobsStorage': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secret_AzureWebJobsStorageName})'
     'WebsiteContentAzureFileConnectionString': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secret_WebsiteContentAzureFileConnectionStringName})'
     'DebugOnly-secret_ConnectionStringValue=': secret_AzureWebJobsStorageValue
+    'ApimSubscriptionKey': ApimSubscriptionKey
+    'ApimWebServiceURL': ApimWebServiceURL
+    'APPINSIGHTS_INSTRUMENTATIONKEY': appInsightsInstrumentationKey
+    'APPLICATIONINSIGHTS_CONNECTION_STRING': appInsightsConnectionString
+    'FUNCTIONS_WORKER_RUNTIME': 'dotnet'
   }
   dependsOn: [
     secret3

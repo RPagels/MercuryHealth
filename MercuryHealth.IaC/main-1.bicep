@@ -504,15 +504,15 @@ module functionappmod './main-6-funcapp.bicep' = {
   name: 'functionappdeploy'
   params: {
     location: location
-    appInsightsInstrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
+    //appInsightsInstrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
     functionAppServiceName: functionAppServiceName
     functionAppName: functionAppName
     defaultTags: defaultTags
-    ApimSubscriptionKey: ApimSubscriptionKeyString
-    ApimWebServiceURL: apiManagement.properties.gatewayUrl
-    keyvaultName: keyvaultName
-    secretName3: secret_AzureWebJobsStorageName
-    secretName4: secret_AzureWebJobsStorageName
+    // ApimSubscriptionKey: ApimSubscriptionKeyString
+    // ApimWebServiceURL: apiManagement.properties.gatewayUrl
+    // keyvaultName: keyvaultName
+    // secretName3: secret_AzureWebJobsStorageName
+    // secretName4: secret_AzureWebJobsStorageName
   }
   dependsOn:  [
     appinsightsmod
@@ -567,6 +567,8 @@ module configsettingsmod './main-13-configsettings.bicep' = {
     appInsightsConnectionString: appinsightsmod.outputs.out_appInsightsConnectionString
     Deployed_Environment: Deployed_Environment
     //appServiceName: webappmod.outputs.out_appServiceName
+    ApimSubscriptionKey: ApimSubscriptionKeyString
+    ApimWebServiceURL: apiManagement.properties.gatewayUrl
 
     }
     dependsOn:  [

@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "6159854814668095384"
+      "templateHash": "1074970414171932406"
     }
   },
   "parameters": {
@@ -316,7 +316,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "9025432387763981902"
+              "templateHash": "8703538281164349611"
             }
           },
           "parameters": {
@@ -330,6 +330,10 @@
             "tenant": {
               "type": "string",
               "defaultValue": "[subscription().tenantId]"
+            },
+            "accessPolicies": {
+              "type": "array",
+              "defaultValue": []
             },
             "networkAcls": {
               "type": "object",
@@ -353,6 +357,7 @@
                   "name": "standard"
                 },
                 "enableSoftDelete": false,
+                "accessPolicies": "[parameters('accessPolicies')]",
                 "enabledForDeployment": true,
                 "enabledForDiskEncryption": true,
                 "enabledForTemplateDeployment": true,
@@ -1037,9 +1042,6 @@
           "location": {
             "value": "[parameters('location')]"
           },
-          "appInsightsInstrumentationKey": {
-            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy'), '2020-06-01').outputs.out_appInsightsInstrumentationKey.value]"
-          },
           "functionAppServiceName": {
             "value": "[variables('functionAppServiceName')]"
           },
@@ -1048,21 +1050,6 @@
           },
           "defaultTags": {
             "value": "[variables('defaultTags')]"
-          },
-          "ApimSubscriptionKey": {
-            "value": "[listSecrets(resourceId('Microsoft.ApiManagement/service/subscriptions', variables('apiServiceName'), 'Developers'), '2021-12-01-preview').primaryKey]"
-          },
-          "ApimWebServiceURL": {
-            "value": "[reference(resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))).gatewayUrl]"
-          },
-          "keyvaultName": {
-            "value": "[variables('keyvaultName')]"
-          },
-          "secretName3": {
-            "value": "[parameters('secret_AzureWebJobsStorageName')]"
-          },
-          "secretName4": {
-            "value": "[parameters('secret_AzureWebJobsStorageName')]"
           }
         },
         "template": {
@@ -1072,7 +1059,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "8509123011521068493"
+              "templateHash": "2508293482836293576"
             }
           },
           "parameters": {
@@ -1080,40 +1067,14 @@
               "type": "string",
               "defaultValue": "[resourceGroup().location]"
             },
-            "functionRuntime": {
-              "type": "string",
-              "defaultValue": "dotnet"
-            },
-            "functionExtensionVersion": {
-              "type": "string",
-              "defaultValue": "~4"
-            },
             "functionAppName": {
               "type": "string"
             },
             "functionAppServiceName": {
               "type": "string"
             },
-            "appInsightsInstrumentationKey": {
-              "type": "string"
-            },
             "defaultTags": {
               "type": "object"
-            },
-            "ApimSubscriptionKey": {
-              "type": "string"
-            },
-            "ApimWebServiceURL": {
-              "type": "string"
-            },
-            "keyvaultName": {
-              "type": "string"
-            },
-            "secretName3": {
-              "type": "string"
-            },
-            "secretName4": {
-              "type": "string"
             }
           },
           "functions": [],
@@ -1204,34 +1165,7 @@
                 "reserved": false,
                 "isXenon": false,
                 "hyperV": false,
-                "siteConfig": {
-                  "appSettings": [
-                    {
-                      "name": "ApimSubscriptionKey",
-                      "value": "[parameters('ApimSubscriptionKey')]"
-                    },
-                    {
-                      "name": "ApimWebServiceURL",
-                      "value": "[parameters('ApimWebServiceURL')]"
-                    },
-                    {
-                      "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                      "value": "[parameters('appInsightsInstrumentationKey')]"
-                    },
-                    {
-                      "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                      "value": "[format('InstrumentationKey={0}', parameters('appInsightsInstrumentationKey'))]"
-                    },
-                    {
-                      "name": "FUNCTIONS_WORKER_RUNTIME",
-                      "value": "[parameters('functionRuntime')]"
-                    },
-                    {
-                      "name": "FUNCTIONS_EXTENSION_VERSION",
-                      "value": "[parameters('functionExtensionVersion')]"
-                    }
-                  ]
-                },
+                "siteConfig": {},
                 "scmSiteAlsoStopped": false,
                 "clientAffinityEnabled": false,
                 "clientCertEnabled": false,
@@ -1352,8 +1286,6 @@
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]",
-        "[resourceId('Microsoft.ApiManagement/service/subscriptions', variables('apiServiceName'), 'Developers')]",
         "[resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')]"
       ]
     },
@@ -1537,6 +1469,12 @@
           },
           "Deployed_Environment": {
             "value": "[parameters('Deployed_Environment')]"
+          },
+          "ApimSubscriptionKey": {
+            "value": "[listSecrets(resourceId('Microsoft.ApiManagement/service/subscriptions', variables('apiServiceName'), 'Developers'), '2021-12-01-preview').primaryKey]"
+          },
+          "ApimWebServiceURL": {
+            "value": "[reference(resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))).gatewayUrl]"
           }
         },
         "template": {
@@ -1546,7 +1484,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "5080150135110424998"
+              "templateHash": "7929697928663857053"
             }
           },
           "parameters": {
@@ -1578,6 +1516,12 @@
               "type": "string"
             },
             "Deployed_Environment": {
+              "type": "string"
+            },
+            "ApimSubscriptionKey": {
+              "type": "string"
+            },
+            "ApimWebServiceURL": {
               "type": "string"
             },
             "secret_configStoreConnectionValue": {
@@ -1708,7 +1652,12 @@
               "properties": {
                 "AzureWebJobsStorage": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secret_AzureWebJobsStorageName'))]",
                 "WebsiteContentAzureFileConnectionString": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secret_WebsiteContentAzureFileConnectionStringName'))]",
-                "DebugOnly-secret_ConnectionStringValue=": "[parameters('secret_AzureWebJobsStorageValue')]"
+                "DebugOnly-secret_ConnectionStringValue=": "[parameters('secret_AzureWebJobsStorageValue')]",
+                "ApimSubscriptionKey": "[parameters('ApimSubscriptionKey')]",
+                "ApimWebServiceURL": "[parameters('ApimWebServiceURL')]",
+                "APPINSIGHTS_INSTRUMENTATIONKEY": "[parameters('appInsightsInstrumentationKey')]",
+                "APPLICATIONINSIGHTS_CONNECTION_STRING": "[parameters('appInsightsConnectionString')]",
+                "FUNCTIONS_WORKER_RUNTIME": "dotnet"
               },
               "dependsOn": [
                 "[resourceId('Microsoft.KeyVault/vaults/secrets', parameters('keyvaultName'), parameters('secret_AzureWebJobsStorageName'))]",
@@ -1719,6 +1668,8 @@
         }
       },
       "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]",
+        "[resourceId('Microsoft.ApiManagement/service/subscriptions', variables('apiServiceName'), 'Developers')]",
         "[resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')]",
         "[resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName'))]",
         "[resourceId('Microsoft.Resources/deployments', 'functionappdeploy')]",

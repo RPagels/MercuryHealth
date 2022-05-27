@@ -2,22 +2,22 @@
 // a consumption plan, along with a storage account
 
 param location string = resourceGroup().location
-param functionRuntime string = 'dotnet'
-param functionExtensionVersion string = '~4'
+// param functionRuntime string = 'dotnet'
+// param functionExtensionVersion string = '~4'
 
 //param appNamePrefix string = uniqueString(resourceGroup().id)
 //param workspaceResourceId string
 param functionAppName string
 param functionAppServiceName string
-param appInsightsInstrumentationKey string
+//param appInsightsInstrumentationKey string
 //var appInsightsName = '${appNamePrefix}-appinsights'
 param defaultTags object
-param ApimSubscriptionKey string
-param ApimWebServiceURL string
+// param ApimSubscriptionKey string
+// param ApimWebServiceURL string
 
-param keyvaultName string
-param secretName3 string
-param secretName4 string
+// param keyvaultName string
+// param secretName3 string
+// param secretName4 string
 
 // remove dashes for storage account name
 //var storageAccountName = format('{0}sta', replace(appNamePrefix, '-', ''))
@@ -111,15 +111,15 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
     isXenon: false
     hyperV: false
     siteConfig: {
-      appSettings: [
-        {
-          name: 'ApimSubscriptionKey'
-          value: ApimSubscriptionKey
-        }
-        {
-          name: 'ApimWebServiceURL'
-          value: ApimWebServiceURL
-        }        
+    //   appSettings: [
+        // {
+        //   name: 'ApimSubscriptionKey'
+        //   value: ApimSubscriptionKey
+        // }
+        // {
+        //   name: 'ApimWebServiceURL'
+        //   value: ApimWebServiceURL
+        // }        
         //{
           //name: 'AzureWebJobsStorage'
           //value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
@@ -130,23 +130,23 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
           //value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
           //value: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName4})'
         //}
-        {
-          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
-          value: appInsightsInstrumentationKey
-        }
-        {
-          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-          value: 'InstrumentationKey=${appInsightsInstrumentationKey}'
-        }
-        {
-          name: 'FUNCTIONS_WORKER_RUNTIME'
-          value: functionRuntime
-        }
-        {
-          name: 'FUNCTIONS_EXTENSION_VERSION'
-          value: functionExtensionVersion
-        }
-      ]
+        // {
+        //   name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+        //   value: appInsightsInstrumentationKey
+        // }
+        // {
+        //   name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+        //   value: 'InstrumentationKey=${appInsightsInstrumentationKey}'
+        // }
+        // {
+        //   name: 'FUNCTIONS_WORKER_RUNTIME'
+        //   value: functionRuntime
+        // }
+        // {
+        //   name: 'FUNCTIONS_EXTENSION_VERSION'
+        //   value: functionExtensionVersion
+        // }
+      //]
     }
     scmSiteAlsoStopped: false
     clientAffinityEnabled: false
