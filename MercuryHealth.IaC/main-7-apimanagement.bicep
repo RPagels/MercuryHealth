@@ -59,7 +59,7 @@ resource petStoreApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-pre
 resource MercuryHealthApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
   name: '${apiManagement.name}/MercuryHealthSwaggerImportExample'
   properties: {
-    format: 'openapi+json' //'openapi'
+    format: 'openapi+json-link' //openapi+json' //'openapi'
     value: 'https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json'
     path: 'MercuryHealthApiExample'
   }
