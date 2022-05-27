@@ -569,7 +569,7 @@ module configsettingsmod './main-13-configsettings.bicep' = {
     //appServiceName: webappmod.outputs.out_appServiceName
     ApimSubscriptionKey: ApimSubscriptionKeyString
     ApimWebServiceURL: apiManagement.properties.gatewayUrl
-
+    apiServiceName: apiServiceName
     }
     dependsOn:  [
      keyvaultmod
