@@ -31,6 +31,12 @@ param tenant string = subscription().tenantId
 //   }
 // ]
 
+param accessPolicies array = [
+  {
+
+  }
+]
+
 param networkAcls object = {
   ipRules: []
   virtualNetworkRules: []
@@ -46,7 +52,7 @@ resource keyvault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
       name: 'standard'
     }
     enableSoftDelete: false
-    //accessPolicies: accessPolicies
+    accessPolicies: accessPolicies
     enabledForDeployment: true
     enabledForDiskEncryption: true
     enabledForTemplateDeployment: true
