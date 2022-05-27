@@ -1,7 +1,7 @@
 param location string = resourceGroup().location
 param vaultName string
 param tenant string = subscription().tenantId
-//param object string = subscription().subscriptionId
+param object string =  subscription().subscriptionId
 
 // param appServiceprincipalId string
 // param secretName1 string
@@ -14,26 +14,20 @@ param tenant string = subscription().tenantId
 // @secure()
 // param secretAzureWebJobsStorage string
 
-// param accessPolicies array = [
-//   {
-//     tenantId: tenant
-//     objectId: object
-//     permissions: {
-//       keys: [/
-//         'Get'
-//         'List'
-//       ]
-//       secrets: [
-//         'Get'
-//         'List'
-//       ]
-//     }
-//   }
-// ]
-
 param accessPolicies array = [
   {
-
+    tenantId: tenant
+    objectId: object
+    permissions: {
+      keys: [
+        'Get'
+        'List'
+      ]
+      secrets: [
+        'Get'
+        'List'
+      ]
+    }
   }
 ]
 
@@ -52,7 +46,7 @@ resource keyvault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
       name: 'standard'
     }
     enableSoftDelete: false
-    accessPolicies: accessPolicies
+    accessPolicies: [] //accessPolicies
     enabledForDeployment: true
     enabledForDiskEncryption: true
     enabledForTemplateDeployment: true
