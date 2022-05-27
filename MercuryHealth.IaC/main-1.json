@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "1074970414171932406"
+      "templateHash": "16302196194442651588"
     }
   },
   "parameters": {
@@ -1484,7 +1484,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "7929697928663857053"
+              "templateHash": "1717204332328766265"
             }
           },
           "parameters": {
@@ -1637,7 +1637,9 @@
                 "APPLICATIONINSIGHTS_CONNECTION_STRING": "[parameters('appInsightsConnectionString')]",
                 "WebAppUrl": "[format('https://{0}.azurewebsites.net/', parameters('webappName'))]",
                 "ASPNETCORE_ENVIRONMENT": "Development",
-                "DebugOnly-secret_ConnectionStringValue=": "[parameters('secret_ConnectionStringValue')]"
+                "Debug_Only-secret_ConnectionStringValue=": "[parameters('secret_ConnectionStringValue')]",
+                "Debug_Only-secret_configStoreConnectionValue": "[parameters('secret_configStoreConnectionValue')]",
+                "Debug_Only-secret_AzureWebJobsStorageValue": "[parameters('secret_AzureWebJobsStorageValue')]"
               },
               "dependsOn": [
                 "[resourceId('Microsoft.KeyVault/vaults/secrets', parameters('keyvaultName'), parameters('secret_configStoreConnectionName'))]",

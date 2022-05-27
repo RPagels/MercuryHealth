@@ -124,8 +124,8 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
   name: 'appsettings'
   parent: existing_appService
   properties: {
-    'ConnectionStrings:MercuryHealthWebContext': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secret_configStoreConnectionName})'
-    'ConnectionStrings:AppConfig': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secret_ConnectionStringName})'
+    'ConnectionStrings:MercuryHealthWebContext': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secret_ConnectionStringName})'
+    'ConnectionStrings:AppConfig': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secret_configStoreConnectionName})'
     'DeployedEnvironment': Deployed_Environment
     'WEBSITE_RUN_FROM_PACKAGE': '1'
     'APPINSIGHTS_INSTRUMENTATIONKEY': appInsightsInstrumentationKey
@@ -134,9 +134,9 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
     'APPLICATIONINSIGHTS_CONNECTION_STRING': appInsightsConnectionString
     'WebAppUrl': 'https://${existing_appService.name}.azurewebsites.net/'
     'ASPNETCORE_ENVIRONMENT': 'Development'
-    // 'DebugOnly-sqlAdminLoginPassword=': sqlAdminLoginPassword
-    // 'DebugOnly-sqlAdminLoginName=': sqlAdminLoginName
-    'DebugOnly-secret_ConnectionStringValue=': secret_ConnectionStringValue
+    'Debug_Only-secret_ConnectionStringValue=': secret_ConnectionStringValue
+    'Debug_Only-secret_configStoreConnectionValue': secret_configStoreConnectionValue
+    'Debug_Only-secret_AzureWebJobsStorageValue': secret_AzureWebJobsStorageValue
   }
   dependsOn: [
     secret1
