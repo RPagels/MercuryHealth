@@ -306,7 +306,7 @@ jobs:
     #         --service-url 'https://${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net/' \
     #         --display-name 'Mercury Health'
 
-    - name: Deploy MercuryHealth APIs'
+    - name: Add MercuryHealth APIs to APIM'
       uses: Azure/CLI@v1
       continue-on-error: true
       with:
@@ -318,6 +318,18 @@ jobs:
              --specification-format OpenApiJson \
              --service-url 'https://${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net/' \
              --display-name 'Mercury Health'
+             --api-id 'Mercury-Health'
+ 
+    - name: Add MercuryHealth APIs to Product'
+      uses: Azure/CLI@v1
+      continue-on-error: true
+      with:
+        inlineScript: |
+          az apim product api add 
+            --api-id 'Mercury-Health' \
+            --product-id 'Development' \
+            --resource-group ${{ env.Azure_Resource_GroupName }} \
+            --service-name ${{ needs.deploy_infrastructure.outputs.output_apiServiceName }}
              
     - name: 'Generate Temporary API Key For App Insights'
       id: AIKeyGen
