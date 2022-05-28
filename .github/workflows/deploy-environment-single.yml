@@ -313,13 +313,13 @@ jobs:
       with:
         inlineScript: |
           az apim api import -g ${{ env.Azure_Resource_GroupName }} \
+             --api-id 'mercury-health' \
              --service-name ${{ needs.deploy_infrastructure.outputs.output_apiServiceName }} \
              --path '' \
              --specification-path './MercuryHealth.Website/MercuryHealth.openapi.yaml' \
              --specification-format OpenApiJson \
              --service-url 'https://${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net/' \
-             --display-name 'Mercury Health' \
-             --api-id 'Mercury-Health'
+             --display-name 'Mercury Health'
  
     - name: Add MercuryHealth APIs to Product'
       uses: Azure/CLI@v1
@@ -327,7 +327,7 @@ jobs:
       with:
         inlineScript: |
           az apim product api add 
-            --api-id 'Mercury-Health' \
+            --api-id 'mercury-health' \
             --product-id 'Development' \
             --resource-group ${{ env.Azure_Resource_GroupName }} \
             --service-name ${{ needs.deploy_infrastructure.outputs.output_apiServiceName }}
