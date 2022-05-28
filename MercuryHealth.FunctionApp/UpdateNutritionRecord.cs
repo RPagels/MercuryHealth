@@ -22,8 +22,13 @@ public class UpdateNutritionRecord
         this.telemetry = telemetry;
     }
 
+    // Time Trigger Cheat Sheet: https://codehollow.com/2017/02/azure-functions-time-trigger-cron-cheat-sheet/
+    // 0 * * * * *	    every minute
+    // 0 */5 * * * *	every 5 minutes
+    // 0 0 */6 * * *	every 6 hours
+    //
     [FunctionName("UpdateNutritionRecord")]
-    public async Task RunAsync([TimerTrigger("0 */5 * * * *")] TimerInfo myTimer, ILogger log)
+    public async Task RunAsync([TimerTrigger("0 * * * * *")] TimerInfo myTimer, ILogger log)
     {
 
         try
@@ -51,7 +56,8 @@ public class UpdateNutritionRecord
 
             // Update a fields
             nutrition.Tags = "API PUT Update";
-            nutrition.ProteinInGrams = Convert.ToDecimal("0.1234567890");
+            //nutrition.ProteinInGrams = Convert.ToDecimal("0.1234567890");
+            nutrition.ProteinInGrams = Convert.ToDecimal("0.123");
             nutrition.Calories = 110;
             nutrition.MealTime = DateTime.Now;
 

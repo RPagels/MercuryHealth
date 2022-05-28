@@ -15,16 +15,14 @@ public class InsertExerciseRecord
     private static string ApimSubscriptionKey = System.Environment.GetEnvironmentVariable("ApimSubscriptionKey");
     private static string ApimWebServiceURL = System.Environment.GetEnvironmentVariable("ApimWebServiceURL");
 
+    // Time Trigger Cheat Sheet: https://codehollow.com/2017/02/azure-functions-time-trigger-cron-cheat-sheet/
+    // 0 * * * * *	    every minute
+    // 0 */5 * * * *	every 5 minutes
+    // 0 0 */6 * * *	every 6 hours
+    //
     [FunctionName("InsertExerciseRecord")]
     public async Task RunAsync([TimerTrigger("0 0 */12 * * *")] TimerInfo myTimer, ILogger log)
     {
-        // Time Trigger Cheat Sheet: https://codehollow.com/2017/02/azure-functions-time-trigger-cron-cheat-sheet/
-        // 0 * * * * *	    every minute
-        // 0 */5 * * * *	every 5 minutes
-        // 0 0 */6 * * *	every 6 hours
-
-        //log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-
         var client = new HttpClient();
         var queryString = HttpUtility.ParseQueryString(string.Empty);
 
