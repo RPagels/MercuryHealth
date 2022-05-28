@@ -402,6 +402,7 @@ resource apiManagementSubscription 'Microsoft.ApiManagement/service/subscription
   properties: {
     scope: '/apis' // Subscription applies to all APIs
     displayName: 'Mercury Health - Developers' //apiSubscriptionName
+    state: 'active'
   }
 }
 
@@ -410,8 +411,8 @@ resource apiManagementProducts 'Microsoft.ApiManagement/service/products@2021-12
   name: 'Development'
   properties: {
     approvalRequired: false
-    state: 'notPublished'
-    
+    state: 'published'
+    //subscriptionRequired: true
     description: 'Product used for Mercury Health Development Teams'
     displayName: 'Mercury Health - Developers' //apiSubscriptionName
   }
@@ -419,7 +420,7 @@ resource apiManagementProducts 'Microsoft.ApiManagement/service/products@2021-12
 
 resource appInsightsAPIManagement 'Microsoft.ApiManagement/service/loggers@2021-12-01-preview' = {
   parent: apiManagement
-  name: 'MercuryHealth-applicationinsights' //${apiServiceName}/${appInsightsName}' //MercuryHealth-applicationinsights'
+  name: 'MercuryHealth-applicationinsights'
   properties: {
     loggerType: 'applicationInsights'
     description: 'Mercury Health Application Insights instance.'

@@ -22,8 +22,13 @@ public class UpdateExerciseRecord
         this.telemetry = telemetry;
     }
 
+    // Time Trigger Cheat Sheet: https://codehollow.com/2017/02/azure-functions-time-trigger-cron-cheat-sheet/
+    // 0 * * * * *	    every minute
+    // 0 */5 * * * *	every 5 minutes
+    // 0 0 */6 * * *	every 6 hours
+    //
     [FunctionName("UpdateExerciseRecord")]
-    public async Task RunAsync([TimerTrigger("0 */20 * * * *")] TimerInfo myTimer, ILogger log)
+    public async Task RunAsync([TimerTrigger("0 */5 * * * *")] TimerInfo myTimer, ILogger log)
     {
 
         try
