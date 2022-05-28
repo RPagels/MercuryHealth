@@ -44,6 +44,7 @@ public class UpdateNutritionRecord
 
             // Hard code record # 25
             var uri = ApimWebServiceURL + "/api/Nutritions/25";
+            log.LogInformation($"ApimSubscriptionKey: {ApimSubscriptionKey}");
             log.LogInformation($"uri: {uri}");
 
             var response = await client.GetAsync(uri);
@@ -57,7 +58,7 @@ public class UpdateNutritionRecord
             // Update a fields
             nutrition.Tags = "API PUT Update";
             //nutrition.ProteinInGrams = Convert.ToDecimal("0.1234567890");
-            nutrition.ProteinInGrams = Convert.ToDecimal("0.123");
+            //nutrition.ProteinInGrams = Convert.ToDecimal("0.123");
             nutrition.Calories = 110;
             nutrition.MealTime = DateTime.Now;
 
