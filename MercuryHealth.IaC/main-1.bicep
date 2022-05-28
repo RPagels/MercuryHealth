@@ -398,7 +398,7 @@ resource apiManagement 'Microsoft.ApiManagement/service@2021-12-01-preview' = {
 
 resource apiManagementSubscription 'Microsoft.ApiManagement/service/subscriptions@2021-12-01-preview' = {
   parent: apiManagement
-  name: 'Developers' //apiSubscriptionName
+  name: 'developers' //apiSubscriptionName
   properties: {
     scope: '/apis' // Subscription applies to all APIs
     displayName: 'Mercury Health - Developers' //apiSubscriptionName
@@ -408,7 +408,7 @@ resource apiManagementSubscription 'Microsoft.ApiManagement/service/subscription
 
 resource apiManagementProducts 'Microsoft.ApiManagement/service/products@2021-12-01-preview' = {
   parent: apiManagement
-  name: 'Development'
+  name: 'development'
   properties: {
     approvalRequired: false
     state: 'published'

@@ -328,7 +328,7 @@ jobs:
         inlineScript: |
           az apim product api add 
             --api-id 'mercury-health' \
-            --product-id 'Development' \
+            --product-id development \
             --resource-group ${{ env.Azure_Resource_GroupName }} \
             --service-name ${{ needs.deploy_infrastructure.outputs.output_apiServiceName }}
              
