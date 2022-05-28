@@ -304,7 +304,8 @@ jobs:
     #         --specification-url 'https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json' \
     #         --specification-format OpenApiJson \
     #         --service-url 'https://${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net/' \
-    #         --display-name 'Mercury Health'
+    #         --display-name 'Mercury Health' \
+    #         --api-id 'Mercury-Health'
 
     - name: Add MercuryHealth APIs to APIM'
       uses: Azure/CLI@v1
@@ -317,7 +318,7 @@ jobs:
              --specification-path './MercuryHealth.Website/MercuryHealth.openapi.yaml' \
              --specification-format OpenApiJson \
              --service-url 'https://${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net/' \
-             --display-name 'Mercury Health'
+             --display-name 'Mercury Health' \
              --api-id 'Mercury-Health'
  
     - name: Add MercuryHealth APIs to Product'
