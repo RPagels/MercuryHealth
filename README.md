@@ -15,6 +15,11 @@ At Microsoft, DevOps means one thing. “It is the union of People, Process and 
 
 We’re also working hand in hand with the Ops folks to figure out what is the best way to consistently and quickly deploy our applications. For processing, there needs to be a process in place which will let teams iterate fast enough, produce code of high enough quality, and a way to deliver the application to the end users quickly and consistently. Agile processes (done correctly) work great. And finally, for end-to-end products and tooling, the answer can be Azure DevOps & GitHub, a better together story.
 
+## Blog Posts on DevOps Nirvana
+- Part 1 - [DevOps Nirvana – Part 1](https://techcommunity.microsoft.com/t5/azure-devops-blog/devops-nirvana-part-1/ba-p/3439942)
+- Part 2 - coming soon...
+- Part 3 - coming soon...
+
 ## DevOps Nirvana
 DevOps Nirvana, what does this mean? Webster defines it as a state of perfect happiness. Although a complete DevOps end-to-end setup might not be perfect, it can be extremely close.  By adopting the principles of agile, automation, continuous integration and continuous delivery, and you will reach your goal of healthy DevOps. 
 
