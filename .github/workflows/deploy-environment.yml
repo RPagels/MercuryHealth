@@ -559,7 +559,7 @@ jobs:
       # VERY Important. Do not use end slash for webHost value. "/"
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
-        continue-on-error: false
+        continue-on-error: true
         with:
           loadTestConfigFile: './MercuryHealth.LoadTests/LoadTest_NutritionPage_Config.yaml'
           loadTestResource: ${{needs.deploy_infrastructure.outputs.output_loadTestsName}}
@@ -618,7 +618,7 @@ jobs:
       # VERY Important. Do not use end slash for webHost value. "/"
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
-        continue-on-error: false
+        continue-on-error: true
         with:
           loadTestConfigFile: './MercuryHealth.LoadTests/LoadTest_ExercisePage_Config.yaml'
           loadTestResource: ${{needs.deploy_infrastructure.outputs.output_loadTestsName}}
