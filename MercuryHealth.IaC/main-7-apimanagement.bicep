@@ -52,6 +52,7 @@ param swaggerType string = 'yaml-v3'
 param urlToSwagger string = 'https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json'
 // There can be only one api without path
 param apiPath string = ''
+param name string = 'MercuryHealthSwaggerImportExample'
 
 var format = ((swaggerType == 'yaml-v3')  ? 'openapi-link' : 'openapi+json-link')
 
@@ -62,6 +63,7 @@ resource api 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
     format: format
     value: urlToSwagger
     path: apiPath
+    displayName: 'MercuryHealthSwaggerImportExample'
     // apiVersion: apiVersion
     // apiVersionSetId: apiVersionSet.id
   }
