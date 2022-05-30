@@ -161,5 +161,4 @@ jobs:
       resource-group-location: 'eastus'
       approval-required: true
     secrets:
-      azure-subscription: ${{ secrets.AZURE_SUBSCRIPTION }}
       azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
