@@ -47,12 +47,12 @@ resource petStoreApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-pre
 }
 
 // Copy APIs from "Dev" instance
-// resource MercuryHealthApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
-//   name: '${apiManagement.name}/MercuryHealthSwaggerImportExample'
-//   properties: {
-//     format: 'openapi+json' //swagger-json' //'openapi-link' //'openapi+json-link' //openapi+json' //'openapi'
-//     value: 'https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json'
-//     path: ''
-//     displayName: 'Mercury Health'
-//   }
-// }
+resource MercuryHealthApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
+  name: '${apiManagement.name}/MercuryHealthSwaggerImportExample'
+  properties: {
+    format: 'openapi-link'
+    value: 'https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json'
+    path: ''
+    displayName: 'Mercury Health TEST'
+  }
+}
