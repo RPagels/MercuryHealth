@@ -36,14 +36,12 @@ public class UpdateExerciseRecord
             // Instantiate new record object
             Exercises exercise;
 
-            // https://rpagels-apim.azure-api.net/api/Exercises/{id}
             var client = new HttpClient();
 
             // Request headers
             client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", ApimSubscriptionKey);
 
             // Hard code record # 25
-            //var uri = "https://apim-fq3ruuhxgjony.azure-api.net/api/Exercises/25";
             var uri = ApimWebServiceURL + "/api/Exercises/25";
 
             log.LogInformation($"uri: {uri}");

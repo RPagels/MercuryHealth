@@ -31,7 +31,6 @@ public class UpdateNutritionRecord_BadRequest
             // Instantiate new record object
             //Nutrition nutrition;
 
-            // https://rpagels-apim.azure-api.net/api/Nutritions/{id}
             var client = new HttpClient();
 
             // Request headers

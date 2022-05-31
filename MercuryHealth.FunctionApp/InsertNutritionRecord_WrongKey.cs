@@ -30,7 +30,7 @@ public class InsertNutritionRecord_WrongKey
         var queryString = HttpUtility.ParseQueryString(string.Empty);
 
         // Request headers with APIM Key retrieved from Azure KeyVault
-        client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", ApimSubscriptionKey + "XYZ");
+        client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", ApimSubscriptionKey + "BadKey");
 
         //var uri = "https://rpagels-apim.azure-api.net/api/Nutritions?" + queryString;
         //var uri = WebAppUrl + "api/Nutritions?" + queryString;

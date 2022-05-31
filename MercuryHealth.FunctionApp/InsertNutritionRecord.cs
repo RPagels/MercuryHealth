@@ -12,8 +12,8 @@ namespace MercuryHealth.FunctionApp;
 
 public class InsertNutritionRecord
 {
-    private static string ApimSubscriptionKey = System.Environment.GetEnvironmentVariable("ApimSubscriptionKey");
-    private static string ApimWebServiceURL = System.Environment.GetEnvironmentVariable("ApimWebServiceURL");
+    private static string ApimSubscriptionKey = Environment.GetEnvironmentVariable("ApimSubscriptionKey");
+    private static string ApimWebServiceURL = Environment.GetEnvironmentVariable("ApimWebServiceURL");
 
     [FunctionName("InsertNutritionRecord")]
     public async Task RunAsync([TimerTrigger("0 0 */2 * * *")] TimerInfo myTimer, ILogger log)
@@ -29,10 +29,7 @@ public class InsertNutritionRecord
         // Request headers with APIM Key retrieved from Azure KeyVault
         client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", ApimSubscriptionKey);
 
-        //var uri = "https://rpagels-apim.azure-api.net/api/Nutritions?" + queryString;
         var uri = ApimWebServiceURL + "/api/Nutritions?" + queryString;
-        //var uri = WebAppUrl + "api/Nutritions?" + queryString;
-
         HttpResponseMessage response;
 
         string serializedObject = Newtonsoft.Json.JsonConvert.SerializeObject(new

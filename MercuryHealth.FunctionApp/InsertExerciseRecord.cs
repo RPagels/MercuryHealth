@@ -29,9 +29,7 @@ public class InsertExerciseRecord
         // Request headers with APIM Key retrieved from Azure KeyVault
         client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", ApimSubscriptionKey);
 
-        //var uri = "https://rpagels-apim.azure-api.net/api/Exercises?" + queryString;
         var uri = ApimWebServiceURL + "/api/Exercises?" + queryString;
-        //var uri = WebAppUrl + "api/Exercises?" + queryString;
 
         HttpResponseMessage response;
 

@@ -12,8 +12,8 @@ namespace MercuryHealth.FunctionApp;
 
 public class UpdateNutritionRecord
 {
-    private static string ApimSubscriptionKey = System.Environment.GetEnvironmentVariable("ApimSubscriptionKey");
-    private static string ApimWebServiceURL = System.Environment.GetEnvironmentVariable("ApimWebServiceURL");
+    private static string ApimSubscriptionKey = Environment.GetEnvironmentVariable("ApimSubscriptionKey");
+    private static string ApimWebServiceURL = Environment.GetEnvironmentVariable("ApimWebServiceURL");
 
     private readonly TelemetryClient telemetry;
 
@@ -44,6 +44,7 @@ public class UpdateNutritionRecord
 
             // Hard code record # 25
             var uri = ApimWebServiceURL + "/api/Nutritions/25";
+            log.LogInformation($"ApimWebServiceURL: {ApimWebServiceURL}"); 
             log.LogInformation($"ApimSubscriptionKey: {ApimSubscriptionKey}");
             log.LogInformation($"uri: {uri}");
 
