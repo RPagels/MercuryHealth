@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "16302196194442651588"
+      "templateHash": "4842605758869598161"
     }
   },
   "parameters": {
@@ -160,7 +160,8 @@
       "location": "[parameters('location')]",
       "tags": "[variables('defaultTags')]",
       "properties": {
-        "enablePurgeProtection": false
+        "enablePurgeProtection": false,
+        "softDeleteRetentionInDays": 7
       },
       "sku": {
         "name": "Standard"
@@ -239,10 +240,11 @@
     {
       "type": "Microsoft.ApiManagement/service/subscriptions",
       "apiVersion": "2021-12-01-preview",
-      "name": "[format('{0}/{1}', variables('apiServiceName'), 'Developers')]",
+      "name": "[format('{0}/{1}', variables('apiServiceName'), 'developers')]",
       "properties": {
         "scope": "/apis",
-        "displayName": "Mercury Health - Developers"
+        "displayName": "Mercury Health - Developers",
+        "state": "active"
       },
       "dependsOn": [
         "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]"
@@ -251,10 +253,10 @@
     {
       "type": "Microsoft.ApiManagement/service/products",
       "apiVersion": "2021-12-01-preview",
-      "name": "[format('{0}/{1}', variables('apiServiceName'), 'Development')]",
+      "name": "[format('{0}/{1}', variables('apiServiceName'), 'development')]",
       "properties": {
         "approvalRequired": false,
-        "state": "notPublished",
+        "state": "published",
         "description": "Product used for Mercury Health Development Teams",
         "displayName": "Mercury Health - Developers"
       },
@@ -1471,10 +1473,13 @@
             "value": "[parameters('Deployed_Environment')]"
           },
           "ApimSubscriptionKey": {
-            "value": "[listSecrets(resourceId('Microsoft.ApiManagement/service/subscriptions', variables('apiServiceName'), 'Developers'), '2021-12-01-preview').primaryKey]"
+            "value": "[listSecrets(resourceId('Microsoft.ApiManagement/service/subscriptions', variables('apiServiceName'), 'developers'), '2021-12-01-preview').primaryKey]"
           },
           "ApimWebServiceURL": {
             "value": "[reference(resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))).gatewayUrl]"
+          },
+          "apiServiceName": {
+            "value": "[variables('apiServiceName')]"
           }
         },
         "template": {
@@ -1484,7 +1489,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "1717204332328766265"
+              "templateHash": "5607324795579384853"
             }
           },
           "parameters": {
@@ -1522,6 +1527,9 @@
               "type": "string"
             },
             "ApimWebServiceURL": {
+              "type": "string"
+            },
+            "apiServiceName": {
               "type": "string"
             },
             "secret_configStoreConnectionValue": {
@@ -1627,8 +1635,8 @@
               "apiVersion": "2021-03-01",
               "name": "[format('{0}/{1}', parameters('webappName'), 'appsettings')]",
               "properties": {
-                "ConnectionStrings:MercuryHealthWebContext": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secret_configStoreConnectionName'))]",
-                "ConnectionStrings:AppConfig": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secret_ConnectionStringName'))]",
+                "ConnectionStrings:MercuryHealthWebContext": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secret_ConnectionStringName'))]",
+                "ConnectionStrings:AppConfig": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('secret_configStoreConnectionName'))]",
                 "DeployedEnvironment": "[parameters('Deployed_Environment')]",
                 "WEBSITE_RUN_FROM_PACKAGE": "1",
                 "APPINSIGHTS_INSTRUMENTATIONKEY": "[parameters('appInsightsInstrumentationKey')]",
@@ -1659,7 +1667,8 @@
                 "ApimWebServiceURL": "[parameters('ApimWebServiceURL')]",
                 "APPINSIGHTS_INSTRUMENTATIONKEY": "[parameters('appInsightsInstrumentationKey')]",
                 "APPLICATIONINSIGHTS_CONNECTION_STRING": "[parameters('appInsightsConnectionString')]",
-                "FUNCTIONS_WORKER_RUNTIME": "dotnet"
+                "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+                "FUNCTIONS_EXTENSION_VERSION": "~4"
               },
               "dependsOn": [
                 "[resourceId('Microsoft.KeyVault/vaults/secrets', parameters('keyvaultName'), parameters('secret_AzureWebJobsStorageName'))]",
@@ -1671,7 +1680,7 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]",
-        "[resourceId('Microsoft.ApiManagement/service/subscriptions', variables('apiServiceName'), 'Developers')]",
+        "[resourceId('Microsoft.ApiManagement/service/subscriptions', variables('apiServiceName'), 'developers')]",
         "[resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')]",
         "[resourceId('Microsoft.AppConfiguration/configurationStores', variables('configStoreName'))]",
         "[resourceId('Microsoft.Resources/deployments', 'functionappdeploy')]",

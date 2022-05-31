@@ -376,8 +376,8 @@ module keyvaultmod './main-8-keyvault.bicep' = {
 param publisherEmail string = 'rpagels@microsoft.com'
 @minLength(1)
 param publisherName string = 'Randy Pagels'
-param sku string = 'Consumption'
-param skuCount int = 0 // Must be Zero for Consumption
+param sku string = 'Developer' // 'Developer' or 'Consumption'
+param skuCount int = 1 // 0 // Must be Zero for Consumption
 
 resource apiManagement 'Microsoft.ApiManagement/service@2021-12-01-preview' = {
   name: apiServiceName

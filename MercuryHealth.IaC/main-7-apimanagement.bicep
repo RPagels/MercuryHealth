@@ -58,7 +58,7 @@ var format = ((swaggerType == 'yaml-v3')  ? 'openapi-link' : 'openapi+json-link'
 
 // Create APIs from "Dev" instance
 resource api 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
-  name: '${apimService.name}/${name}'
+  name: '${apiManagement.name}/${name}'
   properties: {
     format: format
     value: urlToSwagger
