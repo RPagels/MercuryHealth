@@ -420,7 +420,7 @@ resource apiManagementProducts 'Microsoft.ApiManagement/service/products@2021-12
 
 resource appInsightsAPIManagement 'Microsoft.ApiManagement/service/loggers@2021-12-01-preview' = {
   parent: apiManagement
-  name: 'MercuryHealth-applicationinsights'
+  name: appInsightsName // 'MercuryHealth-applicationinsights'
   properties: {
     loggerType: 'applicationInsights'
     description: 'Mercury Health Application Insights instance.'
