@@ -1,5 +1,7 @@
 name: Deployment-Environment
 
+# TThe workflow_call keyword allows to specify inputs that are passed to the called workflow
+# from the caller workflow.
 on:
   workflow_call:
     inputs:
@@ -24,24 +26,9 @@ on:
         required: true
         type: boolean        
     secrets:
-#      azure-subscription:
-#        description: 'Credentials used to log into Azure for deployment of resources'
-#        required: true
       azure-credentials:
         description: 'Credentials used to log into Azure for deployment of resources'
         required: true
-#      sql-db-login:
-#        description: 'Credentials used to log into SQL for deployment of resources'
-#        required: true
-#      sql-db-password:
-#        description: 'Credentials used to log into SQL for deployment of resources'
-#        required: true
-#      sql-db-server-name:
-#        description: 'Credentials used to log into SQL for deployment of resources'
-#        required: true
-#      sql-connection-string:
-#        description: 'Credentials used to log into SQL for deployment of resources'
-#        required: true
 
 jobs:
   ###################################################################
@@ -58,12 +45,12 @@ jobs:
       output_releaseAnnotationGuidID: ${{ steps.Infra.outputs.out_releaseAnnotationGuidID }}
       output_appInsightsApplicationId: ${{ steps.Infra.outputs.out_appInsightsApplicationId }}
       output_appInsightsAPIApplicationId: ${{ steps.Infra.outputs.out_appInsightsAPIApplicationId }}
-      #output_keyvaultName: ${{ steps.Infra.outputs.out_keyvaultName }}
-      #output_keyvaultSecretName: ${{ steps.Infra.outputs.out_keyvaultSecretName }}
       output_secretConnectionString: ${{ steps.Infra.outputs.out_secretConnectionString }}
-      #output_TestMyConnectionString: 'Server=tcp:${{ steps.Infra.outputs.out_sqlserverFQName }},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdminLoginName}@${sqlserverName};Password=${sqlAdminLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
 
     name: Deploy Infrastructure
+    ###################################################################
+    # Environment Variables                                           #
+    ###################################################################
     env:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
       Deployed_Environment: ${{ inputs.environment-suffix }}
@@ -75,7 +62,7 @@ jobs:
       contents: read
       packages: write
 
-    # Identify any jobs that must complete successfully before this job will run.
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     - name: Login to Azure
       uses: azure/login@v1
@@ -133,7 +120,7 @@ jobs:
           az rest --method delete --header "Accept=application/json" -u 'https://management.azure.com/subscriptions/{subscriptionId}/providers/Microsoft.ApiManagement/locations/${{ inputs.resource-group-location }}/deletedservices/${{ env.APIM_PurgeNameProd }}?api-version=2021-08-01'
 
       ###########################################
-      # Deploy ARM Template using Bicep DSL
+      # Deploy Infrastructure using ARM Template generated from Bicep DSL
       ###########################################
     - name: Infrastructure
       id: Infra
@@ -293,7 +280,6 @@ jobs:
         name: MercuryHealth.FunctionApp
         path: ${{ github.workspace }}/MercuryHealth.FunctionApp
 
-    # Deploy Function Application
     - name: 'Deploy Function Application'
       uses: Azure/functions-action@v1
       with:
@@ -336,7 +322,8 @@ jobs:
                       --app ${{ needs.deploy_infrastructure.outputs.output_appInsightsApplicationId }} \
                       --query "apiKey" --output tsv)
           echo "::set-output name=aiKey::$result"
-        
+
+    # Todo! Replace this code with Azure CLI
     - name: 'Annotate Deployment'
       uses: wictorwilen/application-insights-action@v1
       continue-on-error: true
@@ -489,6 +476,7 @@ jobs:
           creds: ${{ secrets.azure-credentials }}
 
       # Assign the Load Test Contributor or Load Test Owner role to your Azure account
+      # for Demo purposes only - this is NOT needed
 #      - name: Assign Azure Role to Load Test Service
 #        uses: Azure/CLI@v1
 #        continue-on-error: true
@@ -497,7 +485,7 @@ jobs:
 #            #!/bin/bash
 #            az role assignment create --assignee "rpagels@microsoft.com" --role "Load Test Contributor" --resource-group ${{ env.Azure_Resource_GroupName }}
 
-      # VERY Important!!! Do not use end slash for webHost value. "/"
+      # Extremely Important!!! - Do not use end slash for webHost value. "/"
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
         continue-on-error: true
@@ -525,6 +513,9 @@ jobs:
         run: |
           az logout
 
+##################################################################
+# CD Stage - Load and Performance Testing >>> Nutrition Page     #
+##################################################################
   LoadTesting_Stage_Application_Nutrition:
     # Identify any jobs that must complete successfully before this job will run.
     runs-on: ubuntu-latest
@@ -556,7 +547,7 @@ jobs:
         with:
           creds: ${{ secrets.azure-credentials }}
 
-      # VERY Important. Do not use end slash for webHost value. "/"
+      # Extremely Important!!! - Do not use end slash for webHost value. "/"
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
         continue-on-error: true
@@ -584,6 +575,9 @@ jobs:
         run: |
           az logout
 
+##################################################################
+# CD Stage - Load and Performance Testing >>> Exercise Page      #
+##################################################################
   LoadTesting_Stage_Application_Exercise:
     # Identify any jobs that must complete successfully before this job will run.
     runs-on: ubuntu-latest
@@ -615,7 +609,7 @@ jobs:
         with:
           creds: ${{ secrets.azure-credentials }}
 
-      # VERY Important. Do not use end slash for webHost value. "/"
+      # Extremely Important!!! - Do not use end slash for webHost value. "/"
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
         continue-on-error: true
