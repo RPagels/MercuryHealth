@@ -411,7 +411,7 @@ resource apiManagementProducts 'Microsoft.ApiManagement/service/products@2021-12
   name: 'development'
   properties: {
     approvalRequired: false
-    state: 'published'
+    state: 'notPublished'
     //subscriptionRequired: true
     description: 'Product used for Mercury Health Development Teams'
     displayName: 'Mercury Health - Developers' //apiSubscriptionName
