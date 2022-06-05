@@ -157,7 +157,7 @@ jobs:
     uses: ./.github/workflows/deploy-environment-single.yml
     with:
       resource-group-base-name: 'rg-MercuryHealth'
-      environment-suffix: 'try-20'
+      environment-suffix: 'DevUpDemo'
       resource-group-location: 'eastus'
       approval-required: true
     secrets:
