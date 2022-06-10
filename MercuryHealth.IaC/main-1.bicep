@@ -446,7 +446,7 @@ resource petStoreApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-pre
 }
 
 resource apiManagementApis 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' existing = {
-  name: 'api' // PetStoreSwaggerImportExample
+  name: 'PetStoreSwaggerImportExample' // 'api' PetStoreSwaggerImportExample
   parent: apiManagementService
 }
 
