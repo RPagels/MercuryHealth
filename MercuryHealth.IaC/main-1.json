@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "4842605758869598161"
+      "templateHash": "17359778383896895082"
     }
   },
   "parameters": {
@@ -105,11 +105,11 @@
     },
     "sku": {
       "type": "string",
-      "defaultValue": "Consumption"
+      "defaultValue": "Developer"
     },
     "skuCount": {
       "type": "int",
-      "defaultValue": 0
+      "defaultValue": 1
     }
   },
   "functions": [],
@@ -256,7 +256,7 @@
       "name": "[format('{0}/{1}', variables('apiServiceName'), 'development')]",
       "properties": {
         "approvalRequired": false,
-        "state": "published",
+        "state": "notPublished",
         "description": "Product used for Mercury Health Development Teams",
         "displayName": "Mercury Health - Developers"
       },
@@ -267,7 +267,7 @@
     {
       "type": "Microsoft.ApiManagement/service/loggers",
       "apiVersion": "2021-12-01-preview",
-      "name": "[format('{0}/{1}', variables('apiServiceName'), 'MercuryHealth-applicationinsights')]",
+      "name": "[format('{0}/{1}', variables('apiServiceName'), variables('appInsightsName'))]",
       "properties": {
         "loggerType": "applicationInsights",
         "description": "Mercury Health Application Insights instance.",
@@ -292,6 +292,54 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/apis/diagnostics",
+      "apiVersion": "2021-12-01-preview",
+      "name": "[format('{0}/{1}/{2}', variables('apiServiceName'), 'apis', 'applicationinsights')]",
+      "properties": {
+        "loggerId": "[resourceId('Microsoft.ApiManagement/service/loggers', variables('apiServiceName'), variables('appInsightsName'))]",
+        "alwaysLog": "allErrors",
+        "logClientIp": true,
+        "sampling": {
+          "samplingType": "fixed",
+          "percentage": 100
+        },
+        "verbosity": "information",
+        "httpCorrelationProtocol": "Legacy",
+        "frontend": {
+          "request": {
+            "headers": [],
+            "body": {
+              "bytes": 0
+            }
+          },
+          "response": {
+            "headers": [],
+            "body": {
+              "bytes": 0
+            }
+          }
+        },
+        "backend": {
+          "request": {
+            "headers": [],
+            "body": {
+              "bytes": 0
+            }
+          },
+          "response": {
+            "headers": [],
+            "body": {
+              "bytes": 0
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]",
+        "[resourceId('Microsoft.ApiManagement/service/loggers', variables('apiServiceName'), variables('appInsightsName'))]"
       ]
     },
     {

@@ -376,10 +376,10 @@ module keyvaultmod './main-8-keyvault.bicep' = {
 param publisherEmail string = 'rpagels@microsoft.com'
 @minLength(1)
 param publisherName string = 'Randy Pagels'
-param sku string = 'Developer' // 'Developer' or 'Consumption'
-param skuCount int = 1 // 0 // Must be Zero for Consumption
+param sku string = 'Consumption' // 'Developer' or 'Consumption'
+param skuCount int = 0  // Developr = 1, Consumption = 0
 
-resource apiManagement 'Microsoft.ApiManagement/service@2021-12-01-preview' = {
+resource apiManagementService 'Microsoft.ApiManagement/service@2021-12-01-preview' = {
   name: apiServiceName
   location: location
   tags: defaultTags
@@ -397,7 +397,7 @@ resource apiManagement 'Microsoft.ApiManagement/service@2021-12-01-preview' = {
 }
 
 resource apiManagementSubscription 'Microsoft.ApiManagement/service/subscriptions@2021-12-01-preview' = {
-  parent: apiManagement
+  parent: apiManagementService
   name: 'developers' //apiSubscriptionName
   properties: {
     scope: '/apis' // Subscription applies to all APIs
@@ -407,7 +407,7 @@ resource apiManagementSubscription 'Microsoft.ApiManagement/service/subscription
 }
 
 resource apiManagementProducts 'Microsoft.ApiManagement/service/products@2021-12-01-preview' = {
-  parent: apiManagement
+  parent: apiManagementService
   name: 'development'
   properties: {
     approvalRequired: false
@@ -418,8 +418,8 @@ resource apiManagementProducts 'Microsoft.ApiManagement/service/products@2021-12
   }
 }
 
-resource appInsightsAPIManagement 'Microsoft.ApiManagement/service/loggers@2021-12-01-preview' = {
-  parent: apiManagement
+resource appInsightsAPILogger 'Microsoft.ApiManagement/service/loggers@2021-12-01-preview' = {
+  parent: apiManagementService
   name: appInsightsName // 'MercuryHealth-applicationinsights'
   properties: {
     loggerType: 'applicationInsights'
@@ -437,11 +437,61 @@ resource appInsightsAPIManagement 'Microsoft.ApiManagement/service/loggers@2021-
 resource petStoreApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
   name: 'PetStoreSwaggerImportExample'
   //name: '${apiManagement.name}/PetStoreSwaggerImportExample'
-  parent: apiManagement
+  parent: apiManagementService
   properties: {
     format: 'swagger-link-json'
     value: 'http://petstore.swagger.io/v2/swagger.json'
     path: 'examplepetstore'
+  }
+}
+
+resource apiManagementApis 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' existing = {
+  name: 'apis'
+  parent: apiManagementService
+}
+
+// Configure logging on the API.
+resource appInsightsAPIdiagnostics 'Microsoft.ApiManagement/service/apis/diagnostics@2021-12-01-preview' = {
+  parent: apiManagementApis
+  name: 'applicationinsights'
+  properties: {
+    loggerId: appInsightsAPILogger.id
+    alwaysLog: 'allErrors'
+    logClientIp: true
+    sampling: {
+      samplingType: 'fixed'
+      percentage: 100
+    }
+    verbosity: 'information'
+    httpCorrelationProtocol: 'Legacy'
+    frontend: {
+      request: {
+        headers: []
+        body: {
+          bytes: 0
+        }
+      }
+      response: {
+        headers: []
+        body: {
+          bytes: 0
+        }
+      }
+    }
+    backend: {
+      request: {
+        headers: []
+        body: {
+          bytes: 0
+        }
+      }
+      response: {
+        headers: []
+        body: {
+          bytes: 0
+        }
+      }
+    }
   }
 }
 
@@ -569,7 +619,7 @@ module configsettingsmod './main-13-configsettings.bicep' = {
     Deployed_Environment: Deployed_Environment
     //appServiceName: webappmod.outputs.out_appServiceName
     ApimSubscriptionKey: ApimSubscriptionKeyString
-    ApimWebServiceURL: apiManagement.properties.gatewayUrl
+    ApimWebServiceURL: apiManagementService.properties.gatewayUrl
     apiServiceName: apiServiceName
     }
     dependsOn:  [
