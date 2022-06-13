@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "17359778383896895082"
+      "templateHash": "4889370825051494655"
     }
   },
   "parameters": {
@@ -105,11 +105,11 @@
     },
     "sku": {
       "type": "string",
-      "defaultValue": "Developer"
+      "defaultValue": "Consumption"
     },
     "skuCount": {
       "type": "int",
-      "defaultValue": 1
+      "defaultValue": 0
     }
   },
   "functions": [],
@@ -297,7 +297,7 @@
     {
       "type": "Microsoft.ApiManagement/service/apis/diagnostics",
       "apiVersion": "2021-12-01-preview",
-      "name": "[format('{0}/{1}/{2}', variables('apiServiceName'), 'apis', 'applicationinsights')]",
+      "name": "[format('{0}/{1}/{2}', variables('apiServiceName'), 'PetStoreSwaggerImportExample', 'applicationinsights')]",
       "properties": {
         "loggerId": "[resourceId('Microsoft.ApiManagement/service/loggers', variables('apiServiceName'), variables('appInsightsName'))]",
         "alwaysLog": "allErrors",
