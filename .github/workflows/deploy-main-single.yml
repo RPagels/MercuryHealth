@@ -106,14 +106,14 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: MercuryHealth.API
-          path: ${{ github.workspace }}/MercuryHealth.Web/MercuryHealth.openapi.yaml
+          path: ${{ github.workspace }}/MercuryHealth.API/MercuryHealth.openapi.yaml
 
       - name: Upload API file
         if: ${{ github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v2
         with:
           name: MercuryHealth.API
-          path: ${{ github.workspace }}/MercuryHealth.Web/MercuryHealth.swagger.json
+          path: ${{ github.workspace }}/MercuryHealth.API/MercuryHealth.swagger.json
           
       - name: Upload Build Artifacts-FunctionApp
         if: ${{ github.event_name != 'pull_request' }}
