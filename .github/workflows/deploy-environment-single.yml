@@ -319,19 +319,19 @@ jobs:
     #         --display-name 'Mercury Health' \
     #         --api-id 'Mercury-Health'
 
-    - name: Add MercuryHealth APIs to APIM'
-      uses: Azure/CLI@v1
-      continue-on-error: true
-      with:
-        inlineScript: |
-          az apim api import -g ${{ env.Azure_Resource_GroupName }} \
-             --api-id 'mercury-health' \
-             --service-name ${{ needs.deploy_infrastructure.outputs.output_apiServiceName }} \
-             --path '' \
-             --specification-path './MercuryHealth.API/MercuryHealth.openapi.yaml' \
-             --specification-format OpenApiJson \
-             --service-url 'https://${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net/' \
-             --display-name 'Mercury Health'
+    ##- name: Add MercuryHealth APIs to APIM'
+    ##  uses: Azure/CLI@v1
+    ##  continue-on-error: true
+    ##  with:
+    ##    inlineScript: |
+    ##      az apim api import -g ${{ env.Azure_Resource_GroupName }} \
+    ##         --api-id 'mercury-health' \
+    ##         --service-name ${{ needs.deploy_infrastructure.outputs.output_apiServiceName }} \
+    ##         --path '' \
+    ##         --specification-path './MercuryHealth.API/MercuryHealth.openapi.yaml' \
+    ##         --specification-format OpenApiJson \
+    ##         --service-url 'https://${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net/' \
+    ##         --display-name 'Mercury Health'
  
     #- name: Add MercuryHealth APIs to Product'
     #  uses: Azure/CLI@v1

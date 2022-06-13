@@ -433,7 +433,7 @@ resource appInsightsAPILogger 'Microsoft.ApiManagement/service/loggers@2021-12-0
     appinsightsmod
   ]
 }
-PetStoreSwaggerImportExample
+
 resource petStoreApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
   name: 'PetStoreSwaggerImportExample'
   //name: '${apiManagement.name}/PetStoreSwaggerImportExample'
@@ -462,10 +462,10 @@ param swaggerType string = 'yaml-v3'
 
 // This url needs to be reachable for APIM
 param urlToSwagger string = 'https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json'
+param urlToSwaggerTest string = 'https://github.com/RPagels/MercuryHealth/blob/master/MercuryHealth.API/MercuryHealth.swagger.json'
 // There can be only one api without path
 param apiPath string = ''
-param name string = 'MercuryHealthSwaggerImportExample'
-
+param name string = 'MercuryHealthSwaggerTest'
 var format = ((swaggerType == 'yaml-v3')  ? 'openapi-link' : 'openapi+json-link')
 
 // Create APIs from "Dev" instance
@@ -473,7 +473,7 @@ resource api 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
   name: '${apiManagementService.name}/${name}'
   properties: {
     format: format
-    value: urlToSwagger
+    value: urlToSwaggerTest // urlToSwagger
     path: apiPath
     displayName: 'MercuryHealthSwaggerImportExample'
   }
