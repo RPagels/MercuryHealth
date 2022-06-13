@@ -67,8 +67,8 @@ jobs:
           dotnet restore
           dotnet build MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} --no-restore
           dotnet publish MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} -o './web' /p:FileVersion="${{ steps.setBuildNumber.outputs.BuildNumber }}" /p:Version="${{ steps.setBuildNumber.outputs.BuildNumber }}" /p:AssemblyVersion="${{ steps.setBuildNumber.outputs.BuildNumber }}"
-          dotnet build MercuryHealth.Web/MercuryHealth.API.csproj --configuration ${{ env.buildConfiguration }} --no-restore
-          dotnet publish MercuryHealth.Web/MercuryHealth.API.csproj --configuration ${{ env.buildConfiguration }} -o './api' /p:FileVersion="${{ steps.setBuildNumber.outputs.BuildNumber }}" /p:Version="${{ steps.setBuildNumber.outputs.BuildNumber }}" /p:AssemblyVersion="${{ steps.setBuildNumber.outputs.BuildNumber }}"
+          dotnet build MercuryHealth.API/MercuryHealth.API.csproj --configuration ${{ env.buildConfiguration }} --no-restore
+          dotnet publish MercuryHealth.API/MercuryHealth.API.csproj --configuration ${{ env.buildConfiguration }} -o './api' /p:FileVersion="${{ steps.setBuildNumber.outputs.BuildNumber }}" /p:Version="${{ steps.setBuildNumber.outputs.BuildNumber }}" /p:AssemblyVersion="${{ steps.setBuildNumber.outputs.BuildNumber }}"
           dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} --no-restore
           dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './uitests'
           dotnet build MercuryHealth.FunctionApp/MercuryHealth.FunctionApp.csproj --configuration ${{ env.buildConfiguration }} --no-restore
