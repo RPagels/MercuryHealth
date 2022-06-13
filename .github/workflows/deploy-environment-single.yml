@@ -328,7 +328,7 @@ jobs:
              --api-id 'mercury-health' \
              --service-name ${{ needs.deploy_infrastructure.outputs.output_apiServiceName }} \
              --path '' \
-             --specification-path './MercuryHealth.Website/MercuryHealth.openapi.yaml' \
+             --specification-path './MercuryHealth.API/MercuryHealth.openapi.yaml' \
              --specification-format OpenApiJson \
              --service-url 'https://${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net/' \
              --display-name 'Mercury Health'
