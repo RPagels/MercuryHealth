@@ -67,6 +67,8 @@ jobs:
           dotnet restore
           dotnet build MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} --no-restore
           dotnet publish MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} -o './web' /p:FileVersion="${{ steps.setBuildNumber.outputs.BuildNumber }}" /p:Version="${{ steps.setBuildNumber.outputs.BuildNumber }}" /p:AssemblyVersion="${{ steps.setBuildNumber.outputs.BuildNumber }}"
+          dotnet build MercuryHealth.Web/MercuryHealth.API.csproj --configuration ${{ env.buildConfiguration }} --no-restore
+          dotnet publish MercuryHealth.Web/MercuryHealth.API.csproj --configuration ${{ env.buildConfiguration }} -o './api' /p:FileVersion="${{ steps.setBuildNumber.outputs.BuildNumber }}" /p:Version="${{ steps.setBuildNumber.outputs.BuildNumber }}" /p:AssemblyVersion="${{ steps.setBuildNumber.outputs.BuildNumber }}"
           dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} --no-restore
           dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './uitests'
           dotnet build MercuryHealth.FunctionApp/MercuryHealth.FunctionApp.csproj --configuration ${{ env.buildConfiguration }} --no-restore
@@ -92,12 +94,26 @@ jobs:
           name: MercuryHealth.Website
           path: ${{ github.workspace }}/web
 
+      - name: Upload Build Artifacts-APIs
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: MercuryHealth.API
+          path: ${{ github.workspace }}/api
+          
       - name: Upload API file
         if: ${{ github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v2
         with:
-          name: MercuryHealth.Website
+          name: MercuryHealth.API
           path: ${{ github.workspace }}/MercuryHealth.Web/MercuryHealth.openapi.yaml
+
+      - name: Upload API file
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: MercuryHealth.API
+          path: ${{ github.workspace }}/MercuryHealth.Web/MercuryHealth.swagger.json
           
       - name: Upload Build Artifacts-FunctionApp
         if: ${{ github.event_name != 'pull_request' }}
@@ -157,7 +173,7 @@ jobs:
     uses: ./.github/workflows/deploy-environment-single.yml
     with:
       resource-group-base-name: 'rg-MercuryHealth'
-      environment-suffix: 'try-22'
+      environment-suffix: 'try-23'
       resource-group-location: 'eastus'
       approval-required: true
     secrets:

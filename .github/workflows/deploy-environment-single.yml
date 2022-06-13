@@ -275,8 +275,20 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
           app-name: ${{ needs.deploy_infrastructure.outputs.output_webSiteName }}
-          #slot-name: 'Dev'
           package: './MercuryHealth.Website'
+
+    - name: Download Build Artifacts-API
+      uses: actions/download-artifact@v2
+      continue-on-error: false
+      with:
+        name: MercuryHealth.API
+        path: ${{ github.workspace }}/MercuryHealth.API
+
+    - name: 'Deploy API Application'
+      uses: azure/webapps-deploy@v2
+      with:
+          app-name: ${{ needs.deploy_infrastructure.outputs.output_webSiteName }}
+          package: './MercuryHealth.API'
           
     - name: Download Build Artifacts-Function Application
       uses: actions/download-artifact@v2

@@ -450,6 +450,35 @@ resource apiManagementApis 'Microsoft.ApiManagement/service/apis@2021-12-01-prev
   parent: apiManagementService
 }
 
+//
+// Mercury Health Swagger
+//
+param swaggerType string = 'yaml-v3'
+
+// This url needs to be reachable for APIM
+param urlToSwagger string = 'https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json'
+// There can be only one api without path
+param apiPath string = ''
+param name string = 'MercuryHealthSwaggerImportExample'
+
+var format = ((swaggerType == 'yaml-v3')  ? 'openapi-link' : 'openapi+json-link')
+
+// Create APIs from "Dev" instance
+resource api 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
+  name: '${apiManagementService.name}/${name}'
+  properties: {
+    format: format
+    value: urlToSwagger
+    path: apiPath
+    displayName: 'MercuryHealthSwaggerImportExample'
+    // apiVersion: apiVersion
+    // apiVersionSetId: apiVersionSet.id
+  }
+}
+//
+// Mercury Health Swagger
+//
+
 // Configure logging on the API.
 resource appInsightsAPIdiagnostics 'Microsoft.ApiManagement/service/apis/diagnostics@2021-12-01-preview' = {
   parent: apiManagementApis
