@@ -433,7 +433,7 @@ resource appInsightsAPILogger 'Microsoft.ApiManagement/service/loggers@2021-12-0
     appinsightsmod
   ]
 }
-
+PetStoreSwaggerImportExample
 resource petStoreApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
   name: 'PetStoreSwaggerImportExample'
   //name: '${apiManagement.name}/PetStoreSwaggerImportExample'
@@ -445,8 +445,13 @@ resource petStoreApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-pre
   }
 }
 
-resource apiManagementApis 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' existing = {
+resource apiManagementPetStoreApis 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' existing = {
   name: 'PetStoreSwaggerImportExample' // 'api' PetStoreSwaggerImportExample
+  parent: apiManagementService
+}
+
+resource apiManagementMercuryHealthApis 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' existing = {
+  name: 'MercuryHealthSwaggerImportExample'
   parent: apiManagementService
 }
 
@@ -471,8 +476,6 @@ resource api 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
     value: urlToSwagger
     path: apiPath
     displayName: 'MercuryHealthSwaggerImportExample'
-    // apiVersion: apiVersion
-    // apiVersionSetId: apiVersionSet.id
   }
 }
 //
@@ -480,8 +483,53 @@ resource api 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
 //
 
 // Configure logging on the API.
-resource appInsightsAPIdiagnostics 'Microsoft.ApiManagement/service/apis/diagnostics@2021-12-01-preview' = {
-  parent: apiManagementApis
+resource appInsightsAPIPetStorediagnostics 'Microsoft.ApiManagement/service/apis/diagnostics@2021-12-01-preview' = {
+  parent: apiManagementPetStoreApis
+  name: 'applicationinsights'
+  properties: {
+    loggerId: appInsightsAPILogger.id
+    alwaysLog: 'allErrors'
+    logClientIp: true
+    sampling: {
+      samplingType: 'fixed'
+      percentage: 100
+    }
+    verbosity: 'information'
+    httpCorrelationProtocol: 'Legacy'
+    frontend: {
+      request: {
+        headers: []
+        body: {
+          bytes: 0
+        }
+      }
+      response: {
+        headers: []
+        body: {
+          bytes: 0
+        }
+      }
+    }
+    backend: {
+      request: {
+        headers: []
+        body: {
+          bytes: 0
+        }
+      }
+      response: {
+        headers: []
+        body: {
+          bytes: 0
+        }
+      }
+    }
+  }
+}
+
+// Configure logging on the API.
+resource appInsightsAPIMercuryHealthdiagnostics 'Microsoft.ApiManagement/service/apis/diagnostics@2021-12-01-preview' = {
+  parent: apiManagementMercuryHealthApis
   name: 'applicationinsights'
   properties: {
     loggerId: appInsightsAPILogger.id
