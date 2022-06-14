@@ -476,6 +476,7 @@ resource api 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
     value: urlToSwagger
     path: apiPath
     displayName: 'MercuryHealthSwaggerTest'
+    serviceUrl: 'https://${webSiteName}.azurewebsites.net/'
   }
 }
 //
