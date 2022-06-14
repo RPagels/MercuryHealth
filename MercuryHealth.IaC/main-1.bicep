@@ -462,7 +462,7 @@ param swaggerType string = 'yaml-v3'
 
 // This url needs to be reachable for APIM
 param urlToSwagger string = 'https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json'
-param urlToSwaggerTest string = 'https://github.com/RPagels/MercuryHealth/blob/master/MercuryHealth.API/MercuryHealth.swagger.json'
+//param urlToSwaggerTest string = 'https://github.com/RPagels/MercuryHealth/blob/master/MercuryHealth.API/MercuryHealth.swagger.json'
 // There can be only one api without path
 param apiPath string = ''
 param name string = 'MercuryHealthSwaggerTest'
@@ -473,9 +473,9 @@ resource api 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
   name: '${apiManagementService.name}/${name}'
   properties: {
     format: format
-    value: urlToSwaggerTest // urlToSwagger
+    value: urlToSwagger
     path: apiPath
-    displayName: 'MercuryHealthSwaggerImportExample'
+    displayName: 'MercuryHealthSwaggerTest'
   }
 }
 //
