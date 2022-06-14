@@ -411,7 +411,7 @@ resource apiManagementProducts 'Microsoft.ApiManagement/service/products@2021-12
   name: 'development'
   properties: {
     approvalRequired: false
-    state: 'notPublished'
+    state: 'published'
     //subscriptionRequired: true
     description: 'Product used for Mercury Health Development Teams'
     displayName: 'Mercury Health - Developers' //apiSubscriptionName
@@ -441,7 +441,7 @@ resource petStoreApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-pre
   properties: {
     format: 'swagger-link-json'
     value: 'http://petstore.swagger.io/v2/swagger.json'
-    path: 'examplepetstore'
+    path: 'petstore'
     description: 'Pet Store Swagger Import Example'
   }
 }
@@ -451,21 +451,16 @@ resource apiManagementPetStoreApis 'Microsoft.ApiManagement/service/apis@2021-12
   parent: apiManagementService
 }
 
-resource apiManagementMercuryHealthApis 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' existing = {
-  name: 'mercury-health'
-  parent: apiManagementService
-}
-
 //
 // Mercury Health Swagger
 //
 param swaggerType string = 'yaml-v3'
 
 // This url needs to be reachable for APIM
-param urlToSwagger string = 'https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json'
+//param urlToSwagger string = 'https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json'
 //param urlToSwaggerTest string = 'https://github.com/RPagels/MercuryHealth/blob/master/MercuryHealth.API/MercuryHealth.swagger.json'
 // There can be only one api without path
-param apiPath string = ''
+//param apiPath string = ''
 param name string = 'mercury-health'
 var format = ((swaggerType == 'yaml-v3')  ? 'openapi-link' : 'openapi+json-link')
 
@@ -474,8 +469,8 @@ resource api 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
   name: '${apiManagementService.name}/${name}'
   properties: {
     format: format
-    value: urlToSwagger
-    path: apiPath
+    value: 'https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json' //urlToSwagger
+    path: '' //apiPath
     displayName: 'Mercury Health'
     serviceUrl: 'https://${webSiteName}.azurewebsites.net/'
   }
@@ -483,6 +478,11 @@ resource api 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
 //
 // Mercury Health Swagger
 //
+
+resource apiManagementMercuryHealthApis 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' existing = {
+  name: 'mercury-health'
+  parent: apiManagementService
+}
 
 // Configure logging on the API.
 resource appInsightsAPIPetStorediagnostics 'Microsoft.ApiManagement/service/apis/diagnostics@2021-12-01-preview' = {
