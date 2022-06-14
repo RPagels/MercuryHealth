@@ -591,22 +591,17 @@ module webappmod './main-2-webapp.bicep' = {
     appInsightsInstrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
     appInsightsConnectionString: appinsightsmod.outputs.out_appInsightsConnectionString
     defaultTags: defaultTags
-    // keyvaultName: keyvaultName
-    // secretName1: secretName1
-    // secretName2: secretName2
     sqlAdminLoginName: sqlAdminLoginName
     sqlAdminLoginPassword: sqlAdminLoginPassword
     sqlDBName: sqlDBName
     sqlserverfullyQualifiedDomainName: sqldbmod.outputs.sqlserverfullyQualifiedDomainName
     sqlserverName: sqlserverName
   }
-
 }
 
 // Create SQL database
 module sqldbmod './main-3-sqldatabase.bicep' = {
   name: 'sqldbdeploy'
-  //scope: resourceGroup(location)
   params: {
     location: location
     sqlserverName: sqlserverName
@@ -634,15 +629,9 @@ module functionappmod './main-6-funcapp.bicep' = {
   name: 'functionappdeploy'
   params: {
     location: location
-    //appInsightsInstrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
     functionAppServiceName: functionAppServiceName
     functionAppName: functionAppName
     defaultTags: defaultTags
-    // ApimSubscriptionKey: ApimSubscriptionKeyString
-    // ApimWebServiceURL: apiManagement.properties.gatewayUrl
-    // keyvaultName: keyvaultName
-    // secretName3: secret_AzureWebJobsStorageName
-    // secretName4: secret_AzureWebJobsStorageName
   }
   dependsOn:  [
     appinsightsmod
@@ -696,7 +685,6 @@ module configsettingsmod './main-13-configsettings.bicep' = {
     appInsightsInstrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
     appInsightsConnectionString: appinsightsmod.outputs.out_appInsightsConnectionString
     Deployed_Environment: Deployed_Environment
-    //appServiceName: webappmod.outputs.out_appServiceName
     ApimSubscriptionKey: ApimSubscriptionKeyString
     ApimWebServiceURL: apiManagementService.properties.gatewayUrl
     apiServiceName: apiServiceName

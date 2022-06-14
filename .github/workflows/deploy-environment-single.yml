@@ -287,7 +287,7 @@ jobs:
     - name: 'Deploy API Application'
       uses: azure/webapps-deploy@v2
       with:
-          app-name: ${{ needs.deploy_infrastructure.outputs.output_webSiteName }}
+          app-name: ${{ needs.deploy_infrastructure.outputs.output_apiServiceName }}
           package: './MercuryHealth.API'
           
     - name: Download Build Artifacts-Function Application
