@@ -435,23 +435,24 @@ resource appInsightsAPILogger 'Microsoft.ApiManagement/service/loggers@2021-12-0
 }
 
 resource petStoreApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
-  name: 'PetStoreSwaggerImportExample'
+  name: 'pet-store-swagger'
   //name: '${apiManagement.name}/PetStoreSwaggerImportExample'
   parent: apiManagementService
   properties: {
     format: 'swagger-link-json'
     value: 'http://petstore.swagger.io/v2/swagger.json'
     path: 'examplepetstore'
+    description: 'Pet Store Swagger Import Example'
   }
 }
 
 resource apiManagementPetStoreApis 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' existing = {
-  name: 'PetStoreSwaggerImportExample' // 'api' PetStoreSwaggerImportExample
+  name: 'pet-store-swagger' // 'api' PetStoreSwaggerImportExample
   parent: apiManagementService
 }
 
 resource apiManagementMercuryHealthApis 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' existing = {
-  name: 'MercuryHealthSwaggerImportExample'
+  name: 'mercury-health'
   parent: apiManagementService
 }
 
@@ -465,7 +466,7 @@ param urlToSwagger string = 'https://app-fq3ruuhxgjony.azurewebsites.net/swagger
 //param urlToSwaggerTest string = 'https://github.com/RPagels/MercuryHealth/blob/master/MercuryHealth.API/MercuryHealth.swagger.json'
 // There can be only one api without path
 param apiPath string = ''
-param name string = 'MercuryHealthSwaggerTest'
+param name string = 'mercury-health'
 var format = ((swaggerType == 'yaml-v3')  ? 'openapi-link' : 'openapi+json-link')
 
 // Create APIs from "Dev" instance
@@ -475,7 +476,7 @@ resource api 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
     format: format
     value: urlToSwagger
     path: apiPath
-    displayName: 'MercuryHealthSwaggerTest'
+    displayName: 'Mercury Health'
     serviceUrl: 'https://${webSiteName}.azurewebsites.net/'
   }
 }

@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "4889370825051494655"
+      "templateHash": "9543851142925634340"
     }
   },
   "parameters": {
@@ -110,6 +110,22 @@
     "skuCount": {
       "type": "int",
       "defaultValue": 0
+    },
+    "swaggerType": {
+      "type": "string",
+      "defaultValue": "yaml-v3"
+    },
+    "urlToSwagger": {
+      "type": "string",
+      "defaultValue": "https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json"
+    },
+    "apiPath": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "name": {
+      "type": "string",
+      "defaultValue": "mercury-health"
     }
   },
   "functions": [],
@@ -150,7 +166,8 @@
       "id": "[parameters('FeatureFlagKey3')]",
       "description": "Description for Nutrition Color.",
       "enabled": false
-    }
+    },
+    "format": "[if(equals(parameters('swaggerType'), 'yaml-v3'), 'openapi-link', 'openapi+json-link')]"
   },
   "resources": [
     {
@@ -284,11 +301,27 @@
     {
       "type": "Microsoft.ApiManagement/service/apis",
       "apiVersion": "2021-12-01-preview",
-      "name": "[format('{0}/{1}', variables('apiServiceName'), 'PetStoreSwaggerImportExample')]",
+      "name": "[format('{0}/{1}', variables('apiServiceName'), 'pet-store-swagger')]",
       "properties": {
         "format": "swagger-link-json",
         "value": "http://petstore.swagger.io/v2/swagger.json",
-        "path": "examplepetstore"
+        "path": "examplepetstore",
+        "description": "Pet Store Swagger Import Example"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/apis",
+      "apiVersion": "2021-12-01-preview",
+      "name": "[format('{0}/{1}', variables('apiServiceName'), parameters('name'))]",
+      "properties": {
+        "format": "[variables('format')]",
+        "value": "[parameters('urlToSwagger')]",
+        "path": "[parameters('apiPath')]",
+        "displayName": "Mercury Health",
+        "serviceUrl": "[format('https://{0}.azurewebsites.net/', variables('webSiteName'))]"
       },
       "dependsOn": [
         "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]"
@@ -297,7 +330,55 @@
     {
       "type": "Microsoft.ApiManagement/service/apis/diagnostics",
       "apiVersion": "2021-12-01-preview",
-      "name": "[format('{0}/{1}/{2}', variables('apiServiceName'), 'PetStoreSwaggerImportExample', 'applicationinsights')]",
+      "name": "[format('{0}/{1}/{2}', variables('apiServiceName'), 'pet-store-swagger', 'applicationinsights')]",
+      "properties": {
+        "loggerId": "[resourceId('Microsoft.ApiManagement/service/loggers', variables('apiServiceName'), variables('appInsightsName'))]",
+        "alwaysLog": "allErrors",
+        "logClientIp": true,
+        "sampling": {
+          "samplingType": "fixed",
+          "percentage": 100
+        },
+        "verbosity": "information",
+        "httpCorrelationProtocol": "Legacy",
+        "frontend": {
+          "request": {
+            "headers": [],
+            "body": {
+              "bytes": 0
+            }
+          },
+          "response": {
+            "headers": [],
+            "body": {
+              "bytes": 0
+            }
+          }
+        },
+        "backend": {
+          "request": {
+            "headers": [],
+            "body": {
+              "bytes": 0
+            }
+          },
+          "response": {
+            "headers": [],
+            "body": {
+              "bytes": 0
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]",
+        "[resourceId('Microsoft.ApiManagement/service/loggers', variables('apiServiceName'), variables('appInsightsName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/apis/diagnostics",
+      "apiVersion": "2021-12-01-preview",
+      "name": "[format('{0}/{1}/{2}', variables('apiServiceName'), 'mercury-health', 'applicationinsights')]",
       "properties": {
         "loggerId": "[resourceId('Microsoft.ApiManagement/service/loggers', variables('apiServiceName'), variables('appInsightsName'))]",
         "alwaysLog": "allErrors",
