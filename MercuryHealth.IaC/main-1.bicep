@@ -412,9 +412,20 @@ resource apiManagementProducts 'Microsoft.ApiManagement/service/products@2021-12
   properties: {
     approvalRequired: false
     state: 'published'
-    //subscriptionRequired: true
+    subscriptionRequired: true
+    subscriptionsLimit: 1
     description: 'Product used for Mercury Health Development Teams'
-    displayName: 'Mercury Health - Developers' //apiSubscriptionName
+    displayName: 'Mercury Health - Developers'
+     terms: 'These are the terms of use ...'
+  }
+}
+
+resource apiManagementProductPolicies 'Microsoft.ApiManagement/service/products/policies@2020-12-01' = {
+  name: 'policy'
+  parent: apiManagementProducts
+  properties: {
+    value: '<policies>\r\n  <inbound>\r\n    <rate-limit calls="5" renewal-period="60" />\r\n    <quota calls="100" renewal-period="604800" />\r\n    <base />\r\n  </inbound>\r\n  <backend>\r\n    <base />\r\n  </backend>\r\n  <outbound>\r\n    <base />\r\n  </outbound>\r\n  <on-error>\r\n    <base />\r\n  </on-error>\r\n</policies>'
+    format: 'xml'
   }
 }
 
@@ -573,6 +584,15 @@ resource appInsightsAPIMercuryHealthdiagnostics 'Microsoft.ApiManagement/service
     }
   }
 }
+
+// resource petshopApiPolicies 'Microsoft.ApiManagement/service/apis/policies@2020-12-01' = {
+//   name: 'policy'
+//   parent: apiManagementMercuryHealthApis
+//   properties: {
+//     value: '<!--\r\n    IMPORTANT:\r\n    - Policy elements can appear only within the <inbound>, <outbound>, <backend> section elements.\r\n    - To apply a policy to the incoming request (before it is forwarded to the backend service), place a corresponding policy element within the <inbound> section element.\r\n    - To apply a policy to the outgoing response (before it is sent back to the caller), place a corresponding policy element within the <outbound> section element.\r\n    - To add a policy, place the cursor at the desired insertion point and select a policy from the sidebar.\r\n    - To remove a policy, delete the corresponding policy statement from the policy document.\r\n    - Position the <base> element within a section element to inherit all policies from the corresponding section element in the enclosing scope.\r\n    - Remove the <base> element to prevent inheriting policies from the corresponding section element in the enclosing scope.\r\n    - Policies are applied in the order of their appearance, from the top down.\r\n    - Comments within policy elements are not supported and may disappear. Place your comments between policy elements or at a higher level scope.\r\n-->\r\n<policies>\r\n  <inbound>\r\n    <base />\r\n  </inbound>\r\n  <backend>\r\n    <base />\r\n  </backend>\r\n  <outbound>\r\n    <base />\r\n  </outbound>\r\n  <on-error>\r\n    <base />\r\n  </on-error>\r\n</policies>'
+//     format: 'xml'
+//   }
+// }
 
 // API Management - Avoid outputs for secrets - Look up secrets dynamically
 // Note: This is why API Management isn't it's own module...MUST be in the main
