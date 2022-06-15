@@ -420,11 +420,6 @@ resource apiManagementProducts 'Microsoft.ApiManagement/service/products@2021-12
   }
 }
 
-resource apiManagementServiceName_exampleProduct_exampleApi 'Microsoft.ApiManagement/service/products/apis@2017-03-01' = {
-  parent: apiManagementProducts
-  name: 'developmentApi'
-}
-
 resource apiManagementProductPolicies 'Microsoft.ApiManagement/service/products/policies@2021-12-01-preview' = {
   name: 'policy'
   parent: apiManagementProducts
@@ -506,6 +501,14 @@ resource api 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
 //
 // Mercury Health Swagger
 //
+
+resource apiManagementServiceName_exampleProduct_exampleApi 'Microsoft.ApiManagement/service/products/apis@2017-03-01' = {
+  parent: apiManagementProducts
+  name: 'mercury-health'
+  dependsOn: [
+    api
+  ]
+}
 
 resource apiManagementMercuryHealthApis 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' existing = {
   name: 'mercury-health'
