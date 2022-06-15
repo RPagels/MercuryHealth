@@ -480,7 +480,8 @@ resource api 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
   name: '${apiManagementService.name}/${name}'
   properties: {
     format: format
-    value: 'https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json' //urlToSwagger
+    value: 'https://app-3gsbqvhdrf5ge.azurewebsites.net/swagger/v1/swagger.json' //urlToSwagger
+    //value: 'https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json' //urlToSwagger
     path: '' //apiPath
     displayName: 'Mercury Health'
     serviceUrl: 'https://${webSiteName}.azurewebsites.net/'
