@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "2248627120906346021"
+      "templateHash": "12780372880811987796"
     }
   },
   "parameters": {
@@ -285,6 +285,15 @@
         "terms": "These are the terms of use ..."
       },
       "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/products/apis",
+      "apiVersion": "2017-03-01",
+      "name": "[format('{0}/{1}/{2}', variables('apiServiceName'), 'development', 'developmentApi')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/products', variables('apiServiceName'), 'development')]",
         "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]"
       ]
     },

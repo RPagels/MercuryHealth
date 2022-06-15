@@ -420,6 +420,11 @@ resource apiManagementProducts 'Microsoft.ApiManagement/service/products@2021-12
   }
 }
 
+resource apiManagementServiceName_exampleProduct_exampleApi 'Microsoft.ApiManagement/service/products/apis@2017-03-01' = {
+  parent: apiManagementProducts
+  name: 'developmentApi'
+}
+
 resource apiManagementProductPolicies 'Microsoft.ApiManagement/service/products/policies@2021-12-01-preview' = {
   name: 'policy'
   parent: apiManagementProducts
