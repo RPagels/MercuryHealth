@@ -468,21 +468,25 @@ resource apiManagementPetStoreApis 'Microsoft.ApiManagement/service/apis@2021-12
 param swaggerType string = 'yaml-v3'
 
 // This url needs to be reachable for APIM
+// Prod Instance
+//param urlToSwagger string = 'https://app-3gsbqvhdrf5ge.azurewebsites.net/swagger/v1/swagger.json'
+// Dev Instance
 //param urlToSwagger string = 'https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json'
-//param urlToSwaggerTest string = 'https://github.com/RPagels/MercuryHealth/blob/master/MercuryHealth.API/MercuryHealth.swagger.json'
-// There can be only one api without path
-//param apiPath string = ''
+
+
+//param urlToSwaggerTest string = 'https://github.com/RPagels/MercuryHealth/blob/master/MercuryHealth.Web/MercuryHealth.swagger.json'
+param apiPath string = '' // There can be only one api without path
 param name string = 'mercury-health'
 var format = ((swaggerType == 'yaml-v3')  ? 'openapi-link' : 'openapi+json-link')
 
-// Create APIs from "Dev" instance
+// Create APIs from "Prod" instance
 resource api 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
   name: '${apiManagementService.name}/${name}'
   properties: {
     format: format
-    value: 'https://app-3gsbqvhdrf5ge.azurewebsites.net/swagger/v1/swagger.json' //urlToSwagger
-    //value: 'https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json' //urlToSwagger
-    path: '' //apiPath
+    //value: urlToSwagger
+    value: loadTextContent('./MercuryHealth.swagger.json')
+    path: apiPath
     displayName: 'Mercury Health'
     serviceUrl: 'https://${webSiteName}.azurewebsites.net/'
   }
