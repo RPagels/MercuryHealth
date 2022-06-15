@@ -420,7 +420,7 @@ resource apiManagementProducts 'Microsoft.ApiManagement/service/products@2021-12
   }
 }
 
-resource apiManagementProductPolicies 'Microsoft.ApiManagement/service/products/policies@2020-12-01' = {
+resource apiManagementProductPolicies 'Microsoft.ApiManagement/service/products/policies@2021-12-01-preview' = {
   name: 'policy'
   parent: apiManagementProducts
   properties: {

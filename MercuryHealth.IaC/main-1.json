@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "9543851142925634340"
+      "templateHash": "13583498385792140594"
     }
   },
   "parameters": {
@@ -114,14 +114,6 @@
     "swaggerType": {
       "type": "string",
       "defaultValue": "yaml-v3"
-    },
-    "urlToSwagger": {
-      "type": "string",
-      "defaultValue": "https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json"
-    },
-    "apiPath": {
-      "type": "string",
-      "defaultValue": ""
     },
     "name": {
       "type": "string",
@@ -273,11 +265,27 @@
       "name": "[format('{0}/{1}', variables('apiServiceName'), 'development')]",
       "properties": {
         "approvalRequired": false,
-        "state": "notPublished",
+        "state": "published",
+        "subscriptionRequired": true,
+        "subscriptionsLimit": 1,
         "description": "Product used for Mercury Health Development Teams",
-        "displayName": "Mercury Health - Developers"
+        "displayName": "Mercury Health - Developers",
+        "terms": "These are the terms of use ..."
       },
       "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/products/policies",
+      "apiVersion": "2020-12-01",
+      "name": "[format('{0}/{1}/{2}', variables('apiServiceName'), 'development', 'policy')]",
+      "properties": {
+        "value": "<policies>\r\n  <inbound>\r\n    <rate-limit calls=\"5\" renewal-period=\"60\" />\r\n    <quota calls=\"100\" renewal-period=\"604800\" />\r\n    <base />\r\n  </inbound>\r\n  <backend>\r\n    <base />\r\n  </backend>\r\n  <outbound>\r\n    <base />\r\n  </outbound>\r\n  <on-error>\r\n    <base />\r\n  </on-error>\r\n</policies>",
+        "format": "xml"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/products', variables('apiServiceName'), 'development')]",
         "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]"
       ]
     },
@@ -305,7 +313,7 @@
       "properties": {
         "format": "swagger-link-json",
         "value": "http://petstore.swagger.io/v2/swagger.json",
-        "path": "examplepetstore",
+        "path": "petstore",
         "description": "Pet Store Swagger Import Example"
       },
       "dependsOn": [
@@ -318,8 +326,8 @@
       "name": "[format('{0}/{1}', variables('apiServiceName'), parameters('name'))]",
       "properties": {
         "format": "[variables('format')]",
-        "value": "[parameters('urlToSwagger')]",
-        "path": "[parameters('apiPath')]",
+        "value": "https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json",
+        "path": "",
         "displayName": "Mercury Health",
         "serviceUrl": "[format('https://{0}.azurewebsites.net/', variables('webSiteName'))]"
       },
