@@ -43,8 +43,6 @@ jobs:
       output_releaseAnnotationGuidID: ${{ steps.Infra.outputs.out_releaseAnnotationGuidID }}
       output_appInsightsApplicationId: ${{ steps.Infra.outputs.out_appInsightsApplicationId }}
       output_appInsightsAPIApplicationId: ${{ steps.Infra.outputs.out_appInsightsAPIApplicationId }}
-      #output_keyvaultName: ${{ steps.Infra.outputs.out_keyvaultName }}
-      #output_keyvaultSecretName: ${{ steps.Infra.outputs.out_keyvaultSecretName }}
       output_secretConnectionString: ${{ steps.Infra.outputs.out_secretConnectionString }}
       #output_TestMyConnectionString: 'Server=tcp:${{ steps.Infra.outputs.out_sqlserverFQName }},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdminLoginName}@${sqlserverName};Password=${sqlAdminLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
 
@@ -164,7 +162,6 @@ jobs:
          echo 'output_appInsightsApplicationId: ${{ steps.Infra.outputs.out_appInsightsApplicationId }}'
          echo 'output_appInsightsAPIApplicationId: ${{ steps.Infra.outputs.out_appInsightsAPIApplicationId }}'
          echo 'output_keyvaultName: ${{ steps.Infra.outputs.out_keyvaultName }}'
-         #echo 'output_keyvaultSecretName: ${{ steps.Infra.outputs.out_keyvaultSecretName }}'
          echo 'output_secretConnectionString: ${{ steps.Infra.outputs.out_secretConnectionString }}'
 
     ##########################################################
@@ -202,6 +199,10 @@ jobs:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
       Deployed_Environment: ${{ inputs.environment-suffix }}
       url: 'https://${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net/' 
+
+    environment:
+      name: Azure #${{ inputs.environment-suffix }}
+      url: 'https://${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net/' 
       
     permissions:
       contents: read
@@ -220,9 +221,7 @@ jobs:
          echo 'output_appInsightsApplicationId: ${{ needs.deploy_infrastructure.outputs.output_appInsightsApplicationId }}'
          echo 'output_appInsightsAPIApplicationId: ${{ needs.deploy_infrastructure.outputs.output_appInsightsAPIApplicationId }}'
          echo 'output_keyvaultName: ${{ needs.deploy_infrastructure.outputs.output_keyvaultName }}'
-         #echo 'output_keyvaultSecretName: ${{ needs.deploy_infrastructure.outputs.output_keyvaultSecretName }}'
          echo 'output_secretConnectionString: ${{ needs.deploy_infrastructure.outputs.output_secretConnectionString }}'
-         #echo 'output_TestMyConnectionString: ${{ needs.deploy_infrastructure.outputs.output_TestMyConnectionString }}'
          echo 'output_secretConnectionString: ${{ needs.deploy_infrastructure.outputs.output_secretConnectionString }}'
          echo 'output_apiServiceName: ${{ needs.deploy_infrastructure.outputs.output_apiServiceName }}'
 
@@ -277,19 +276,6 @@ jobs:
           app-name: ${{ needs.deploy_infrastructure.outputs.output_webSiteName }}
           package: './MercuryHealth.Website'
 
-    #- name: Download Build Artifacts-API
-    #  uses: actions/download-artifact@v2
-    #  continue-on-error: false
-    #  with:
-    #    name: MercuryHealth.API
-    #    path: ${{ github.workspace }}/MercuryHealth.API
-
-    #- name: 'Deploy API Application'
-    #  uses: azure/webapps-deploy@v2
-    #  with:
-    #      app-name: ${{ needs.deploy_infrastructure.outputs.output_apiServiceName }}
-    #      package: './MercuryHealth.API'
-          
     - name: Download Build Artifacts-Function Application
       uses: actions/download-artifact@v2
       continue-on-error: false
@@ -339,7 +325,10 @@ jobs:
     #  with:
     #    inlineScript: |
     #      az apim product api add --api-id 'mercury-health' --product-id 'development' --resource-group ${{ env.Azure_Resource_GroupName }} --service-name ${{ needs.deploy_infrastructure.outputs.output_apiServiceName }}
-             
+
+    #
+    # TODO!!!  Removed this and replace using Azure CLI
+    #              
     - name: 'Generate Temporary API Key For App Insights'
       id: AIKeyGen
       uses: Azure/CLI@v1
@@ -449,12 +438,6 @@ jobs:
           # Select the value of the ErrorActionPreference variable for executing the script. Options: stop, continue, silentlyContinue. Default is Stop.
           errorActionPreference: continue
 
-#      - name: 
-#        continue-on-error: true
-#        run: |
-#         dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }}
-#         dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './MercuryHealth.UITests'
-
       - name: Playwright Tests all on Browsers
         continue-on-error: false
         run: |
@@ -521,7 +504,7 @@ jobs:
 #            #!/bin/bash
 #            az role assignment create --assignee "rpagels@microsoft.com" --role "Load Test Contributor" --resource-group ${{ env.Azure_Resource_GroupName }}
 
-      # VERY Important. Do not use end slash for webHost value. "/"
+      # Extremely Important. Do not use end slash for webHost value. "/"
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
         continue-on-error: true
@@ -549,6 +532,9 @@ jobs:
         run: |
           az logout
 
+##################################################################
+# CD Stage - Load and Performance Testing >>> Nutrition Page     #
+##################################################################          
   LoadTesting_Stage_Application_Nutrition:
     # Identify any jobs that must complete successfully before this job will run.
     runs-on: ubuntu-latest
@@ -580,7 +566,7 @@ jobs:
         with:
           creds: ${{ secrets.azure-credentials }}
 
-      # VERY Important. Do not use end slash for webHost value. "/"
+      # Extremely Important. Do not use end slash for webHost value. "/"
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
         continue-on-error: true
@@ -639,7 +625,7 @@ jobs:
         with:
           creds: ${{ secrets.azure-credentials }}
 
-      # VERY Important. Do not use end slash for webHost value. "/"
+      # Extremely Important. Do not use end slash for webHost value. "/"
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
         continue-on-error: true

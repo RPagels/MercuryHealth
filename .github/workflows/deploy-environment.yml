@@ -108,6 +108,14 @@ jobs:
         sudo mv ./bicep /usr/local/bin/bicep
         bicep --version
 
+    - name: Purge soft-deleted instance of APIM, List them
+      #if: contains(github.event_name, 'push')
+      uses: Azure/CLI@v1
+      continue-on-error: true
+      with:
+        inlineScript: |
+          az rest --method get --header "Accept=application/json" -u 'https://management.azure.com/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/providers/Microsoft.ApiManagement/deletedservices?api-version=2021-08-01'
+        
     - name: Purge soft-deleted instance of APIM, if exists
       if: contains(github.event_name, 'push')
       uses: Azure/CLI@v1
@@ -160,7 +168,6 @@ jobs:
          echo 'output_appInsightsApplicationId: ${{ steps.Infra.outputs.out_appInsightsApplicationId }}'
          echo 'output_appInsightsAPIApplicationId: ${{ steps.Infra.outputs.out_appInsightsAPIApplicationId }}'
          echo 'output_keyvaultName: ${{ steps.Infra.outputs.out_keyvaultName }}'
-         #echo 'output_keyvaultSecretName: ${{ steps.Infra.outputs.out_keyvaultSecretName }}'
          echo 'output_secretConnectionString: ${{ steps.Infra.outputs.out_secretConnectionString }}'
 
     ##########################################################
@@ -197,6 +204,7 @@ jobs:
     env:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
       Deployed_Environment: ${{ inputs.environment-suffix }}
+      url: 'https://${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net/' 
       
     environment:
       name: Azure #${{ inputs.environment-suffix }}
@@ -287,27 +295,36 @@ jobs:
         slot-name: 'production'
         package: './MercuryHealth.FunctionApp'
 
-    - name: Add MercuryHealth APIs to APIM'
-      uses: Azure/CLI@v1
-      continue-on-error: true
-      with:
-        inlineScript: |
-          az apim api import -g ${{ env.Azure_Resource_GroupName }} \
-             --api-id 'mercury-health' \
-             --service-name ${{ needs.deploy_infrastructure.outputs.output_apiServiceName }} \
-             --path '' \
-             --specification-path './MercuryHealth.Website/MercuryHealth.openapi.yaml' \
-             --specification-format OpenApiJson \
-             --service-url 'https://${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net/' \
-             --display-name 'Mercury Health'
+    #
+    # NOT needed! Bicep templates does ALL this!!!
+    #
+    #- name: Add MercuryHealth APIs to APIM'
+    #  uses: Azure/CLI@v1
+    #  continue-on-error: true
+    #  with:
+    #    inlineScript: |
+    #      az apim api import -g ${{ env.Azure_Resource_GroupName }} \
+    #         --api-id 'mercury-health' \
+    #         --service-name ${{ needs.deploy_infrastructure.outputs.output_apiServiceName }} \
+    #         --path '' \
+    #         --specification-path './MercuryHealth.Website/MercuryHealth.openapi.yaml' \
+    #         --specification-format OpenApiJson \
+    #         --service-url 'https://${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net/' \
+    #         --display-name 'Mercury Health'
  
-    - name: Add MercuryHealth APIs to Product'
-      uses: Azure/CLI@v1
-      continue-on-error: true
-      with:
-        inlineScript: |
-          az apim product api add --api-id 'mercury-health' --product-id 'development' --resource-group ${{ env.Azure_Resource_GroupName }} --service-name ${{ needs.deploy_infrastructure.outputs.output_apiServiceName }}
-             
+    #
+    # NOT needed! Bicep templates does ALL this!!!
+    #
+    #- name: Add MercuryHealth APIs to Product'
+    #  uses: Azure/CLI@v1
+    #  continue-on-error: true
+    #  with:
+    #    inlineScript: |
+    #      az apim product api add --api-id 'mercury-health' --product-id 'development' --resource-group ${{ env.Azure_Resource_GroupName }} --service-name ${{ needs.deploy_infrastructure.outputs.output_apiServiceName }}
+
+    #
+    # TODO!!!  Removed this and replace using Azure CLI
+    #             
     - name: 'Generate Temporary API Key For App Insights'
       id: AIKeyGen
       uses: Azure/CLI@v1
