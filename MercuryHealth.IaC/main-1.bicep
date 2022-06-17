@@ -459,7 +459,7 @@ resource apiManagementServiceName_examplesubscription1 'Microsoft.ApiManagement/
     userId: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/exampleServiceName/users/exampleUser1'
   }
   dependsOn: [
-    apiManagementProduct
+    apiManagementProductApi
     apiManagementServiceName_exampleUser1
   ]
 }
