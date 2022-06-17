@@ -455,11 +455,11 @@ resource apiManagementServiceName_examplesubscription1 'Microsoft.ApiManagement/
   name: 'examplesubscription1'
   properties: {
     displayName: 'exampleUser1DisplayName'
-    productId: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/exampleServiceName/products/exampleProduct'
+    productId: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/exampleServiceName/products/development'
     userId: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/exampleServiceName/users/exampleUser1'
   }
   dependsOn: [
-    apiManagementProductApi
+    apiManagementProduct
     apiManagementServiceName_exampleUser1
   ]
 }
