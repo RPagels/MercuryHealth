@@ -192,180 +192,14 @@ resource configStoreName_appconfig_featureflags_3 'Microsoft.AppConfiguration/co
 // Note: This is why ConfigStore isn't it's own module...MUST be in the main
 var configStoreConnectionString = listKeys(config.id, config.apiVersion).value[0].connectionString
 
-////////////////////////////////////////
-// START - Key Vault
-////////////////////////////////////////
-
 // Create Azure KeyVault
 module keyvaultmod './main-8-keyvault.bicep' = {
   name: keyvaultName
   params: {
     location: location
     vaultName: keyvaultName
-    // appServiceprincipalId: webappmod.outputs.out_appServiceprincipalId
-    // secretName1: secretName1
-    // secretName2: secretName2
-    // secretName3: secretName3
-    // secretName4: secretName4
-
-    // configStoreConnection: configStoreConnectionString
-    // secretConnectionString: webappmod.outputs.out_secretConnectionString
-    //secretAzureWebJobsStorage: functionappmod.outputs.out_AzureWebJobsStorage
-    //funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
     }
-  //   dependsOn:  [
-  //    webappmod
-  //    functionappmod
-  //  ]
  }
-
-//  param accessPolicies array = [
-//   {
-//     tenantId: subscription().tenantId
-//     objectId: webappmod.outputs.out_appServiceprincipalId
-//     permissions: {
-//       keys: [
-//         'Get'
-//         'List'
-//       ]
-//       secrets: [
-//         'Get'
-//         'List'
-//       ]
-//     }
-//   }
-
-// param networkAcls object = {
-//   ipRules: []
-//   virtualNetworkRules: []
-// }
-
-// resource keyvault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
-//   name: keyvaultName
-//   location: location
-//   properties: {
-//     sku: {
-//       family: 'A'
-//       name: 'standard'
-//     }
-//     tenantId: subscription().tenantId
-//     enableSoftDelete: false
-//     enabledForDeployment: true
-//     enabledForDiskEncryption: true
-//     enabledForTemplateDeployment: true
-//     softDeleteRetentionInDays: 90
-//     enableRbacAuthorization: false
-//     networkAcls: networkAcls
-//     accessPolicies:[
-//       {
-//       tenantId: subscription().tenantId
-//       objectId: webappmod.outputs.out_appServiceprincipalId
-//         permissions: {
-//           keys: [
-//             'list'
-//             'get'
-//           ]
-//           secrets: [
-//             'list'
-//             'get'
-//           ]
-//         }
-//       }
-//       {
-//         tenantId: subscription().tenantId
-//         objectId: functionappmod.outputs.out_funcAppServiceprincipalId
-//           permissions: {
-//             keys: [
-//               'list'
-//               'get'
-//             ]
-//             secrets: [
-//               'list'
-//               'get'
-//             ]
-//           }
-//       }
-//     ]
-//   }
-//   dependsOn:  [
-//     webappmod
-//     functionappmod
-//   ]
-// }
-
-//  resource secret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-//    name: secretName1
-//    parent: keyvaultmod
-//    properties: {
-//      contentType: 'text/plain'
-//      value: configStoreConnectionString
-//    }
-//  }
-//  resource secret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-//    name: secretName2
-//    parent: keyvaultmod
-//    properties: {
-//      contentType: 'text/plain'
-//      value: 'Server=tcp:${sqldbmod.outputs.sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdministratorLogin}@${sqlserverName};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
-//    }
-//  }
- 
-// create secret for Web App
-// resource mySecret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-//   name: secretName1
-//   //name: '${keyvaultName}/${secretName1}'
-//   parent: keyvault
-//   properties: {
-//     contentType: 'text/plain'
-//     value: configStoreConnectionString
-//   }
-//   // dependsOn:  [
-//   //   keyvault
-//   // ]
-// }
-// create secret for Web App
-// resource mySecret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-//   name: secretName2
-//   //name: '${keyvaultName}/${secretName2}'
-//   parent: keyvault
-//   properties: {
-//     contentType: 'text/plain'
-//     value: webappmod.outputs.out_secretConnectionString
-//   }
-//   // dependsOn:  [
-//   //   keyvault
-//   // ]
-// }
-//create secret for Func App
-// resource mySecret3 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-//   name: secretName3
-//   //name: '${keyvaultName}/${secretName3}'
-//   parent: keyvault
-//   properties: {
-//     contentType: 'text/plain'
-//     value: functionappmod.outputs.out_AzureWebJobsStorage
-//   }
-//   // dependsOn:  [
-//   //   keyvault
-//   // ]
-// }
-//create secret for Func App
-// resource mySecret4 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-//   name: secretName4
-//   //name: '${keyvaultName}/${secretName4}'
-//   parent: keyvault
-//   properties: {
-//     contentType: 'text/plain'
-//     value: functionappmod.outputs.out_AzureWebJobsStorage
-//   }
-//   // dependsOn:  [
-//   //   keyvault
-//   // ]
-// }
-
- ////////////////////////////////////////
- // END - Key Vault
- ////////////////////////////////////////
  
 // AppConfiguration - Avoid outputs for secrets - Look up secrets dynamically
 // https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/scenarios-secrets
@@ -379,6 +213,7 @@ param publisherName string = 'Randy Pagels'
 param sku string = 'Developer' // 'Developer' or 'Consumption'
 param skuCount int = 1  // Developr = 1, Consumption = 0
 
+// Create the API Service
 resource apiManagementService 'Microsoft.ApiManagement/service@2021-12-01-preview' = {
   name: apiServiceName
   location: location
@@ -396,17 +231,19 @@ resource apiManagementService 'Microsoft.ApiManagement/service@2021-12-01-previe
   }
 }
 
+// Create the Subscription for Developers
 resource apiManagementSubscription 'Microsoft.ApiManagement/service/subscriptions@2021-12-01-preview' = {
   parent: apiManagementService
-  name: 'developers' //apiSubscriptionName
+  name: 'developers'
   properties: {
     scope: '/apis' // Subscription applies to all APIs
-    displayName: 'Mercury Health - Developers' //apiSubscriptionName
+    displayName: 'Mercury Health - Developers'
     state: 'active'
   }
 }
 
-resource apiManagementProducts 'Microsoft.ApiManagement/service/products@2021-12-01-preview' = {
+// Create the Product
+resource apiManagementProduct 'Microsoft.ApiManagement/service/products@2021-12-01-preview' = {
   parent: apiManagementService
   name: 'development'
   properties: {
@@ -420,15 +257,17 @@ resource apiManagementProducts 'Microsoft.ApiManagement/service/products@2021-12
   }
 }
 
+// Create the Product Policies
 resource apiManagementProductPolicies 'Microsoft.ApiManagement/service/products/policies@2021-12-01-preview' = {
   name: 'policy'
-  parent: apiManagementProducts
+  parent: apiManagementProduct
   properties: {
     value: '<policies>\r\n  <inbound>\r\n    <rate-limit calls="5" renewal-period="60" />\r\n    <quota calls="100" renewal-period="604800" />\r\n    <base />\r\n  </inbound>\r\n  <backend>\r\n    <base />\r\n  </backend>\r\n  <outbound>\r\n    <base />\r\n  </outbound>\r\n  <on-error>\r\n    <base />\r\n  </on-error>\r\n</policies>'
     format: 'xml'
   }
 }
 
+// Create the API Logger for Application Insights
 resource appInsightsAPILogger 'Microsoft.ApiManagement/service/loggers@2021-12-01-preview' = {
   parent: apiManagementService
   name: appInsightsName // 'MercuryHealth-applicationinsights'
@@ -445,6 +284,7 @@ resource appInsightsAPILogger 'Microsoft.ApiManagement/service/loggers@2021-12-0
   ]
 }
 
+// Import API Example
 resource petStoreApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
   name: 'pet-store-swagger'
   //name: '${apiManagement.name}/PetStoreSwaggerImportExample'
@@ -455,11 +295,6 @@ resource petStoreApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-pre
     path: 'petstore'
     description: 'Pet Store Swagger Import Example'
   }
-}
-
-resource apiManagementPetStoreApis 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' existing = {
-  name: 'pet-store-swagger' // 'api' PetStoreSwaggerImportExample
-  parent: apiManagementService
 }
 
 //
@@ -473,26 +308,16 @@ param swaggerType string = 'yaml-v3'
 
 // This url needs to be reachable for APIM
 param urlToSwagger string = 'https://raw.githubusercontent.com/RPagels/MercuryHealth/master/MercuryHealth.IaC/MercuryHealth.openapi.yaml'
-
-// This url needs to be reachable for APIM
-// Prod Instance
-//param urlToSwagger string = 'https://app-3gsbqvhdrf5ge.azurewebsites.net/swagger/v1/swagger.json'
-// Dev Instance
-//param urlToSwagger string = 'https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json'
-
-//param urlToSwaggerTest string = 'https://github.com/RPagels/MercuryHealth/blob/master/MercuryHealth.Web/MercuryHealth.swagger.json'
 param apiPath string = '' // There can be only one api without path
 param name string = 'mercury-health'
 var format = ((swaggerType == 'yaml-v3')  ? 'openapi-link' : 'openapi+json-link')
 
-// Create APIs from "Prod" instance
-resource api 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
+// Create APIs from template
+resource apiManagementMercuryHealthImport 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
   name: '${apiManagementService.name}/${name}'
   properties: {
     format: format
-    value: urlToSwagger
-    //value: loadTextContent('./MercuryHealth.swagger.json')
-    //value: loadTextContent('./MercuryHealth.swagger.json')
+    value: urlToSwagger // OR value: loadTextContent('./MercuryHealth.swagger.json')
     path: apiPath
     displayName: 'Mercury Health'
     serviceUrl: 'https://${webSiteName}.azurewebsites.net/'
@@ -502,20 +327,28 @@ resource api 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
 // Mercury Health Swagger
 //
 
-resource apiManagementServiceName_exampleProduct_exampleApi 'Microsoft.ApiManagement/service/products/apis@2017-03-01' = {
-  parent: apiManagementProducts
+// Create the Product for API
+resource apiManagementProductApi 'Microsoft.ApiManagement/service/products/apis@2017-03-01' = {
+  parent: apiManagementProduct
   name: 'mercury-health'
   dependsOn: [
-    api
+    apiManagementMercuryHealthImport
   ]
 }
 
+// Create reference to existing API
 resource apiManagementMercuryHealthApis 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' existing = {
   name: 'mercury-health'
   parent: apiManagementService
 }
 
-// Configure logging on the API.
+// Create reference to existing API
+resource apiManagementPetStoreApis 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' existing = {
+  name: 'pet-store-swagger' // 'api' PetStoreSwaggerImportExample
+  parent: apiManagementService
+}
+
+// Configure logging for the API
 resource appInsightsAPIPetStorediagnostics 'Microsoft.ApiManagement/service/apis/diagnostics@2021-12-01-preview' = {
   parent: apiManagementPetStoreApis
   name: 'applicationinsights'
@@ -560,7 +393,7 @@ resource appInsightsAPIPetStorediagnostics 'Microsoft.ApiManagement/service/apis
   }
 }
 
-// Configure logging on the API.
+// Configure logging for the API.
 resource appInsightsAPIMercuryHealthdiagnostics 'Microsoft.ApiManagement/service/apis/diagnostics@2021-12-01-preview' = {
   parent: apiManagementMercuryHealthApis
   name: 'applicationinsights'
@@ -605,14 +438,31 @@ resource appInsightsAPIMercuryHealthdiagnostics 'Microsoft.ApiManagement/service
   }
 }
 
-// resource petshopApiPolicies 'Microsoft.ApiManagement/service/apis/policies@2020-12-01' = {
-//   name: 'policy'
-//   parent: apiManagementMercuryHealthApis
-//   properties: {
-//     value: '<!--\r\n    IMPORTANT:\r\n    - Policy elements can appear only within the <inbound>, <outbound>, <backend> section elements.\r\n    - To apply a policy to the incoming request (before it is forwarded to the backend service), place a corresponding policy element within the <inbound> section element.\r\n    - To apply a policy to the outgoing response (before it is sent back to the caller), place a corresponding policy element within the <outbound> section element.\r\n    - To add a policy, place the cursor at the desired insertion point and select a policy from the sidebar.\r\n    - To remove a policy, delete the corresponding policy statement from the policy document.\r\n    - Position the <base> element within a section element to inherit all policies from the corresponding section element in the enclosing scope.\r\n    - Remove the <base> element to prevent inheriting policies from the corresponding section element in the enclosing scope.\r\n    - Policies are applied in the order of their appearance, from the top down.\r\n    - Comments within policy elements are not supported and may disappear. Place your comments between policy elements or at a higher level scope.\r\n-->\r\n<policies>\r\n  <inbound>\r\n    <base />\r\n  </inbound>\r\n  <backend>\r\n    <base />\r\n  </backend>\r\n  <outbound>\r\n    <base />\r\n  </outbound>\r\n  <on-error>\r\n    <base />\r\n  </on-error>\r\n</policies>'
-//     format: 'xml'
-//   }
-// }
+resource apiManagementServiceName_exampleUser1 'Microsoft.ApiManagement/service/users@2017-03-01' = {
+  parent: apiManagementService
+  name: 'exampleUser1'
+  properties: {
+    firstName: 'ExampleFirstName1'
+    lastName: 'ExampleLastName1'
+    email: 'ExampleFirst1@example.com'
+    state: 'active'
+    note: 'note for example user 1'
+  }
+}
+
+resource apiManagementServiceName_examplesubscription1 'Microsoft.ApiManagement/service/subscriptions@2017-03-01' = {
+  parent: apiManagementService
+  name: 'examplesubscription1'
+  properties: {
+    displayName: 'exampleUser1DisplayName'
+    productId: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/exampleServiceName/products/exampleProduct'
+    userId: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/exampleServiceName/users/exampleUser1'
+  }
+  dependsOn: [
+    apiManagementProduct
+    apiManagementServiceName_exampleUser1
+  ]
+}
 
 // API Management - Avoid outputs for secrets - Look up secrets dynamically
 // Note: This is why API Management isn't it's own module...MUST be in the main

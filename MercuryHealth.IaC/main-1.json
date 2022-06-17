@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "12780372880811987796"
+      "templateHash": "17356444721036719411"
     }
   },
   "parameters": {
@@ -105,11 +105,11 @@
     },
     "sku": {
       "type": "string",
-      "defaultValue": "Consumption"
+      "defaultValue": "Developer"
     },
     "skuCount": {
       "type": "int",
-      "defaultValue": 0
+      "defaultValue": 1
     },
     "swaggerType": {
       "type": "string",
@@ -289,15 +289,6 @@
       ]
     },
     {
-      "type": "Microsoft.ApiManagement/service/products/apis",
-      "apiVersion": "2017-03-01",
-      "name": "[format('{0}/{1}/{2}', variables('apiServiceName'), 'development', 'developmentApi')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/products', variables('apiServiceName'), 'development')]",
-        "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]"
-      ]
-    },
-    {
       "type": "Microsoft.ApiManagement/service/products/policies",
       "apiVersion": "2021-12-01-preview",
       "name": "[format('{0}/{1}/{2}', variables('apiServiceName'), 'development', 'policy')]",
@@ -353,6 +344,16 @@
         "serviceUrl": "[format('https://{0}.azurewebsites.net/', variables('webSiteName'))]"
       },
       "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/products/apis",
+      "apiVersion": "2017-03-01",
+      "name": "[format('{0}/{1}/{2}', variables('apiServiceName'), 'development', 'mercury-health')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', split(format('{0}/{1}', variables('apiServiceName'), parameters('name')), '/')[0], split(format('{0}/{1}', variables('apiServiceName'), parameters('name')), '/')[1])]",
+        "[resourceId('Microsoft.ApiManagement/service/products', variables('apiServiceName'), 'development')]",
         "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]"
       ]
     },
@@ -450,6 +451,36 @@
       "dependsOn": [
         "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]",
         "[resourceId('Microsoft.ApiManagement/service/loggers', variables('apiServiceName'), variables('appInsightsName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/users",
+      "apiVersion": "2017-03-01",
+      "name": "[format('{0}/{1}', variables('apiServiceName'), 'exampleUser1')]",
+      "properties": {
+        "firstName": "ExampleFirstName1",
+        "lastName": "ExampleLastName1",
+        "email": "ExampleFirst1@example.com",
+        "state": "active",
+        "note": "note for example user 1"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/subscriptions",
+      "apiVersion": "2017-03-01",
+      "name": "[format('{0}/{1}', variables('apiServiceName'), 'examplesubscription1')]",
+      "properties": {
+        "displayName": "exampleUser1DisplayName",
+        "productId": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/exampleServiceName/products/exampleProduct",
+        "userId": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/exampleServiceName/users/exampleUser1"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/products', variables('apiServiceName'), 'development')]",
+        "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]",
+        "[resourceId('Microsoft.ApiManagement/service/users', variables('apiServiceName'), 'exampleUser1')]"
       ]
     },
     {
