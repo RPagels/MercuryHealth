@@ -40,6 +40,7 @@ var loadTestsName = 'loadtests-${uniqueString(resourceGroup().id)}'
 var keyvaultName = 'kv-${uniqueString(resourceGroup().id)}'
 var blobstorageName = 'stablob${uniqueString(resourceGroup().id)}'
 //var dashboardName = 'dashboard-${uniqueString(resourceGroup().id)}'
+var frontDoorName = 'fd${uniqueString(resourceGroup().id)}'
 
 // Tags
 var defaultTags = {
@@ -391,6 +392,9 @@ resource appInsightsAPIPetStorediagnostics 'Microsoft.ApiManagement/service/apis
       }
     }
   }
+  dependsOn:  [
+    appinsightsmod
+  ]
 }
 
 // Configure logging for the API.
@@ -436,6 +440,9 @@ resource appInsightsAPIMercuryHealthdiagnostics 'Microsoft.ApiManagement/service
       }
     }
   }
+  dependsOn:  [
+    appinsightsmod
+  ]
 }
 
 resource apiManagementServiceName_exampleUser1 'Microsoft.ApiManagement/service/users@2017-03-01' = {
@@ -585,6 +592,16 @@ module configsettingsmod './main-13-configsettings.bicep' = {
      functionappmod
    ]
  }
+
+ // Create Front Door
+module frontdoormod './main-14-frontdoor.bicep' = {
+  name: frontDoorName
+  params: {
+  //backendAddress: 'https://${webSiteName}.azurewebsites.net/'
+  backendAddress: 'https://${apiServiceName}.azure-api.net/'
+  frontDoorName: frontDoorName
+  }
+}
 
 
 // Output Params used for IaC deployment in pipeline

@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "17356444721036719411"
+      "templateHash": "6712061103855508293"
     }
   },
   "parameters": {
@@ -150,6 +150,7 @@
     "loadTestsName": "[format('loadtests-{0}', uniqueString(resourceGroup().id))]",
     "keyvaultName": "[format('kv-{0}', uniqueString(resourceGroup().id))]",
     "blobstorageName": "[format('stablob{0}', uniqueString(resourceGroup().id))]",
+    "frontDoorName": "[format('fd{0}', uniqueString(resourceGroup().id))]",
     "defaultTags": {
       "Env": "[parameters('Deployed_Environment')]",
       "App": "Mercury Health",
@@ -402,7 +403,8 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]",
-        "[resourceId('Microsoft.ApiManagement/service/loggers', variables('apiServiceName'), variables('appInsightsName'))]"
+        "[resourceId('Microsoft.ApiManagement/service/loggers', variables('apiServiceName'), variables('appInsightsName'))]",
+        "[resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')]"
       ]
     },
     {
@@ -450,7 +452,8 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.ApiManagement/service', variables('apiServiceName'))]",
-        "[resourceId('Microsoft.ApiManagement/service/loggers', variables('apiServiceName'), variables('appInsightsName'))]"
+        "[resourceId('Microsoft.ApiManagement/service/loggers', variables('apiServiceName'), variables('appInsightsName'))]",
+        "[resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')]"
       ]
     },
     {
@@ -474,7 +477,7 @@
       "name": "[format('{0}/{1}', variables('apiServiceName'), 'examplesubscription1')]",
       "properties": {
         "displayName": "exampleUser1DisplayName",
-        "productId": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/exampleServiceName/products/exampleProduct",
+        "productId": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/exampleServiceName/products/development",
         "userId": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/exampleServiceName/users/exampleUser1"
       },
       "dependsOn": [
@@ -1876,6 +1879,148 @@
         "[resourceId('Microsoft.Resources/deployments', variables('keyvaultName'))]",
         "[resourceId('Microsoft.Resources/deployments', 'webappdeploy')]"
       ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('frontDoorName')]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "backendAddress": {
+            "value": "[format('https://{0}.azure-api.net/', variables('apiServiceName'))]"
+          },
+          "frontDoorName": {
+            "value": "[variables('frontDoorName')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.4.1008.15138",
+              "templateHash": "15853942929848798386"
+            }
+          },
+          "parameters": {
+            "frontDoorName": {
+              "type": "string",
+              "metadata": {
+                "description": "The name of the frontdoor resource."
+              }
+            },
+            "backendAddress": {
+              "type": "string",
+              "metadata": {
+                "description": "The hostname of the backend. Must be an IP address or FQDN."
+              }
+            }
+          },
+          "functions": [],
+          "variables": {
+            "frontEndEndpointName": "frontEndEndpoint",
+            "loadBalancingSettingsName": "loadBalancingSettings",
+            "healthProbeSettingsName": "healthProbeSettings",
+            "routingRuleName": "routingRule",
+            "backendPoolName": "backendPool"
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Network/frontDoors",
+              "apiVersion": "2020-05-01",
+              "name": "[parameters('frontDoorName')]",
+              "location": "global",
+              "properties": {
+                "enabledState": "Enabled",
+                "frontendEndpoints": [
+                  {
+                    "name": "[variables('frontEndEndpointName')]",
+                    "properties": {
+                      "hostName": "[format('{0}.azurefd.net', parameters('frontDoorName'))]",
+                      "sessionAffinityEnabledState": "Disabled"
+                    }
+                  }
+                ],
+                "loadBalancingSettings": [
+                  {
+                    "name": "[variables('loadBalancingSettingsName')]",
+                    "properties": {
+                      "sampleSize": 4,
+                      "successfulSamplesRequired": 2
+                    }
+                  }
+                ],
+                "healthProbeSettings": [
+                  {
+                    "name": "[variables('healthProbeSettingsName')]",
+                    "properties": {
+                      "path": "/",
+                      "protocol": "Http",
+                      "intervalInSeconds": 120
+                    }
+                  }
+                ],
+                "backendPools": [
+                  {
+                    "name": "[variables('backendPoolName')]",
+                    "properties": {
+                      "backends": [
+                        {
+                          "address": "[parameters('backendAddress')]",
+                          "backendHostHeader": "[parameters('backendAddress')]",
+                          "httpPort": 80,
+                          "httpsPort": 443,
+                          "weight": 50,
+                          "priority": 1,
+                          "enabledState": "Enabled"
+                        }
+                      ],
+                      "loadBalancingSettings": {
+                        "id": "[resourceId('Microsoft.Network/frontDoors/loadBalancingSettings', parameters('frontDoorName'), variables('loadBalancingSettingsName'))]"
+                      },
+                      "healthProbeSettings": {
+                        "id": "[resourceId('Microsoft.Network/frontDoors/healthProbeSettings', parameters('frontDoorName'), variables('healthProbeSettingsName'))]"
+                      }
+                    }
+                  }
+                ],
+                "routingRules": [
+                  {
+                    "name": "[variables('routingRuleName')]",
+                    "properties": {
+                      "frontendEndpoints": [
+                        {
+                          "id": "[resourceId('Microsoft.Network/frontDoors/frontEndEndpoints', parameters('frontDoorName'), variables('frontEndEndpointName'))]"
+                        }
+                      ],
+                      "acceptedProtocols": [
+                        "Http",
+                        "Https"
+                      ],
+                      "patternsToMatch": [
+                        "/*"
+                      ],
+                      "routeConfiguration": {
+                        "@odata.type": "#Microsoft.Azure.FrontDoor.Models.FrontdoorForwardingConfiguration",
+                        "forwardingProtocol": "MatchRequest",
+                        "backendPool": {
+                          "id": "[resourceId('Microsoft.Network/frontDoors/backEndPools', parameters('frontDoorName'), variables('backendPoolName'))]"
+                        }
+                      },
+                      "enabledState": "Enabled"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "outputs": {
