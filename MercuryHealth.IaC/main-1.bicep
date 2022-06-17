@@ -598,7 +598,7 @@ module frontdoormod './main-14-frontdoor.bicep' = {
   name: frontDoorName
   params: {
   //backendAddress: 'https://${webSiteName}.azurewebsites.net/'
-  backendAddress: 'https://${apiServiceName}.azure-api.net'
+  backendAddress: '${apiServiceName}.azure-api.net'
   frontDoorName: frontDoorName
   }
 }
