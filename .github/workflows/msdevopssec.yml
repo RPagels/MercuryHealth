@@ -1,9 +1,12 @@
 name: MSDO windows-latest
-on:
-  push:
-    branches:
-      - main
 
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+    
 jobs:
   sample:
     name: Microsoft Security DevOps Analysis
