@@ -40,7 +40,7 @@ var loadTestsName = 'loadtests-${uniqueString(resourceGroup().id)}'
 var keyvaultName = 'kv-${uniqueString(resourceGroup().id)}'
 var blobstorageName = 'stablob${uniqueString(resourceGroup().id)}'
 //var dashboardName = 'dashboard-${uniqueString(resourceGroup().id)}'
-var frontDoorName = 'fd${uniqueString(resourceGroup().id)}'
+var frontDoorName = 'fd-${uniqueString(resourceGroup().id)}'
 
 // Tags
 var defaultTags = {
@@ -598,11 +598,10 @@ module frontdoormod './main-14-frontdoor.bicep' = {
   name: frontDoorName
   params: {
   //backendAddress: 'https://${webSiteName}.azurewebsites.net/'
-  backendAddress: '${apiServiceName}.azure-api.net'
+  backendAddress: '${apiServiceName}.azure-api.net'  //
   frontDoorName: frontDoorName
   }
 }
-
 
 // Output Params used for IaC deployment in pipeline
 output out_webSiteName string = webSiteName

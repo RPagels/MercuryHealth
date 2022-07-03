@@ -41,6 +41,7 @@ jobs:
       output_apiServiceName: ${{ steps.Infra.outputs.out_apiServiceName }}
       output_webSiteName: ${{ steps.Infra.outputs.out_webSiteName }}
       output_functionAppName: ${{ steps.Infra.outputs.out_functionAppName }}
+      output_appInsightsName: ${{ steps.Infra.outputs.out_appInsightsName }}'
       output_sqlserverFQName: ${{ steps.Infra.outputs.out_sqlserverFQName }}
       output_releaseAnnotationGuidID: ${{ steps.Infra.outputs.out_releaseAnnotationGuidID }}
       output_appInsightsApplicationId: ${{ steps.Infra.outputs.out_appInsightsApplicationId }}
@@ -163,6 +164,7 @@ jobs:
          echo 'output_apiServiceName: ${{ steps.Infra.outputs.out_apiServiceName }}'
          echo 'output_webSiteName: ${{ steps.Infra.outputs.out_webSiteName }}'
          echo 'output_functionAppName: ${{ steps.Infra.outputs.out_functionAppName }}'
+         echo 'output_appInsightsName: ${{ steps.Infra.outputs.out_appInsightsName }}'
          echo 'output_sqlserverFQName: ${{ steps.Infra.outputs.out_sqlserverFQName }}'
          echo 'output_releaseAnnotationGuidID: ${{ steps.Infra.outputs.out_releaseAnnotationGuidID }}'
          echo 'output_appInsightsApplicationId: ${{ steps.Infra.outputs.out_appInsightsApplicationId }}'
@@ -222,6 +224,7 @@ jobs:
          echo 'output_loadTestsName: ${{ needs.deploy_infrastructure.outputs.output_loadTestsName }}'
          echo 'output_webSiteName: ${{ needs.deploy_infrastructure.outputs.output_webSiteName }}'
          echo 'output_functionAppName: ${{ needs.deploy_infrastructure.outputs.output_functionAppName }}'
+         echo 'output_appInsightsName: ${{ needs.deploy_infrastructure.outputs.output_appInsightsName }}'
          echo 'output_sqlserverFQName: ${{ needs.deploy_infrastructure.outputs.output_sqlserverFQName }}'
          echo 'output_releaseAnnotationGuidID: ${{ needs.deploy_infrastructure.outputs.output_releaseAnnotationGuidID }}'
          echo 'output_appInsightsApplicationId: ${{ needs.deploy_infrastructure.outputs.output_appInsightsApplicationId }}'
@@ -321,6 +324,21 @@ jobs:
     #  with:
     #    inlineScript: |
     #      az apim product api add --api-id 'mercury-health' --product-id 'development' --resource-group ${{ env.Azure_Resource_GroupName }} --service-name ${{ needs.deploy_infrastructure.outputs.output_apiServiceName }}
+    
+    # Create release annotations using Azure CLI
+    - name: Update Runsettings with Website URL
+      uses: Azure/powershell@v1
+      continue-on-error: true
+      env:
+        POWERSHELL_TELEMETRY_OPTOUT: 1
+      with:
+          inlineScript: .\CreateReleaseAnnotation.ps1 `
+              -aiResourceId "/subscriptions/{subscriptionId}/resourceGroups/{{$Azure_Resource_GroupName}/providers/microsoft.insights/components/{{ steps.Infra.outputs.out_appInsightsName }}" `
+              -releaseName "<releaseName>" `
+              -releaseProperties @{"ReleaseDescription"="<a description>"; "TriggerBy"="Randy Pagels" }
+          azPSVersion: 3.4.0
+          # Select the value of the ErrorActionPreference variable for executing the script. Options: stop, continue, silentlyContinue. Default is Stop.
+          errorActionPreference: continue
 
     #
     # TODO!!!  Removed this and replace using Azure CLI
