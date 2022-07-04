@@ -332,7 +332,7 @@ jobs:
       env:
         POWERSHELL_TELEMETRY_OPTOUT: 1
       with:
-          inlineScript: MercuryHealth.Web/CreateReleaseAnnotation.ps1 `
+          inlineScript: MercuryHealth.Website/CreateReleaseAnnotation.ps1 `
               -aiResourceId "/subscriptions/{subscriptionId}/resourceGroups/{{$Azure_Resource_GroupName}/providers/microsoft.insights/components/{{ steps.Infra.outputs.out_appInsightsName }}" `
               -releaseName "<releaseName>" `
               -releaseProperties @{"ReleaseDescription"="<a description>"; "TriggerBy"="Randy Pagels" }
