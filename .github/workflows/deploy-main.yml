@@ -99,6 +99,13 @@ jobs:
         with:
           name: MercuryHealth.Website
           path: ${{ github.workspace }}/MercuryHealth.Web/MercuryHealth.openapi.yaml
+
+      - name: Upload Build Artifacts-Create Release Annotation PS File
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: MercuryHealth.Website
+          path: ${{ github.workspace }}/MercuryHealth.Web/CreateReleaseAnnotation.ps1
           
       - name: Upload Build Artifacts-FunctionApp
         if: ${{ github.event_name != 'pull_request' }}

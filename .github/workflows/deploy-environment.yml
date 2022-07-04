@@ -41,7 +41,7 @@ jobs:
       output_apiServiceName: ${{ steps.Infra.outputs.out_apiServiceName }}
       output_webSiteName: ${{ steps.Infra.outputs.out_webSiteName }}
       output_functionAppName: ${{ steps.Infra.outputs.out_functionAppName }}
-      output_appInsightsName: ${{ steps.Infra.outputs.out_appInsightsName }}'
+      output_appInsightsName: ${{ steps.Infra.outputs.out_appInsightsName }}
       output_sqlserverFQName: ${{ steps.Infra.outputs.out_sqlserverFQName }}
       output_releaseAnnotationGuidID: ${{ steps.Infra.outputs.out_releaseAnnotationGuidID }}
       output_appInsightsApplicationId: ${{ steps.Infra.outputs.out_appInsightsApplicationId }}
@@ -325,14 +325,14 @@ jobs:
     #    inlineScript: |
     #      az apim product api add --api-id 'mercury-health' --product-id 'development' --resource-group ${{ env.Azure_Resource_GroupName }} --service-name ${{ needs.deploy_infrastructure.outputs.output_apiServiceName }}
     
-    # Create release annotations using Azure CLI
-    - name: Update Runsettings with Website URL
+    # Create release annotations using Azure CLI  - MIght try inlineScript: .\CreateReleaseAnnotation.ps1 `
+    - name: Create release annotation using Azure CLI
       uses: Azure/powershell@v1
       continue-on-error: true
       env:
         POWERSHELL_TELEMETRY_OPTOUT: 1
       with:
-          inlineScript: .\CreateReleaseAnnotation.ps1 `
+          inlineScript: MercuryHealth.Web/CreateReleaseAnnotation.ps1 `
               -aiResourceId "/subscriptions/{subscriptionId}/resourceGroups/{{$Azure_Resource_GroupName}/providers/microsoft.insights/components/{{ steps.Infra.outputs.out_appInsightsName }}" `
               -releaseName "<releaseName>" `
               -releaseProperties @{"ReleaseDescription"="<a description>"; "TriggerBy"="Randy Pagels" }
