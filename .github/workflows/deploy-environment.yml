@@ -332,9 +332,7 @@ jobs:
       env:
         POWERSHELL_TELEMETRY_OPTOUT: 1
       with:
-          inlineScript: MercuryHealth.Website/CreateReleaseAnnotation.ps1 `
-              -aiResourceId "/subscriptions/{subscriptionId}/resourceGroups/${{env.Azure_Resource_GroupName}}/providers/microsoft.insights/components/${{ steps.Infra.outputs.out_appInsightsName }}" `
-              -releaseName "<Release name goes here>" #`
+          inlineScript: MercuryHealth.Website/CreateReleaseAnnotation.ps1 -aiResourceId "/subscriptions/{subscriptionId}/resourceGroups/${{env.Azure_Resource_GroupName}}/providers/microsoft.insights/components/${{ steps.Infra.outputs.out_appInsightsName }}" -releaseName "${{ github.event_name }}"
               #-releaseProperties @{"ReleaseDescription"="<Description goes here>"; "TriggerBy"="<by Randy Pagels>" }
           azPSVersion: 3.4.0
           # Select the value of the ErrorActionPreference variable for executing the script. Options: stop, continue, silentlyContinue. Default is Stop.
