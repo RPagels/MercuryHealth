@@ -341,43 +341,43 @@ jobs:
     #
     # TODO!!!  Removed this and replace using Azure CLI (Above!)
     #             
-    #- name: 'Generate Temporary API Key For App Insights'
-    #  id: AIKeyGen
-    #  uses: Azure/CLI@v1
-    #  continue-on-error: true
-    #  with:
-    #    inlineScript: |
-    #      az config set extension.use_dynamic_install=yes_without_prompt
-    #      result=$(az monitor app-insights api-key create \
-    #                  --api-key ${{ needs.deploy_infrastructure.outputs.output_releaseAnnotationGuidID }} \
-    #                  --write-properties WriteAnnotations \
-    #                  -g ${{ env.Azure_Resource_GroupName }} \
-    #                  --app ${{ needs.deploy_infrastructure.outputs.output_appInsightsApplicationId }} \
-    #                  --query "apiKey" --output tsv)
-    #      echo "::set-output name=aiKey::$result"
+    - name: 'Generate Temporary API Key For App Insights'
+      id: AIKeyGen
+      uses: Azure/CLI@v1
+      continue-on-error: true
+      with:
+        inlineScript: |
+          az config set extension.use_dynamic_install=yes_without_prompt
+          result=$(az monitor app-insights api-key create \
+                      --api-key ${{ needs.deploy_infrastructure.outputs.output_releaseAnnotationGuidID }} \
+                      --write-properties WriteAnnotations \
+                      -g ${{ env.Azure_Resource_GroupName }} \
+                      --app ${{ needs.deploy_infrastructure.outputs.output_appInsightsApplicationId }} \
+                      --query "apiKey" --output tsv)
+          echo "::set-output name=aiKey::$result"
 
     # Todo! Replace this code with Azure CLI
-    #- name: 'Annotate Deployment'
-    #  uses: wictorwilen/application-insights-action@v1
-    #  continue-on-error: true
-    #  id: annotation
-    #  with:
-    #    applicationId: ${{ needs.deploy_infrastructure.outputs.output_appInsightsAPIApplicationId }}
-    #    apiKey: ${{ steps.AIKeyGen.outputs.aiKey }}
-    #    releaseName: ${{ github.event_name }}
-    #    message: ${{ github.event.head_commit.message }}
-    #    actor: ${{ github.actor }}
+    - name: 'Annotate Deployment'
+      uses: wictorwilen/application-insights-action@v1
+      continue-on-error: true
+      id: annotation
+      with:
+        applicationId: ${{ needs.deploy_infrastructure.outputs.output_appInsightsAPIApplicationId }}
+        apiKey: ${{ steps.AIKeyGen.outputs.aiKey }}
+        releaseName: ${{ github.event_name }}
+        message: ${{ github.event.head_commit.message }}
+        actor: ${{ github.actor }}
 
-    #- name: Remove Temporary API Key For App Insights
-    #  uses: Azure/CLI@v1
-    #  continue-on-error: true
-    #  with:
-    #    inlineScript: |
-    #      az config set extension.use_dynamic_install=yes_without_prompt
-    #      az monitor app-insights api-key delete \
-    #                  --api-key ${{ needs.deploy_infrastructure.outputs.output_releaseAnnotationGuidID }} \
-    #                  -g ${{ env.Azure_Resource_GroupName }} \
-    #                  --app ${{ needs.deploy_infrastructure.outputs.output_appInsightsApplicationId }} 
+    - name: Remove Temporary API Key For App Insights
+      uses: Azure/CLI@v1
+      continue-on-error: true
+      with:
+        inlineScript: |
+          az config set extension.use_dynamic_install=yes_without_prompt
+          az monitor app-insights api-key delete \
+                      --api-key ${{ needs.deploy_infrastructure.outputs.output_releaseAnnotationGuidID }} \
+                      -g ${{ env.Azure_Resource_GroupName }} \
+                      --app ${{ needs.deploy_infrastructure.outputs.output_appInsightsApplicationId }} 
 
     - name: Ensure Resource Group is Locked
       if: contains(github.event_name, 'push')
