@@ -528,12 +528,28 @@ namespace MercuryHealth.UITests
             await using var browser = await playwright.Chromium.LaunchAsync();
             var page = await browser.NewPageAsync();
             page.SetDefaultTimeout(myDefaultTimeout);
+            await page.GotoAsync("https://www.bing.com/");
+
+            myPageTitle = await page.TitleAsync();
+            //Assert.AreEqual(true, myPageTitle.Contains("Bing"), myPageTitle);
+            Assert.AreEqual(true, myPageTitle.Contains("Bing"));
+
+        }
+        [Test]
+        [Category("Playwright_Tests_Chromium")]
+        public async Task Verify_MicrosoftOnChromium()
+        {
+            using var playwright = await Playwright.CreateAsync();
+            await using var browser = await playwright.Chromium.LaunchAsync();
+            var page = await browser.NewPageAsync();
+            page.SetDefaultTimeout(myDefaultTimeout);
             await page.GotoAsync("https://www.microsoft.com/");
 
             myPageTitle = await page.TitleAsync();
-            Assert.AreEqual(true, myPageTitle.Contains("Microsoft - Cloud, Computers, Apps & Gaming"), myPageTitle);
+            //Assert.AreEqual(true, myPageTitle.Contains("Microsoft"), myPageTitle);
+            Assert.AreEqual(true, myPageTitle.Contains("Microsoft"));
 
-         }
+        }
 
         [Test]
         [Category("Playwright_Tests_Chromium")]
