@@ -528,10 +528,10 @@ namespace MercuryHealth.UITests
             await using var browser = await playwright.Chromium.LaunchAsync();
             var page = await browser.NewPageAsync();
             page.SetDefaultTimeout(myDefaultTimeout);
-            await page.GotoAsync("https://www.bing.com");
+            await page.GotoAsync("https://www.microsoft.com/");
 
             myPageTitle = await page.TitleAsync();
-            Assert.AreEqual("Bing", myPageTitle);
+            Assert.AreEqual(true, myPageTitle.Contains("Microsoft - Cloud, Computers, Apps & Gaming"), myPageTitle);
 
          }
 
