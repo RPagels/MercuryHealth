@@ -470,7 +470,7 @@ jobs:
           errorActionPreference: continue
 
       - name: Playwright Tests all on Browsers
-        continue-on-error: false
+        continue-on-error: true #false
         run: |
          dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }}
          dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './MercuryHealth.UITests'
