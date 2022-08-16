@@ -531,8 +531,8 @@ namespace MercuryHealth.UITests
             await page.GotoAsync("https://www.bing.com/");
 
             myPageTitle = await page.TitleAsync();
-            //Assert.AreEqual(true, "Search", myPageTitle);
-            Assert.AreEqual(true, myPageTitle.Contains("Search"));
+            Assert.AreEqual(true, "Search", myPageTitle);
+            //Assert.AreEqual(true, myPageTitle.Contains("Search"));
 
         }
         [Test]
