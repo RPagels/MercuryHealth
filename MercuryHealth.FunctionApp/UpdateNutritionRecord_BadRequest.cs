@@ -48,7 +48,7 @@ public class UpdateNutritionRecord_BadRequest
             //JsonSerializer.Serialize(DateTime.Now);
 
             //string payLoad = "{\"id\":25,\"description\":\"string\",\"quantity\":0,\"mealTime\":\"2022-04-04T00:00:00\",\"tags\":\"string\",\"calories\":\"X\",\"proteinInGrams\":0,\"fatInGrams\":0,\"carbohydratesInGrams\":0,\"sodiumInGrams\":0,\"color\":\"string\"}";
-            string payLoad = "{\"id\":25,\"description\":\"Banana\",\"quantity\":1,\"mealTime\":payLoadDateTime,\"tags\":\"API PUT Update\",\"calories\":\"O\",\"proteinInGrams\":1.3,\"fatInGrams\":0.4,\"carbohydratesInGrams\":0.12,\"sodiumInGrams\":1.20,\"color\":\"Yellow\"}";
+            string payLoad = "{\"id\":25,\"description\":\"Banana\",\"quantity\":1,\"mealTime\":payLoadDateTime,\"tags\":\"API Update\",\"calories\":\"O\",\"proteinInGrams\":1.3,\"fatInGrams\":0.4,\"carbohydratesInGrams\":0.12,\"sodiumInGrams\":1.20,\"color\":\"Yellow\"}";
 
             // Deserialize JSON Object to Nutrition record
             //nutrition = Newtonsoft.Json.JsonConvert.DeserializeObject<Nutrition>(responseBody);
@@ -79,7 +79,7 @@ public class UpdateNutritionRecord_BadRequest
             }
 
             // Application Insights - Track Events
-            telemetry.TrackEvent("TrackEvent-Nutrition API PUT Update 25 - Banana");
+            telemetry.TrackEvent("TrackEvent-Nutrition API Update 25 - Banana");
 
         }
         catch (Exception)

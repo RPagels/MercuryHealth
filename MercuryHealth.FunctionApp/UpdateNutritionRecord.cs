@@ -57,7 +57,7 @@ public class UpdateNutritionRecord
             nutrition = Newtonsoft.Json.JsonConvert.DeserializeObject<Nutrition>(responseBody);
 
             // Update a fields
-            nutrition.Tags = "API PUT Update";
+            nutrition.Tags = "API Update";
             //nutrition.ProteinInGrams = Convert.ToDecimal("0.1234567890");
             //nutrition.ProteinInGrams = Convert.ToDecimal("0.123");
             nutrition.Calories = 110;
@@ -84,7 +84,7 @@ public class UpdateNutritionRecord
             }
 
             // Application Insights - Track Events
-            telemetry.TrackEvent("TrackEvent-Nutrition API PUT Update " + nutrition.Id.ToString() + " " + nutrition.Description);
+            telemetry.TrackEvent("TrackEvent-Nutrition API Update " + nutrition.Id.ToString() + " " + nutrition.Description);
 
         }
         catch (Exception)
