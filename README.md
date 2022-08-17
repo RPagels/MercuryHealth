@@ -7,7 +7,9 @@ TThe mission of Mercury Health is to help improve longevity and quality of life 
 [![CodeQL](https://github.com/RPagels/MercuryHealth/actions/workflows/codeql-analysis.yml/badge.svg?branch=master)](https://github.com/RPagels/MercuryHealth/actions/workflows/codeql-analysis.yml)
 
 ## Build & Deploy Status
-[![Deploy-Main](https://github.com/RPagels/MercuryHealth/actions/workflows/deploy-main.yml/badge.svg?branch=master)](https://github.com/RPagels/MercuryHealth/actions/workflows/deploy-main.yml) 
+[![Deploy-Main](https://github.com/RPagels/MercuryHealth/actions/workflows/deploy-main.yml/badge.svg)](https://github.com/RPagels/MercuryHealth/actions/workflows/deploy-main.yml)
+[![Deploy-Main-Single](https://github.com/RPagels/MercuryHealth/actions/workflows/deploy-main-single.yml/badge.svg)](https://github.com/RPagels/MercuryHealth/actions/workflows/deploy-main-single.yml)
+
 [![Build_And_Deploy_To_Azure](https://github.com/RPagels/MercuryHealth/actions/workflows/Build_And_Deploy_To_Azure.yml/badge.svg?branch=master)](https://github.com/RPagels/MercuryHealth/actions/workflows/Build_And_Deploy_To_Azure.yml)
 
 ## Overview of DevOps
