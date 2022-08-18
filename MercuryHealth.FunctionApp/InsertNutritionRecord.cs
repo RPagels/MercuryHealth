@@ -16,7 +16,7 @@ public class InsertNutritionRecord
     private static string ApimWebServiceURL = Environment.GetEnvironmentVariable("ApimWebServiceURL");
 
     [FunctionName("InsertNutritionRecord")]
-    public async Task RunAsync([TimerTrigger("0 0 */2 * * *")] TimerInfo myTimer, ILogger log)
+    public async Task RunAsync([TimerTrigger("0 0 */6 * * *")] TimerInfo myTimer, ILogger log)
     {
         // Time Trigger Cheat Sheet: https://codehollow.com/2017/02/azure-functions-time-trigger-cron-cheat-sheet/
         // 0 * * * * *	    every minute

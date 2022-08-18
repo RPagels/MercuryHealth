@@ -102,12 +102,12 @@ jobs:
         name: MercuryHealth.IaC
         path: ${{ github.workspace }}/MercuryHealth.IaC
 
-    - name: Install Bicep
-      run: |
-        curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
-        chmod +x ./bicep
-        sudo mv ./bicep /usr/local/bin/bicep
-        bicep --version
+    #- name: Install Bicep
+    #  run: |
+    #    curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
+    #    chmod +x ./bicep
+    #    sudo mv ./bicep /usr/local/bin/bicep
+    #    bicep --version
 
     - name: Purge soft-deleted instance of APIM, List them
       #if: contains(github.event_name, 'push')

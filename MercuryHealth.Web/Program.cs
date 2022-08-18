@@ -7,6 +7,7 @@ using MercuryHealth.Web.Controllers;
 using Azure.Identity;
 using System.Configuration;
 using Microsoft.OpenApi.Models;
+using Microsoft.ApplicationInsights.Extensibility;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,12 @@ builder.Host.ConfigureAppConfiguration(builder =>
         services.AddControllersWithViews();
 });
 
+//builder.Services.Configure<ForwardedHeadersOptions>(options =>
+//{
+//    options.KnownProxies.Add(IPAddress)
+//})
+
+
 // Add services to the container.
 builder.Services.AddFeatureManagement(); 
 builder.Services.Configure<PageSettings>(builder.Configuration.GetSection("App:Settings"));
@@ -59,11 +66,8 @@ builder.Services.AddHealthChecks()
     .AddCheck<MyAppHealthCheck>("Sample")
     .AddDbContextCheck<MercuryHealthWebContext>();
 
-// Add services to the container.
-//builder.Services.AddRazorPages();
-
-// Add MVC views and Controller services to the container.
-//builder.Services.AddControllersWithViews();
+//builder.Services.AddSingleton<ITelemetryInitializer, CloneIPAddress>();
+//builder.Services.AddSingleton<ITelemetryInitializer, AddAppVersion>();
 
 // Add Azure Application Insights services to the container
 builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
@@ -91,6 +95,13 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+// NEW - IP Address
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor |
+    Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor
+});
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

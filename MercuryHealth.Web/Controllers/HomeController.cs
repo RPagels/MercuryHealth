@@ -5,6 +5,7 @@ using Microsoft.FeatureManagement;
 using Microsoft.FeatureManagement.Mvc;
 using System.Diagnostics;
 using Microsoft.Extensions.Options;
+using System.Net;
 
 namespace MercuryHealth.Web.Controllers;
 
@@ -32,6 +33,8 @@ public class HomeController : Controller
 
         // Save App Service Configuration Settings
         ViewData["myenvironment"] = _configuration["deployedenvironment"];
+
+        //IPAddress remoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress;
 
         List<AccessLogs> ObjAccessLogs = new List<AccessLogs>();
 
