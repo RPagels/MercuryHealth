@@ -1,8 +1,8 @@
 version: v0.1
-testName: Home_Page_Tests
+testName: 'Mercury Health API Tests'
 testPlan: LoadTest_HomePage.jmx
 description: Load test website home page
-engineInstances: 2
+engineInstances: 1
 configurationFiles:
   - 'SampleData-Nutrition.csv'
 failureCriteria:
