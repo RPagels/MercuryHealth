@@ -8,7 +8,7 @@
       <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
         <collectionProp name="Arguments.arguments"/>
-		    <elementProp name="appToken" elementType="Argument">
+		    <elementProp name="appToken1" elementType="Argument">
             <stringProp name="Argument.name">udv_webapp</stringProp>
             <stringProp name="Argument.value">${__BeanShell( System.getenv("webapp") )}</stringProp>
             <stringProp name="Argument.desc">Web app URL</stringProp>
@@ -17,18 +17,18 @@
       </elementProp>
       <stringProp name="TestPlan.user_define_classpath"></stringProp>
     </TestPlan>
-    <!-- <hashTree>
+    <hashTree>
       <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
         <collectionProp name="Arguments.arguments">
-          <elementProp name="appToken" elementType="Argument">
-            <stringProp name="Argument.name">appToken</stringProp>
-            <stringProp name="Argument.value">${__GetSecret(appToken)}</stringProp>
+          <elementProp name="appToken2" elementType="Argument">
+            <stringProp name="Argument.name">appToken2</stringProp>
+            <stringProp name="Argument.value">${__GetSecret(appToken2)}</stringProp>
             <stringProp name="Argument.desc">Value for x-secret header </stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
       </Arguments>
-      <hashTree/> -->
+      <hashTree/>
       <kg.apc.jmeter.threads.UltimateThreadGroup guiclass="kg.apc.jmeter.threads.UltimateThreadGroupGui" testclass="kg.apc.jmeter.threads.UltimateThreadGroup" testname="jp@gc - Ultimate Thread Group" enabled="true">
         <collectionProp name="ultimatethreadgroupdata">
           <collectionProp name="1400604752">
@@ -50,7 +50,7 @@
           <collectionProp name="HeaderManager.headers">
             <elementProp name="" elementType="Header">
               <stringProp name="Header.name">x-secret</stringProp>
-              <stringProp name="Header.value">${appToken}</stringProp>
+              <stringProp name="Header.value">${appToken2}</stringProp>
             </elementProp>
           </collectionProp>
         </HeaderManager>
@@ -97,7 +97,7 @@
           <collectionProp name="HeaderManager.headers">
             <elementProp name="" elementType="Header">
               <stringProp name="Header.name">x-secret</stringProp>
-              <stringProp name="Header.value">${appToken}</stringProp>
+              <stringProp name="Header.value">${appToken2}</stringProp>
             </elementProp>
           </collectionProp>
         </HeaderManager>
@@ -151,7 +151,7 @@
           <collectionProp name="HeaderManager.headers">
             <elementProp name="" elementType="Header">
               <stringProp name="Header.name">x-secret</stringProp>
-              <stringProp name="Header.value">${appToken}</stringProp>
+              <stringProp name="Header.value">${appToken2}</stringProp>
             </elementProp>
           </collectionProp>
         </HeaderManager>

@@ -1,5 +1,5 @@
 version: v0.1
-testName: Mercury Health API Tests
+testName: MercuryHealth_API_Tests
 testPlan: LoadTest_HomePage.jmx
 description: Load test website home page
 engineInstances: 1
