@@ -1,5 +1,5 @@
 version: v0.1
-testName: 'Mercury Health API Tests'
+testName: Mercury Health API Tests
 testPlan: LoadTest_HomePage.jmx
 description: Load test website home page
 engineInstances: 1
@@ -12,6 +12,8 @@ failureCriteria:
 #  - name: my-variable
 #    value: my-value
 #secrets:
-#  - name: my-secret
-#    value: https://MercuryHealth.vault.azure.net/secrets/MySecret
+#  - name: my-secret-ClientId
+#    value: https://kv-fq3ruuhxgjony.vault.azure.net/secrets/ClientId/f1526569a9524945a3632247f4fa862c
+#  - name: my-secret-SubscriptionKey
+#    value: https://kv-fq3ruuhxgjony.vault.azure.net/secrets/SubscriptionKey/f1526569a9524945a3632247f4fa862c
 #
