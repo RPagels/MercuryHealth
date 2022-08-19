@@ -558,6 +558,10 @@ jobs:
                 "name": "webapp",
                 "value": "${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net"
               }
+              {
+                "name": "appToken",
+                "value": "12345678"
+              }
             ]
 
       - name: 'Upload Load Test Results'
