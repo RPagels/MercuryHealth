@@ -8,21 +8,19 @@
       <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
         <collectionProp name="Arguments.arguments"/>
-		    <elementProp name="appToken1" elementType="Argument">
-            <stringProp name="Argument.name">udv_webapp</stringProp>
-            <stringProp name="Argument.value">${__BeanShell( System.getenv("webapp") )}</stringProp>
-            <stringProp name="Argument.desc">Web app URL</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-          </elementProp>
+		<stringProp name="Argument.name">udv_webapp</stringProp>
+		<stringProp name="Argument.value">${__BeanShell( System.getenv("webapp") )}</stringProp>
+		<stringProp name="Argument.desc">Web app URL</stringProp>
+		<stringProp name="Argument.metadata">=</stringProp>		
       </elementProp>
       <stringProp name="TestPlan.user_define_classpath"></stringProp>
     </TestPlan>
     <hashTree>
       <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
         <collectionProp name="Arguments.arguments">
-          <elementProp name="appToken2" elementType="Argument">
-            <stringProp name="Argument.name">appToken2</stringProp>
-            <stringProp name="Argument.value">${__GetSecret(appToken2)}</stringProp>
+          <elementProp name="appToken" elementType="Argument">
+            <stringProp name="Argument.name">appToken</stringProp>
+            <stringProp name="Argument.value">${__GetSecret(appToken)}</stringProp>
             <stringProp name="Argument.desc">Value for x-secret header </stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
@@ -32,7 +30,7 @@
       <kg.apc.jmeter.threads.UltimateThreadGroup guiclass="kg.apc.jmeter.threads.UltimateThreadGroupGui" testclass="kg.apc.jmeter.threads.UltimateThreadGroup" testname="jp@gc - Ultimate Thread Group" enabled="true">
         <collectionProp name="ultimatethreadgroupdata">
           <collectionProp name="1400604752">
-            <stringProp name="1567">5</stringProp>
+            <stringProp name="1567">10</stringProp>
             <stringProp name="0">0</stringProp>
             <stringProp name="48873">180</stringProp>
             <stringProp name="49710">240</stringProp>
@@ -50,7 +48,7 @@
           <collectionProp name="HeaderManager.headers">
             <elementProp name="" elementType="Header">
               <stringProp name="Header.name">x-secret</stringProp>
-              <stringProp name="Header.value">${appToken2}</stringProp>
+              <stringProp name="Header.value">${appToken}</stringProp>
             </elementProp>
           </collectionProp>
         </HeaderManager>
@@ -79,7 +77,7 @@
       <kg.apc.jmeter.threads.UltimateThreadGroup guiclass="kg.apc.jmeter.threads.UltimateThreadGroupGui" testclass="kg.apc.jmeter.threads.UltimateThreadGroup" testname="jp@gc - Ultimate Thread Group" enabled="true">
         <collectionProp name="ultimatethreadgroupdata">
           <collectionProp name="1400604752">
-            <stringProp name="1567">5</stringProp>
+            <stringProp name="1567">10</stringProp>
             <stringProp name="0">0</stringProp>
             <stringProp name="48873">180</stringProp>
             <stringProp name="49710">240</stringProp>
@@ -97,7 +95,7 @@
           <collectionProp name="HeaderManager.headers">
             <elementProp name="" elementType="Header">
               <stringProp name="Header.name">x-secret</stringProp>
-              <stringProp name="Header.value">${appToken2}</stringProp>
+              <stringProp name="Header.value">${appToken}</stringProp>
             </elementProp>
           </collectionProp>
         </HeaderManager>
@@ -133,7 +131,7 @@
       <kg.apc.jmeter.threads.UltimateThreadGroup guiclass="kg.apc.jmeter.threads.UltimateThreadGroupGui" testclass="kg.apc.jmeter.threads.UltimateThreadGroup" testname="jp@gc - Ultimate Thread Group" enabled="true">
         <collectionProp name="ultimatethreadgroupdata">
           <collectionProp name="1400604752">
-            <stringProp name="1567">5</stringProp>
+            <stringProp name="1567">10</stringProp>
             <stringProp name="0">0</stringProp>
             <stringProp name="48873">180</stringProp>
             <stringProp name="49710">240</stringProp>
@@ -151,7 +149,7 @@
           <collectionProp name="HeaderManager.headers">
             <elementProp name="" elementType="Header">
               <stringProp name="Header.name">x-secret</stringProp>
-              <stringProp name="Header.value">${appToken2}</stringProp>
+              <stringProp name="Header.value">${appToken}</stringProp>
             </elementProp>
           </collectionProp>
         </HeaderManager>
