@@ -536,6 +536,14 @@ jobs:
 #            #!/bin/bash
 #            az role assignment create --assignee "rpagels@microsoft.com" --role "Load Test Contributor" --resource-group ${{ env.Azure_Resource_GroupName }}
 
+    #secrets: |
+    #    [
+    #        {
+    #        "name": "appToken",
+    #        "value": "${{ secrets.MY_SECRET }}"
+    #        }
+    #    ]
+
       # Extremely Important!!! - Do not use end slash for webHost value. "/"
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
@@ -551,13 +559,6 @@ jobs:
                 "value": "${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net"
               }
             ]
-            #secrets: |
-            #    [
-            #        {
-            #        "name": "appToken",
-            #        "value": "${{ secrets.MY_SECRET }}"
-            #        }
-            #    ]
 
       - name: 'Upload Load Test Results'
         uses: actions/upload-artifact@v2
