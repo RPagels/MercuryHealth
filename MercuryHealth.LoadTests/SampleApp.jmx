@@ -8,7 +8,7 @@
 			<boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
 			<elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
 				<collectionProp name="Arguments.arguments"/>
-				<stringProp name="Argument.name">webapp</stringProp>
+				<stringProp name="Argument.name">udv_webapp</stringProp>
 				<stringProp name="Argument.value">${__BeanShell( System.getenv("webapp") )}</stringProp>
 				<stringProp name="Argument.desc">Web App URL</stringProp>
 				<stringProp name="Argument.metadata">=</stringProp>
@@ -37,7 +37,7 @@
 					<elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
 						<collectionProp name="Arguments.arguments"/>
 					</elementProp>
-					<stringProp name="HTTPSampler.domain">${webapp}</stringProp>
+					<stringProp name="HTTPSampler.domain">${udv_webapp}</stringProp>
 					<stringProp name="HTTPSampler.port"></stringProp>
 					<stringProp name="HTTPSampler.protocol">https</stringProp>
 					<stringProp name="HTTPSampler.contentEncoding"></stringProp>
@@ -82,7 +82,7 @@
 							</elementProp>
 						</collectionProp>
 					</elementProp>
-					<stringProp name="HTTPSampler.domain">${webapp}</stringProp>
+					<stringProp name="HTTPSampler.domain">${udv_webapp}</stringProp>
 					<stringProp name="HTTPSampler.port"></stringProp>
 					<stringProp name="HTTPSampler.protocol">https</stringProp>
 					<stringProp name="HTTPSampler.contentEncoding"></stringProp>
@@ -120,7 +120,7 @@
 					<elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
 						<collectionProp name="Arguments.arguments"/>
 					</elementProp>
-					<stringProp name="HTTPSampler.domain">${webapp}</stringProp>
+					<stringProp name="HTTPSampler.domain">${udv_webapp}</stringProp>
 					<stringProp name="HTTPSampler.port"></stringProp>
 					<stringProp name="HTTPSampler.protocol">https</stringProp>
 					<stringProp name="HTTPSampler.contentEncoding"></stringProp>
