@@ -481,6 +481,7 @@ jobs:
       - name: DEBUG ONLY Display Output Variables
         run: |
            echo 'output_loadTestsName: ${{ needs.deploy_infrastructure.outputs.output_loadTestsName }}'
+           echo 'env:webapp: ${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net'
            
       # Download Artifacts under $GITHUB_WORKSPACE, so your job can access it
       - name: 'Download Build Artifacts-Load Tests'
@@ -504,12 +505,14 @@ jobs:
 #            #!/bin/bash
 #            az role assignment create --assignee "rpagels@microsoft.com" --role "Load Test Contributor" --resource-group ${{ env.Azure_Resource_GroupName }}
 
+# loadTestConfigFile: './MercuryHealth.LoadTests/LoadTest_HomePage_Config.yaml'
+
       # Extremely Important. Do not use end slash for webHost value. "/"
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
         continue-on-error: true
         with:
-          loadTestConfigFile: './MercuryHealth.LoadTests/LoadTest_HomePage_Config.yaml'
+          loadTestConfigFile: './MercuryHealth.LoadTests/SampleApp.yaml'
           loadTestResource: ${{needs.deploy_infrastructure.outputs.output_loadTestsName}}
           resourceGroup: ${{ env.Azure_Resource_GroupName }}
           env: |
@@ -519,13 +522,13 @@ jobs:
                 "value": "${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net"
               }
             ]
-          #secrets: |
-          #  [
-          #    {
-          #      "name": "appToken",
-          #      "value": "12345678"
-          #    }
-          #  ]
+          secrets: |
+            [
+              {
+                "name": "appToken",
+                "value": "12345678"
+              }
+            ]
 
       - name: 'Upload Load Test Results'
         uses: actions/upload-artifact@v2
