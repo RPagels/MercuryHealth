@@ -1,6 +1,6 @@
 version: v0.1
 testName: SampleAppTest
-testPlan: SampleAppTest.jmx
+testPlan: SampleApp.jmx
 description: SampleAppTest website home page
 engineInstances: 1
 configurationFiles:
