@@ -29,7 +29,7 @@
 				<collectionProp name="ultimatethreadgroupdata">
 					<collectionProp name="1400604752">
 						<stringProp name="1567">10</stringProp>
-						<stringProp name="0">0</stringProp>
+						<stringProp name="0">10</stringProp>
 						<stringProp name="48873">180</stringProp>
 						<stringProp name="49710">240</stringProp>
 						<stringProp name="10">10</stringProp>
@@ -41,27 +41,7 @@
 				</elementProp>
 				<stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
 			</kg.apc.jmeter.threads.UltimateThreadGroup>-->
-			<kg.apc.jmeter.threads.SteppingThreadGroup guiclass="kg.apc.jmeter.threads.SteppingThreadGroupGui" testclass="kg.apc.jmeter.threads.SteppingThreadGroup" testname="jp@gc - Stepping Thread Group 2" enabled="true">
-				<stringProp name="TestPlan.comments">
-					This thread group set to wait some time before starting any threads,
-					then start threads with few steps,
-					then stop threads with 10x5 steps
-				</stringProp>
-				<stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
-				<stringProp name="ThreadGroup.num_threads">35</stringProp>
-				<stringProp name="Threads initial delay">15</stringProp>
-				<stringProp name="Start users count">10</stringProp>
-				<stringProp name="Start users period">2</stringProp>
-				<stringProp name="Stop users count">10</stringProp>
-				<stringProp name="Stop users period">5</stringProp>
-				<stringProp name="flighttime">30</stringProp>
-				<elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
-					<boolProp name="LoopController.continue_forever">false</boolProp>
-					<intProp name="LoopController.loops">-1</intProp>
-				</elementProp>
-				<stringProp name="rampUp">1</stringProp>
-			</kg.apc.jmeter.threads.SteppingThreadGroup>			
-			<!--<ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Web endpoint test" enabled="true">
+			<ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Web endpoint test" enabled="true">
 				<stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
 				<elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
 					<boolProp name="LoopController.continue_forever">false</boolProp>
@@ -73,7 +53,7 @@
 				<stringProp name="ThreadGroup.duration">120</stringProp>
 				<stringProp name="ThreadGroup.delay">5</stringProp>
 				<boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
-			</ThreadGroup>-->
+			</ThreadGroup>
 			<hashTree>
 				<HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Nutritions" enabled="true">
 					<elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
@@ -96,11 +76,11 @@
 				</HTTPSamplerProxy>
 			<hashTree/>
 			</hashTree>
-			<kg.apc.jmeter.threads.UltimateThreadGroup guiclass="kg.apc.jmeter.threads.UltimateThreadGroupGui" testclass="kg.apc.jmeter.threads.UltimateThreadGroup" testname="jp@gc - Ultimate Thread Group" enabled="true">
+			<!--<kg.apc.jmeter.threads.UltimateThreadGroup guiclass="kg.apc.jmeter.threads.UltimateThreadGroupGui" testclass="kg.apc.jmeter.threads.UltimateThreadGroup" testname="jp@gc - Ultimate Thread Group" enabled="true">
 				<collectionProp name="ultimatethreadgroupdata">
 					<collectionProp name="1400604752">
 						<stringProp name="1567">10</stringProp>
-						<stringProp name="0">0</stringProp>
+						<stringProp name="0">10</stringProp>
 						<stringProp name="48873">180</stringProp>
 						<stringProp name="49710">240</stringProp>
 						<stringProp name="10">10</stringProp>
@@ -111,8 +91,8 @@
 					<intProp name="LoopController.loops">-1</intProp>
 				</elementProp>
 				<stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
-			</kg.apc.jmeter.threads.UltimateThreadGroup>
-			<!--<ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Web endpoint test" enabled="true">
+			</kg.apc.jmeter.threads.UltimateThreadGroup>-->
+			<ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Web endpoint test" enabled="true">
 				<stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
 				<elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
 					<boolProp name="LoopController.continue_forever">false</boolProp>
@@ -124,7 +104,7 @@
 				<stringProp name="ThreadGroup.duration">120</stringProp>
 				<stringProp name="ThreadGroup.delay">5</stringProp>
 				<boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
-			</ThreadGroup>-->
+			</ThreadGroup>
 			<hashTree>
 				<HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Exercises" enabled="true">
 					<boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
@@ -154,11 +134,11 @@
 				</HTTPSamplerProxy>
 				<hashTree/>
 			</hashTree>
-			<kg.apc.jmeter.threads.UltimateThreadGroup guiclass="kg.apc.jmeter.threads.UltimateThreadGroupGui" testclass="kg.apc.jmeter.threads.UltimateThreadGroup" testname="jp@gc - Ultimate Thread Group" enabled="true">
+			<!--<kg.apc.jmeter.threads.UltimateThreadGroup guiclass="kg.apc.jmeter.threads.UltimateThreadGroupGui" testclass="kg.apc.jmeter.threads.UltimateThreadGroup" testname="jp@gc - Ultimate Thread Group" enabled="true">
 				<collectionProp name="ultimatethreadgroupdata">
 					<collectionProp name="1400604752">
 						<stringProp name="1567">10</stringProp>
-						<stringProp name="0">0</stringProp>
+						<stringProp name="0">10</stringProp>
 						<stringProp name="48873">180</stringProp>
 						<stringProp name="49710">240</stringProp>
 						<stringProp name="10">10</stringProp>
@@ -169,8 +149,8 @@
 					<intProp name="LoopController.loops">-1</intProp>
 				</elementProp>
 				<stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
-			</kg.apc.jmeter.threads.UltimateThreadGroup>
-			<!--<ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Web endpoint test" enabled="true">
+			</kg.apc.jmeter.threads.UltimateThreadGroup>-->
+			<ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Web endpoint test" enabled="true">
 				<stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
 				<elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
 					<boolProp name="LoopController.continue_forever">false</boolProp>
@@ -186,7 +166,7 @@
 				<stringProp name="Stop users count">25</stringProp>
 				<stringProp name="Stop users period">5</stringProp>
 				<boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
-			</ThreadGroup>-->
+			</ThreadGroup>
 			<hashTree>
 				<HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="AccessLogs" enabled="true">
 					<elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
