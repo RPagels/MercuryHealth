@@ -105,7 +105,7 @@
 							</elementProp>
 						</collectionProp>
 					</elementProp>
-					<stringProp name="HTTPSampler.domain">${udv_webapp2}</stringProp>
+					<stringProp name="HTTPSampler.domain">${udv_webapp}</stringProp>
 					<stringProp name="HTTPSampler.port"></stringProp>
 					<stringProp name="HTTPSampler.protocol">https</stringProp>
 					<stringProp name="HTTPSampler.contentEncoding"></stringProp>
