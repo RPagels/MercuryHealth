@@ -493,13 +493,13 @@ jobs:
           retention-days: 30
           
 ##################################################################
-# CD Stage - Load and Performance Testing >>> Home Page          #
+# CD Stage - Load and Performance Testing >>> Load Test APIs     #
 ##################################################################
   LoadTesting_Stage_Application_Home:
     # Identify any jobs that must complete successfully before this job will run.
     runs-on: ubuntu-latest
     if: contains(github.event_name, 'push')
-    name: 'Azure Load Testing APIs'   
+    name: 'Load Test APIs'   
     env:
       Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
            
@@ -535,14 +535,6 @@ jobs:
 #          inlineScript: |
 #            #!/bin/bash
 #            az role assignment create --assignee "rpagels@microsoft.com" --role "Load Test Contributor" --resource-group ${{ env.Azure_Resource_GroupName }}
-
-    #secrets: |
-    #    [
-    #        {
-    #        "name": "appToken",
-    #        "value": "${{ secrets.MY_SECRET }}"
-    #        }
-    #    ]
 
       # Extremely Important!!! - Do not use end slash for webHost value. "/"
       - name: 'Azure Load Testing'
@@ -580,128 +572,83 @@ jobs:
           az logout
 
 ##################################################################
-# CD Stage - Load and Performance Testing >>> Nutrition Page     #
+# CD Stage - Load and Performance Testing >>> Load Test Web      #
 ##################################################################
-  #LoadTesting_Stage_Application_Nutrition:
-  #  # Identify any jobs that must complete successfully before this job will run.
-  #  runs-on: ubuntu-latest
-  #  if: contains(github.event_name, 'push')
-  #  name: 'Load Test Nutrition'   
-  #  env:
-  #    Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
+  LoadTesting_Stage_Application_Home:
+    # Identify any jobs that must complete successfully before this job will run.
+    runs-on: ubuntu-latest
+    if: contains(github.event_name, 'push')
+    name: 'Load Test Web'   
+    env:
+      Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
            
-  #  # Identify any jobs that must complete successfully before this job will run.
-  #  needs: [deploy_infrastructure, deploy_application, UITesting_Stage_Application]
-  #  steps:
-  #    - name: 'Checkout GitHub Actions'
-  #      uses: actions/checkout@v2
+    # Identify any jobs that must complete successfully before this job will run.
+    needs: [deploy_infrastructure, deploy_application, UITesting_Stage_Application]
+    steps:
+      - name: 'Checkout GitHub Actions'
+        uses: actions/checkout@v2
 
-  #    - name: DEBUG ONLY Display Output Variables
-  #      run: |
-  #         echo 'output_loadTestsName: ${{ needs.deploy_infrastructure.outputs.output_loadTestsName }}'
+      - name: DEBUG ONLY Display Output Variables
+        run: |
+           echo 'output_loadTestsName: ${{ needs.deploy_infrastructure.outputs.output_loadTestsName }}'
            
-  #    # Download Artifacts under $GITHUB_WORKSPACE, so your job can access it
-  #    - name: 'Download Build Artifacts-Load Tests'
-  #      uses: actions/download-artifact@v2
-  #      with:
-  #        name: MercuryHealth.LoadTests
-  #        path: ${{ github.workspace }}/MercuryHealth.LoadTests
+      # Download Artifacts under $GITHUB_WORKSPACE, so your job can access it
+      - name: 'Download Build Artifacts-Load Tests'
+        uses: actions/download-artifact@v2
+        with:
+          name: MercuryHealth.LoadTests
+          path: ${{ github.workspace }}/MercuryHealth.LoadTests
           
-  #    - name: 'Login to Azure'
-  #      uses: azure/login@v1
-  #      continue-on-error: false
-  #      with:
-  #        creds: ${{ secrets.azure-credentials }}
+      - name: 'Login to Azure'
+        uses: azure/login@v1
+        continue-on-error: false
+        with:
+          creds: ${{ secrets.azure-credentials }}
 
-  #    # Extremely Important!!! - Do not use end slash for webHost value. "/"
-  #    - name: 'Azure Load Testing'
-  #      uses: azure/load-testing@v1
-  #      continue-on-error: true
-  #      with:
-  #        loadTestConfigFile: './MercuryHealth.LoadTests/LoadTest_NutritionPage_Config.yaml'
-  #        loadTestResource: ${{needs.deploy_infrastructure.outputs.output_loadTestsName}}
-  #        resourceGroup: ${{ env.Azure_Resource_GroupName }}
-  #        env: |
-  #          [
-  #            {
-  #              "name": "webapp",
-  #              "value": "${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net"
-  #            }
-  #          ]
+      # Assign the Load Test Contributor or Load Test Owner role to your Azure account
+      # for Demo purposes only - this is NOT needed
+#      - name: Assign Azure Role to Load Test Service
+#        uses: Azure/CLI@v1
+#        continue-on-error: true
+#        with:
+#          inlineScript: |
+#            #!/bin/bash
+#            az role assignment create --assignee "rpagels@microsoft.com" --role "Load Test Contributor" --resource-group ${{ env.Azure_Resource_GroupName }}
 
-  #    - name: 'Upload Load Test Results'
-  #      uses: actions/upload-artifact@v2
-  #      continue-on-error: true
-  #      with:
-  #        name: MercuryHealth.LoadTestsResults
-  #        path: ${{ github.workspace }}/MercuryHealth.LoadTests
-  #        retention-days: 30
+      # Extremely Important!!! - Do not use end slash for webHost value. "/"
+      - name: 'Azure Load Testing'
+        uses: azure/load-testing@v1
+        continue-on-error: true
+        with:
+          loadTestConfigFile: './MercuryHealth.LoadTests/Web_Testing.yaml'
+          loadTestResource: ${{needs.deploy_infrastructure.outputs.output_loadTestsName}}
+          resourceGroup: ${{ env.Azure_Resource_GroupName }}
+          env: |
+            [
+              {
+                "name": "webapp",
+                "value": "${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net"
+              }
+            ]
+          secrets: |
+            [
+              {
+                "name": "appToken",
+                "value": "12345678"
+              }
+            ]
+
+      - name: 'Upload Load Test Results'
+        uses: actions/upload-artifact@v2
+        continue-on-error: true
+        with:
+          name: MercuryHealth.LoadTestsResults
+          path: ${{ github.workspace }}/MercuryHealth.LoadTests
+          retention-days: 30
           
-  #    - name: 'Azure logout'
-  #      run: |
-  #        az logout
-
-##################################################################
-# CD Stage - Load and Performance Testing >>> Exercise Page      #
-##################################################################
-  #LoadTesting_Stage_Application_Exercise:
-  #  # Identify any jobs that must complete successfully before this job will run.
-  #  runs-on: ubuntu-latest
-  #  if: contains(github.event_name, 'push')
-  #  name: 'Load Test Exercise'   
-  #  env:
-  #    Azure_Resource_GroupName: ${{ inputs.resource-group-base-name }}-${{ inputs.environment-suffix }}
-           
-  #  # Identify any jobs that must complete successfully before this job will run.
-  #  needs: [deploy_infrastructure, deploy_application, UITesting_Stage_Application]
-  #  steps:
-  #    - name: 'Checkout GitHub Actions'
-  #      uses: actions/checkout@v2
-
-  #    - name: DEBUG ONLY Display Output Variables
-  #      run: |
-  #         echo 'output_loadTestsName: ${{ needs.deploy_infrastructure.outputs.output_loadTestsName }}'
-           
-  #    # Download Artifacts under $GITHUB_WORKSPACE, so your job can access it
-  #    - name: 'Download Build Artifacts-Load Tests'
-  #      uses: actions/download-artifact@v2
-  #      with:
-  #        name: MercuryHealth.LoadTests
-  #        path: ${{ github.workspace }}/MercuryHealth.LoadTests
-          
-  #    - name: 'Login to Azure'
-  #      uses: azure/login@v1
-  #      continue-on-error: false
-  #      with:
-  #        creds: ${{ secrets.azure-credentials }}
-
-  #    # Extremely Important!!! - Do not use end slash for webHost value. "/"
-  #    - name: 'Azure Load Testing'
-  #      uses: azure/load-testing@v1
-  #      continue-on-error: true
-  #      with:
-  #        loadTestConfigFile: './MercuryHealth.LoadTests/LoadTest_ExercisePage_Config.yaml'
-  #        loadTestResource: ${{needs.deploy_infrastructure.outputs.output_loadTestsName}}
-  #        resourceGroup: ${{ env.Azure_Resource_GroupName }}
-  #        env: |
-  #          [
-  #            {
-  #              "name": "webapp",
-  #              "value": "${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net"
-  #            }
-  #          ]
-
-  #    - name: 'Upload Load Test Results'
-  #      uses: actions/upload-artifact@v2
-  #      continue-on-error: true
-  #      with:
-  #        name: MercuryHealth.LoadTestsResults
-  #        path: ${{ github.workspace }}/MercuryHealth.LoadTests
-  #        retention-days: 30
-          
-  #    - name: 'Azure logout'
-  #      run: |
-  #        az logout
+      - name: 'Azure logout'
+        run: |
+          az logout
 
 ###################################################################
 # CD Stage - Approve  
