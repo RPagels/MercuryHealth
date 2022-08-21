@@ -15,8 +15,20 @@
 			</elementProp>
 			<stringProp name="TestPlan.user_define_classpath"></stringProp>
 		</TestPlan>
+		<!--<hashTree>-->
+		<Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+			<collectionProp name="Arguments.arguments">
+				<elementProp name="udv_appToken" elementType="Argument">
+					<stringProp name="Argument.name">udv_webapp2</stringProp>
+					<stringProp name="Argument.value">${__BeanShell( System.getenv("webapp") )}</stringProp>
+					<stringProp name="Argument.desc">Web App URL</stringProp>
+					<stringProp name="Argument.metadata">=</stringProp>
+				</elementProp>
+			</collectionProp>
+		</Arguments>
+		<hashTree/>
 		<hashTree>
-			<kg.apc.jmeter.threads.UltimateThreadGroup guiclass="kg.apc.jmeter.threads.UltimateThreadGroupGui" testclass="kg.apc.jmeter.threads.UltimateThreadGroup" testname="jp@gc - Ultimate Thread Group" enabled="true">
+			<!--<kg.apc.jmeter.threads.UltimateThreadGroup guiclass="kg.apc.jmeter.threads.UltimateThreadGroupGui" testclass="kg.apc.jmeter.threads.UltimateThreadGroup" testname="jp@gc - Ultimate Thread Group" enabled="true">
 				<collectionProp name="ultimatethreadgroupdata">
 					<collectionProp name="1400604752">
 						<stringProp name="1567">10</stringProp>
@@ -31,7 +43,20 @@
 					<intProp name="LoopController.loops">-1</intProp>
 				</elementProp>
 				<stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
-			</kg.apc.jmeter.threads.UltimateThreadGroup>
+			</kg.apc.jmeter.threads.UltimateThreadGroup>-->
+			<ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Web endpoint test" enabled="true">
+				<stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+				<elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+					<boolProp name="LoopController.continue_forever">false</boolProp>
+					<intProp name="LoopController.loops">-1</intProp>
+				</elementProp>
+				<stringProp name="ThreadGroup.num_threads">5</stringProp>
+				<stringProp name="ThreadGroup.ramp_time">10</stringProp>
+				<boolProp name="ThreadGroup.scheduler">true</boolProp>
+				<stringProp name="ThreadGroup.duration">120</stringProp>
+				<stringProp name="ThreadGroup.delay">5</stringProp>
+				<boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+			</ThreadGroup>
 			<hashTree>
 				<HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Nutritions" enabled="true">
 					<elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
@@ -82,7 +107,7 @@
 							</elementProp>
 						</collectionProp>
 					</elementProp>
-					<stringProp name="HTTPSampler.domain">${udv_webapp}</stringProp>
+					<stringProp name="HTTPSampler.domain">${udv_webapp2}</stringProp>
 					<stringProp name="HTTPSampler.port"></stringProp>
 					<stringProp name="HTTPSampler.protocol">https</stringProp>
 					<stringProp name="HTTPSampler.contentEncoding"></stringProp>
