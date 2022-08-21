@@ -495,7 +495,7 @@ jobs:
 ##################################################################
 # CD Stage - Load and Performance Testing >>> Load Test APIs     #
 ##################################################################
-  LoadTesting_Stage_Application_Home:
+  LoadTesting_Stage_Application_Web:
     # Identify any jobs that must complete successfully before this job will run.
     runs-on: ubuntu-latest
     if: contains(github.event_name, 'push')
@@ -574,7 +574,7 @@ jobs:
 ##################################################################
 # CD Stage - Load and Performance Testing >>> Load Test Web      #
 ##################################################################
-  LoadTesting_Stage_Application_Home:
+  LoadTesting_Stage_Application_APIs:
     # Identify any jobs that must complete successfully before this job will run.
     runs-on: ubuntu-latest
     if: contains(github.event_name, 'push')
@@ -662,8 +662,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # Identify any jobs that must complete successfully before this job will run.
-    #needs: [UITesting_Stage_Application, LoadTesting_Stage_Application_Home, LoadTesting_Stage_Application_Nutrition, LoadTesting_Stage_Application_Exercise]
-    needs: [UITesting_Stage_Application, LoadTesting_Stage_Application_Home]
+    needs: [UITesting_Stage_Application, LoadTesting_Stage_Application_APIs, LoadTesting_Stage_Application_Web]
     environment:
       name: ${{ inputs.environment-suffix }}
       url: ${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net
