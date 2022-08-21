@@ -515,7 +515,7 @@ jobs:
         uses: azure/load-testing@v1
         continue-on-error: true
         with:
-          loadTestConfigFile: './MercuryHealth.LoadTests/SampleApp.yaml'
+          loadTestConfigFile: './MercuryHealth.LoadTests/API_Testing.yaml'
           loadTestResource: ${{needs.deploy_infrastructure.outputs.output_loadTestsName}}
           resourceGroup: ${{ env.Azure_Resource_GroupName }}
           env: |
