@@ -516,20 +516,20 @@ jobs:
           loadTestResource: ${{needs.deploy_infrastructure.outputs.output_loadTestsName}}
           resourceGroup: ${{ env.Azure_Resource_GroupName }}
           env: |
-          [
-              {
-              "name": "webapp",
-              "value": "${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net"
-              }
-          ]
+            [
+               {
+                 "name": "webapp",
+                 "value": "${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net"
+               }
+            ]
 
-          #secrets: |
-          #  [
-          #    {
-          #      "name": "appToken",
-          #      "value": "12345678"
-          #    }
-          #  ]
+          secrets: |
+            [
+              {
+                "name": "appToken",
+                "value": "12345678"
+              }
+            ]
 
       - name: 'Upload Load Test Results'
         uses: actions/upload-artifact@v2
