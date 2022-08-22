@@ -2,9 +2,9 @@ version: v0.1
 testName: API_Testing
 testPlan: API_Testing.jmx
 description: Testing website pages through API
-engineInstances: 1
+engineInstances: 2
 configurationFiles:
-  - 'SampleData-Nutrition.csv'
+  - 'SampleData.csv'
 failureCriteria:
   - avg(response_time_ms) > 10000
   - percentage(error) > 50
