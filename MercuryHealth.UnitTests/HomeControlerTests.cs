@@ -53,7 +53,7 @@ public class HomeControlerTests
     {
         _featureManager.Setup(_fm => _fm.IsEnabledAsync("PrivacyBeta")).Returns(Task.FromResult(true));
 
-        ViewResult result = await _homecontroller.Privacy() as ViewResult;
+        ViewResult? result = await _homecontroller.Privacy() as ViewResult;
         var viewName = result.ViewName;
         var model = result.Model as PrivacyModel;
 
@@ -70,7 +70,7 @@ public class HomeControlerTests
     {
         _featureManager.Setup(_fm => _fm.IsEnabledAsync("PrivacyBeta")).Returns(Task.FromResult(false));
 
-        ViewResult result = await _homecontroller.Privacy() as ViewResult;
+        ViewResult? result = await _homecontroller.Privacy() as ViewResult;
         var viewName = result.ViewName;
         var model = result.Model as PrivacyModel;
 
@@ -87,7 +87,7 @@ public class HomeControlerTests
     {
         _featureManager.Setup(_fm => _fm.IsEnabledAsync("MetricsDashboard")).Returns(Task.FromResult(false));
 
-        ViewResult result = await _homecontroller.Metrics() as ViewResult;
+        ViewResult? result = await _homecontroller.Metrics() as ViewResult;
         var viewName = result.ViewName;
         var model = result.Model as MetricsModel;
 
@@ -105,7 +105,7 @@ public class HomeControlerTests
     {
         _featureManager.Setup(_fm => _fm.IsEnabledAsync("MetricsDashboard")).Returns(Task.FromResult(false));
 
-        ViewResult result = await _homecontroller.Metrics() as ViewResult;
+        ViewResult? result = await _homecontroller.Metrics() as ViewResult;
         var viewName = result.ViewName;
         var model = result.Model as MetricsModel;
 
