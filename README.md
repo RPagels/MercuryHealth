@@ -55,6 +55,10 @@ Back in early 2016, Abel Wang and I met in-person for a couple days and worked t
 The development team follows the modern application pattern for building and deploying code using resilient DevOps practices.
 ![Alt text](ModernAppDevPattern.png)
 
+## Application Architecture
+The development team follows the common web application architecure for building a single project with traditional application layers.
+![Alt text](Mercury Health application architecture.png)
+
 ## Demo Setup
 Coming soon...See DevOps Nirvana Demo Script.md
 
