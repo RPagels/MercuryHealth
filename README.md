@@ -57,7 +57,7 @@ The development team follows the modern application pattern for building and dep
 
 ## Application Architecture
 The development team follows the common web application architecure for building a single project with traditional application layers.
-![Alt text](Mercury Health application architecture.png)
+![Alt text](ApplicationArchitecture.png)
 
 ## Demo Setup
 Coming soon...See DevOps Nirvana Demo Script.md
