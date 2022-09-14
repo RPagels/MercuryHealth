@@ -62,9 +62,13 @@ jobs:
     #    and modify them (or add more) to build your code if your project
     #    uses a compiled language
 
-    #- run: |
-    #   make bootstrap
-    #   make release
+    - name: dotnet build
+      run: |
+        dotnet restore
+        dotnet build MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} --no-restore
+        dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} --no-restore
+        dotnet build MercuryHealth.FunctionApp/MercuryHealth.FunctionApp.csproj --configuration ${{ env.buildConfiguration }} --no-restore
+        dotnet build MercuryHealth.Database/MercuryHealth.Database.csproj --configuration ${{ env.buildConfiguration }} --no-restore --output './database'
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
