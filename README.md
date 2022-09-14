@@ -4,14 +4,12 @@
 TThe mission of Mercury Health is to help improve longevity and quality of life through healthy activity. The Mercury Health development team has embraced a DevOps approach and is using continuous integration for builds and unit tests. If everything passes they use continuous deployment that deploys to various environments.  Then UI Automation tests are run to ensure usability and key functionally works as designed.  Lastly, Load and Performance tests are run from various locations around the world at the expected peak load to ensure there are no challenges around performance or stability when operating at full capacity.
 
 ## Security Scan Status
-### Code QL
-[![CodeQL](https://github.com/RPagels/MercuryHealth/actions/workflows/codeql-analysis.yml/badge.svg?branch=master)](https://github.com/RPagels/MercuryHealth/actions/workflows/codeql-analysis.yml)
-### Microsoft Security DevOps Analysis
-[![MSDO windows-latest](https://github.com/RPagels/MercuryHealth/actions/workflows/msdevopssec.yml/badge.svg)](https://github.com/RPagels/MercuryHealth/actions/workflows/msdevopssec.yml)
+- Code QL: [![CodeQL](https://github.com/RPagels/MercuryHealth/actions/workflows/codeql-analysis.yml/badge.svg?branch=master)](https://github.com/RPagels/MercuryHealth/actions/workflows/codeql-analysis.yml)
+- Microsoft Security DevOps Analysis: [![MSDO windows-latest](https://github.com/RPagels/MercuryHealth/actions/workflows/msdevopssec.yml/badge.svg)](https://github.com/RPagels/MercuryHealth/actions/workflows/msdevopssec.yml)
 
 ## Build & Deploy Status
-[![Deploy-Main](https://github.com/RPagels/MercuryHealth/actions/workflows/deploy-main.yml/badge.svg)](https://github.com/RPagels/MercuryHealth/actions/workflows/deploy-main.yml)
-[![Deploy-Main-Single](https://github.com/RPagels/MercuryHealth/actions/workflows/deploy-main-single.yml/badge.svg)](https://github.com/RPagels/MercuryHealth/actions/workflows/deploy-main-single.yml)
+- Full Deployment, Dev, QA, Prod: [![Deploy-Main](https://github.com/RPagels/MercuryHealth/actions/workflows/deploy-main.yml/badge.svg)](https://github.com/RPagels/MercuryHealth/actions/workflows/deploy-main.yml)
+- Single Deployment, Dev only: [![Deploy-Main-Single](https://github.com/RPagels/MercuryHealth/actions/workflows/deploy-main-single.yml/badge.svg)](https://github.com/RPagels/MercuryHealth/actions/workflows/deploy-main-single.yml)
 
 ## Overview of DevOps
 At Microsoft, DevOps means one thing. “It is the union of People, Process and Products to enable continuous delivery of value to our end users”. -Donovan Brown, Partner PM Azure Incubation Team. On the people side, this means breaking down walls between dev teams, qa teams and ops teams. Instead of three separate teams, have one team with everyone focused on one goal, to continually deliver value to our end users. Teams have become far more cross functional and own the end-to-end customer experience. The developers role is too implement a user story, write full coverage unit tests for that user story and either work with QA to write UI automation or writing the UI automation themselves to test the User Story. This way, devs can iterate fast enough and catch regression bugs without the need for months of regression testing that’s such a manual process.
