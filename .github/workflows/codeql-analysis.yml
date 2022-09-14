@@ -20,6 +20,11 @@ on:
   schedule:
     - cron: '41 19 * * 6'
 
+env:
+  # Path to the solution file relative to the root of the project.
+  buildConfiguration: 'Release'
+  dotnet_version: '6.x.x'
+  
 jobs:
   analyze:
     name: Analyze
@@ -52,8 +57,8 @@ jobs:
 
     # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@v2
+    #- name: Autobuild
+    #  uses: github/codeql-action/autobuild@v2
 
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 https://git.io/JvXDl
@@ -62,13 +67,18 @@ jobs:
     #    and modify them (or add more) to build your code if your project
     #    uses a compiled language
 
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ env.dotnet_version }}
+          
     - name: dotnet build
       run: |
         dotnet restore
         dotnet build MercuryHealth.Web/MercuryHealth.Web.csproj --configuration ${{ env.buildConfiguration }} --no-restore
         dotnet build MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} --no-restore
         dotnet build MercuryHealth.FunctionApp/MercuryHealth.FunctionApp.csproj --configuration ${{ env.buildConfiguration }} --no-restore
-        dotnet build MercuryHealth.Database/MercuryHealth.Database.csproj --configuration ${{ env.buildConfiguration }} --no-restore --output './database'
+        dotnet build MercuryHealth.Database/MercuryHealth.Database.csproj --configuration ${{ env.buildConfiguration }} --no-restore
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
