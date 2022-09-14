@@ -6,6 +6,7 @@ TThe mission of Mercury Health is to help improve longevity and quality of life 
 ## Security Scan Status
 - Code QL: [![CodeQL](https://github.com/RPagels/MercuryHealth/actions/workflows/codeql-analysis.yml/badge.svg?branch=master)](https://github.com/RPagels/MercuryHealth/actions/workflows/codeql-analysis.yml)
 - Microsoft Security DevOps Analysis: [![MSDO windows-latest](https://github.com/RPagels/MercuryHealth/actions/workflows/msdevopssec.yml/badge.svg)](https://github.com/RPagels/MercuryHealth/actions/workflows/msdevopssec.yml)
+- Dependabot Scans: X
 
 ## Build & Deploy Status
 - Full Deployment, Dev, QA, Prod: [![Deploy-Main](https://github.com/RPagels/MercuryHealth/actions/workflows/deploy-main.yml/badge.svg)](https://github.com/RPagels/MercuryHealth/actions/workflows/deploy-main.yml)
