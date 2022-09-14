@@ -19,8 +19,8 @@ We’re also working hand in hand with the Ops folks to figure out what is the b
 
 ## Blog Posts on DevOps Nirvana
 - Part 1 - [DevOps Nirvana – Part 1](https://techcommunity.microsoft.com/t5/azure-devops-blog/devops-nirvana-part-1/ba-p/3439942)
-- Part 2 - coming soon...
-- Part 3 - coming soon...
+- Part 2 - [DevOps Nirvana – Part 2] Continuous Delivery, coming soon...
+- Part 3 - [DevOps Nirvana – Part 3] Demo Setup and Walkthrough, coming soon...
 
 ## DevOps Nirvana
 DevOps Nirvana, what does this mean? Webster defines it as a state of perfect happiness. Although a complete DevOps end-to-end setup might not be perfect, it can be extremely close.  By adopting the principles of agile, automation, continuous integration and continuous delivery, and you will reach your goal of healthy DevOps. 
@@ -53,14 +53,13 @@ Back in early 2016, Abel Wang and I met in-person for a couple days and worked t
 
 ## Modern Application Development Pattern
 The development team follows the modern application pattern for building and deploying code using resilient DevOps practices.
+
 ![Alt text](ModernAppDevPattern.png)
 
 ## Application Architecture
 The development team follows the common web application architecure for building a single project with traditional application layers.
-![Alt text](ApplicationArchitecture.png)
 
-## Demo Setup
-Coming soon...See DevOps Nirvana Demo Script.md
+![Alt text](ApplicationArchitecture.png)
 
 ## Resources
 ## Team Resources
