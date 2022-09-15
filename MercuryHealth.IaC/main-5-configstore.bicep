@@ -38,6 +38,8 @@ param FeatureFlagKey2 string = 'MetricsDashboard'
 param FeatureFlagLabel2 string = ''
 param FeatureFlagKey3 string = 'NutritionColor'
 param FeatureFlagLabel3 string = ''
+param FeatureFlagKey4 string = 'CognitiveServices'
+param FeatureFlagLabel4 string = ''
 
 var FeatureFlagValue1 = {
   id: FeatureFlagKey1
@@ -52,6 +54,11 @@ var FeatureFlagValue2 = {
 var FeatureFlagValue3 = {
   id: FeatureFlagKey3
   description: 'Description for Nutrition Color.'
+  enabled: false
+}
+var FeatureFlagValue4 = {
+  id: FeatureFlagKey4
+  description: 'Description for Cognitive Services.'
   enabled: false
 }
 // var FeatureFlagValue4 = {
@@ -127,34 +134,6 @@ resource configStoreName_Values4 'Microsoft.AppConfiguration/configurationStores
 }
 
 // Feature Flag 1
-// resource configStoreName_appconfig_featureflags_1 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
-//   parent: config
-//   name: '.appconfig.featureflag~2F${FeatureFlagKey1}$${FeatureFlagLabel1}'
-//   properties: {
-//     value: string(FeatureFlagValue1)
-//     contentType: contentType
-//   }
-// }
-// // Feature Flag 2
-// resource configStoreName_appconfig_featureflags_2 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
-//   parent: config
-//   name: '.appconfig.featureflag~2F${FeatureFlagKey2}$${FeatureFlagLabel2}'
-//   properties: {
-//     value: string(FeatureFlagValue2)
-//     contentType: contentType
-//   }
-// }
-// // Feature Flag 3
-// resource configStoreName_appconfig_featureflags_3 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
-//   parent: config
-//   name: '.appconfig.featureflag~2F${FeatureFlagKey3}$${FeatureFlagLabel3}'
-//   properties: {
-//     value: string(FeatureFlagValue3)
-//     contentType: contentType
-//   }
-// }
-
-// Feature Flag 1
 resource configStoreName_featureflags_1 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
   parent: config
   name: '.appconfig.featureflag~2F${FeatureFlagKey1}$${FeatureFlagLabel1}'
@@ -180,6 +159,16 @@ resource configStoreName_featureflags_3 'Microsoft.AppConfiguration/configuratio
   name: '.appconfig.featureflag~2F${FeatureFlagKey3}$${FeatureFlagLabel3}'
   properties: {
     value: string(FeatureFlagValue3)
+    contentType: contentType
+  }
+}
+
+// Feature Flag 3
+resource configStoreName_featureflags_4 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
+  parent: config
+  name: '.appconfig.featureflag~2F${FeatureFlagKey4}$${FeatureFlagLabel4}'
+  properties: {
+    value: string(FeatureFlagValue4)
     contentType: contentType
   }
 }
