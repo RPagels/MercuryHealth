@@ -27,23 +27,6 @@ param appInsightsConnectionString string
 param defaultTags object
 //param configStoreConnection string
 
-// Varabiles
-// var standardPlanMaxAdditionalSlots = 2
-// param environments array = [
-//   'dev'
-//   'qa'
-// ]
-
-// resource appServicePlan 'Microsoft.Web/serverfarms@2021-01-15' = {
-//   name: webAppPlanName // app serivce plan name
-//   location: location // Azure Region
-//   tags: defaultTags
-//   properties: {}
-//   sku: {
-//     name: ((length(environments) <= standardPlanMaxAdditionalSlots) ? skuName : 'P1')
-//   }
-// }
-
 resource appServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
   name: webAppPlanName // app serivce plan name
   location: location // Azure Region
@@ -77,38 +60,21 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
   name: 'appsettings'
   parent: appService
   properties: {
-//    'ConnectionStrings:MercuryHealthWebContext': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName2})'
-//    'ConnectionStrings:AppConfig': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName1})'
-    'DeployedEnvironment': Deployed_Environment
-    'WEBSITE_RUN_FROM_PACKAGE': '1'
-    'APPINSIGHTS_INSTRUMENTATIONKEY': appInsightsInstrumentationKey
-    'APPINSIGHTS_PROFILERFEATURE_VERSION': '1.0.0'
-    'APPINSIGHTS_SNAPSHOTFEATURE_VERSION': '1.0.0'
-    'APPLICATIONINSIGHTS_CONNECTION_STRING': appInsightsConnectionString
-    'WebAppUrl': 'https://${appService.name}.azurewebsites.net/'
-    'ASPNETCORE_ENVIRONMENT': 'Development'
-    'DebugOnly-sqlAdminLoginPassword=': sqlAdminLoginPassword
-    'DebugOnly-sqlAdminLoginName=': sqlAdminLoginName
-    'DebugOnly-sqlConnectionString=': secretConnectionString
+    DeployedEnvironment: Deployed_Environment
+    WEBSITE_RUN_FROM_PACKAGE: '1'
+    APPINSIGHTS_INSTRUMENTATIONKEY: appInsightsInstrumentationKey
+    APPINSIGHTS_PROFILERFEATURE_VERSION: '1.0.0'
+    APPINSIGHTS_SNAPSHOTFEATURE_VERSION: '1.0.0'
+    APPLICATIONINSIGHTS_CONNECTION_STRING: appInsightsConnectionString
+    WebAppUrl: 'https://${appService.name}.azurewebsites.net/'
+    ASPNETCORE_ENVIRONMENT: 'Development'
   }
 }
-
-// resource webAppPortalName_environments 'Microsoft.Web/sites/slots@2021-03-01' = [for item in environments: {
-//   name: '${webSiteName}/${item}'
-//   kind: 'app'
-//   location: location
-//   tags: {
-//     displayName: 'WebAppSlots'
-//   }
-//   properties: {
-//     serverFarmId: appServicePlan.id
-//   }
-// }]
 
 // Location population tags
 // https://docs.microsoft.com/en-us/azure/azure-monitor/app/monitor-web-app-availability
 
-resource standardWebTestPageHome  'Microsoft.Insights/webtests@2020-10-05-preview' = {
+resource standardWebTestPageHome  'Microsoft.Insights/webtests@2022-06-15' = {
   name: 'Page Home'
   location: location
   tags: {
@@ -160,7 +126,7 @@ resource standardWebTestPageHome  'Microsoft.Insights/webtests@2020-10-05-previe
   }
 }
 
-resource standardWebTestPageNutritions  'Microsoft.Insights/webtests@2020-10-05-preview' = {
+resource standardWebTestPageNutritions  'Microsoft.Insights/webtests@2022-06-15' = {
   name: 'Page Nutritions'
   location: location
   tags: {
@@ -212,7 +178,7 @@ resource standardWebTestPageNutritions  'Microsoft.Insights/webtests@2020-10-05-
   }
 }
 
-resource standardWebTestPageExercises  'Microsoft.Insights/webtests@2020-10-05-preview' = {
+resource standardWebTestPageExercises  'Microsoft.Insights/webtests@2022-06-15' = {
   name: 'Page Exercises'
   location: location
   tags: {
@@ -264,34 +230,7 @@ resource standardWebTestPageExercises  'Microsoft.Insights/webtests@2020-10-05-p
   }
 }
 
-// Reference Existing resource
-// resource existingkeyvault 'Microsoft.KeyVault/vaults@2021-11-01-preview' existing = {
-//   name: keyvaultName
-// }
-
-// // create secret
-// resource mySecret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-//   name: '${keyvaultName}/${secretName1}'
-//   // parent: existingkeyvault
-//   properties: {
-//     contentType: 'text/plain'
-//     value: configStoreConnection
-//   }
-// }
-
 var secretConnectionString = 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdminLoginName}@${sqlserverName};Password=${sqlAdminLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
-
-// create secret
-// resource mySecret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-//   name: '${keyvaultName}/${secretName2}'
-//   //parent: existingkeyvault
-//   properties: {
-//     contentType: 'text/plain'
-//     //value: 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdminLoginName}@${sqlserverName};Password=${sqlAdminLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
-//     //value: 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdminLoginName}@${sqlserverName};Password=${sqlAdminLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
-//     value: secretConnectionString
-//   }
-// }
 
 output out_appService string = appService.id
 output out_webSiteName string = appService.properties.defaultHostName

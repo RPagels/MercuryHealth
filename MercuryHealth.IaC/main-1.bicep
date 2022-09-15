@@ -82,9 +82,11 @@ param ConfigkeyKeyValues array = [
 param FeatureFlagKey1 string = 'PrivacyBeta'
 param FeatureFlagKey2 string = 'MetricsDashboard'
 param FeatureFlagKey3 string = 'NutritionColor'
+param featureFlagKey4 string = 'MetricsDashboard2'
 param FeatureFlagLabel1 string = 'Privacy Beta'
 param FeatureFlagLabel2 string = 'Metrics Dashboard'
 param FeatureFlagLabel3 string = 'Nutrition Color'
+param FeatureFlagLabel4 string = ''
 
 var FeatureFlagValue1 = {
   id: FeatureFlagKey1
@@ -94,7 +96,7 @@ var FeatureFlagValue1 = {
 var FeatureFlagValue2 = {
   id: FeatureFlagKey2
   description: 'Description for Metrics Dashboard.'
-  enabled: false
+  enabled: true
 }
 var FeatureFlagValue3 = {
   id: FeatureFlagKey3
@@ -123,7 +125,7 @@ var FeatureFlagValue3 = {
 
 // Create AppConfiguration configuration Store
 // enableSoftDelete: false
-resource config 'Microsoft.AppConfiguration/configurationStores@2021-10-01-preview' = {
+resource config 'Microsoft.AppConfiguration/configurationStores@2022-05-01' = {
   name: configStoreName
   location: location
   tags: defaultTags
@@ -137,7 +139,7 @@ resource config 'Microsoft.AppConfiguration/configurationStores@2021-10-01-previ
 }
 
 // Loop through array and create Config Key Values
-resource configStoreName_keyValueNames 'Microsoft.AppConfiguration/configurationStores/keyValues@2021-10-01-preview' = [for (item, i) in ConfigkeyValueNames: {
+resource configStoreName_keyValueNames 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = [for (item, i) in ConfigkeyValueNames: {
   name: '${config.name}/${item}' //'${config.name}/${item}'
   properties: {
     value: ConfigkeyKeyValues[i]
@@ -146,19 +148,8 @@ resource configStoreName_keyValueNames 'Microsoft.AppConfiguration/configuration
   }
 }]
 
-// Want to loop through array and create Feature Flags
-// **Not** able to loop through array creating FF
-// resource configStoreName_appconfig_featureflags 'Microsoft.AppConfiguration/configurationStores/keyValues@2021-10-01-preview' = [for (item, i) in FeatureFlagkeyValueNames: {
-//   parent: config
-//   name: '.appconfig.featureflag~2F${FeatureFlagkeyValueNames[i]}$${FeatureFlagkeyValueLabels[i]}'
-//   properties: {
-//     value: string(FeatureFlagkeyValueKeys[i])
-//     contentType: contentType
-//   }
-// }]
-
 // Feature Flag 1
-resource configStoreName_appconfig_featureflags_1 'Microsoft.AppConfiguration/configurationStores/keyValues@2021-10-01-preview' = {
+resource configStoreName_appconfig_featureflags_1 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
   parent: config
   name: '.appconfig.featureflag~2F${FeatureFlagKey1}$${FeatureFlagLabel1}'
   properties: {
@@ -167,7 +158,7 @@ resource configStoreName_appconfig_featureflags_1 'Microsoft.AppConfiguration/co
   }
 }
 // Feature Flag 2
-resource configStoreName_appconfig_featureflags_2 'Microsoft.AppConfiguration/configurationStores/keyValues@2021-10-01-preview' = {
+resource configStoreName_appconfig_featureflags_2 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
   parent: config
   name: '.appconfig.featureflag~2F${FeatureFlagKey2}$${FeatureFlagLabel2}'
   properties: {
@@ -176,7 +167,7 @@ resource configStoreName_appconfig_featureflags_2 'Microsoft.AppConfiguration/co
   }
 }
 // Feature Flag 3
-resource configStoreName_appconfig_featureflags_3 'Microsoft.AppConfiguration/configurationStores/keyValues@2021-10-01-preview' = {
+resource configStoreName_appconfig_featureflags_3 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
   parent: config
   name: '.appconfig.featureflag~2F${FeatureFlagKey3}$${FeatureFlagLabel3}'
   properties: {
@@ -184,14 +175,24 @@ resource configStoreName_appconfig_featureflags_3 'Microsoft.AppConfiguration/co
     contentType: contentType
   }
 }
-////////////////////////////////////////
-// END - Setup Config Store
-////////////////////////////////////////
+
+resource configStoreName_appconfig_featureflags_4 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
+  parent: config
+  name: '.appconfig.featureflag~2F${featureFlagKey4}$${FeatureFlagLabel4}'
+  properties: {
+    value: string(FeatureFlagLabel4)
+    contentType: contentType
+  }
+}
 
 // AppConfiguration - Avoid outputs for secrets - Look up secrets dynamically
 // https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/scenarios-secrets
 // Note: This is why ConfigStore isn't it's own module...MUST be in the main
 var configStoreConnectionString = listKeys(config.id, config.apiVersion).value[0].connectionString
+
+////////////////////////////////////////
+// END - Setup Config Store
+////////////////////////////////////////
 
 // Create Azure KeyVault
 module keyvaultmod './main-8-keyvault.bicep' = {

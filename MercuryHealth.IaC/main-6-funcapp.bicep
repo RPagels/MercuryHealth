@@ -15,20 +15,8 @@ param defaultTags object
 // param ApimSubscriptionKey string
 // param ApimWebServiceURL string
 
-// param keyvaultName string
-// param secretName3 string
-// param secretName4 string
-
 // remove dashes for storage account name
-//var storageAccountName = format('{0}sta', replace(appNamePrefix, '-', ''))
-//var storageAccountName = replace(appNamePrefix, '-', '')
-//var storageAccountName = uniqueString(resourceGroup().id)
 var storageAccountName = 'sta${uniqueString(resourceGroup().id)}'
-
-// var appTags = {
-//   AppID: 'myfunc'
-//   AppName: 'My Function App'
-// }
 
 // Storage Account
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' = {
@@ -111,42 +99,6 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
     isXenon: false
     hyperV: false
     siteConfig: {
-    //   appSettings: [
-        // {
-        //   name: 'ApimSubscriptionKey'
-        //   value: ApimSubscriptionKey
-        // }
-        // {
-        //   name: 'ApimWebServiceURL'
-        //   value: ApimWebServiceURL
-        // }        
-        //{
-          //name: 'AzureWebJobsStorage'
-          //value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
-          //value: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName3})'
-        //}
-        //{
-          //name: 'WebsiteContentAzureFileConnectionString'
-          //value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
-          //value: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secretName4})'
-        //}
-        // {
-        //   name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
-        //   value: appInsightsInstrumentationKey
-        // }
-        // {
-        //   name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-        //   value: 'InstrumentationKey=${appInsightsInstrumentationKey}'
-        // }
-        // {
-        //   name: 'FUNCTIONS_WORKER_RUNTIME'
-        //   value: functionRuntime
-        // }
-        // {
-        //   name: 'FUNCTIONS_EXTENSION_VERSION'
-        //   value: functionExtensionVersion
-        // }
-      //]
     }
     scmSiteAlsoStopped: false
     clientAffinityEnabled: false
@@ -248,38 +200,7 @@ resource functionAppBinding 'Microsoft.Web/sites/hostNameBindings@2021-03-01' = 
   }
 }
 
-// resource functionAppServiceAppSettings 'Microsoft.Web/sites/siteextensions@2021-03-01' = {
-//   parent: functionApp
-//   name: 'Microsoft.ApplicationInsights.AzureWebSites'
-// }
-
-// Reference Existing resource
-// resource existingkeyvault 'Microsoft.KeyVault/vaults@2021-11-01-preview' existing = {
-//   name: keyvaultName
-// }
-
 var secretAzureWebJobsStorage = 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
-
-// create secret
-// resource mySecret3 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-//   name: '${keyvaultName}/${secretName3}'
-//   //parent: existingkeyvault
-//   properties: {
-//     contentType: 'text/plain'
-//     //value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
-//     value: secretAzureWebJobsStorage
-//   }
-// }
-// create secret
-// resource mySecret4 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-//   name: '${keyvaultName}/${secretName4}'
-//   //parent: existingkeyvault
-//   properties: {
-//     contentType: 'text/plain'
-//     //value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
-//     value: secretAzureWebJobsStorage
-//   }
-// }
 
 output out_funcAppServiceprincipalId string = functionApp.identity.principalId
 output out_AzureWebJobsStorage string = secretAzureWebJobsStorage

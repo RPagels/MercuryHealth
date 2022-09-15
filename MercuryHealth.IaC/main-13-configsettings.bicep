@@ -127,17 +127,14 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
   properties: {
     'ConnectionStrings:MercuryHealthWebContext': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secret_ConnectionStringName})'
     'ConnectionStrings:AppConfig': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secret_configStoreConnectionName})'
-    'DeployedEnvironment': Deployed_Environment
-    'WEBSITE_RUN_FROM_PACKAGE': '1'
-    'APPINSIGHTS_INSTRUMENTATIONKEY': appInsightsInstrumentationKey
-    'APPINSIGHTS_PROFILERFEATURE_VERSION': '1.0.0'
-    'APPINSIGHTS_SNAPSHOTFEATURE_VERSION': '1.0.0'
-    'APPLICATIONINSIGHTS_CONNECTION_STRING': appInsightsConnectionString
-    'WebAppUrl': 'https://${existing_appService.name}.azurewebsites.net/'
-    'ASPNETCORE_ENVIRONMENT': 'Development'
-    'Debug_Only-secret_ConnectionStringValue=': secret_ConnectionStringValue
-    'Debug_Only-secret_configStoreConnectionValue': secret_configStoreConnectionValue
-    'Debug_Only-secret_AzureWebJobsStorageValue': secret_AzureWebJobsStorageValue
+    DeployedEnvironment: Deployed_Environment
+    WEBSITE_RUN_FROM_PACKAGE: '1'
+    APPINSIGHTS_INSTRUMENTATIONKEY: appInsightsInstrumentationKey
+    APPINSIGHTS_PROFILERFEATURE_VERSION: '1.0.0'
+    APPINSIGHTS_SNAPSHOTFEATURE_VERSION: '1.0.0'
+    APPLICATIONINSIGHTS_CONNECTION_STRING: appInsightsConnectionString
+    WebAppUrl: 'https://${existing_appService.name}.azurewebsites.net/'
+    ASPNETCORE_ENVIRONMENT: 'Development'
   }
   dependsOn: [
     secret1
@@ -155,15 +152,14 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
   kind: 'string'
   parent: existing_funcAppService
   properties: {
-    'AzureWebJobsStorage': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secret_AzureWebJobsStorageName})'
-    'WebsiteContentAzureFileConnectionString': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secret_WebsiteContentAzureFileConnectionStringName})'
-    'DebugOnly-secret_ConnectionStringValue=': secret_AzureWebJobsStorageValue
-    'ApimSubscriptionKey': ApimSubscriptionKey
-    'ApimWebServiceURL': ApimWebServiceURL
-    'APPINSIGHTS_INSTRUMENTATIONKEY': appInsightsInstrumentationKey
-    'APPLICATIONINSIGHTS_CONNECTION_STRING': appInsightsConnectionString
-    'FUNCTIONS_WORKER_RUNTIME': 'dotnet'
-    'FUNCTIONS_EXTENSION_VERSION': '~4'
+    AzureWebJobsStorage: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secret_AzureWebJobsStorageName})'
+    WebsiteContentAzureFileConnectionString: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secret_WebsiteContentAzureFileConnectionStringName})'
+    ApimSubscriptionKey: ApimSubscriptionKey
+    ApimWebServiceURL: ApimWebServiceURL
+    APPINSIGHTS_INSTRUMENTATIONKEY: appInsightsInstrumentationKey
+    APPLICATIONINSIGHTS_CONNECTION_STRING: appInsightsConnectionString
+    FUNCTIONS_WORKER_RUNTIME: 'dotnet'
+    FUNCTIONS_EXTENSION_VERSION: '~4'
   }
   dependsOn: [
     secret3
@@ -171,18 +167,4 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
   ]
 }
 
-// Reference Existing resource
-// resource existing_apimservice 'Microsoft.Web/sites@2021-03-01' existing = {
-//   name: apiServiceName
-// }
-// resource MercuryHealthApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
-//   name: '${existing_apimservice.name}/MercuryHealthSwaggerImportExample'
-//   properties: {
-//     format: 'openapi'
-//     value: 'https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json'
-//     path: ''
-//     displayName: 'Mercury Health'
-//     serviceUrl: 'https://${existing_appService.name}.azurewebsites.net/'
-//   }
-// }
 
