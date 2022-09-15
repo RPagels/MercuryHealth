@@ -70,20 +70,6 @@ param accessPolicies array = [
   }
   {
     tenantId: tenant
-    objectId: configStoreprincipalId
-    permissions: {
-      keys: [
-        'get'
-        'list'
-      ]
-      secrets: [
-        'get'
-        'list'
-      ]
-    }
-  }
-  {
-    tenantId: tenant
     objectId: AzObjectIdPagels
     permissions: {
       keys: [
@@ -98,6 +84,20 @@ param accessPolicies array = [
       ]
     }
   }
+  // {
+  //   tenantId: tenant
+  //   objectId: configStoreprincipalId
+  //   permissions: {
+  //     keys: [
+  //       'get'
+  //       'list'
+  //     ]
+  //     secrets: [
+  //       'get'
+  //       'list'
+  //     ]
+  //   }
+  // }
 ]
 
 // Reference Existing resource
