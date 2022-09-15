@@ -96,7 +96,7 @@ public class HomeController : Controller
     [FeatureGate("MetricsDashboard")]
     public async Task<IActionResult> Metrics()
     {
-        if (await _featureManager.IsEnabledAsync("MetricsDashboard"))
+        if (await _featureManager.IsEnabledAsync("MetricsDashboard2"))
         {
             return View(new MetricsModel { Name = "Metrics Beta" });
         }

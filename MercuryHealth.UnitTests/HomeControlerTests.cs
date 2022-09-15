@@ -85,7 +85,7 @@ public class HomeControlerTests
     [Category("UnitTests")]
     public async Task Metrics_should_return_model_when_false()
     {
-        _featureManager.Setup(_fm => _fm.IsEnabledAsync("MetricsDashboard")).Returns(Task.FromResult(false));
+        _featureManager.Setup(_fm => _fm.IsEnabledAsync("MetricsDashboard2")).Returns(Task.FromResult(false));
 
         ViewResult? result = await _homecontroller.Metrics() as ViewResult;
         var viewName = result.ViewName;
@@ -103,7 +103,7 @@ public class HomeControlerTests
     [Category("UnitTests")]
     public async Task Metrics_should_not_return_model_when_false()
     {
-        _featureManager.Setup(_fm => _fm.IsEnabledAsync("MetricsDashboard")).Returns(Task.FromResult(false));
+        _featureManager.Setup(_fm => _fm.IsEnabledAsync("MetricsDashboard2")).Returns(Task.FromResult(false));
 
         ViewResult? result = await _homecontroller.Metrics() as ViewResult;
         var viewName = result.ViewName;
