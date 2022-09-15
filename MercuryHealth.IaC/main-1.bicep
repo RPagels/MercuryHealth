@@ -543,7 +543,7 @@ module blogstoragemod './main-12-blobstorage.bicep' = {
 }
 
 module configstoremod 'main-5-configstore.bicep' = {
-  name: blobstorageName
+  name: configStoreName
   params: {
     location: location
      defaultTags: defaultTags

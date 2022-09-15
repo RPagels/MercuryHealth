@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.10.61.36676",
-      "templateHash": "4971122596676447401"
+      "templateHash": "15096440427343231560"
     }
   },
   "parameters": {
@@ -1427,7 +1427,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.10.61.36676",
-              "templateHash": "3237458374859679499"
+              "templateHash": "7835194516533621073"
             }
           },
           "parameters": {
@@ -1446,7 +1446,7 @@
           "resources": [
             {
               "type": "Microsoft.Storage/storageAccounts",
-              "apiVersion": "2019-06-01",
+              "apiVersion": "2022-05-01",
               "name": "[parameters('storageAccountName')]",
               "location": "[parameters('location')]",
               "sku": {
@@ -1460,7 +1460,7 @@
             },
             {
               "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-              "apiVersion": "2019-06-01",
+              "apiVersion": "2022-05-01",
               "name": "[format('{0}/default/{1}', parameters('storageAccountName'), parameters('containerName'))]",
               "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
@@ -1784,7 +1784,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.10.61.36676",
-              "templateHash": "9943261229798371770"
+              "templateHash": "14121262337087551257"
             }
           },
           "parameters": {
@@ -1869,20 +1869,6 @@
                 {
                   "tenantId": "[parameters('tenant')]",
                   "objectId": "[parameters('funcAppServiceprincipalId')]",
-                  "permissions": {
-                    "keys": [
-                      "get",
-                      "list"
-                    ],
-                    "secrets": [
-                      "get",
-                      "list"
-                    ]
-                  }
-                },
-                {
-                  "tenantId": "[parameters('tenant')]",
-                  "objectId": "[parameters('configStoreprincipalId')]",
                   "permissions": {
                     "keys": [
                       "get",
