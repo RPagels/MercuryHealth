@@ -25,7 +25,7 @@ builder.Host.ConfigureAppConfiguration(builder =>
                     .ConfigureRefresh(refresh =>
                     {
                         refresh.Register("App:Settings:Sentinel", refreshAll: true)
-                            .SetCacheExpiration(TimeSpan.FromSeconds(10));
+                            .SetCacheExpiration(TimeSpan.FromSeconds(5));
                     });
         });
     })
