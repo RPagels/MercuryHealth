@@ -183,8 +183,6 @@
 //   }
 // }
 
-// //output configStoreEndpoint string = config.properties.endpoint
-// // disable-next-line outputs-should-not-contain-secrets // Does not contain a password
-
-// output configStoreConnection string = config.properties.endpoint
-// //output configStoreConnectionString string = listKeys(config.id, config.apiVersion).keys[0].value
+// Todo! 9.15.2022
+//var configStoreConnectionString = listKeys(config.id, config.apiVersion).value[0].connectionString
+//output out_configStoreConnectionString = configStoreConnectionString

@@ -309,8 +309,8 @@ resource petStoreApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-pre
 param swaggerType string = 'yaml-v3'
 
 // This url needs to be reachable for APIM
-//param urlToSwagger string = 'https://raw.githubusercontent.com/RPagels/MercuryHealth/master/MercuryHealth.IaC/MercuryHealth.openapi.yaml'
-param urlToSwagger string = './MercuryHealth.IaC/MercuryHealth.openapi.yaml'
+param urlToSwagger string = 'https://raw.githubusercontent.com/RPagels/MercuryHealth/master/MercuryHealth.IaC/MercuryHealth.openapi.yaml'
+//param urlToSwagger string = './MercuryHealth.IaC/MercuryHealth.openapi.yaml'
 param apiPath string = '' // There can be only one api without path
 param name string = 'mercury-health'
 var format = ((swaggerType == 'yaml-v3')  ? 'openapi-link' : 'openapi+json-link')
@@ -571,7 +571,7 @@ module configsettingsmod './main-13-configsettings.bicep' = {
   params: {
     keyvaultName: keyvaultName
     secret_configStoreConnectionName: secret_configStoreConnectionName
-    secret_configStoreConnectionValue: configStoreConnectionString
+    secret_configStoreConnectionValue: configStoreConnectionString //configstore.outputs.out_configStoreConnectionString
     secret_ConnectionStringName: secret_ConnectionStringName
     secret_ConnectionStringValue: webappmod.outputs.out_secretConnectionString
     appServiceprincipalId: webappmod.outputs.out_appServiceprincipalId
