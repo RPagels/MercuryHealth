@@ -82,7 +82,7 @@ param ConfigkeyKeyValues array = [
 param FeatureFlagKey1 string = 'PrivacyBeta'
 param FeatureFlagKey2 string = 'MetricsDashboard'
 param FeatureFlagKey3 string = 'NutritionColor'
-param featureFlagKey4 string = 'MetricsDashboard2'
+param FeatureFlagKey4 string = 'MetricsDashboard2'
 param FeatureFlagLabel1 string = 'Privacy Beta'
 param FeatureFlagLabel2 string = 'Metrics Dashboard'
 param FeatureFlagLabel3 string = 'Nutrition Color'
@@ -103,7 +103,11 @@ var FeatureFlagValue3 = {
   description: 'Description for Nutrition Color.'
   enabled: false
 }
-
+var FeatureFlagValue4 = {
+  id: FeatureFlagKey4
+  description: 'Description for Metrics Dashboard 2.'
+  enabled: true
+}
 // Not able to loop through array creating FF
 // param FeatureFlagkeyValueNames array = [
 //   'PrivacyBeta'
@@ -178,9 +182,9 @@ resource configStoreName_appconfig_featureflags_3 'Microsoft.AppConfiguration/co
 
 resource configStoreName_appconfig_featureflags_4 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
   parent: config
-  name: '.appconfig.featureflag~2F${featureFlagKey4}$${FeatureFlagLabel4}'
+  name: '.appconfig.featureflag~2F${FeatureFlagKey4}$${FeatureFlagLabel4}'
   properties: {
-    value: string(FeatureFlagLabel4)
+    value: string(FeatureFlagValue4)
     contentType: contentType
   }
 }
