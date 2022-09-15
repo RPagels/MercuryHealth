@@ -33,6 +33,9 @@ param secret_AzureWebJobsStorageValue string
 
 param tenant string = subscription().tenantId
 
+@secure()
+param AzObjectIdPagels string
+
 // Define KeyVault accessPolicies
 param accessPolicies array = [
   {
@@ -40,12 +43,12 @@ param accessPolicies array = [
     objectId: appServiceprincipalId
     permissions: {
       keys: [
-        'Get'
-        'List'
+        'get'
+        'list'
       ]
       secrets: [
-        'Get'
-        'List'
+        'get'
+        'list'
       ]
     }
   }
@@ -54,12 +57,28 @@ param accessPolicies array = [
     objectId: funcAppServiceprincipalId
     permissions: {
       keys: [
-        'Get'
-        'List'
+        'get'
+        'list'
       ]
       secrets: [
-        'Get'
-        'List'
+        'get'
+        'list'
+      ]
+    }
+  }
+  {
+    tenantId: tenant
+    objectId: AzObjectIdPagels
+    permissions: {
+      keys: [
+        'get'
+        'list'
+      ]
+      secrets: [
+        'get'
+        'list'
+        'set'
+        'delete'
       ]
     }
   }
