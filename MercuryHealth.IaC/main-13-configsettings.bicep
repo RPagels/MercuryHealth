@@ -1,26 +1,25 @@
 param keyvaultName string
-param secret_configStoreConnectionName string
-param secret_ConnectionStringName string
+param kvValue_configStoreConnectionName string
+param kvValue_ConnectionStringName string
 param webappName string
 param functionAppName string
-param secret_AzureWebJobsStorageName string
-param secret_WebsiteContentAzureFileConnectionStringName string
+param kvValue_AzureWebJobsStorageName string
+param kvValue_WebsiteContentAzureFileConnectionStringName string
 param appInsightsInstrumentationKey string
 param appInsightsConnectionString string
 param Deployed_Environment string
 param ApimSubscriptionKey string
 param ApimWebServiceURL string
-param apiServiceName string
 //param appServiceName string
 
 //param location string = resourceGroup().location
 //param vaultName string
 
 @secure()
-param secret_configStoreConnectionValue string
+param kvValue_configStoreConnectionValue string
 
 @secure()
-param secret_ConnectionStringValue string
+param kvValue_ConnectionStringValue string
 
 @secure()
 param appServiceprincipalId string
@@ -29,7 +28,10 @@ param appServiceprincipalId string
 param funcAppServiceprincipalId string
 
 @secure()
-param secret_AzureWebJobsStorageValue string
+param configStoreprincipalId string
+
+@secure()
+param kvValue_AzureWebJobsStorageValue string
 
 param tenant string = subscription().tenantId
 
@@ -55,6 +57,20 @@ param accessPolicies array = [
   {
     tenantId: tenant
     objectId: funcAppServiceprincipalId
+    permissions: {
+      keys: [
+        'get'
+        'list'
+      ]
+      secrets: [
+        'get'
+        'list'
+      ]
+    }
+  }
+  {
+    tenantId: tenant
+    objectId: configStoreprincipalId
     permissions: {
       keys: [
         'get'
@@ -100,38 +116,38 @@ resource keyvaultaccessmod 'Microsoft.KeyVault/vaults/accessPolicies@2021-11-01-
 
 // Create KeyVault Secrets
 resource secret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: secret_configStoreConnectionName
+  name: kvValue_configStoreConnectionName
   parent: existing_keyvault
   properties: {
-    value: secret_configStoreConnectionValue
+    value: kvValue_configStoreConnectionValue
   }
 }
 
 // create secret for Web App
 resource secret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: secret_ConnectionStringName
+  name: kvValue_ConnectionStringName
   parent: existing_keyvault
   properties: {
     contentType: 'text/plain'
-    value: secret_ConnectionStringValue
+    value: kvValue_ConnectionStringValue
   }
 }
 //create secret for Func App
 resource secret3 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: secret_AzureWebJobsStorageName
+  name: kvValue_AzureWebJobsStorageName
   parent: existing_keyvault
   properties: {
     contentType: 'text/plain'
-    value: secret_AzureWebJobsStorageValue
+    value: kvValue_AzureWebJobsStorageValue
   }
 }
 // create secret for Func App
 resource secret4 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: secret_WebsiteContentAzureFileConnectionStringName
+  name: kvValue_WebsiteContentAzureFileConnectionStringName
   parent: existing_keyvault
   properties: {
     contentType: 'text/plain'
-    value: secret_AzureWebJobsStorageValue
+    value: kvValue_AzureWebJobsStorageValue
   }
 }
 // Reference Existing resource
@@ -144,8 +160,8 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
   name: 'appsettings'
   parent: existing_appService
   properties: {
-    'ConnectionStrings:MercuryHealthWebContext': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secret_ConnectionStringName})'
-    'ConnectionStrings:AppConfig': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secret_configStoreConnectionName})'
+    'ConnectionStrings:MercuryHealthWebContext': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${kvValue_ConnectionStringName})'
+    'ConnectionStrings:AppConfig': '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${kvValue_configStoreConnectionName})'
     DeployedEnvironment: Deployed_Environment
     WEBSITE_RUN_FROM_PACKAGE: '1'
     APPINSIGHTS_INSTRUMENTATIONKEY: appInsightsInstrumentationKey
@@ -171,8 +187,8 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
   kind: 'string'
   parent: existing_funcAppService
   properties: {
-    AzureWebJobsStorage: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secret_AzureWebJobsStorageName})'
-    WebsiteContentAzureFileConnectionString: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${secret_WebsiteContentAzureFileConnectionStringName})'
+    AzureWebJobsStorage: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${kvValue_AzureWebJobsStorageName})'
+    WebsiteContentAzureFileConnectionString: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${kvValue_WebsiteContentAzureFileConnectionStringName})'
     ApimSubscriptionKey: ApimSubscriptionKey
     ApimWebServiceURL: ApimWebServiceURL
     APPINSIGHTS_INSTRUMENTATIONKEY: appInsightsInstrumentationKey

@@ -44,155 +44,137 @@ var frontDoorName = 'fd-${uniqueString(resourceGroup().id)}'
 
 // Tags
 var defaultTags = {
-  'Env': Deployed_Environment
-  'App': 'Mercury Health'
-  'CostCenter': costCenter
-  'CreatedBy': createdBy
+  Env: Deployed_Environment
+  App: 'Mercury Health'
+  CostCenter: costCenter
+  CreatedBy: createdBy
 }
 
 // KeyVault Secret Names
-param secret_configStoreConnectionName string = 'ConnectionStringsAppConfig'
-param secret_ConnectionStringName string = 'ConnectionStringsMercuryHealthWebContext'
-param secret_AzureWebJobsStorageName string = 'AzureWebJobsStorage'
-param secret_WebsiteContentAzureFileConnectionString string = 'WebsiteContentAzureFileConnectionString'
+param kvValue_configStoreConnectionName string = 'ConnectionStringsAppConfig'
+param kvValue_ConnectionStringName string = 'ConnectionStringsMercuryHealthWebContext'
+param kvValue_AzureWebJobsStorageName string = 'AzureWebJobsStorage'
+param kvValue_WebsiteContentAzureFileConnectionString string = 'WebsiteContentAzureFileConnectionString'
 
 ////////////////////////////////////////
 // BEGIN - Create Config Store
 ////////////////////////////////////////
 
-@description('Specifies the content type of the key-value resources. For feature flag, the value should be application/vnd.microsoft.appconfig.ff+json;charset=utf-8. For Key Value reference, the value should be application/vnd.microsoft.appconfig.keyvaultref+json;charset=utf-8. Otherwise, it\'s optional.')
-param contentType string = 'application/vnd.microsoft.appconfig.ff+json;charset=utf-8'
+// @description('Specifies the content type of the key-value resources. For feature flag, the value should be application/vnd.microsoft.appconfig.ff+json;charset=utf-8. For Key Value reference, the value should be application/vnd.microsoft.appconfig.keyvaultref+json;charset=utf-8. Otherwise, it\'s optional.')
+// param contentType string = 'application/vnd.microsoft.appconfig.ff+json;charset=utf-8'
 
-// Specifies the names of the key-value resources. 
-param ConfigkeyValueNames array = [
-  'App:Settings:FontSize'
-  'App:Settings:FontColor'
-  'App:Settings:BackgroundColor'
-  'App:Settings:Sentinel'
-]
-
-// Specifies the values of the key-value resources. #000=Black, #FFF=White
-param ConfigkeyKeyValues array = [
-  '13'
-  'black'
-  'white'
-  '1'
-]
-
-param FeatureFlagKey1 string = 'PrivacyBeta'
-param FeatureFlagKey2 string = 'MetricsDashboard'
-param FeatureFlagKey3 string = 'NutritionColor'
-param FeatureFlagKey4 string = 'MetricsDashboard2'
-param FeatureFlagLabel1 string = 'Privacy Beta'
-param FeatureFlagLabel2 string = 'Metrics Dashboard'
-param FeatureFlagLabel3 string = 'Nutrition Color'
-param FeatureFlagLabel4 string = ''
-
-var FeatureFlagValue1 = {
-  id: FeatureFlagKey1
-  description: 'Description for Privacy Beta.'
-  enabled: true
-}
-var FeatureFlagValue2 = {
-  id: FeatureFlagKey2
-  description: 'Description for Metrics Dashboard.'
-  enabled: true
-}
-var FeatureFlagValue3 = {
-  id: FeatureFlagKey3
-  description: 'Description for Nutrition Color.'
-  enabled: false
-}
-var FeatureFlagValue4 = {
-  id: FeatureFlagKey4
-  description: 'Description for Metrics Dashboard 2.'
-  enabled: true
-}
-// Not able to loop through array creating FF
-// param FeatureFlagkeyValueNames array = [
-//   'PrivacyBeta'
-//   'MetricsDashboard'
-//   'NutritionColor'
+// // Specifies the names of the key-value resources. 
+// param ConfigkeyValueNames array = [
+//   'App:Settings:FontSize'
+//   'App:Settings:FontColor'
+//   'App:Settings:BackgroundColor'
+//   'App:Settings:Sentinel'
 // ]
-// Not able to loop through array creating FF
-// param FeatureFlagkeyValueLabels array = [
-//   'Privacy Page'
-//   'Metrics Dashboard'
-//   'Capture Nutrition Color'
+
+// // Specifies the values of the key-value resources. #000=Black, #FFF=White
+// param ConfigkeyKeyValues array = [
+//   '13'
+//   'black'
+//   'white'
+//   '1'
 // ]
-// Not able to loop through array creating FF
-// param FeatureFlagkeyValueKeys array = [
-//   'true'
-//   'true'
-//   'true'
-// ]
+
+// param FeatureFlagKey1 string = 'PrivacyBeta'
+// param FeatureFlagKey2 string = 'MetricsDashboard'
+// param FeatureFlagKey3 string = 'NutritionColor'
+// param FeatureFlagKey4 string = 'MetricsDashboard2'
+// param FeatureFlagLabel1 string = 'Privacy Beta'
+// param FeatureFlagLabel2 string = 'Metrics Dashboard'
+// param FeatureFlagLabel3 string = 'Nutrition Color'
+// param FeatureFlagLabel4 string = ''
+
+// var FeatureFlagValue1 = {
+//   id: FeatureFlagKey1
+//   description: 'Description for Privacy Beta.'
+//   enabled: true
+// }
+// var FeatureFlagValue2 = {
+//   id: FeatureFlagKey2
+//   description: 'Description for Metrics Dashboard.'
+//   enabled: true
+// }
+// var FeatureFlagValue3 = {
+//   id: FeatureFlagKey3
+//   description: 'Description for Nutrition Color.'
+//   enabled: false
+// }
+// var FeatureFlagValue4 = {
+//   id: FeatureFlagKey4
+//   description: 'Description for Metrics Dashboard 2.'
+//   enabled: true
+// }
 
 // Create AppConfiguration configuration Store
 // enableSoftDelete: false
-resource config 'Microsoft.AppConfiguration/configurationStores@2022-05-01' = {
-  name: configStoreName
-  location: location
-  tags: defaultTags
-  properties: {
-    enablePurgeProtection: false
-    softDeleteRetentionInDays: 7
-  }
-  sku: {
-    name: 'Standard'
-  }
-}
+// resource config 'Microsoft.AppConfiguration/configurationStores@2022-05-01' = {
+//   name: configStoreName
+//   location: location
+//   tags: defaultTags
+//   properties: {
+//     enablePurgeProtection: false
+//     softDeleteRetentionInDays: 7
+//   }
+//   sku: {
+//     name: 'Standard'
+//   }
+// }
 
 // Loop through array and create Config Key Values
-resource configStoreName_keyValueNames 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = [for (item, i) in ConfigkeyValueNames: {
-  name: '${config.name}/${item}' //'${config.name}/${item}'
-  properties: {
-    value: ConfigkeyKeyValues[i]
-    //contentType: contentType
-    tags: defaultTags
-  }
-}]
+// resource configStoreName_keyValueNames 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = [for (item, i) in ConfigkeyValueNames: {
+//   name: '${config.name}/${item}' //'${config.name}/${item}'
+//   properties: {
+//     value: ConfigkeyKeyValues[i]
+//     //contentType: contentType
+//     tags: defaultTags
+//   }
+// }]
 
 // Feature Flag 1
-resource configStoreName_appconfig_featureflags_1 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
-  parent: config
-  name: '.appconfig.featureflag~2F${FeatureFlagKey1}$${FeatureFlagLabel1}'
-  properties: {
-    value: string(FeatureFlagValue1)
-    contentType: contentType
-  }
-}
+// resource configStoreName_appconfig_featureflags_1 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
+//   parent: config
+//   name: '.appconfig.featureflag~2F${FeatureFlagKey1}$${FeatureFlagLabel1}'
+//   properties: {
+//     value: string(FeatureFlagValue1)
+//     contentType: contentType
+//   }
+// }
 // Feature Flag 2
-resource configStoreName_appconfig_featureflags_2 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
-  parent: config
-  name: '.appconfig.featureflag~2F${FeatureFlagKey2}$${FeatureFlagLabel2}'
-  properties: {
-    value: string(FeatureFlagValue2)
-    contentType: contentType
-  }
-}
+// resource configStoreName_appconfig_featureflags_2 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
+//   parent: config
+//   name: '.appconfig.featureflag~2F${FeatureFlagKey2}$${FeatureFlagLabel2}'
+//   properties: {
+//     value: string(FeatureFlagValue2)
+//     contentType: contentType
+//   }
+// }
 // Feature Flag 3
-resource configStoreName_appconfig_featureflags_3 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
-  parent: config
-  name: '.appconfig.featureflag~2F${FeatureFlagKey3}$${FeatureFlagLabel3}'
-  properties: {
-    value: string(FeatureFlagValue3)
-    contentType: contentType
-  }
-}
+// resource configStoreName_appconfig_featureflags_3 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
+//   parent: config
+//   name: '.appconfig.featureflag~2F${FeatureFlagKey3}$${FeatureFlagLabel3}'
+//   properties: {
+//     value: string(FeatureFlagValue3)
+//     contentType: contentType
+//   }
+// }
 
-resource configStoreName_appconfig_featureflags_4 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
-  parent: config
-  name: '.appconfig.featureflag~2F${FeatureFlagKey4}$${FeatureFlagLabel4}'
-  properties: {
-    value: string(FeatureFlagValue4)
-    contentType: contentType
-  }
-}
+// resource configStoreName_appconfig_featureflags_4 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
+//   parent: config
+//   name: '.appconfig.featureflag~2F${FeatureFlagKey4}$${FeatureFlagLabel4}'
+//   properties: {
+//     value: string(FeatureFlagValue4)
+//     contentType: contentType
+//   }
+// }
 
 // AppConfiguration - Avoid outputs for secrets - Look up secrets dynamically
 // https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/scenarios-secrets
 // Note: This is why ConfigStore isn't it's own module...MUST be in the main
-var configStoreConnectionString = listKeys(config.id, config.apiVersion).value[0].connectionString
+//var configStoreConnectionString = listKeys(config.id, config.apiVersion).value[0].connectionString
 
 ////////////////////////////////////////
 // END - Setup Config Store
@@ -560,6 +542,16 @@ module blogstoragemod './main-12-blobstorage.bicep' = {
   }
 }
 
+module configstoremod 'main-5-configstore.bicep' = {
+  name: blobstorageName
+  params: {
+    location: location
+     defaultTags: defaultTags
+     configStoreName: configStoreName
+
+  }
+}
+
 // module portaldashboardmod './main-11-Dashboard.bicep' = {
 //   name: dashboardName
 //   params: {
@@ -576,23 +568,23 @@ module configsettingsmod './main-13-configsettings.bicep' = {
   name: 'configSettings'
   params: {
     keyvaultName: keyvaultName
-    secret_configStoreConnectionName: secret_configStoreConnectionName
-    secret_configStoreConnectionValue: configStoreConnectionString //configstore.outputs.out_configStoreConnectionString
-    secret_ConnectionStringName: secret_ConnectionStringName
-    secret_ConnectionStringValue: webappmod.outputs.out_secretConnectionString
+    kvValue_configStoreConnectionName: kvValue_configStoreConnectionName
+    kvValue_configStoreConnectionValue: configstoremod.outputs.out_configStoreConnectionString
+    kvValue_ConnectionStringName: kvValue_ConnectionStringName
+    kvValue_ConnectionStringValue: webappmod.outputs.out_secretConnectionString
     appServiceprincipalId: webappmod.outputs.out_appServiceprincipalId
     webappName: webSiteName
     functionAppName: functionAppName
     funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
-    secret_AzureWebJobsStorageName: secret_AzureWebJobsStorageName
-    secret_AzureWebJobsStorageValue: functionappmod.outputs.out_AzureWebJobsStorage
-    secret_WebsiteContentAzureFileConnectionStringName: secret_WebsiteContentAzureFileConnectionString
+    configStoreprincipalId: configstoremod.outputs.out_configStoreprincipalId
+    kvValue_AzureWebJobsStorageName: kvValue_AzureWebJobsStorageName
+    kvValue_AzureWebJobsStorageValue: functionappmod.outputs.out_AzureWebJobsStorage
+    kvValue_WebsiteContentAzureFileConnectionStringName: kvValue_WebsiteContentAzureFileConnectionString
     appInsightsInstrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
     appInsightsConnectionString: appinsightsmod.outputs.out_appInsightsConnectionString
     Deployed_Environment: Deployed_Environment
     ApimSubscriptionKey: ApimSubscriptionKeyString
     ApimWebServiceURL: apiManagementService.properties.gatewayUrl
-    apiServiceName: apiServiceName
     AzObjectIdPagels: AzObjectIdPagels
     }
     dependsOn:  [

@@ -93,10 +93,10 @@ public class HomeController : Controller
 
     // Check for Feature Flag
     // If Feature Flag is disabled, the entire method is disabled.
-    [FeatureGate("MetricsDashboard2")]
+    [FeatureGate("MetricsDashboard")]
     public async Task<IActionResult> Metrics()
     {
-        if (await _featureManager.IsEnabledAsync("MetricsDashboard2"))
+        if (await _featureManager.IsEnabledAsync("MetricsDashboard"))
         {
             return View(new MetricsModel { Name = "Metrics Beta" });
         }

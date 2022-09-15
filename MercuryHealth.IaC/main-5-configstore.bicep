@@ -1,188 +1,189 @@
-// param configStoreName string
-// param location string = resourceGroup().location
-// param defaultTags object
-// param configParent object
+param configStoreName string
+param location string = resourceGroup().location
+param defaultTags object
+//param configParent object
+
+param contentType string = 'application/vnd.microsoft.appconfig.ff+json;charset=utf-8'
 
 // // Specifies the names of the key-value resources. 
 // param ConfigkeyValueNames array = [
-//   'MercuryHealth:Settings:FontSize'
-//   'MercuryHealth:Settings:Sentinel'
+//   'App:Settings:FontSize'
+//   'App:Settings:FontColor'
+//   'App:Settings:BackgroundColor'
+//   'App:Settings:Sentinel'
 // ]
 
-// // Specifies the values of the key-value resources. It's optional
+// // Specifies the values of the key-value resources. #000=Black, #FFF=White
 // param ConfigkeyKeyValues array = [
-//   '14'
+//   '12'
+//   'black'
+//   'white'
 //   '1'
 // ]
 
-// param FeatureFlagkeyValueNames array = [
-//   'PrivacyBeta'
-//   'MetricsDashboard'
-//   'CognitiveServices'
-//   'CaptureNutritionColor'
-// ]
+// Configuation
+param ConfigName1 string = 'App:Settings:FontSize$lablegoeshere'
+param ConfigValue1 string = '12'
+param ConfigName2 string = 'App:Settings:FontColor$lablegoeshere'
+param ConfigValue2 string = 'black'
+param ConfigName3 string = 'App:Settings:BackgroundColor$lablegoeshere'
+param ConfigValue3 string = 'white'
+param ConfigName4 string = 'App:Settings:Sentinel$lablegoeshere'
+param ConfigValue4 string = '1'
 
-// param FeatureFlagkeyValueLabels array = [
-//   'Privacy Page'
-//   'Metrics Dashboard'
-//   'Cognitive Services'
-//   'Capture Nutrition Color'
-// ]
+// Feature Flags
+param FeatureFlagKey1 string = 'PrivacyBeta'
+param FeatureFlagLabel1 string = ''
+param FeatureFlagKey2 string = 'MetricsDashboard'
+param FeatureFlagLabel2 string = ''
+param FeatureFlagKey3 string = 'NutritionColor'
+param FeatureFlagLabel3 string = ''
 
-// param FeatureFlagkeyValueKeys array = [
-//   'true'
-//   'true'
-//   'true'
-//   'true'
-// ]
+var FeatureFlagValue1 = {
+  id: FeatureFlagKey1
+  description: 'Description for Privacy Beta.'
+  enabled: true
+}
+var FeatureFlagValue2 = {
+  id: FeatureFlagKey2
+  description: 'Description for Metrics Dashboard.'
+  enabled: true
+}
+var FeatureFlagValue3 = {
+  id: FeatureFlagKey3
+  description: 'Description for Nutrition Color.'
+  enabled: false
+}
+// var FeatureFlagValue4 = {
+//   id: FeatureFlagKey4
+//   description: 'Description for Metrics Dashboard 2.'
+//   enabled: true
+// }
 
-// // ////////////////////////////////////////////////////////////////
-// // ////////////////////////////////////////////////////////////////
-// // param featureFlagKey1 string = 'PrivacyBeta'
-// // param featureFlagLabel1 string = 'Privacy Page'
-// // var featureFlagValue1 = {
-// //   id: featureFlagKey1
-// //   description: 'Beta Privacy Page.'
-// //   enabled: true
-// // }
+// Create AppConfiguration configuration Store
+// enableSoftDelete: false
+resource config 'Microsoft.AppConfiguration/configurationStores@2022-05-01' = {
+  name: configStoreName
+  location: location
+  tags: defaultTags
+  properties: {
+    enablePurgeProtection: false
+    softDeleteRetentionInDays: 7
+  }
+  sku: {
+    name: 'Standard'
+  }
+  identity: {
+    type:'SystemAssigned'
+  }
+}
 
-// // // Add Microsoft.Percentage
-// // param featureFlagKey2 string = 'MetricsDashboard'
-// // param featureFlagLabel2 string = 'Metrics Dashboard'
-// // var featureFlagValue2 = {
-// //   id: featureFlagKey2
-// //   description: 'Metrics Dashboard.'
-// //   enabled: false
-// // }
-
-// // param featureFlagKey3 string = 'CognitiveServices'
-// // param featureFlagLabel3 string = 'Cognitive Services'
-// // var featureFlagValue3 = {
-// //   id: featureFlagKey3
-// //   description: 'Cognitive Services.'
-// //   enabled: false
-// // }
-
-// // param featureFlagKey4 string = 'CaptureNutritionColor'
-// // param featureFlagLabel4 string = 'Capture Nutrition Color'
-// // var featureFlagValue4 = {
-// //   id: featureFlagKey4
-// //   description: 'Capture Nutrition Color.'
-// //   enabled: false
-// // }
-// // ////////////////////////////////////////////////////////////////
-// // ////////////////////////////////////////////////////////////////
-
-// @description('Specifies the content type of the key-value resources. For feature flag, the value should be application/vnd.microsoft.appconfig.ff+json;charset=utf-8. For Key Value reference, the value should be application/vnd.microsoft.appconfig.keyvaultref+json;charset=utf-8. Otherwise, it\'s optional.')
-// param contentType string = 'application/vnd.microsoft.appconfig.ff+json;charset=utf-8'
-
-// // AppConfiguration configuration Store
-// // resource config 'Microsoft.AppConfiguration/configurationStores@2021-03-01-preview' = {
-// //   name: configStoreName
-// //   location: location
-// //   tags: defaultTags
-// //   sku: {
-// //     name: 'Standard'
-// //   }
-// // }
-
-// resource configStoreName_keyValueNames 'Microsoft.AppConfiguration/configurationStores/keyValues@2021-10-01-preview' = [for (item, i) in ConfigkeyValueNames: {
-//   name: '${configParent}/${item}' //'${config.name}/${item}'
+// Loop through array and create Config Key Values
+// resource configStoreName_keyValueNames 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = [for (item, i) in ConfigkeyValueNames: {
+//   name: '${config.name}/${item}'
 //   properties: {
 //     value: ConfigkeyKeyValues[i]
-//     contentType: contentType
+//     contentType:
+//     //contentType: contentType
 //     tags: defaultTags
 //   }
 // }]
 
-// // Todo: Must add "key-value" pairs under Configuration Explorer
-// // MercuryHealth:Settings:FontSize = 14
-// // MercuryHealth:Settings:Sentinel = 1
+resource configStoreName_Values1 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
+  name: ConfigName1
+  parent: config
+  properties: {
+    value: ConfigValue1
+    contentType: 'application/json'
+    tags: defaultTags
+  }
+}
+resource configStoreName_Values2 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
+  name: ConfigName2
+  parent: config
+  properties: {
+    value: ConfigValue2
+    contentType: 'application/json'
+    tags: defaultTags
+  }
+}
+resource configStoreName_Values3 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
+  name: ConfigName3
+  parent: config
+  properties: {
+    value: ConfigValue3
+    contentType: 'application/json'
+    tags: defaultTags
+  }
+}
+resource configStoreName_Values4 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
+  name: ConfigName4
+  parent: config
+  properties: {
+    value: ConfigValue4
+    contentType: 'application/json'
+    tags: defaultTags
+  }
+}
 
-
-// // // AppConfiguration Key 1
-// // resource key1 'Microsoft.AppConfiguration/configurationStores/keyValues@2021-03-01-preview' = {
-// //   name: '${config.name}/${keyValueNames[0]}'
-// //   properties: {
-// //     value: keyValueValues[0]
-// //     contentType: contentType
-// //   }
-// // }
-// // // AppConfiguration Key 2
-// // resource key2 'Microsoft.AppConfiguration/configurationStores/keyValues@2021-03-01-preview' = {
-// //   name: '${config.name}/${keyValueNames[1]}'
-// //   properties: {
-// //     value: keyValueValues[1]
-// //     contentType: contentType
-// //   }
-// // }
-// // // AppConfiguration Key 3
-// // resource key3 'Microsoft.AppConfiguration/configurationStores/keyValues@2021-03-01-preview' = {
-// //   name: '${config.name}/${keyValueNames[2]}'
-// //   properties: {
-// //     value: keyValueValues[2]
-// //     contentType: contentType
-// //   }
-// // }
-// // // AppConfiguration Key 4
-// // resource key4 'Microsoft.AppConfiguration/configurationStores/keyValues@2021-03-01-preview' = {
-// //   name: '${config.name}/${keyValueNames[3]}'
-// //   properties: {
-// //     value: keyValueValues[3]
-// //     contentType: contentType
-// //   }
-// // }
-
-// // AppConfiguration Feature Flag Store
-// resource configStoreName_appconfig_featureflags 'Microsoft.AppConfiguration/configurationStores/keyValues@2020-07-01-preview' = [for (item, i) in FeatureFlagkeyValueNames: {
+// Feature Flag 1
+// resource configStoreName_appconfig_featureflags_1 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
 //   parent: config
-//   name: '.appconfig.featureflag~2F${featureFlagKey1}$${featureFlagLabel1}'
+//   name: '.appconfig.featureflag~2F${FeatureFlagKey1}$${FeatureFlagLabel1}'
 //   properties: {
-//     value: string(featureFlagValue1)
+//     value: string(FeatureFlagValue1)
+//     contentType: contentType
+//   }
+// }
+// // Feature Flag 2
+// resource configStoreName_appconfig_featureflags_2 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
+//   parent: config
+//   name: '.appconfig.featureflag~2F${FeatureFlagKey2}$${FeatureFlagLabel2}'
+//   properties: {
+//     value: string(FeatureFlagValue2)
+//     contentType: contentType
+//   }
+// }
+// // Feature Flag 3
+// resource configStoreName_appconfig_featureflags_3 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
+//   parent: config
+//   name: '.appconfig.featureflag~2F${FeatureFlagKey3}$${FeatureFlagLabel3}'
+//   properties: {
+//     value: string(FeatureFlagValue3)
 //     contentType: contentType
 //   }
 // }
 
-// // AppConfiguration Feature Flag Store
-// resource configStoreName_appconfig_featureflag_1 'Microsoft.AppConfiguration/configurationStores/keyValues@2020-07-01-preview' = {
-//   parent: config
-//   name: '.appconfig.featureflag~2F${featureFlagKey1}$${featureFlagLabel1}'
-//   properties: {
-//     value: string(featureFlagValue1)
-//     contentType: contentType
-//   }
-// }
+// Feature Flag 1
+resource configStoreName_featureflags_1 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
+  parent: config
+  name: '.appconfig.featureflag~2F${FeatureFlagKey1}$${FeatureFlagLabel1}'
+  properties: {
+    value: string(FeatureFlagValue1)
+    contentType: contentType
+  }
+}
 
-// // AppConfiguration Feature Flag Store
-// resource configStoreName_appconfig_featureflag_2 'Microsoft.AppConfiguration/configurationStores/keyValues@2020-07-01-preview' = {
-//   parent: config
-//   name: '.appconfig.featureflag~2F${featureFlagKey2}$${featureFlagLabel2}'
-//   properties: {
-//     value: string(featureFlagValue2)
-//     contentType: contentType
-//   }
-// }
+// Feature Flag 2
+resource configStoreName_featureflags_2 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
+  parent: config
+  name: '.appconfig.featureflag~2F${FeatureFlagKey2}$${FeatureFlagLabel2}'
+  properties: {
+    value: string(FeatureFlagValue2)
+    contentType: contentType
+  }
+}
 
-// // AppConfiguration Feature Flag Store
-// resource configStoreName_appconfig_featureflag_3 'Microsoft.AppConfiguration/configurationStores/keyValues@2020-07-01-preview' = {
-//   parent: config
-//   name: '.appconfig.featureflag~2F${featureFlagKey3}$${featureFlagLabel3}'
-//   properties: {
-//     value: string(featureFlagValue3)
-//     contentType: contentType
-//   }
-// }
+// Feature Flag 3
+resource configStoreName_featureflags_3 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
+  parent: config
+  name: '.appconfig.featureflag~2F${FeatureFlagKey3}$${FeatureFlagLabel3}'
+  properties: {
+    value: string(FeatureFlagValue3)
+    contentType: contentType
+  }
+}
 
-// // AppConfiguration Feature Flag Store
-// resource configStoreName_appconfig_featureflag_4 'Microsoft.AppConfiguration/configurationStores/keyValues@2020-07-01-preview' = {
-//   parent: config
-//   name: '.appconfig.featureflag~2F${featureFlagKey4}$${featureFlagLabel4}'
-//   properties: {
-//     value: string(featureFlagValue4)
-//     contentType: contentType
-//   }
-// }
-
-// Todo! 9.15.2022
-//var configStoreConnectionString = listKeys(config.id, config.apiVersion).value[0].connectionString
-//output out_configStoreConnectionString = configStoreConnectionString
+var configStoreConnectionString = listKeys(config.id, config.apiVersion).value[0].connectionString
+output out_configStoreConnectionString string = configStoreConnectionString
+output out_configStoreprincipalId string = config.identity.principalId

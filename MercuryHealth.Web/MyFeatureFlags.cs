@@ -5,6 +5,6 @@
         PrivacyBeta,
         CaptureNutritionColor,
         CognitiveServices,
-        MetricsDashboard2
+        MetricsDashboard
     }
 }
