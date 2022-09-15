@@ -569,6 +569,8 @@ module blogstoragemod './main-12-blobstorage.bicep' = {
 //   }
 // }
 
+param AzObjectIdPagels string = 'b6be0700-1fda-4f88-bf20-1aa508a91f73'
+
 // Create Configuration Entries
 module configsettingsmod './main-13-configsettings.bicep' = {
   name: 'configSettings'
@@ -591,6 +593,7 @@ module configsettingsmod './main-13-configsettings.bicep' = {
     ApimSubscriptionKey: ApimSubscriptionKeyString
     ApimWebServiceURL: apiManagementService.properties.gatewayUrl
     apiServiceName: apiServiceName
+    AzObjectIdPagels: AzObjectIdPagels
     }
     dependsOn:  [
      keyvaultmod
