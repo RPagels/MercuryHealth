@@ -15,7 +15,7 @@ param ApimWebServiceURL string
 ///////////////////////////
 /// TESTING App Config
 ///////////////////////////
-param configStoreObject object
+param configStoreEndPoint string
 param FontNameKey string
 param FontColorKey string
 param FontSizeKey string
@@ -41,8 +41,8 @@ param appServiceprincipalId string
 @secure()
 param funcAppServiceprincipalId string
 
-@secure()
-param configStoreprincipalId string
+// @secure()
+// param configStoreprincipalId string
 
 @secure()
 param kvValue_AzureWebJobsStorageValue string
@@ -115,12 +115,12 @@ param accessPolicies array = [
 ]
 
 // Reference Existing resource
-resource existing_keyvault 'Microsoft.KeyVault/vaults@2021-11-01-preview' existing = {
+resource existing_keyvault 'Microsoft.KeyVault/vaults@2022-07-01' existing = {
   name: keyvaultName
 }
 
 // Create KeyVault accessPolicies
-resource keyvaultaccessmod 'Microsoft.KeyVault/vaults/accessPolicies@2021-11-01-preview' = {
+resource keyvaultaccessmod 'Microsoft.KeyVault/vaults/accessPolicies@2022-07-01' = {
   name: 'add'
   parent: existing_keyvault
   properties: {
@@ -129,7 +129,7 @@ resource keyvaultaccessmod 'Microsoft.KeyVault/vaults/accessPolicies@2021-11-01-
 }
 
 // Create KeyVault Secrets
-resource secret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+resource secret1 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
   name: kvValue_configStoreConnectionName
   parent: existing_keyvault
   properties: {
@@ -138,7 +138,7 @@ resource secret1 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
 }
 
 // create secret for Web App
-resource secret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+resource secret2 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
   name: kvValue_ConnectionStringName
   parent: existing_keyvault
   properties: {
@@ -147,7 +147,7 @@ resource secret2 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
   }
 }
 //create secret for Func App
-resource secret3 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+resource secret3 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
   name: kvValue_AzureWebJobsStorageName
   parent: existing_keyvault
   properties: {
@@ -156,7 +156,7 @@ resource secret3 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
   }
 }
 // create secret for Func App
-resource secret4 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+resource secret4 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
   name: kvValue_WebsiteContentAzureFileConnectionStringName
   parent: existing_keyvault
   properties: {
@@ -165,12 +165,16 @@ resource secret4 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
   }
 }
 // Reference Existing resource
-resource existing_appService 'Microsoft.Web/sites@2021-03-01' existing = {
+resource existing_appService 'Microsoft.Web/sites@2022-03-01' existing = {
   name: webappName
 }
 
+// resource existing_configStore 'Microsoft.AppConfiguration/configurationStores@2022-05-01' existing = {
+//   name: configStoreName
+// }
+
 // Create Web sites/config 'appsettings' - Web App
-resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
+resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2022-03-01' = {
   name: 'appsettings'
   parent: existing_appService
   properties: {
@@ -184,9 +188,9 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
     APPLICATIONINSIGHTS_CONNECTION_STRING: appInsightsConnectionString
     WebAppUrl: 'https://${existing_appService.name}.azurewebsites.net/'
     ASPNETCORE_ENVIRONMENT: 'Development'
-    WEBSITE_FONTNAME: '@Microsoft.AppConfiguration(Endpoint=${configStoreObject.properties.endpoint}; Key=${FontNameKey}; Label=${myLabel})'
-    WEBSITE_FONTCOLOR: '@Microsoft.AppConfiguration(Endpoint=${configStoreObject.properties.endpoint}; Key=${FontColorKey}; Label=${myLabel})'
-    WEBSITE_FONTSIZE: '@Microsoft.AppConfiguration(Endpoint=${configStoreObject.properties.endpoint}; Key=${FontSizeKey}; Label=${myLabel})'
+    WEBSITE_FONTNAME: '@Microsoft.AppConfiguration(Endpoint=${configStoreEndPoint}; Key=${FontNameKey}; Label=${myLabel})'
+    WEBSITE_FONTCOLOR: '@Microsoft.AppConfiguration(Endpoint=${configStoreEndPoint}; Key=${FontColorKey}; Label=${myLabel})'
+    WEBSITE_FONTSIZE: '@Microsoft.AppConfiguration(Endpoint=${configStoreEndPoint}; Key=${FontSizeKey}; Label=${myLabel})'
   }
   dependsOn: [
     secret1
@@ -195,11 +199,11 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
 }
 
 // Reference Existing resource
-resource existing_funcAppService 'Microsoft.Web/sites@2021-03-01' existing = {
+resource existing_funcAppService 'Microsoft.Web/sites@2022-03-01' existing = {
   name: functionAppName
 }
 // Create Web sites/config 'appsettings' - Function App
-resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
+resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2022-03-01' = {
   name: 'appsettings'
   kind: 'string'
   parent: existing_funcAppService
