@@ -3,25 +3,14 @@
 //targetScope = 'subscription'
 // Region for all resources
 param location string = resourceGroup().location
-//param environment string = 'dev'
 param createdBy string = 'Randy Pagels' // resourceGroup().managedBy
 param costCenter string = '74f644d3e665'
 param releaseAnnotationGuid string = newGuid()
-//param guidValue string = newGuid()
-
-// Data params
 param Deployed_Environment string
-
-// @secure()
-// param sqlAdministratorLogin string
-
-// @secure()
-// param sqlAdministratorLoginPassword string
 
 // Generate Azure SQL Credentials
 var sqlAdminLoginName = 'AzureAdmin'
-//var sqlAdminLoginPassword = 'Password.1.!!'
-var sqlAdminLoginPassword = '${substring(base64(uniqueString(resourceGroup().id)), 0, 10)}.!&!.${uniqueString(resourceGroup().id)}'
+var sqlAdminLoginPassword = '${substring(base64(uniqueString(resourceGroup().id)), 0, 10)}.${uniqueString(resourceGroup().id)}'
 
 // Variables for Recommended abbreviations for Azure resource types
 // https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations
@@ -56,144 +45,13 @@ param kvValue_ConnectionStringName string = 'ConnectionStringsMercuryHealthWebCo
 param kvValue_AzureWebJobsStorageName string = 'AzureWebJobsStorage'
 param kvValue_WebsiteContentAzureFileConnectionString string = 'WebsiteContentAzureFileConnectionString'
 
-///////////////////////////
-/// TESTING App Config
-///////////////////////////
+// App Configuration Settings
 var FontNameKey = 'FontName'
 var FontColorKey = 'FontColor'
 var FontSizeKey = 'FontSize'
 var FontNameValue = 'Calibri'
 var FontColorValue = 'Blue'
 var FontSizeValue = '12'
-//var myLabel = 'Test'
-//var App_Configuration_Data_Reader = '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/516239f1-63e1-4d78-a4de-a74fb236a071'
-///////////////////////////
-/// TESTING App Config
-///////////////////////////
-
-////////////////////////////////////////
-// BEGIN - Create Config Store
-////////////////////////////////////////
-
-// @description('Specifies the content type of the key-value resources. For feature flag, the value should be application/vnd.microsoft.appconfig.ff+json;charset=utf-8. For Key Value reference, the value should be application/vnd.microsoft.appconfig.keyvaultref+json;charset=utf-8. Otherwise, it\'s optional.')
-// param contentType string = 'application/vnd.microsoft.appconfig.ff+json;charset=utf-8'
-
-// // Specifies the names of the key-value resources. 
-// param ConfigkeyValueNames array = [
-//   'App:Settings:FontSize'
-//   'App:Settings:FontColor'
-//   'App:Settings:BackgroundColor'
-//   'App:Settings:Sentinel'
-// ]
-
-// // Specifies the values of the key-value resources. #000=Black, #FFF=White
-// param ConfigkeyKeyValues array = [
-//   '13'
-//   'black'
-//   'white'
-//   '1'
-// ]
-
-// param FeatureFlagKey1 string = 'PrivacyBeta'
-// param FeatureFlagKey2 string = 'MetricsDashboard'
-// param FeatureFlagKey3 string = 'NutritionColor'
-// param FeatureFlagKey4 string = 'MetricsDashboard2'
-// param FeatureFlagLabel1 string = 'Privacy Beta'
-// param FeatureFlagLabel2 string = 'Metrics Dashboard'
-// param FeatureFlagLabel3 string = 'Nutrition Color'
-// param FeatureFlagLabel4 string = ''
-
-// var FeatureFlagValue1 = {
-//   id: FeatureFlagKey1
-//   description: 'Description for Privacy Beta.'
-//   enabled: true
-// }
-// var FeatureFlagValue2 = {
-//   id: FeatureFlagKey2
-//   description: 'Description for Metrics Dashboard.'
-//   enabled: true
-// }
-// var FeatureFlagValue3 = {
-//   id: FeatureFlagKey3
-//   description: 'Description for Nutrition Color.'
-//   enabled: false
-// }
-// var FeatureFlagValue4 = {
-//   id: FeatureFlagKey4
-//   description: 'Description for Metrics Dashboard 2.'
-//   enabled: true
-// }
-
-// Create AppConfiguration configuration Store
-// enableSoftDelete: false
-// resource config 'Microsoft.AppConfiguration/configurationStores@2022-05-01' = {
-//   name: configStoreName
-//   location: location
-//   tags: defaultTags
-//   properties: {
-//     enablePurgeProtection: false
-//     softDeleteRetentionInDays: 7
-//   }
-//   sku: {
-//     name: 'Standard'
-//   }
-// }
-
-// Loop through array and create Config Key Values
-// resource configStoreName_keyValueNames 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = [for (item, i) in ConfigkeyValueNames: {
-//   name: '${config.name}/${item}' //'${config.name}/${item}'
-//   properties: {
-//     value: ConfigkeyKeyValues[i]
-//     //contentType: contentType
-//     tags: defaultTags
-//   }
-// }]
-
-// Feature Flag 1
-// resource configStoreName_appconfig_featureflags_1 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
-//   parent: config
-//   name: '.appconfig.featureflag~2F${FeatureFlagKey1}$${FeatureFlagLabel1}'
-//   properties: {
-//     value: string(FeatureFlagValue1)
-//     contentType: contentType
-//   }
-// }
-// Feature Flag 2
-// resource configStoreName_appconfig_featureflags_2 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
-//   parent: config
-//   name: '.appconfig.featureflag~2F${FeatureFlagKey2}$${FeatureFlagLabel2}'
-//   properties: {
-//     value: string(FeatureFlagValue2)
-//     contentType: contentType
-//   }
-// }
-// Feature Flag 3
-// resource configStoreName_appconfig_featureflags_3 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
-//   parent: config
-//   name: '.appconfig.featureflag~2F${FeatureFlagKey3}$${FeatureFlagLabel3}'
-//   properties: {
-//     value: string(FeatureFlagValue3)
-//     contentType: contentType
-//   }
-// }
-
-// resource configStoreName_appconfig_featureflags_4 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
-//   parent: config
-//   name: '.appconfig.featureflag~2F${FeatureFlagKey4}$${FeatureFlagLabel4}'
-//   properties: {
-//     value: string(FeatureFlagValue4)
-//     contentType: contentType
-//   }
-// }
-
-// AppConfiguration - Avoid outputs for secrets - Look up secrets dynamically
-// https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/scenarios-secrets
-// Note: This is why ConfigStore isn't it's own module...MUST be in the main
-//var configStoreConnectionString = listKeys(config.id, config.apiVersion).value[0].connectionString
-
-////////////////////////////////////////
-// END - Setup Config Store
-////////////////////////////////////////
 
 // Create Azure KeyVault
 module keyvaultmod './main-8-keyvault.bicep' = {
@@ -595,7 +453,6 @@ module configsettingsmod './main-13-configsettings.bicep' = {
     webappName: webSiteName
     functionAppName: functionAppName
     funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
-    //configStoreprincipalId: configstoremod.outputs.out_configStoreprincipalId
     configStoreEndPoint: configstoremod.outputs.out_configStoreEndPoint
     FontNameKey: FontNameKey
     FontColorKey: FontColorKey
@@ -621,7 +478,6 @@ module configsettingsmod './main-13-configsettings.bicep' = {
 module frontdoormod './main-14-frontdoor.bicep' = {
   name: frontDoorName
   params: {
-  //backendAddress: 'https://${webSiteName}.azurewebsites.net/'
   backendAddress: '${apiServiceName}.azure-api.net'  //
   frontDoorName: frontDoorName
   }

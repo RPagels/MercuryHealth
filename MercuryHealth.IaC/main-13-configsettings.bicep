@@ -10,24 +10,13 @@ param appInsightsConnectionString string
 param Deployed_Environment string
 param ApimSubscriptionKey string
 param ApimWebServiceURL string
-//param appServiceName string
 
-///////////////////////////
-/// TESTING App Config
-///////////////////////////
+// App Configuration Settings
 param configStoreEndPoint string
 param FontNameKey string
 param FontColorKey string
 param FontSizeKey string
-//param webSiteName string
 var myLabel = 'Test'
-
-///////////////////////////
-/// TESTING App Config
-///////////////////////////
-
-//param location string = resourceGroup().location
-//param vaultName string
 
 @secure()
 param kvValue_configStoreConnectionValue string
@@ -40,9 +29,6 @@ param appServiceprincipalId string
 
 @secure()
 param funcAppServiceprincipalId string
-
-// @secure()
-// param configStoreprincipalId string
 
 @secure()
 param kvValue_AzureWebJobsStorageValue string
@@ -98,20 +84,6 @@ param accessPolicies array = [
       ]
     }
   }
-  // {
-  //   tenantId: tenant
-  //   objectId: configStoreprincipalId
-  //   permissions: {
-  //     keys: [
-  //       'get'
-  //       'list'
-  //     ]
-  //     secrets: [
-  //       'get'
-  //       'list'
-  //     ]
-  //   }
-  // }
 ]
 
 // Reference Existing resource
@@ -168,10 +140,6 @@ resource secret4 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
 resource existing_appService 'Microsoft.Web/sites@2022-03-01' existing = {
   name: webappName
 }
-
-// resource existing_configStore 'Microsoft.AppConfiguration/configurationStores@2022-05-01' existing = {
-//   name: configStoreName
-// }
 
 // Create Web sites/config 'appsettings' - Web App
 resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2022-03-01' = {

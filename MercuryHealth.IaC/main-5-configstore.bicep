@@ -1,43 +1,20 @@
 param configStoreName string
 param location string = resourceGroup().location
 param defaultTags object
-//param configParent object
 
 param contentType string = 'application/vnd.microsoft.appconfig.ff+json;charset=utf-8'
 
-///////////////////////////
-/// TESTING App Config
-///////////////////////////
+// App Configuration Settings
 param FontNameKey string
 param FontColorKey string
 param FontSizeKey string
 param FontNameValue string
 param FontColorValue string
 param FontSizeValue string
-//var myLabel = 'Test'
-//var App_Configuration_Data_Reader = '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/516239f1-63e1-4d78-a4de-a74fb236a071'
-///////////////////////////
-/// TESTING App Config
-///////////////////////////
 
-
-// // Specifies the names of the key-value resources. 
-// param ConfigkeyValueNames array = [
-//   'App:Settings:FontSize'
-//   'App:Settings:FontColor'
-//   'App:Settings:BackgroundColor'
-//   'App:Settings:Sentinel'
-// ]
-
-// // Specifies the values of the key-value resources. #000=Black, #FFF=White
-// param ConfigkeyKeyValues array = [
-//   '12'
-//   'black'
-//   'white'
-//   '1'
-// ]
-
-// Configuation
+//
+// TBD! These WILL be deleted...NOT needed - App Configuation
+//
 param ConfigName1 string = 'App:Settings:FontSize$lablegoeshere'
 param ConfigValue1 string = '12'
 param ConfigName2 string = 'App:Settings:FontColor$lablegoeshere'
@@ -46,6 +23,9 @@ param ConfigName3 string = 'App:Settings:BackgroundColor$lablegoeshere'
 param ConfigValue3 string = 'white'
 param ConfigName4 string = 'App:Settings:Sentinel$lablegoeshere'
 param ConfigValue4 string = '1'
+//
+// TBD! These WILL be deleted...NOT needed - App Configuation
+//
 
 // Feature Flags
 param FeatureFlagKey1 string = 'PrivacyBeta'
@@ -77,11 +57,6 @@ var FeatureFlagValue4 = {
   description: 'Description for Cognitive Services.'
   enabled: false
 }
-// var FeatureFlagValue4 = {
-//   id: FeatureFlagKey4
-//   description: 'Description for Metrics Dashboard 2.'
-//   enabled: true
-// }
 
 // Create AppConfiguration configuration Store
 // enableSoftDelete: false
@@ -100,17 +75,6 @@ resource config 'Microsoft.AppConfiguration/configurationStores@2022-05-01' = {
     type:'SystemAssigned'
   }
 }
-
-// Loop through array and create Config Key Values
-// resource configStoreName_keyValueNames 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = [for (item, i) in ConfigkeyValueNames: {
-//   name: '${config.name}/${item}'
-//   properties: {
-//     value: ConfigkeyKeyValues[i]
-//     contentType:
-//     //contentType: contentType
-//     tags: defaultTags
-//   }
-// }]
 
 resource configStoreName_Values1 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
   name: ConfigName1
@@ -189,9 +153,7 @@ resource configStoreName_featureflags_4 'Microsoft.AppConfiguration/configuratio
   }
 }
 
-///////////////////////////
-/// TEST ONLY
-///////////////////////////
+// Add App Configuration Settings
 resource appConfigStoreName_FontNameKey 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
   parent: config
   name: FontNameKey
@@ -216,12 +178,7 @@ resource appConfigStoreName_FontSizeKey 'Microsoft.AppConfiguration/configuratio
     contentType: 'application/json'
   }
 }
-///////////////////////////
-/// TEST ONLY
-///////////////////////////
-
 
 var configStoreConnectionString = listKeys(config.id, config.apiVersion).value[0].connectionString
 output out_configStoreConnectionString string = configStoreConnectionString
-//output out_configStoreprincipalId string = config.identity.principalId
 output out_configStoreEndPoint string = config.properties.endpoint
