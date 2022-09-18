@@ -33,6 +33,9 @@ public class HomeController : Controller
 
         // Save App Service Configuration Settings
         ViewData["myenvironment"] = _configuration["deployedenvironment"];
+        ViewData["Website_FontName"] = _configuration["WEBSITE_FONTNAME"];
+        ViewData["Website_FontColor"] = _configuration["WEBSITE_FONTCOLOR"];
+        ViewData["Website_FontSize"] = _configuration["WEBSITE_FONTSIZE"];
 
         //IPAddress remoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress;
 
