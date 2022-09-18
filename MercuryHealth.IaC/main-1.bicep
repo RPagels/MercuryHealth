@@ -595,7 +595,7 @@ module configsettingsmod './main-13-configsettings.bicep' = {
     webappName: webSiteName
     functionAppName: functionAppName
     funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
-    configStoreprincipalId: configstoremod.outputs.out_configStoreprincipalId
+    //configStoreprincipalId: configstoremod.outputs.out_configStoreprincipalId
     configStoreEndPoint: configstoremod.outputs.out_configStoreEndPoint
     FontNameKey: FontNameKey
     FontColorKey: FontColorKey

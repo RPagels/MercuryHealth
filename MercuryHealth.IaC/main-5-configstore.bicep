@@ -223,5 +223,5 @@ resource appConfigStoreName_FontSizeKey 'Microsoft.AppConfiguration/configuratio
 
 var configStoreConnectionString = listKeys(config.id, config.apiVersion).value[0].connectionString
 output out_configStoreConnectionString string = configStoreConnectionString
-output out_configStoreprincipalId string = config.identity.principalId
+//output out_configStoreprincipalId string = config.identity.principalId
 output out_configStoreEndPoint string = config.properties.endpoint
