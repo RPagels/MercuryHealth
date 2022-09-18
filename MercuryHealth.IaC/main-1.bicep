@@ -56,6 +56,21 @@ param kvValue_ConnectionStringName string = 'ConnectionStringsMercuryHealthWebCo
 param kvValue_AzureWebJobsStorageName string = 'AzureWebJobsStorage'
 param kvValue_WebsiteContentAzureFileConnectionString string = 'WebsiteContentAzureFileConnectionString'
 
+///////////////////////////
+/// TESTING App Config
+///////////////////////////
+var FontNameKey = 'FontName'
+var FontColorKey = 'FontColor'
+var FontSizeKey = 'FontSize'
+var FontNameValue = 'Calibri'
+var FontColorValue = 'Blue'
+var FontSizeValue = '12'
+//var myLabel = 'Test'
+//var App_Configuration_Data_Reader = '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/516239f1-63e1-4d78-a4de-a74fb236a071'
+///////////////////////////
+/// TESTING App Config
+///////////////////////////
+
 ////////////////////////////////////////
 // BEGIN - Create Config Store
 ////////////////////////////////////////
@@ -521,7 +536,6 @@ module functionappmod './main-6-funcapp.bicep' = {
   dependsOn:  [
     appinsightsmod
   ]
-  
 }
 
 // Create Azure Load Tests
@@ -548,7 +562,12 @@ module configstoremod 'main-5-configstore.bicep' = {
     location: location
      defaultTags: defaultTags
      configStoreName: configStoreName
-
+     FontNameKey: FontNameKey
+     FontNameValue: FontNameValue
+     FontColorKey: FontColorKey
+     FontColorValue: FontColorValue
+     FontSizeKey: FontSizeKey
+     FontSizeValue: FontSizeValue
   }
 }
 
@@ -577,6 +596,10 @@ module configsettingsmod './main-13-configsettings.bicep' = {
     functionAppName: functionAppName
     funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
     configStoreprincipalId: configstoremod.outputs.out_configStoreprincipalId
+    configStoreObject: configstoremod
+    FontNameKey: FontNameKey
+    FontColorKey: FontColorKey
+    FontSizeKey: FontSizeKey
     kvValue_AzureWebJobsStorageName: kvValue_AzureWebJobsStorageName
     kvValue_AzureWebJobsStorageValue: functionappmod.outputs.out_AzureWebJobsStorage
     kvValue_WebsiteContentAzureFileConnectionStringName: kvValue_WebsiteContentAzureFileConnectionString

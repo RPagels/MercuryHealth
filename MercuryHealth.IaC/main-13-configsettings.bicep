@@ -12,6 +12,20 @@ param ApimSubscriptionKey string
 param ApimWebServiceURL string
 //param appServiceName string
 
+///////////////////////////
+/// TESTING App Config
+///////////////////////////
+param configStoreObject object
+param FontNameKey string
+param FontColorKey string
+param FontSizeKey string
+//param webSiteName string
+var myLabel = 'Test'
+
+///////////////////////////
+/// TESTING App Config
+///////////////////////////
+
 //param location string = resourceGroup().location
 //param vaultName string
 
@@ -170,6 +184,9 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2021-03-01' = {
     APPLICATIONINSIGHTS_CONNECTION_STRING: appInsightsConnectionString
     WebAppUrl: 'https://${existing_appService.name}.azurewebsites.net/'
     ASPNETCORE_ENVIRONMENT: 'Development'
+    WEBSITE_FONTNAME: '@Microsoft.AppConfiguration(Endpoint=${configStoreObject.properties.endpoint}; Key=${FontNameKey}; Label=${myLabel})'
+    WEBSITE_FONTCOLOR: '@Microsoft.AppConfiguration(Endpoint=${configStoreObject.properties.endpoint}; Key=${FontColorKey}; Label=${myLabel})'
+    WEBSITE_FONTSIZE: '@Microsoft.AppConfiguration(Endpoint=${configStoreObject.properties.endpoint}; Key=${FontSizeKey}; Label=${myLabel})'
   }
   dependsOn: [
     secret1

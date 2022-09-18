@@ -5,6 +5,22 @@ param defaultTags object
 
 param contentType string = 'application/vnd.microsoft.appconfig.ff+json;charset=utf-8'
 
+///////////////////////////
+/// TESTING App Config
+///////////////////////////
+param FontNameKey string
+param FontColorKey string
+param FontSizeKey string
+param FontNameValue string
+param FontColorValue string
+param FontSizeValue string
+//var myLabel = 'Test'
+//var App_Configuration_Data_Reader = '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/516239f1-63e1-4d78-a4de-a74fb236a071'
+///////////////////////////
+/// TESTING App Config
+///////////////////////////
+
+
 // // Specifies the names of the key-value resources. 
 // param ConfigkeyValueNames array = [
 //   'App:Settings:FontSize'
@@ -163,7 +179,7 @@ resource configStoreName_featureflags_3 'Microsoft.AppConfiguration/configuratio
   }
 }
 
-// Feature Flag 3
+// Feature Flag 4
 resource configStoreName_featureflags_4 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
   parent: config
   name: '.appconfig.featureflag~2F${FeatureFlagKey4}$${FeatureFlagLabel4}'
@@ -172,6 +188,38 @@ resource configStoreName_featureflags_4 'Microsoft.AppConfiguration/configuratio
     contentType: contentType
   }
 }
+
+///////////////////////////
+/// TEST ONLY
+///////////////////////////
+resource appConfigStoreName_FontNameKey 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
+  parent: config
+  name: FontNameKey
+  properties: {
+    value: FontNameValue
+    contentType: 'application/json'
+  }
+}
+resource appConfigStoreName_FontColorKey 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
+  parent: config
+  name: FontColorKey
+  properties: {
+    value: FontColorValue
+    contentType: 'application/json'
+  }
+}
+resource appConfigStoreName_FontSizeKey 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
+  parent: config
+  name: FontSizeKey
+  properties: {
+    value: FontSizeValue
+    contentType: 'application/json'
+  }
+}
+///////////////////////////
+/// TEST ONLY
+///////////////////////////
+
 
 var configStoreConnectionString = listKeys(config.id, config.apiVersion).value[0].connectionString
 output out_configStoreConnectionString string = configStoreConnectionString
