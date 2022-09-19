@@ -159,6 +159,7 @@ resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2022-03-01' = {
     WEBSITE_FONTNAME: '@Microsoft.AppConfiguration(Endpoint=${configStoreEndPoint}; Key=${FontNameKey}; Label=${myLabel})'
     WEBSITE_FONTCOLOR: '@Microsoft.AppConfiguration(Endpoint=${configStoreEndPoint}; Key=${FontColorKey}; Label=${myLabel})'
     WEBSITE_FONTSIZE: '@Microsoft.AppConfiguration(Endpoint=${configStoreEndPoint}; Key=${FontSizeKey}; Label=${myLabel})'
+    WEBSITE_ENABLE_SYNC_UPDATE_SITE: 'true'
   }
   dependsOn: [
     secret1
