@@ -10,6 +10,7 @@ using MercuryHealth.Web.Data;
 using MercuryHealth.Web.Models;
 using Microsoft.ApplicationInsights;
 using Microsoft.Extensions.Options;
+using System.Configuration;
 
 namespace MercuryHealth.Web.Controllers;
 
@@ -18,13 +19,15 @@ public class ExercisesController : Controller
     private readonly MercuryHealthWebContext _context;
     private readonly TelemetryClient telemetry;
     private readonly PageSettings _pageSettings;
+    private readonly IConfiguration _configuration;
 
-    public ExercisesController(MercuryHealthWebContext context, TelemetryClient telemetry, IOptionsSnapshot<PageSettings> pageSettings)
+    public ExercisesController(MercuryHealthWebContext context, TelemetryClient telemetry, IConfiguration Configuration, IOptionsSnapshot<PageSettings> pageSettings)
     //public ExercisesController(MercuryHealthWebContext context, TelemetryClient telemetry)
     {
         _context = context;
         _pageSettings = pageSettings.Value;
         this.telemetry = telemetry;
+        _configuration = Configuration;
     }
 
     // GET: Exercises
@@ -34,6 +37,11 @@ public class ExercisesController : Controller
         ViewData["FontSize"] = _pageSettings.FontSize;
         ViewData["FontColor"] = _pageSettings.FontColor;
         ViewData["BackgroundColor"] = _pageSettings.BackgroundColor;
+
+        // Save App Configuration Dynamic Configuration Settings
+        ViewData["Website_FontName"] = _configuration["WEBSITE_FONTNAME"];
+        ViewData["Website_FontColor"] = _configuration["WEBSITE_FONTCOLOR"];
+        ViewData["Website_FontSize"] = _configuration["WEBSITE_FONTSIZE"];
 
         //return View(await _context.Exercises.ToListAsync());
         // Keep color logic out of the ViewPage, per MVC pattern, use a ViewModel.

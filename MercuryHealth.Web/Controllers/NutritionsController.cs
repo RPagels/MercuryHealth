@@ -31,6 +31,11 @@ public class NutritionsController : Controller
         ViewData["FontColor"] = _pageSettings.FontColor;
         ViewData["BackgroundColor"] = _pageSettings.BackgroundColor;
 
+        // Save App Configuration Dynamic Configuration Settings
+        ViewData["Website_FontName"] = _configuration["WEBSITE_FONTNAME"];
+        ViewData["Website_FontColor"] = _configuration["WEBSITE_FONTCOLOR"];
+        ViewData["Website_FontSize"] = _configuration["WEBSITE_FONTSIZE"];
+
         // Keep color logic out of the ViewPage, per MVC pattern, use a ViewModel.
         var nutritions = from n in _context.Nutrition select n;
 
