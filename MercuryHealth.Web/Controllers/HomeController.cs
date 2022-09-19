@@ -32,7 +32,7 @@ public class HomeController : Controller
         ViewData["BackgroundColor"] = _pageSettings.BackgroundColor;
 
         // Save App Configuration Dynamic Configuration Settings
-        ViewData["myenvironment"] = _configuration["deployedenvironment"];
+        ViewData["myenvironment"] = _configuration["DeployedEnvironment"];
         ViewData["Website_FontName"] = _configuration["WEBSITE_FONTNAME"];
         ViewData["Website_FontColor"] = _configuration["WEBSITE_FONTCOLOR"];
         ViewData["Website_FontSize"] = _configuration["WEBSITE_FONTSIZE"];
