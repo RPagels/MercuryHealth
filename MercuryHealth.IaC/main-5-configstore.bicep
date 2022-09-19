@@ -180,27 +180,6 @@ resource appConfigStoreName_FontSizeKey 'Microsoft.AppConfiguration/configuratio
   }
 }
 
-// Reference Existing resource
-// resource existing_appService 'Microsoft.Web/sites@2022-03-01' existing = {
-//   name: webSiteName
-// }
-
-// Add role assigment for Service Identity
-// Azure built-in roles - https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles
-// App Configuration Data Reader	Allows read access to App Configuration data.	516239f1-63e1-4d78-a4de-a74fb236a071
-//var AppConfigDataReaderRoleDefinitionId = subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '516239f1-63e1-4d78-a4de-a74fb236a071')
-
-// Add role assignment to App Config Store
-//  resource roleAssignmentForAppConfig 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
-//   name: guid(config.id, AppConfigDataReaderRoleDefinitionId)
-//   scope: config
-//   properties: {
-//     principalType: 'ServicePrincipal'
-//     principalId: existing_appService.identity.principalId // reference(existing_appService.id, '2020-12-01', 'Full').identity.principalId
-//     roleDefinitionId: AppConfigDataReaderRoleDefinitionId
-//   }
-// }
-
 var configStoreConnectionString = listKeys(config.id, config.apiVersion).value[0].connectionString
 output out_configStoreConnectionString string = configStoreConnectionString
 output out_configStoreEndPoint string = config.properties.endpoint
