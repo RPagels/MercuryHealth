@@ -190,7 +190,7 @@ resource apiManagementMercuryHealthImport 'Microsoft.ApiManagement/service/apis@
 //
 
 // Create the Product for API
-resource apiManagementProductApi 'Microsoft.ApiManagement/service/products/apis@2017-03-01' = {
+resource apiManagementProductApi 'Microsoft.ApiManagement/service/products/apis@2021-12-01-preview' = {
   parent: apiManagementProduct
   name: 'mercury-health'
   dependsOn: [
@@ -306,7 +306,7 @@ resource appInsightsAPIMercuryHealthdiagnostics 'Microsoft.ApiManagement/service
   ]
 }
 
-resource apiManagementServiceName_exampleUser1 'Microsoft.ApiManagement/service/users@2017-03-01' = {
+resource apiManagementServiceName_exampleUser1 'Microsoft.ApiManagement/service/users@2021-12-01-preview' = {
   parent: apiManagementService
   name: 'exampleUser1'
   properties: {
@@ -318,7 +318,7 @@ resource apiManagementServiceName_exampleUser1 'Microsoft.ApiManagement/service/
   }
 }
 
-resource apiManagementServiceName_examplesubscription1 'Microsoft.ApiManagement/service/subscriptions@2017-03-01' = {
+resource apiManagementServiceName_examplesubscription1 'Microsoft.ApiManagement/service/subscriptions@2021-12-01-preview' = {
   parent: apiManagementService
   name: 'examplesubscription1'
   properties: {
@@ -414,7 +414,7 @@ module blogstoragemod './main-12-blobstorage.bicep' = {
   }
 }
 
-module configstoremod 'main-5-configstore.bicep' = {
+module configstoremod './main-5-configstore.bicep' = {
   name: configStoreName
   params: {
     location: location
@@ -471,6 +471,7 @@ module configsettingsmod './main-13-configsettings.bicep' = {
      keyvaultmod
      webappmod
      functionappmod
+     configstoremod
    ]
  }
 
