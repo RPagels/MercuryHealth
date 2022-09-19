@@ -420,6 +420,7 @@ module configstoremod './main-5-configstore.bicep' = {
     location: location
      defaultTags: defaultTags
      configStoreName: configStoreName
+     webSiteName: webSiteName
      FontNameKey: FontNameKey
      FontNameValue: FontNameValue
      FontColorKey: FontColorKey
@@ -427,6 +428,10 @@ module configstoremod './main-5-configstore.bicep' = {
      FontSizeKey: FontSizeKey
      FontSizeValue: FontSizeValue
   }
+  dependsOn:  [
+    webappmod
+    functionappmod
+  ]
 }
 
 // module portaldashboardmod './main-11-Dashboard.bicep' = {
@@ -454,7 +459,7 @@ module configsettingsmod './main-13-configsettings.bicep' = {
     functionAppName: functionAppName
     funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
     configStoreEndPoint: configstoremod.outputs.out_configStoreEndPoint
-    configStoreName: configStoreName
+    //configStoreName: configStoreName
     FontNameKey: FontNameKey
     FontColorKey: FontColorKey
     FontSizeKey: FontSizeKey

@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.10.61.36676",
-      "templateHash": "10320000878360621710"
+      "templateHash": "3679509195639541736"
     }
   },
   "parameters": {
@@ -1495,6 +1495,9 @@
           "configStoreName": {
             "value": "[variables('configStoreName')]"
           },
+          "webSiteName": {
+            "value": "[variables('webSiteName')]"
+          },
           "FontNameKey": {
             "value": "[variables('FontNameKey')]"
           },
@@ -1521,11 +1524,14 @@
             "_generator": {
               "name": "bicep",
               "version": "0.10.61.36676",
-              "templateHash": "14404868576834322792"
+              "templateHash": "3939032509190023476"
             }
           },
           "parameters": {
             "configStoreName": {
+              "type": "string"
+            },
+            "webSiteName": {
               "type": "string"
             },
             "location": {
@@ -1642,7 +1648,8 @@
               "id": "[parameters('FeatureFlagKey4')]",
               "description": "Description for Cognitive Services.",
               "enabled": false
-            }
+            },
+            "AppConfigDataReaderRoleDefinitionId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '516239f1-63e1-4d78-a4de-a74fb236a071')]"
           },
           "resources": [
             {
@@ -1797,6 +1804,20 @@
               "dependsOn": [
                 "[resourceId('Microsoft.AppConfiguration/configurationStores', parameters('configStoreName'))]"
               ]
+            },
+            {
+              "type": "Microsoft.Authorization/roleAssignments",
+              "apiVersion": "2020-04-01-preview",
+              "scope": "[format('Microsoft.AppConfiguration/configurationStores/{0}', parameters('configStoreName'))]",
+              "name": "[guid(resourceId('Microsoft.AppConfiguration/configurationStores', parameters('configStoreName')), variables('AppConfigDataReaderRoleDefinitionId'))]",
+              "properties": {
+                "principalType": "ServicePrincipal",
+                "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('webSiteName')), '2020-12-01', 'Full').identity.principalId]",
+                "roleDefinitionId": "[variables('AppConfigDataReaderRoleDefinitionId')]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.AppConfiguration/configurationStores', parameters('configStoreName'))]"
+              ]
             }
           ],
           "outputs": {
@@ -1810,7 +1831,11 @@
             }
           }
         }
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', 'functionappdeploy')]",
+        "[resourceId('Microsoft.Resources/deployments', 'webappdeploy')]"
+      ]
     },
     {
       "type": "Microsoft.Resources/deployments",
@@ -1851,9 +1876,6 @@
           },
           "configStoreEndPoint": {
             "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('configStoreName'))).outputs.out_configStoreEndPoint.value]"
-          },
-          "configStoreName": {
-            "value": "[variables('configStoreName')]"
           },
           "FontNameKey": {
             "value": "[variables('FontNameKey')]"
@@ -1899,7 +1921,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.10.61.36676",
-              "templateHash": "15085650264953211980"
+              "templateHash": "13331538797364672556"
             }
           },
           "parameters": {
@@ -1940,9 +1962,6 @@
               "type": "string"
             },
             "configStoreEndPoint": {
-              "type": "string"
-            },
-            "configStoreName": {
               "type": "string"
             },
             "FontNameKey": {
@@ -2027,8 +2046,7 @@
             }
           },
           "variables": {
-            "myLabel": "Test",
-            "AppConfigDataReaderRoleDefinitionId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '516239f1-63e1-4d78-a4de-a74fb236a071')]"
+            "myLabel": "Test"
           },
           "resources": [
             {
@@ -2072,17 +2090,6 @@
               "properties": {
                 "contentType": "text/plain",
                 "value": "[parameters('kvValue_AzureWebJobsStorageValue')]"
-              }
-            },
-            {
-              "type": "Microsoft.Authorization/roleAssignments",
-              "apiVersion": "2022-04-01",
-              "scope": "[format('Microsoft.AppConfiguration/configurationStores/{0}', parameters('configStoreName'))]",
-              "name": "[guid(resourceId('Microsoft.AppConfiguration/configurationStores', parameters('configStoreName')), variables('AppConfigDataReaderRoleDefinitionId'))]",
-              "properties": {
-                "principalType": "ServicePrincipal",
-                "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('webappName')), '2022-03-01', 'full').identity.principalId]",
-                "roleDefinitionId": "[variables('AppConfigDataReaderRoleDefinitionId')]"
               }
             },
             {
