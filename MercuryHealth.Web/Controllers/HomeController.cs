@@ -70,10 +70,6 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Privacy()
     {
-        ViewData["Website_FontName"] = _configuration["WEBSITE_FONTNAME"];
-        ViewData["Website_FontColor"] = _configuration["WEBSITE_FONTCOLOR"];
-        ViewData["Website_FontSize"] = _configuration["WEBSITE_FONTSIZE"];
-
         if (await _featureManager.IsEnabledAsync("PrivacyBeta"))
         {
             return View(new PrivacyModel { Name = "Privacy Beta" });
