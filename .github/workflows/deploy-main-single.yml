@@ -136,6 +136,13 @@ jobs:
           name: MercuryHealth.IaC
           path: ${{ github.workspace }}/MercuryHealth.IaC/*.*
 
+      - name: Upload API Files
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: MercuryHealth.API
+          path: ${{ github.workspace }}/MercuryHealth.API/*.*
+
       - name: Upload Load Test Files
         if: ${{ github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v2
