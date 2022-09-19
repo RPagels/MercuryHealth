@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.10.61.36676",
-      "templateHash": "14628452806907527695"
+      "templateHash": "10320000878360621710"
     }
   },
   "parameters": {
@@ -228,7 +228,7 @@
     },
     {
       "type": "Microsoft.ApiManagement/service/products/apis",
-      "apiVersion": "2017-03-01",
+      "apiVersion": "2021-12-01-preview",
       "name": "[format('{0}/{1}/{2}', variables('apiServiceName'), 'development', 'mercury-health')]",
       "dependsOn": [
         "[resourceId('Microsoft.ApiManagement/service/apis', split(format('{0}/{1}', variables('apiServiceName'), parameters('name')), '/')[0], split(format('{0}/{1}', variables('apiServiceName'), parameters('name')), '/')[1])]",
@@ -335,7 +335,7 @@
     },
     {
       "type": "Microsoft.ApiManagement/service/users",
-      "apiVersion": "2017-03-01",
+      "apiVersion": "2021-12-01-preview",
       "name": "[format('{0}/{1}', variables('apiServiceName'), 'exampleUser1')]",
       "properties": {
         "firstName": "ExampleFirstName1",
@@ -350,7 +350,7 @@
     },
     {
       "type": "Microsoft.ApiManagement/service/subscriptions",
-      "apiVersion": "2017-03-01",
+      "apiVersion": "2021-12-01-preview",
       "name": "[format('{0}/{1}', variables('apiServiceName'), 'examplesubscription1')]",
       "properties": {
         "displayName": "exampleUser1DisplayName",
@@ -1852,6 +1852,9 @@
           "configStoreEndPoint": {
             "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('configStoreName'))).outputs.out_configStoreEndPoint.value]"
           },
+          "configStoreName": {
+            "value": "[variables('configStoreName')]"
+          },
           "FontNameKey": {
             "value": "[variables('FontNameKey')]"
           },
@@ -1896,7 +1899,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.10.61.36676",
-              "templateHash": "14188167142454355612"
+              "templateHash": "15085650264953211980"
             }
           },
           "parameters": {
@@ -1937,6 +1940,9 @@
               "type": "string"
             },
             "configStoreEndPoint": {
+              "type": "string"
+            },
+            "configStoreName": {
               "type": "string"
             },
             "FontNameKey": {
@@ -2071,8 +2077,8 @@
             {
               "type": "Microsoft.Authorization/roleAssignments",
               "apiVersion": "2022-04-01",
-              "scope": "[format('Microsoft.Web/sites/{0}', parameters('webappName'))]",
-              "name": "[guid(resourceId('Microsoft.Web/sites', parameters('webappName')), variables('AppConfigDataReaderRoleDefinitionId'))]",
+              "scope": "[format('Microsoft.AppConfiguration/configurationStores/{0}', parameters('configStoreName'))]",
+              "name": "[guid(resourceId('Microsoft.AppConfiguration/configurationStores', parameters('configStoreName')), variables('AppConfigDataReaderRoleDefinitionId'))]",
               "properties": {
                 "principalType": "ServicePrincipal",
                 "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('webappName')), '2022-03-01', 'full').identity.principalId]",

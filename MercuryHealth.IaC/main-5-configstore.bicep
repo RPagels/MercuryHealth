@@ -71,9 +71,9 @@ resource config 'Microsoft.AppConfiguration/configurationStores@2022-05-01' = {
   sku: {
     name: 'Standard'
   }
-  identity: {
-    type:'SystemAssigned'
-  }
+  // identity: {
+  //   type:'SystemAssigned'
+  // }
 }
 
 resource configStoreName_Values1 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
