@@ -13,6 +13,7 @@ param ApimWebServiceURL string
 
 // App Configuration Settings
 param configStoreEndPoint string
+param configStoreName string
 param FontNameKey string
 param FontColorKey string
 param FontSizeKey string
@@ -141,21 +142,36 @@ resource existing_appService 'Microsoft.Web/sites@2022-03-01' existing = {
   name: webappName
 }
 
+resource existing_appConfig 'Microsoft.AppConfiguration/configurationStores@2022-05-01' existing = {
+  name: configStoreName
+}
+
 // Add role assigment for Service Identity
 // Azure built-in roles - https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles
 // App Configuration Data Reader	Allows read access to App Configuration data.	516239f1-63e1-4d78-a4de-a74fb236a071
 var AppConfigDataReaderRoleDefinitionId = subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '516239f1-63e1-4d78-a4de-a74fb236a071')
 
 // Add role assignment to App Config Store
-resource roleAssignmentForAppService 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(existing_appService.id, AppConfigDataReaderRoleDefinitionId)
-  scope: existing_appService //resourceGroup()
+resource roleAssignmentForAppConfig 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(existing_appConfig.id, AppConfigDataReaderRoleDefinitionId)
+  scope: existing_appConfig //resourceGroup()
   properties: {
     principalType: 'ServicePrincipal'
     principalId: existing_appService.identity.principalId
     roleDefinitionId: AppConfigDataReaderRoleDefinitionId
   }
 }
+
+// resource roleNameGuid_resource 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
+//   scope: appConfigStoreName
+//   name: roleNameGuid
+//   properties: {
+//     roleDefinitionId: App_Configuration_Data_Reader
+//     principalId: reference(functionAppName.id, '2020-12-01', 'Full').identity.principalId
+//     principalType: 'ServicePrincipal'
+//   }
+// }
+
 
 // Create Web sites/config 'appsettings' - Web App
 resource webSiteAppSettingsStrings 'Microsoft.Web/sites/config@2022-03-01' = {

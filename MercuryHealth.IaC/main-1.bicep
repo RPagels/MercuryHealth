@@ -454,6 +454,7 @@ module configsettingsmod './main-13-configsettings.bicep' = {
     functionAppName: functionAppName
     funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
     configStoreEndPoint: configstoremod.outputs.out_configStoreEndPoint
+    configStoreName: configStoreName
     FontNameKey: FontNameKey
     FontColorKey: FontColorKey
     FontSizeKey: FontSizeKey
