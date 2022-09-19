@@ -318,19 +318,19 @@ resource apiManagementServiceName_exampleUser1 'Microsoft.ApiManagement/service/
   }
 }
 
-resource apiManagementServiceName_examplesubscription1 'Microsoft.ApiManagement/service/subscriptions@2021-12-01-preview' = {
-  parent: apiManagementService
-  name: 'examplesubscription1'
-  properties: {
-    displayName: 'exampleUser1DisplayName'
-    productId: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/exampleServiceName/products/development'
-    userId: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/exampleServiceName/users/exampleUser1'
-  }
-  dependsOn: [
-    apiManagementProduct
-    apiManagementServiceName_exampleUser1
-  ]
-}
+// resource apiManagementServiceName_examplesubscription1 'Microsoft.ApiManagement/service/subscriptions@2021-12-01-preview' = {
+//   parent: apiManagementService
+//   name: 'examplesubscription1'
+//   properties: {
+//     displayName: 'exampleUser1DisplayName'
+//     productId: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/exampleServiceName/products/development'
+//     userId: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/exampleServiceName/users/exampleUser1'
+//   }
+//   dependsOn: [
+//     apiManagementProduct
+//     apiManagementServiceName_exampleUser1
+//   ]
+// }
 
 // API Management - Avoid outputs for secrets - Look up secrets dynamically
 // Note: This is why API Management isn't it's own module...MUST be in the main
@@ -420,7 +420,7 @@ module configstoremod './main-5-configstore.bicep' = {
     location: location
      defaultTags: defaultTags
      configStoreName: configStoreName
-     webSiteName: webSiteName
+     //webSiteName: webSiteName
      FontNameKey: FontNameKey
      FontNameValue: FontNameValue
      FontColorKey: FontColorKey
@@ -459,7 +459,7 @@ module configsettingsmod './main-13-configsettings.bicep' = {
     functionAppName: functionAppName
     funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
     configStoreEndPoint: configstoremod.outputs.out_configStoreEndPoint
-    //configStoreName: configStoreName
+    configStoreName: configStoreName
     FontNameKey: FontNameKey
     FontColorKey: FontColorKey
     FontSizeKey: FontSizeKey

@@ -227,17 +227,6 @@ resource standardWebTestPageExercises  'Microsoft.Insights/webtests@2022-06-15' 
   }
 }
 
-// // Add role assignment to App Config Store
-// resource roleAssignmentForAppService3 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-//   name: guid(appService.id, AppConfigDataReaderRoleDefinitionId)
-//   scope: appService //resourceGroup()
-//   properties: {
-//     principalType: 'ServicePrincipal'
-//     principalId: appService.identity.principalId
-//     roleDefinitionId: AppConfigDataReaderRoleDefinitionId
-//   }
-// }
-
 var secretConnectionString = 'Server=tcp:${sqlserverfullyQualifiedDomainName},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdminLoginName}@${sqlserverName};Password=${sqlAdminLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
 
 output out_appService string = appService.id
