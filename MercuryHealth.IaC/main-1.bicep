@@ -146,17 +146,17 @@ resource appInsightsAPILogger 'Microsoft.ApiManagement/service/loggers@2021-12-0
 }
 
 // Import API Example
-resource petStoreApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
-  name: 'pet-store-swagger'
-  //name: '${apiManagement.name}/PetStoreSwaggerImportExample'
-  parent: apiManagementService
-  properties: {
-    format: 'swagger-link-json'
-    value: 'http://petstore.swagger.io/v2/swagger.json'
-    path: 'petstore'
-    description: 'Pet Store Swagger Import Example'
-  }
-}
+// resource petStoreApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
+//   name: 'pet-store-swagger'
+//   //name: '${apiManagement.name}/PetStoreSwaggerImportExample'
+//   parent: apiManagementService
+//   properties: {
+//     format: 'swagger-link-json'
+//     value: 'http://petstore.swagger.io/v2/swagger.json'
+//     path: 'petstore'
+//     description: 'Pet Store Swagger Import Example'
+//   }
+// }
 
 
 //
@@ -227,58 +227,58 @@ resource apiManagementMercuryHealthApis 'Microsoft.ApiManagement/service/apis@20
 }
 
 // Create reference to existing API
-resource apiManagementPetStoreApis 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' existing = {
-  name: 'pet-store-swagger' // 'api' PetStoreSwaggerImportExample
-  parent: apiManagementService
-}
+// resource apiManagementPetStoreApis 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' existing = {
+//   name: 'pet-store-swagger' // 'api' PetStoreSwaggerImportExample
+//   parent: apiManagementService
+// }
 
 // Configure logging for the API
-resource appInsightsAPIPetStorediagnostics 'Microsoft.ApiManagement/service/apis/diagnostics@2021-12-01-preview' = {
-  parent: apiManagementPetStoreApis
-  name: 'applicationinsights'
-  properties: {
-    loggerId: appInsightsAPILogger.id
-    alwaysLog: 'allErrors'
-    logClientIp: true
-    sampling: {
-      samplingType: 'fixed'
-      percentage: 100
-    }
-    verbosity: 'information'
-    httpCorrelationProtocol: 'Legacy'
-    frontend: {
-      request: {
-        headers: []
-        body: {
-          bytes: 0
-        }
-      }
-      response: {
-        headers: []
-        body: {
-          bytes: 0
-        }
-      }
-    }
-    backend: {
-      request: {
-        headers: []
-        body: {
-          bytes: 0
-        }
-      }
-      response: {
-        headers: []
-        body: {
-          bytes: 0
-        }
-      }
-    }
-  }
-  dependsOn:  [
-    appinsightsmod
-  ]
-}
+// resource appInsightsAPIPetStorediagnostics 'Microsoft.ApiManagement/service/apis/diagnostics@2021-12-01-preview' = {
+//   parent: apiManagementPetStoreApis
+//   name: 'applicationinsights'
+//   properties: {
+//     loggerId: appInsightsAPILogger.id
+//     alwaysLog: 'allErrors'
+//     logClientIp: true
+//     sampling: {
+//       samplingType: 'fixed'
+//       percentage: 100
+//     }
+//     verbosity: 'information'
+//     httpCorrelationProtocol: 'Legacy'
+//     frontend: {
+//       request: {
+//         headers: []
+//         body: {
+//           bytes: 0
+//         }
+//       }
+//       response: {
+//         headers: []
+//         body: {
+//           bytes: 0
+//         }
+//       }
+//     }
+//     backend: {
+//       request: {
+//         headers: []
+//         body: {
+//           bytes: 0
+//         }
+//       }
+//       response: {
+//         headers: []
+//         body: {
+//           bytes: 0
+//         }
+//       }
+//     }
+//   }
+//   dependsOn:  [
+//     appinsightsmod
+//   ]
+// }
 
 // Configure logging for the API.
 resource appInsightsAPIMercuryHealthdiagnostics 'Microsoft.ApiManagement/service/apis/diagnostics@2021-12-01-preview' = {
