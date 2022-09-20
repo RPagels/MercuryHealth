@@ -198,7 +198,7 @@ resource testOnlyApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-pre
   properties: {
     format: format //'swagger-link-json'
     value: 'https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json'
-    path: apiPath
+    path: '${apiPath}-v2'
     description: 'Test Only Swagger Import Example'
     serviceUrl: 'https://${webSiteName}.azurewebsites.net/'
   }
