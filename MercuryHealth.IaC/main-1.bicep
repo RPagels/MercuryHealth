@@ -191,11 +191,12 @@ resource apiManagementMercuryHealthImport 'Microsoft.ApiManagement/service/apis@
 // TESTONLY
 ///////////////////////////////////
 // Import API Example
+param name2 string = 'mercury-healthv2'
 resource testOnlyApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
-  name: 'test-only-swagger'
-  parent: apiManagementService
+  name: '${apiManagementService.name}/${name2}'
+  //parent: apiManagementService
   properties: {
-    format: urlToSwagger //'swagger-link-json'
+    format: format //'swagger-link-json'
     value: 'https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json'
     path: apiPath
     description: 'Test Only Swagger Import Example'
