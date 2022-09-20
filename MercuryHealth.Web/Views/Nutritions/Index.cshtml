@@ -55,7 +55,7 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
+        <tr style="font-style:@ViewData["Website_FontName"];font-size:@ViewData["Website_FontSize"]px;color:@ViewData["Website_FontColor"]">
             <td style="color:@item.FontColor">
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
