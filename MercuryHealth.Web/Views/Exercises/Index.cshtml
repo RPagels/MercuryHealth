@@ -6,14 +6,12 @@
     ViewData["Title"] = "Exercises";
 }
 
-@*<h1 style="background-color:@Configuration["App:Settings:BackgroundColor"]">Exercises-Configuration</h1>*@
 <h1 style="background-color:@ViewData["BackgroundColor"]">Exercises</h1>
 
 <p>
     <a asp-action="Create" style="font-size:@ViewData["FontSize"]px;">Create New</a>
 </p>
-@*<table class="table" style="font-size:@ViewData["FontSize"]px;color:@ViewData["FontColor"];">
-*@    
+    
 <table class="table" style="font-style:@ViewData["Website_FontName"];font-size:@ViewData["Website_FontSize"]px;color:@ViewData["Website_FontColor"]">
     <thead>
         <tr>
@@ -37,7 +35,7 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
+        <tr style="font-style:@ViewData["Website_FontName"];font-size:@ViewData["Website_FontSize"]px;color:@ViewData["Website_FontColor"]">
             <td style="color:@item.FontColor">
                 @Html.DisplayFor(modelItem => item.Name)
             </td>

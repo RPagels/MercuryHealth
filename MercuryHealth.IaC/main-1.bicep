@@ -50,8 +50,8 @@ var FontNameKey = 'FontName'
 var FontColorKey = 'FontColor'
 var FontSizeKey = 'FontSize'
 var FontNameValue = 'Calibri'
-var FontColorValue = 'Green'
-var FontSizeValue = '16'
+var FontColorValue = 'Blue'
+var FontSizeValue = '12'
 
 // Create Azure KeyVault
 module keyvaultmod './main-8-keyvault.bicep' = {
