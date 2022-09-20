@@ -141,7 +141,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: MercuryHealth.API
-          path: ${{ github.workspace }}/MercuryHealth.API/*.*
+          path: ${{ github.workspace }}/MercuryHealth.API/templates/*.*
 
       - name: Upload Load Test Files
         if: ${{ github.event_name != 'pull_request' }}
