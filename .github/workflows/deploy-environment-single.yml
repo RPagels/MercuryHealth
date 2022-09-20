@@ -148,7 +148,7 @@ jobs:
       with:
         resourceGroupName: ${{ env.Azure_Resource_GroupName }}
         template: ./MercuryHealth.API/apim-master.template.json
-        parameters: ./MercuryHealth.API/apim-parameters.json ApimServiceName=${{ steps.Infra.outputs.out_apiServiceName }}
+        parameters: ./MercuryHealth.API/apim-parameters.json ApimServiceName=${{ steps.Infra.outputs.out_apiServiceName }} LinkedTemplatesBaseUrl='https://github.com/RPagels/MercuryHealth/tree/master/MercuryHealth.API/templates/'
         deploymentMode: Incremental
         failOnStdErr: false
 
