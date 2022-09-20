@@ -158,6 +158,18 @@ resource petStoreApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-pre
   }
 }
 
+// Import API Example
+resource testOnlyApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
+  name: 'test-only-swagger'
+  parent: apiManagementService
+  properties: {
+    format: 'swagger-link-json'
+    value: 'https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json'
+    path: 'testonly'
+    description: 'Test Only Swagger Import Example'
+  }
+}
+
 //
 // Mercury Health Swagger
 //
