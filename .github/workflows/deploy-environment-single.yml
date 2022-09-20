@@ -142,15 +142,15 @@ jobs:
         deploymentMode: Incremental
         failOnStdErr: false
 
-    - name: Infrastructure for API
-      uses: azure/arm-deploy@v1
-      continue-on-error: false
-      with:
-        resourceGroupName: ${{ env.Azure_Resource_GroupName }}
-        template: ./MercuryHealth.API/apim-master.template.json
-        parameters: ./MercuryHealth.API/apim-parameters.json ApimServiceName=${{ steps.Infra.outputs.out_apiServiceName }} LinkedTemplatesBaseUrl='https://github.com/RPagels/MercuryHealth/tree/master/MercuryHealth.API/templates/'
-        deploymentMode: Incremental
-        failOnStdErr: false
+#    - name: Infrastructure for API
+#      uses: azure/arm-deploy@v1
+#      continue-on-error: false
+#      with:
+#        resourceGroupName: ${{ env.Azure_Resource_GroupName }}
+#        template: ./MercuryHealth.API/apim-master.template.json
+#        parameters: ./MercuryHealth.API/apim-parameters.json ApimServiceName=${{ steps.Infra.outputs.out_apiServiceName }} LinkedTemplatesBaseUrl='https://github.com/RPagels/MercuryHealth/tree/master/MercuryHealth.API/templates/'
+#        deploymentMode: Incremental
+#        failOnStdErr: false
 
     - name: Ensure API Management is Locked
       #if: contains(github.event_name, 'push')
