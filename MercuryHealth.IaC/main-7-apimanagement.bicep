@@ -197,48 +197,19 @@ resource apiManagementServiceName_exampleUser1 'Microsoft.ApiManagement/service/
 
 //////////////////////////////////////////////
 
-resource apiManagementServiceName_exampleApi 'Microsoft.ApiManagement/service/apis@2017-03-01' = {
-  parent: apiManagement
-  name: 'exampleApi'
-  properties: {
-    displayName: 'Example API Name'
-    description: 'Description for example API'
-    serviceUrl: 'https://example.net'
-    path: 'exampleapipath'
-    protocols: [
-      'https'
-    ]
-  }
-}
-resource apiManagementServiceName_exampleApi_exampleOperationsDELETE 'Microsoft.ApiManagement/service/apis/operations@2017-03-01' = {
-  parent: apiManagementServiceName_exampleApi
-  name: 'exampleOperationsDELETE'
-  properties: {
-    displayName: 'DELETE resource'
-    method: 'DELETE'
-    urlTemplate: '/resource'
-    description: 'A demonstration of a DELETE call'
-  }
-}
-resource apiManagementServiceName_exampleApi_exampleOperationsGET 'Microsoft.ApiManagement/service/apis/operations@2017-03-01' = {
-  parent: apiManagementServiceName_exampleApi
-  name: 'exampleOperationsGET'
-  properties: {
-    displayName: 'GET resource'
-    method: 'GET'
-    urlTemplate: '/resource'
-    description: 'A demonstration of a GET call'
-  }
-}
-resource apiManagementServiceName_exampleApi_exampleOperationsGET_policy 'Microsoft.ApiManagement/service/apis/operations/policies@2021-12-01-preview' = {
-  parent: apiManagementServiceName_exampleApi_exampleOperationsGET
-  name: 'policy'
-  properties: {
-    //policyContent: operationPolicy
-    format: 'rawxml'
-    value: loadTextContent('./operationPolicy.xml')
-  }
-}
+// resource apiManagementServiceName_exampleApi 'Microsoft.ApiManagement/service/apis@2017-03-01' = {
+//   parent: apiManagement
+//   name: 'exampleApi'
+//   properties: {
+//     displayName: 'Example API Name'
+//     description: 'Description for example API'
+//     serviceUrl: 'https://example.net'
+//     path: 'exampleapipath'
+//     protocols: [
+//       'https'
+//     ]
+//   }
+// }
 resource apiManagementServiceName_exampleApiWithPolicy 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
   parent: apiManagement
   name: 'exampleApiWithPolicy'
@@ -252,12 +223,58 @@ resource apiManagementServiceName_exampleApiWithPolicy 'Microsoft.ApiManagement/
     ]
   }
 }
+resource apiManagementServiceName_exampleApi_exampleOperationsDELETE 'Microsoft.ApiManagement/service/apis/operations@2017-03-01' = {
+  parent: apiManagementServiceName_exampleApiWithPolicy
+  name: 'exampleOperationsDELETE'
+  properties: {
+    displayName: 'DELETE resource'
+    method: 'DELETE'
+    urlTemplate: '/resource'
+    description: 'A demonstration of a DELETE call'
+  }
+}
+resource apiManagementServiceName_exampleApi_exampleOperationsGETMany 'Microsoft.ApiManagement/service/apis/operations@2017-03-01' = {
+  parent: apiManagementServiceName_exampleApiWithPolicy
+  name: 'exampleOperationsGET1'
+  properties: {
+    displayName: 'GET /api/Nutritions'
+    method: 'GET'
+    urlTemplate: '/api/Nutritions'
+    description: 'A demonstration of a GET call'
+  }
+}
+resource apiManagementServiceName_exampleApi_exampleOperationsGET2 'Microsoft.ApiManagement/service/apis/operations@2017-03-01' = {
+  parent: apiManagementServiceName_exampleApiWithPolicy
+  name: 'exampleOperationsGET2'
+  properties: {
+    displayName: 'GET /api/Nutritions/{id}'
+    method: 'GET'
+    urlTemplate: '/api/Nutritions/{id}'
+    description: 'A demonstration of a GET call'
+  }
+}
+resource apiManagementServiceName_exampleApi_exampleOperationsGET_policy 'Microsoft.ApiManagement/service/apis/operations/policies@2021-12-01-preview' = {
+  parent: apiManagementServiceName_exampleApi_exampleOperationsGETMany
+  name: 'policy'
+  properties: {
+    format: 'rawxml'
+    value: loadTextContent('./operationGETPolicy.xml')
+  }
+}
+resource apiManagementServiceName_exampleApi_exampleOperationsDELETE_policy 'Microsoft.ApiManagement/service/apis/operations/policies@2021-12-01-preview' = {
+  parent: apiManagementServiceName_exampleApi_exampleOperationsDELETE
+  name: 'policy'
+  properties: {
+    format: 'rawxml'
+    value: loadTextContent('./operationDELETEPolicy.xml')
+  }
+}
 resource apiPolicy 'Microsoft.ApiManagement/service/apis/policies@2021-12-01-preview' = {
   parent: apiManagementServiceName_exampleApiWithPolicy
   name: 'policy'
   properties: {
     format: 'rawxml'
-    value: loadTextContent('./operationPolicy.xml')
+    value: loadTextContent('./operationAPIPolicy.xml')
   }
 }
 
@@ -275,19 +292,19 @@ resource apiManagementServiceName_exampleProduct 'Microsoft.ApiManagement/servic
   }
 }
 
-resource apiManagementServiceName_exampleProduct_exampleApi 'Microsoft.ApiManagement/service/products/apis@2021-12-01-preview' = {
-  parent: apiManagementServiceName_exampleProduct
-  name: 'exampleApi'
-  dependsOn: [
-    apiManagementServiceName_exampleApi
-  ]
-}
+// resource apiManagementServiceName_exampleProduct_exampleApi 'Microsoft.ApiManagement/service/products/apis@2021-12-01-preview' = {
+//   parent: apiManagementServiceName_exampleProduct
+//   name: 'exampleApi'
+//   dependsOn: [
+//     apiManagementServiceName_exampleApi
+//   ]
+// }
 resource apiManagementServiceName_exampleProduct_policy 'Microsoft.ApiManagement/service/products/policies@2021-12-01-preview' = {
   parent: apiManagementServiceName_exampleProduct
   name: 'policy'
   properties: {
     format: 'rawxml'
-    value: loadTextContent('./operationPolicy.xml')
+    value: loadTextContent('./operationPRODUCTPolicy.xml')
   }
 }
 
@@ -303,18 +320,18 @@ resource apiManagementServiceName_exampleproperties 'Microsoft.ApiManagement/ser
   }
 }
 
-resource apiManagementServiceName_examplesubscription1 'Microsoft.ApiManagement/service/subscriptions@2021-12-01-preview' = {
-  parent: apiManagement
-  name: 'examplesubscription1'
-  properties: {
-    productId: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/exampleServiceName/products/exampleProduct'
-    userId: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/exampleServiceName/users/exampleUser1'
-  }
-  dependsOn: [
-    apiManagementServiceName_exampleProduct
-    apiManagementServiceName_exampleUser1
-  ]
-}
+// resource apiManagementServiceName_examplesubscription1 'Microsoft.ApiManagement/service/subscriptions@2021-12-01-preview' = {
+//   parent: apiManagement
+//   name: 'examplesubscription1'
+//   properties: {
+//     productId: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/exampleServiceName/products/exampleProduct'
+//     userId: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/exampleServiceName/users/exampleUser1'
+//   }
+//   dependsOn: [
+//     apiManagementServiceName_exampleProduct
+//     apiManagementServiceName_exampleUser1
+//   ]
+// }
 
 //////////////////////////////////////////////
 
