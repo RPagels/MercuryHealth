@@ -21,12 +21,12 @@ builder.Host.ConfigureAppConfiguration(builder =>
             builder.AddAzureAppConfiguration(options =>
         {
             options.Connect(connectionString)
-                    .UseFeatureFlags()
-                    .ConfigureRefresh(refresh =>
-                    {
-                        refresh.Register("App:Settings:Sentinel", refreshAll: true)
-                            .SetCacheExpiration(TimeSpan.FromSeconds(5));
-                    });
+                    .UseFeatureFlags();
+                    //.ConfigureRefresh(refresh =>
+                    //{
+                    //    refresh.Register("App:Settings:Sentinel", refreshAll: true)
+                    //        .SetCacheExpiration(TimeSpan.FromSeconds(30));
+                    //});
         });
     })
     .ConfigureServices(services =>
