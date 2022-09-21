@@ -67,83 +67,83 @@ module keyvaultmod './main-8-keyvault.bicep' = {
 // Note: This is why ConfigStore isn't it's own module...MUST be in the main
 //var configStoreConnectionString = listKeys(config.id, config.apiVersion).value[0].connectionString
 
-@minLength(1)
-param publisherEmail string = 'rpagels@microsoft.com'
-@minLength(1)
-param publisherName string = 'Randy Pagels'
-param sku string = 'Developer' // 'Developer' or 'Consumption'
-param skuCount int = 1  // Developr = 1, Consumption = 0
+// @minLength(1)
+// param publisherEmail string = 'rpagels@microsoft.com'
+// @minLength(1)
+// param publisherName string = 'Randy Pagels'
+// param sku string = 'Developer' // 'Developer' or 'Consumption'
+// param skuCount int = 1  // Developr = 1, Consumption = 0
 
 // Create the API Service
-resource apiManagementService 'Microsoft.ApiManagement/service@2021-12-01-preview' = {
-  name: apiServiceName
-  location: location
-  tags: defaultTags
-  sku: {
-    name: sku
-    capacity: skuCount
-  }
-  properties: {
-    publisherEmail: publisherEmail
-    publisherName: publisherName
-  }
-  identity: {
-    type: 'SystemAssigned'
-  }
-}
+// resource apiManagementService 'Microsoft.ApiManagement/service@2021-12-01-preview' = {
+//   name: apiServiceName
+//   location: location
+//   tags: defaultTags
+//   sku: {
+//     name: sku
+//     capacity: skuCount
+//   }
+//   properties: {
+//     publisherEmail: publisherEmail
+//     publisherName: publisherName
+//   }
+//   identity: {
+//     type: 'SystemAssigned'
+//   }
+// }
 
 // Create the Subscription for Developers
-resource apiManagementSubscription 'Microsoft.ApiManagement/service/subscriptions@2021-12-01-preview' = {
-  parent: apiManagementService
-  name: 'developers'
-  properties: {
-    scope: '/apis' // Subscription applies to all APIs
-    displayName: 'Mercury Health - Developers'
-    state: 'active'
-  }
-}
+// resource apiManagementSubscription 'Microsoft.ApiManagement/service/subscriptions@2021-12-01-preview' = {
+//   parent: apiManagementService
+//   name: 'developers'
+//   properties: {
+//     scope: '/apis' // Subscription applies to all APIs
+//     displayName: 'Mercury Health - Developers'
+//     state: 'active'
+//   }
+// }
 
 // Create the Product
-resource apiManagementProduct 'Microsoft.ApiManagement/service/products@2021-12-01-preview' = {
-  parent: apiManagementService
-  name: 'development'
-  properties: {
-    approvalRequired: false
-    state: 'published'
-    subscriptionRequired: true
-    subscriptionsLimit: 1
-    description: 'Product used for Mercury Health Development Teams'
-    displayName: 'Mercury Health - Developers'
-     terms: 'These are the terms of use ...'
-  }
-}
+// resource apiManagementProduct 'Microsoft.ApiManagement/service/products@2021-12-01-preview' = {
+//   parent: apiManagementService
+//   name: 'development'
+//   properties: {
+//     approvalRequired: false
+//     state: 'published'
+//     subscriptionRequired: true
+//     subscriptionsLimit: 1
+//     description: 'Product used for Mercury Health Development Teams'
+//     displayName: 'Mercury Health - Developers'
+//      terms: 'These are the terms of use ...'
+//   }
+// }
 
 // Create the Product Policies
-resource apiManagementProductPolicies 'Microsoft.ApiManagement/service/products/policies@2021-12-01-preview' = {
-  name: 'policy'
-  parent: apiManagementProduct
-  properties: {
-    value: '<policies>\r\n  <inbound>\r\n    <rate-limit calls="5" renewal-period="60" />\r\n    <quota calls="100" renewal-period="604800" />\r\n    <base />\r\n  </inbound>\r\n  <backend>\r\n    <base />\r\n  </backend>\r\n  <outbound>\r\n    <base />\r\n  </outbound>\r\n  <on-error>\r\n    <base />\r\n  </on-error>\r\n</policies>'
-    format: 'xml'
-  }
-}
+// resource apiManagementProductPolicies 'Microsoft.ApiManagement/service/products/policies@2021-12-01-preview' = {
+//   name: 'policy'
+//   parent: apiManagementProduct
+//   properties: {
+//     value: '<policies>\r\n  <inbound>\r\n    <rate-limit calls="5" renewal-period="60" />\r\n    <quota calls="100" renewal-period="604800" />\r\n    <base />\r\n  </inbound>\r\n  <backend>\r\n    <base />\r\n  </backend>\r\n  <outbound>\r\n    <base />\r\n  </outbound>\r\n  <on-error>\r\n    <base />\r\n  </on-error>\r\n</policies>'
+//     format: 'xml'
+//   }
+// }
 
 // Create the API Logger for Application Insights
-resource appInsightsAPILogger 'Microsoft.ApiManagement/service/loggers@2021-12-01-preview' = {
-  parent: apiManagementService
-  name: appInsightsName // 'MercuryHealth-applicationinsights'
-  properties: {
-    loggerType: 'applicationInsights'
-    description: 'Mercury Health Application Insights instance.'
-    resourceId: appinsightsmod.outputs.out_applicationInsightsID
-    credentials: {
-      instrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
-    }
-  }
-  dependsOn:  [
-    appinsightsmod
-  ]
-}
+// resource appInsightsAPILogger 'Microsoft.ApiManagement/service/loggers@2021-12-01-preview' = {
+//   parent: apiManagementService
+//   name: appInsightsName // 'MercuryHealth-applicationinsights'
+//   properties: {
+//     loggerType: 'applicationInsights'
+//     description: 'Mercury Health Application Insights instance.'
+//     resourceId: appinsightsmod.outputs.out_applicationInsightsID
+//     credentials: {
+//       instrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
+//     }
+//   }
+//   dependsOn:  [
+//     appinsightsmod
+//   ]
+// }
 
 // Import API Example
 // resource petStoreApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
@@ -162,30 +162,30 @@ resource appInsightsAPILogger 'Microsoft.ApiManagement/service/loggers@2021-12-0
 //
 // Mercury Health Swagger
 //
-@allowed([
-  'yaml-v3' //uses 'openapi-link' format
-  'json-v3' //uses 'openapi+json-link' format
-])
-param swaggerType string = 'yaml-v3'
+// @allowed([
+//   'yaml-v3' //uses 'openapi-link' format
+//   'json-v3' //uses 'openapi+json-link' format
+// ])
+// param swaggerType string = 'yaml-v3'
 
-// This url needs to be reachable for APIM
-param urlToSwagger string = 'https://raw.githubusercontent.com/RPagels/MercuryHealth/master/MercuryHealth.IaC/MercuryHealth.openapi.yaml'
-//param urlToSwagger string = './MercuryHealth.IaC/MercuryHealth.openapi.yaml'
-param apiPath string = '' // There can be only one api without path
-param name string = 'mercury-health'
-var format = ((swaggerType == 'yaml-v3')  ? 'openapi-link' : 'openapi+json-link')
+// // This url needs to be reachable for APIM
+// param urlToSwagger string = 'https://raw.githubusercontent.com/RPagels/MercuryHealth/master/MercuryHealth.IaC/MercuryHealth.openapi.yaml'
+// //param urlToSwagger string = './MercuryHealth.IaC/MercuryHealth.openapi.yaml'
+// param apiPath string = '' // There can be only one api without path
+// param name string = 'mercury-health'
+// var format = ((swaggerType == 'yaml-v3')  ? 'openapi-link' : 'openapi+json-link')
 
-// Create APIs from template
-resource apiManagementMercuryHealthImport 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
-  name: '${apiManagementService.name}/${name}'
-  properties: {
-    format: format
-    value: urlToSwagger // OR value: loadTextContent('./MercuryHealth.swagger.json')
-    path: apiPath
-    displayName: 'Mercury Health'
-    serviceUrl: 'https://${webSiteName}.azurewebsites.net/'
-  }
-}
+// // Create APIs from template
+// resource apiManagementMercuryHealthImport 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
+//   name: '${apiManagementService.name}/${name}'
+//   properties: {
+//     format: format
+//     value: urlToSwagger // OR value: loadTextContent('./MercuryHealth.swagger.json')
+//     path: apiPath
+//     displayName: 'Mercury Health'
+//     serviceUrl: 'https://${webSiteName}.azurewebsites.net/'
+//   }
+// }
 
 ///////////////////////////////////
 // TESTONLY
@@ -212,19 +212,19 @@ resource apiManagementMercuryHealthImport 'Microsoft.ApiManagement/service/apis@
 //
 
 // Create the Product for API
-resource apiManagementProductApi 'Microsoft.ApiManagement/service/products/apis@2021-12-01-preview' = {
-  parent: apiManagementProduct
-  name: 'mercury-health'
-  dependsOn: [
-    apiManagementMercuryHealthImport
-  ]
-}
+// resource apiManagementProductApi 'Microsoft.ApiManagement/service/products/apis@2021-12-01-preview' = {
+//   parent: apiManagementProduct
+//   name: 'mercury-health'
+//   dependsOn: [
+//     apiManagementMercuryHealthImport
+//   ]
+// }
 
-// Create reference to existing API
-resource apiManagementMercuryHealthApis 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' existing = {
-  name: 'mercury-health'
-  parent: apiManagementService
-}
+// // Create reference to existing API
+// resource apiManagementMercuryHealthApis 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' existing = {
+//   name: 'mercury-health'
+//   parent: apiManagementService
+// }
 
 // Create reference to existing API
 // resource apiManagementPetStoreApis 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' existing = {
@@ -281,64 +281,64 @@ resource apiManagementMercuryHealthApis 'Microsoft.ApiManagement/service/apis@20
 // }
 
 // Configure logging for the API.
-resource appInsightsAPIMercuryHealthdiagnostics 'Microsoft.ApiManagement/service/apis/diagnostics@2021-12-01-preview' = {
-  parent: apiManagementMercuryHealthApis
-  name: 'applicationinsights'
-  properties: {
-    loggerId: appInsightsAPILogger.id
-    alwaysLog: 'allErrors'
-    logClientIp: true
-    sampling: {
-      samplingType: 'fixed'
-      percentage: 100
-    }
-    verbosity: 'information'
-    httpCorrelationProtocol: 'Legacy'
-    frontend: {
-      request: {
-        headers: []
-        body: {
-          bytes: 0
-        }
-      }
-      response: {
-        headers: []
-        body: {
-          bytes: 0
-        }
-      }
-    }
-    backend: {
-      request: {
-        headers: []
-        body: {
-          bytes: 0
-        }
-      }
-      response: {
-        headers: []
-        body: {
-          bytes: 0
-        }
-      }
-    }
-  }
-  dependsOn:  [
-    appinsightsmod
-  ]
-}
+// resource appInsightsAPIMercuryHealthdiagnostics 'Microsoft.ApiManagement/service/apis/diagnostics@2021-12-01-preview' = {
+//   parent: apiManagementMercuryHealthApis
+//   name: 'applicationinsights'
+//   properties: {
+//     loggerId: appInsightsAPILogger.id
+//     alwaysLog: 'allErrors'
+//     logClientIp: true
+//     sampling: {
+//       samplingType: 'fixed'
+//       percentage: 100
+//     }
+//     verbosity: 'information'
+//     httpCorrelationProtocol: 'Legacy'
+//     frontend: {
+//       request: {
+//         headers: []
+//         body: {
+//           bytes: 0
+//         }
+//       }
+//       response: {
+//         headers: []
+//         body: {
+//           bytes: 0
+//         }
+//       }
+//     }
+//     backend: {
+//       request: {
+//         headers: []
+//         body: {
+//           bytes: 0
+//         }
+//       }
+//       response: {
+//         headers: []
+//         body: {
+//           bytes: 0
+//         }
+//       }
+//     }
+//   }
+//   dependsOn:  [
+//     appinsightsmod
+//   ]
+// }
 
-resource apiManagementServiceName_exampleUser1 'Microsoft.ApiManagement/service/users@2021-12-01-preview' = {
-  parent: apiManagementService
-  name: 'exampleUser1'
-  properties: {
-    firstName: 'ExampleFirstName1'
-    lastName: 'ExampleLastName1'
-    email: 'ExampleFirst1@example.com'
-    state: 'active'
-    note: 'note for example user 1'
-  }
-}
+// resource apiManagementServiceName_exampleUser1 'Microsoft.ApiManagement/service/users@2021-12-01-preview' = {
+//   parent: apiManagementService
+//   name: 'exampleUser1'
+//   properties: {
+//     firstName: 'ExampleFirstName1'
+//     lastName: 'ExampleLastName1'
+//     email: 'ExampleFirst1@example.com'
+//     state: 'active'
+//     note: 'note for example user 1'
+//   }
+// }
 
 // resource apiManagementServiceName_examplesubscription1 'Microsoft.ApiManagement/service/subscriptions@2021-12-01-preview' = {
 //   parent: apiManagementService
@@ -356,7 +356,7 @@ resource apiManagementServiceName_exampleUser1 'Microsoft.ApiManagement/service/
 
 // API Management - Avoid outputs for secrets - Look up secrets dynamically
 // Note: This is why API Management isn't it's own module...MUST be in the main
-var ApimSubscriptionKeyString = apiManagementSubscription.listSecrets().primaryKey
+//var ApimSubscriptionKeyString = apiManagementSubscription.listSecrets().primaryKey
 
 // Create Web App
 module webappmod './main-2-webapp.bicep' = {
@@ -412,6 +412,24 @@ module functionappmod './main-6-funcapp.bicep' = {
     functionAppServiceName: functionAppServiceName
     functionAppName: functionAppName
     defaultTags: defaultTags
+  }
+  dependsOn:  [
+    appinsightsmod
+  ]
+}
+
+// Create Function App
+module apimservicemod './main-7-apimanagement.bicep' = {
+  name: apiServiceName
+    params: {
+    location: location
+    defaultTags: defaultTags
+    apiServiceName: apiServiceName
+    appInsightsName: appInsightsName
+    applicationInsightsID: appinsightsmod.outputs.out_applicationInsightsID
+    appInsightsInstrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
+    webSiteName: webSiteName
+    
   }
   dependsOn:  [
     appinsightsmod
@@ -491,8 +509,8 @@ module configsettingsmod './main-13-configsettings.bicep' = {
     appInsightsInstrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
     appInsightsConnectionString: appinsightsmod.outputs.out_appInsightsConnectionString
     Deployed_Environment: Deployed_Environment
-    ApimSubscriptionKey: ApimSubscriptionKeyString
-    ApimWebServiceURL: apiManagementService.properties.gatewayUrl
+    ApimSubscriptionKey: apimservicemod.outputs.out_ApimSubscriptionKeyString
+    ApimWebServiceURL: apimservicemod.outputs.out_ApimWebServiceURL
     AzObjectIdPagels: AzObjectIdPagels
     }
     dependsOn:  [
