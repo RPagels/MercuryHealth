@@ -98,13 +98,6 @@ jobs:
         name: MercuryHealth.IaC
         path: ${{ github.workspace }}/MercuryHealth.IaC
 
-    - name: Download Build Artifact-API
-      uses: actions/download-artifact@v2
-      continue-on-error: false
-      with:
-        name: MercuryHealth.API
-        path: ${{ github.workspace }}/MercuryHealth.API
-
     - name: Install Bicep
       run: |
         curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
