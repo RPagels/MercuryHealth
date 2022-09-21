@@ -124,6 +124,7 @@ resource appInsightsAPILogger 'Microsoft.ApiManagement/service/loggers@2021-12-0
 //
 
 ////////////////////////////
+// Create API Definition
 resource apiManagementMercuryHealthAPIs 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
   parent: apiManagement
   name: 'mercury-health'
@@ -149,14 +150,14 @@ resource apiManagementProductApi 'Microsoft.ApiManagement/service/products/apis@
 }
 
 // Create reference to existing API
-resource apiManagementMercuryHealthApis 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' existing = {
-  name: 'mercury-health'
-  parent: apiManagement
-}
+// resource apiManagementMercuryHealthApis 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' existing = {
+//   name: 'mercury-health'
+//   parent: apiManagement
+// }
 
 // Configure logging for the API.
 resource appInsightsAPIMercuryHealthdiagnostics 'Microsoft.ApiManagement/service/apis/diagnostics@2021-12-01-preview' = {
-  parent: apiManagementMercuryHealthApis
+  parent: apiManagementMercuryHealthAPIs
   name: 'applicationinsights'
   properties: {
     loggerId: appInsightsAPILogger.id
@@ -243,32 +244,35 @@ resource apiManagementServiceName_exampleApi_exampleOperationsDELETE 'Microsoft.
   parent: apiManagementServiceName_exampleApiWithPolicy
   name: 'exampleOperationsDELETE'
   properties: {
-    displayName: 'DELETE resource'
+    displayName: 'DELETE a Nutrition item'
     method: 'DELETE'
-    urlTemplate: '/resource'
+    urlTemplate: '/api/Nutritions/id'
     description: 'A demonstration of a DELETE call'
   }
 }
+// Create GET-many operation
 resource apiManagementServiceName_exampleApi_exampleOperationsGETMany 'Microsoft.ApiManagement/service/apis/operations@2017-03-01' = {
   parent: apiManagementServiceName_exampleApiWithPolicy
   name: 'exampleOperationsGET1'
   properties: {
-    displayName: 'GET /api/Nutritions'
+    displayName: 'GET All items'
     method: 'GET'
     urlTemplate: '/api/Nutritions'
-    description: 'A demonstration of a GET call'
+    description: 'A demonstration of a GET a call'
   }
 }
+// Create GET-single operation
 resource apiManagementServiceName_exampleApi_exampleOperationsGET2 'Microsoft.ApiManagement/service/apis/operations@2017-03-01' = {
   parent: apiManagementServiceName_exampleApiWithPolicy
   name: 'exampleOperationsGET2'
   properties: {
-    displayName: 'GET /api/Nutritions/{id}'
+    displayName: 'GET Get item by Id'
     method: 'GET'
-    urlTemplate: '/api/Nutritions/{id}'
-    description: 'A demonstration of a GET call'
+    urlTemplate: '/api/Nutritions/id'
+    description: 'A demonstration of a GET one call'
   }
 }
+// Apply policy for GET-many operations
 resource apiManagementServiceName_exampleApi_exampleOperationsGET_policy 'Microsoft.ApiManagement/service/apis/operations/policies@2021-12-01-preview' = {
   parent: apiManagementServiceName_exampleApi_exampleOperationsGETMany
   name: 'policy'
@@ -277,6 +281,7 @@ resource apiManagementServiceName_exampleApi_exampleOperationsGET_policy 'Micros
     value: loadTextContent('./operationGETPolicy.xml')
   }
 }
+// Apply policy for DELETE operations
 resource apiManagementServiceName_exampleApi_exampleOperationsDELETE_policy 'Microsoft.ApiManagement/service/apis/operations/policies@2021-12-01-preview' = {
   parent: apiManagementServiceName_exampleApi_exampleOperationsDELETE
   name: 'policy'
@@ -285,6 +290,7 @@ resource apiManagementServiceName_exampleApi_exampleOperationsDELETE_policy 'Mic
     value: loadTextContent('./operationDELETEPolicy.xml')
   }
 }
+// Apply policy for all API
 resource apiPolicy 'Microsoft.ApiManagement/service/apis/policies@2021-12-01-preview' = {
   parent: apiManagementServiceName_exampleApiWithPolicy
   name: 'policy'
