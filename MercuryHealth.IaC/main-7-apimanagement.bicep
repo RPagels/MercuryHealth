@@ -195,7 +195,128 @@ resource apiManagementServiceName_exampleUser1 'Microsoft.ApiManagement/service/
   }
 }
 
+//////////////////////////////////////////////
 
+resource apiManagementServiceName_exampleApi 'Microsoft.ApiManagement/service/apis@2017-03-01' = {
+  parent: apiManagement
+  name: 'exampleApi'
+  properties: {
+    displayName: 'Example API Name'
+    description: 'Description for example API'
+    serviceUrl: 'https://example.net'
+    path: 'exampleapipath'
+    protocols: [
+      'https'
+    ]
+  }
+}
+resource apiManagementServiceName_exampleApi_exampleOperationsDELETE 'Microsoft.ApiManagement/service/apis/operations@2017-03-01' = {
+  parent: apiManagementServiceName_exampleApi
+  name: 'exampleOperationsDELETE'
+  properties: {
+    displayName: 'DELETE resource'
+    method: 'DELETE'
+    urlTemplate: '/resource'
+    description: 'A demonstration of a DELETE call'
+  }
+}
+resource apiManagementServiceName_exampleApi_exampleOperationsGET 'Microsoft.ApiManagement/service/apis/operations@2017-03-01' = {
+  parent: apiManagementServiceName_exampleApi
+  name: 'exampleOperationsGET'
+  properties: {
+    displayName: 'GET resource'
+    method: 'GET'
+    urlTemplate: '/resource'
+    description: 'A demonstration of a GET call'
+  }
+}
+resource apiManagementServiceName_exampleApi_exampleOperationsGET_policy 'Microsoft.ApiManagement/service/apis/operations/policies@2021-12-01-preview' = {
+  parent: apiManagementServiceName_exampleApi_exampleOperationsGET
+  name: 'policy'
+  properties: {
+    //policyContent: operationPolicy
+    format: 'rawxml'
+    value: loadTextContent('./operationPolicy.xml')
+  }
+}
+resource apiManagementServiceName_exampleApiWithPolicy 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
+  parent: apiManagement
+  name: 'exampleApiWithPolicy'
+  properties: {
+    displayName: 'Example API Name with Policy'
+    description: 'Description for example API with policy'
+    serviceUrl: 'https://exampleapiwithpolicy.net'
+    path: 'exampleapiwithpolicypath'
+    protocols: [
+      'https'
+    ]
+  }
+}
+resource apiPolicy 'Microsoft.ApiManagement/service/apis/policies@2021-12-01-preview' = {
+  parent: apiManagementServiceName_exampleApiWithPolicy
+  name: 'policy'
+  properties: {
+    format: 'rawxml'
+    value: loadTextContent('./operationPolicy.xml')
+  }
+}
+
+resource apiManagementServiceName_exampleProduct 'Microsoft.ApiManagement/service/products@2021-12-01-preview' = {
+  parent: apiManagement
+  name: 'exampleProduct'
+  properties: {
+    displayName: 'Example Product Name'
+    description: 'Description for example product'
+    terms: 'Terms for example product'
+    subscriptionRequired: true
+    approvalRequired: false
+    subscriptionsLimit: 1
+    state: 'published'
+  }
+}
+
+resource apiManagementServiceName_exampleProduct_exampleApi 'Microsoft.ApiManagement/service/products/apis@2021-12-01-preview' = {
+  parent: apiManagementServiceName_exampleProduct
+  name: 'exampleApi'
+  dependsOn: [
+    apiManagementServiceName_exampleApi
+  ]
+}
+resource apiManagementServiceName_exampleProduct_policy 'Microsoft.ApiManagement/service/products/policies@2021-12-01-preview' = {
+  parent: apiManagementServiceName_exampleProduct
+  name: 'policy'
+  properties: {
+    format: 'rawxml'
+    value: loadTextContent('./operationPolicy.xml')
+  }
+}
+
+resource apiManagementServiceName_exampleproperties 'Microsoft.ApiManagement/service/properties@2019-01-01' = {
+  parent: apiManagement
+  name: 'exampleproperties'
+  properties: {
+    displayName: 'propertyExampleName'
+    value: 'propertyExampleValue'
+    tags: [
+      'exampleTag'
+    ]
+  }
+}
+
+resource apiManagementServiceName_examplesubscription1 'Microsoft.ApiManagement/service/subscriptions@2021-12-01-preview' = {
+  parent: apiManagement
+  name: 'examplesubscription1'
+  properties: {
+    productId: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/exampleServiceName/products/exampleProduct'
+    userId: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/exampleServiceName/users/exampleUser1'
+  }
+  dependsOn: [
+    apiManagementServiceName_exampleProduct
+    apiManagementServiceName_exampleUser1
+  ]
+}
+
+//////////////////////////////////////////////
 
 var ApimSubscriptionKeyString = apiManagementSubscription.listSecrets().primaryKey
 
