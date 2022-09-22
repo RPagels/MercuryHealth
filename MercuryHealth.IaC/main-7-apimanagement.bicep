@@ -249,7 +249,7 @@ resource apiManagementServiceName_exampleApi_exampleOperationsDELETE 'Microsoft.
   properties: {
     displayName: 'DELETE a Nutrition item'
     method: 'DELETE'
-    urlTemplate: '/api/Nutritions/\${id}'  // evaluates to /api/Nutritions/{id}
+    urlTemplate: '/api/Nutritions/\${id\$}'  // evaluates to /api/Nutritions/{id}
     description: 'A demonstration of a DELETE call'
   }
 }
