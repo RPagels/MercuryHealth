@@ -242,7 +242,7 @@ resource apiManagementServiceName_exampleApiWithPolicy 'Microsoft.ApiManagement/
   }
 }
 // Evaluates to /api/Nutritions/{id}
-var urlTemplateSuffix2 = '\'{id\'}'
+var urlTemplateSuffix2 = 'IdwithCurlyBracesGoesHere' // '\'{id\'}'
 param urlTemplateSuffixArray array = [
   '"{'
   'id'
