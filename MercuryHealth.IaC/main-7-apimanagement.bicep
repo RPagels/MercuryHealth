@@ -228,7 +228,7 @@ resource apiManagementServiceName_exampleUser1 'Microsoft.ApiManagement/service/
 //   }
 // }
 
-var urlTemplateSuffix = '{id}'
+//var urlTemplateSuffix = '\${id}'
 
 resource apiManagementServiceName_exampleApiWithPolicy 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
   parent: apiManagement
@@ -249,7 +249,7 @@ resource apiManagementServiceName_exampleApi_exampleOperationsDELETE 'Microsoft.
   properties: {
     displayName: 'DELETE a Nutrition item'
     method: 'DELETE'
-    urlTemplate: '/api/Nutritions/${urlTemplateSuffix}'
+    urlTemplate: '/api/Nutritions/\${id}'  // evaluates to /api/Nutritions/{id}
     description: 'A demonstration of a DELETE call'
   }
 }
