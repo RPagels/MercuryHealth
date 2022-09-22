@@ -228,9 +228,6 @@ resource apiManagementServiceName_exampleUser1 'Microsoft.ApiManagement/service/
 //   }
 // }
 
-// Evaluates to /api/Nutritions/{id}
-var urlTemplateSuffix = '\${\$i\$d\$}'
-
 resource apiManagementServiceName_exampleApiWithPolicy 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
   parent: apiManagement
   name: 'exampleApiWithPolicy'
@@ -244,18 +241,27 @@ resource apiManagementServiceName_exampleApiWithPolicy 'Microsoft.ApiManagement/
     ]
   }
 }
-resource apiManagementServiceName_exampleApi_exampleOperationsDELETE 'Microsoft.ApiManagement/service/apis/operations@2017-03-01' = {
+// Evaluates to /api/Nutritions/{id}
+//var urlTemplateSuffix = '\${\$i\$d\$}'
+param urlTemplateSuffixArray array = [
+  '{'
+  'id'
+  '}'
+]
+var urlTemplateSuffix = concat(urlTemplateSuffixArray)
+
+resource apiManagementServiceName_exampleApi_exampleOperationsDELETE 'Microsoft.ApiManagement/service/apis/operations@2021-12-01-preview' = {
   parent: apiManagementServiceName_exampleApiWithPolicy
   name: 'exampleOperationsDELETE'
   properties: {
     displayName: 'Delete a Nutrition item'
     method: 'DELETE'
     urlTemplate: '/api/Nutritions/${urlTemplateSuffix}'
-    description: 'A demonstration of a DELETE call'
+    description: '${urlTemplateSuffix}' //'A demonstration of a DELETE call'
   }
 }
 // Create GET-many operation
-resource apiManagementServiceName_exampleApi_exampleOperationsGETMany 'Microsoft.ApiManagement/service/apis/operations@2017-03-01' = {
+resource apiManagementServiceName_exampleApi_exampleOperationsGETMany 'Microsoft.ApiManagement/service/apis/operations@2021-12-01-preview' = {
   parent: apiManagementServiceName_exampleApiWithPolicy
   name: 'exampleOperationsGET1'
   properties: {
@@ -266,7 +272,7 @@ resource apiManagementServiceName_exampleApi_exampleOperationsGETMany 'Microsoft
   }
 }
 // Create GET-single operation
-resource apiManagementServiceName_exampleApi_exampleOperationsGET2 'Microsoft.ApiManagement/service/apis/operations@2017-03-01' = {
+resource apiManagementServiceName_exampleApi_exampleOperationsGET2 'Microsoft.ApiManagement/service/apis/operations@2021-12-01-preview' = {
   parent: apiManagementServiceName_exampleApiWithPolicy
   name: 'exampleOperationsGET2'
   properties: {
