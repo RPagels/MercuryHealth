@@ -228,7 +228,8 @@ resource apiManagementServiceName_exampleUser1 'Microsoft.ApiManagement/service/
 //   }
 // }
 
-//var urlTemplateSuffix = '\${id}'
+// Evaluates to /api/Nutritions/{id}
+var urlTemplateSuffix = '\${\$i\$d\$}'
 
 resource apiManagementServiceName_exampleApiWithPolicy 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
   parent: apiManagement
@@ -247,9 +248,9 @@ resource apiManagementServiceName_exampleApi_exampleOperationsDELETE 'Microsoft.
   parent: apiManagementServiceName_exampleApiWithPolicy
   name: 'exampleOperationsDELETE'
   properties: {
-    displayName: 'DELETE a Nutrition item'
+    displayName: 'Delete a Nutrition item'
     method: 'DELETE'
-    urlTemplate: '/api/Nutritions/\${id\$}'  // evaluates to /api/Nutritions/{id}
+    urlTemplate: '/api/Nutritions/${urlTemplateSuffix}'
     description: 'A demonstration of a DELETE call'
   }
 }
@@ -258,7 +259,7 @@ resource apiManagementServiceName_exampleApi_exampleOperationsGETMany 'Microsoft
   parent: apiManagementServiceName_exampleApiWithPolicy
   name: 'exampleOperationsGET1'
   properties: {
-    displayName: 'List All items'
+    displayName: 'Get all Nutrition items'
     method: 'GET'
     urlTemplate: '/api/Nutritions'
     description: 'A demonstration of a GET a call'
@@ -269,7 +270,7 @@ resource apiManagementServiceName_exampleApi_exampleOperationsGET2 'Microsoft.Ap
   parent: apiManagementServiceName_exampleApiWithPolicy
   name: 'exampleOperationsGET2'
   properties: {
-    displayName: 'List One item'
+    displayName: 'Get all Nutrition items'
     method: 'GET'
     urlTemplate: '/api/Nutritions/id'
     description: 'A demonstration of a GET one call'
