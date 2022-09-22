@@ -257,7 +257,7 @@ resource apiManagementServiceName_exampleApi_exampleOperationsDELETE 'Microsoft.
     displayName: 'Delete a Nutrition item'
     method: 'DELETE'
     urlTemplate: '/api/Nutritions/${urlTemplateSuffix2}'
-    description: '${urlTemplateSuffix}' //'A demonstration of a DELETE call'
+    description: 'A demonstration of a DELETE call'
   }
 }
 // Create GET-many operation
