@@ -242,13 +242,13 @@ resource apiManagementServiceName_exampleApiWithPolicy 'Microsoft.ApiManagement/
   }
 }
 // Evaluates to /api/Nutritions/{id}
-var urlTemplateSuffix2 = 'IdwithCurlyBracesGoesHere' // '\'{id\'}'
-param urlTemplateSuffixArray array = [
-  '"{'
-  'id'
-  '}"'
-]
-var urlTemplateSuffix = concat(urlTemplateSuffixArray)
+// var urlTemplateSuffix2 = 'IdwithCurlyBracesGoesHere' // '\'{id\'}'
+// param urlTemplateSuffixArray array = [
+//   '"{'
+//   'id'
+//   '}"'
+// ]
+// var urlTemplateSuffix = concat(urlTemplateSuffixArray)
 
 resource apiManagementServiceName_exampleApi_exampleOperationsDELETE 'Microsoft.ApiManagement/service/apis/operations@2021-12-01-preview' = {
   parent: apiManagementServiceName_exampleApiWithPolicy
@@ -256,10 +256,18 @@ resource apiManagementServiceName_exampleApi_exampleOperationsDELETE 'Microsoft.
   properties: {
     displayName: 'Delete a Nutrition item'
     method: 'DELETE'
-    urlTemplate: '/api/Nutritions/${urlTemplateSuffix2}'
+    urlTemplate: '/api/Nutritions/{id}'
     description: 'A demonstration of a DELETE call'
+    templateParameters: [
+      {
+        name: 'id'
+        required: true
+        type: 'string'
+      }
+    ]
   }
 }
+
 // Create GET-many operation
 resource apiManagementServiceName_exampleApi_exampleOperationsGETMany 'Microsoft.ApiManagement/service/apis/operations@2021-12-01-preview' = {
   parent: apiManagementServiceName_exampleApiWithPolicy
