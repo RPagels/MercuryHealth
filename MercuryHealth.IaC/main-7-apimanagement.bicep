@@ -244,9 +244,9 @@ resource apiManagementServiceName_exampleApiWithPolicy 'Microsoft.ApiManagement/
 // Evaluates to /api/Nutritions/{id}
 //var urlTemplateSuffix = '\${\$i\$d\$}'
 param urlTemplateSuffixArray array = [
-  '{'
+  '{{ {'
   'id'
-  '}'
+  '} }}'
 ]
 var urlTemplateSuffix = concat(urlTemplateSuffixArray)
 
