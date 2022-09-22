@@ -242,7 +242,7 @@ resource apiManagementServiceName_exampleApiWithPolicy 'Microsoft.ApiManagement/
   }
 }
 // Evaluates to /api/Nutritions/{id}
-//var urlTemplateSuffix = '\${\$i\$d\$}'
+var urlTemplateSuffix2 = '\'{id\'}'
 param urlTemplateSuffixArray array = [
   '"{'
   'id'
@@ -256,7 +256,7 @@ resource apiManagementServiceName_exampleApi_exampleOperationsDELETE 'Microsoft.
   properties: {
     displayName: 'Delete a Nutrition item'
     method: 'DELETE'
-    urlTemplate: '/api/Nutritions/${urlTemplateSuffix}'
+    urlTemplate: '/api/Nutritions/${urlTemplateSuffix2}'
     description: '${urlTemplateSuffix}' //'A demonstration of a DELETE call'
   }
 }
