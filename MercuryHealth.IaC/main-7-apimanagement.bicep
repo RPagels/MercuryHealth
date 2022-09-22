@@ -241,14 +241,6 @@ resource apiManagementServiceName_exampleApiWithPolicy 'Microsoft.ApiManagement/
     ]
   }
 }
-// Evaluates to /api/Nutritions/{id}
-// var urlTemplateSuffix2 = 'IdwithCurlyBracesGoesHere' // '\'{id\'}'
-// param urlTemplateSuffixArray array = [
-//   '"{'
-//   'id'
-//   '}"'
-// ]
-// var urlTemplateSuffix = concat(urlTemplateSuffixArray)
 
 resource apiManagementServiceName_exampleApi_exampleOperationsDELETE 'Microsoft.ApiManagement/service/apis/operations@2021-12-01-preview' = {
   parent: apiManagementServiceName_exampleApiWithPolicy
@@ -284,10 +276,17 @@ resource apiManagementServiceName_exampleApi_exampleOperationsGET2 'Microsoft.Ap
   parent: apiManagementServiceName_exampleApiWithPolicy
   name: 'exampleOperationsGET2'
   properties: {
-    displayName: 'Get all Nutrition items'
+    displayName: 'Get a Nutrition item'
     method: 'GET'
-    urlTemplate: '/api/Nutritions/id'
+    urlTemplate: '/api/Nutritions/{id}'
     description: 'A demonstration of a GET one call'
+    templateParameters: [
+      {
+        name: 'id'
+        required: true
+        type: 'string'
+      }
+    ]
   }
 }
 // Apply policy for GET-many operations
