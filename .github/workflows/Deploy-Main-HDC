@@ -149,9 +149,9 @@ jobs:
   dev:
     #if: contains(github.event_name, 'push')
     needs: Build_Application
-    uses: ./.github/workflows/deploy-environment-single.yml
+    uses: ./.github/workflows/deploy-environment-hdc.yml
     with:
-      resource-group-base-name: 'rg-MercuryHealth'
+      resource-group-base-name: 'rg-hdc-v1'
       environment-suffix: 'dev'
       resource-group-location: 'eastus2'
       approval-required: true
