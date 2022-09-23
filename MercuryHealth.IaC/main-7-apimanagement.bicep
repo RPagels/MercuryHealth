@@ -175,15 +175,15 @@ resource apiPolicy 'Microsoft.ApiManagement/service/apis/policies@2021-12-01-pre
 }
 
 ///////////////////////////////////////////
-// Create the Product for API Service
+// Create the Product for API
 ///////////////////////////////////////////
-// resource apiManagementProductApi 'Microsoft.ApiManagement/service/products/apis@2021-12-01-preview' = {
-//   parent: apiManagementProduct
-//   name: 'mercury-health'
-//   dependsOn: [
-//     apiManagementMercuryHealthAPIs
-//   ]
-// }
+resource apiManagementProductApi 'Microsoft.ApiManagement/service/products/apis@2021-12-01-preview' = {
+  parent: apiManagementProduct
+  name: 'mercury-health'
+  dependsOn: [
+    apiManagementMercuryHealthAPIs
+  ]
+}
 
 ///////////////////////////////////////////
 // Configure logging for the API Service
