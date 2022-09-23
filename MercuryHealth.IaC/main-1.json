@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.10.61.36676",
-      "templateHash": "3729541837456723106"
+      "templateHash": "2724828450028669003"
     }
   },
   "parameters": {
@@ -77,8 +77,8 @@
     "FontColorKey": "FontColor",
     "FontSizeKey": "FontSize",
     "FontNameValue": "Calibri",
-    "FontColorValue": "Blue",
-    "FontSizeValue": "12"
+    "FontColorValue": "Black",
+    "FontSizeValue": "14"
   },
   "resources": [
     {
@@ -676,7 +676,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.10.61.36676",
-              "templateHash": "11947174494256520239"
+              "templateHash": "10483685846902921088"
             }
           },
           "parameters": {
@@ -751,7 +751,7 @@
                       "name": "1st criterion",
                       "metricName": "requests/duration",
                       "operator": "GreaterThan",
-                      "threshold": 300,
+                      "threshold": 500,
                       "timeAggregation": "Average",
                       "criterionType": "StaticThresholdCriterion"
                     }
@@ -1109,7 +1109,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.10.61.36676",
-              "templateHash": "9109210376472599476"
+              "templateHash": "7700066365376924299"
             }
           },
           "parameters": {
@@ -1159,30 +1159,15 @@
             "skuCount": {
               "type": "int",
               "defaultValue": 1
-            },
-            "swaggerType": {
-              "type": "string",
-              "defaultValue": "yaml-v3",
-              "allowedValues": [
-                "yaml-v3",
-                "json-v3"
-              ]
-            },
-            "urlToSwagger": {
-              "type": "string",
-              "defaultValue": "https://raw.githubusercontent.com/RPagels/MercuryHealth/master/MercuryHealth.IaC/MercuryHealth.openapi.yaml"
-            },
-            "apiPath": {
-              "type": "string",
-              "defaultValue": ""
-            },
-            "name": {
-              "type": "string",
-              "defaultValue": "mercury-health"
             }
           },
           "variables": {
-            "format": "[if(equals(parameters('swaggerType'), 'yaml-v3'), 'openapi-link', 'openapi+json-link')]"
+            "$fxv#0": "<policies>\r\n    <inbound>\r\n        <rate-limit calls=\"5\" renewal-period=\"60\" />\r\n        <quota calls=\"100\" renewal-period=\"604800\" />\r\n        <base />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>",
+            "$fxv#1": "<policies>\r\n    <inbound>\r\n        <base />\r\n        <rate-limit-by-key calls=\"10\" renewal-period=\"60\" counter-key=\"@(context.Subscription?.Key ?? \"anonymous\")\" />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>",
+            "$fxv#2": "<policies>\r\n    <inbound>\r\n        <base />\r\n        <rate-limit-by-key calls=\"5\" renewal-period=\"60\" counter-key=\"@(context.Subscription?.Key ?? \"anonymous\")\" />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>",
+            "$fxv#3": "<policies>\r\n    <inbound>\r\n        <base />\r\n        <rate-limit-by-key calls=\"5\" renewal-period=\"60\" counter-key=\"@(context.Subscription?.Key ?? \"anonymous\")\" />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>",
+            "$fxv#4": "<policies>\r\n    <inbound>\r\n        <mock-response status-code=\"200\" content-type=\"application/json\" />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>",
+            "$fxv#5": "<policies>\r\n    <inbound>\r\n        <mock-response status-code=\"200\" content-type=\"application/json\" />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>"
           },
           "resources": [
             {
@@ -1206,10 +1191,10 @@
             {
               "type": "Microsoft.ApiManagement/service/subscriptions",
               "apiVersion": "2021-12-01-preview",
-              "name": "[format('{0}/{1}', parameters('apiServiceName'), 'developers')]",
+              "name": "[format('{0}/{1}', parameters('apiServiceName'), 'Developers')]",
               "properties": {
                 "scope": "/apis",
-                "displayName": "Mercury Health - Developers",
+                "displayName": "Mercury Health Developers",
                 "state": "active"
               },
               "dependsOn": [
@@ -1219,15 +1204,15 @@
             {
               "type": "Microsoft.ApiManagement/service/products",
               "apiVersion": "2021-12-01-preview",
-              "name": "[format('{0}/{1}', parameters('apiServiceName'), 'development')]",
+              "name": "[format('{0}/{1}', parameters('apiServiceName'), 'Development')]",
               "properties": {
                 "approvalRequired": false,
                 "state": "published",
                 "subscriptionRequired": true,
                 "subscriptionsLimit": 1,
                 "description": "Product used for Mercury Health Development Teams",
-                "displayName": "Mercury Health - Developers",
-                "terms": "These are the terms of use ..."
+                "displayName": "Mercury Health Developers",
+                "terms": "These are the terms of use ... .etc"
               },
               "dependsOn": [
                 "[resourceId('Microsoft.ApiManagement/service', parameters('apiServiceName'))]"
@@ -1236,13 +1221,13 @@
             {
               "type": "Microsoft.ApiManagement/service/products/policies",
               "apiVersion": "2021-12-01-preview",
-              "name": "[format('{0}/{1}/{2}', parameters('apiServiceName'), 'development', 'policy')]",
+              "name": "[format('{0}/{1}/{2}', parameters('apiServiceName'), 'Development', 'policyProduct')]",
               "properties": {
-                "value": "<policies>\r\n  <inbound>\r\n    <rate-limit calls=\"5\" renewal-period=\"60\" />\r\n    <quota calls=\"100\" renewal-period=\"604800\" />\r\n    <base />\r\n  </inbound>\r\n  <backend>\r\n    <base />\r\n  </backend>\r\n  <outbound>\r\n    <base />\r\n  </outbound>\r\n  <on-error>\r\n    <base />\r\n  </on-error>\r\n</policies>",
-                "format": "xml"
+                "format": "rawxml",
+                "value": "[variables('$fxv#0')]"
               },
               "dependsOn": [
-                "[resourceId('Microsoft.ApiManagement/service/products', parameters('apiServiceName'), 'development')]"
+                "[resourceId('Microsoft.ApiManagement/service/products', parameters('apiServiceName'), 'Development')]"
               ]
             },
             {
@@ -1264,25 +1249,30 @@
             {
               "type": "Microsoft.ApiManagement/service/apis",
               "apiVersion": "2021-12-01-preview",
-              "name": "[format('{0}/{1}', parameters('apiServiceName'), parameters('name'))]",
+              "name": "[format('{0}/{1}', parameters('apiServiceName'), 'mercury-health')]",
               "properties": {
-                "format": "[variables('format')]",
-                "value": "[parameters('urlToSwagger')]",
-                "path": "[parameters('apiPath')]",
                 "displayName": "Mercury Health",
-                "serviceUrl": "[format('https://{0}.azurewebsites.net/', parameters('webSiteName'))]"
+                "description": "A sample API that uses a Mercury Health as an example to demonstrate features.",
+                "serviceUrl": "[format('https://{0}.azurewebsites.net/', parameters('webSiteName'))]",
+                "path": "",
+                "protocols": [
+                  "https"
+                ]
               },
               "dependsOn": [
                 "[resourceId('Microsoft.ApiManagement/service', parameters('apiServiceName'))]"
               ]
             },
             {
-              "type": "Microsoft.ApiManagement/service/products/apis",
+              "type": "Microsoft.ApiManagement/service/apis/policies",
               "apiVersion": "2021-12-01-preview",
-              "name": "[format('{0}/{1}/{2}', parameters('apiServiceName'), 'development', 'mercury-health')]",
+              "name": "[format('{0}/{1}/{2}', parameters('apiServiceName'), 'mercury-health', 'policy')]",
+              "properties": {
+                "format": "rawxml",
+                "value": "[variables('$fxv#1')]"
+              },
               "dependsOn": [
-                "[resourceId('Microsoft.ApiManagement/service/apis', split(format('{0}/{1}', parameters('apiServiceName'), parameters('name')), '/')[0], split(format('{0}/{1}', parameters('apiServiceName'), parameters('name')), '/')[1])]",
-                "[resourceId('Microsoft.ApiManagement/service/products', parameters('apiServiceName'), 'development')]"
+                "[resourceId('Microsoft.ApiManagement/service/apis', parameters('apiServiceName'), 'mercury-health')]"
               ]
             },
             {
@@ -1329,30 +1319,295 @@
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.ApiManagement/service', parameters('apiServiceName'))]",
+                "[resourceId('Microsoft.ApiManagement/service/apis', parameters('apiServiceName'), 'mercury-health')]",
                 "[resourceId('Microsoft.ApiManagement/service/loggers', parameters('apiServiceName'), parameters('appInsightsName'))]"
               ]
             },
             {
               "type": "Microsoft.ApiManagement/service/users",
               "apiVersion": "2021-12-01-preview",
-              "name": "[format('{0}/{1}', parameters('apiServiceName'), 'exampleUser1')]",
+              "name": "[format('{0}/{1}', parameters('apiServiceName'), 'User1')]",
               "properties": {
-                "firstName": "ExampleFirstName1",
-                "lastName": "ExampleLastName1",
-                "email": "ExampleFirst1@example.com",
+                "firstName": "FirstName",
+                "lastName": "LastName",
+                "email": "FirstName.LastName@example.com",
                 "state": "active",
-                "note": "note for example user 1"
+                "note": "Note for example user 1"
               },
               "dependsOn": [
                 "[resourceId('Microsoft.ApiManagement/service', parameters('apiServiceName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.ApiManagement/service/apis/operations",
+              "apiVersion": "2021-12-01-preview",
+              "name": "[format('{0}/{1}/{2}', parameters('apiServiceName'), 'mercury-health', 'AccessLogsGETMany')]",
+              "properties": {
+                "displayName": "Get all Access Logs items",
+                "method": "GET",
+                "urlTemplate": "/api/AccessLogs",
+                "description": "A demonstration of a GET  call"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.ApiManagement/service/apis', parameters('apiServiceName'), 'mercury-health')]"
+              ]
+            },
+            {
+              "type": "Microsoft.ApiManagement/service/apis/operations",
+              "apiVersion": "2021-12-01-preview",
+              "name": "[format('{0}/{1}/{2}', parameters('apiServiceName'), 'mercury-health', 'AccessLogsGETSingle')]",
+              "properties": {
+                "displayName": "Get a Access Logs item",
+                "method": "GET",
+                "urlTemplate": "/api/AccessLogs/{id}",
+                "description": "A demonstration of a GET single call",
+                "templateParameters": [
+                  {
+                    "name": "id",
+                    "required": true,
+                    "type": "string"
+                  }
+                ]
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.ApiManagement/service/apis', parameters('apiServiceName'), 'mercury-health')]"
+              ]
+            },
+            {
+              "type": "Microsoft.ApiManagement/service/apis/operations",
+              "apiVersion": "2021-12-01-preview",
+              "name": "[format('{0}/{1}/{2}', parameters('apiServiceName'), 'mercury-health', 'NutritionsGETMany')]",
+              "properties": {
+                "displayName": "Get all Nutrition items",
+                "method": "GET",
+                "urlTemplate": "/api/Nutritions",
+                "description": "A demonstration of a GET call"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.ApiManagement/service/apis', parameters('apiServiceName'), 'mercury-health')]"
+              ]
+            },
+            {
+              "type": "Microsoft.ApiManagement/service/apis/operations",
+              "apiVersion": "2021-12-01-preview",
+              "name": "[format('{0}/{1}/{2}', parameters('apiServiceName'), 'mercury-health', 'NutritionsGETSingle')]",
+              "properties": {
+                "displayName": "Get a Nutrition item",
+                "method": "GET",
+                "urlTemplate": "/api/Nutritions/{id}",
+                "description": "A demonstration of a GET single call",
+                "templateParameters": [
+                  {
+                    "name": "id",
+                    "required": true,
+                    "type": "string"
+                  }
+                ]
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.ApiManagement/service/apis', parameters('apiServiceName'), 'mercury-health')]"
+              ]
+            },
+            {
+              "type": "Microsoft.ApiManagement/service/apis/operations",
+              "apiVersion": "2021-12-01-preview",
+              "name": "[format('{0}/{1}/{2}', parameters('apiServiceName'), 'mercury-health', 'NutritionsDELETESingle')]",
+              "properties": {
+                "displayName": "Delete a Nutrition item",
+                "method": "DELETE",
+                "urlTemplate": "/api/Nutritions/{id}",
+                "description": "A demonstration of a DELETE call",
+                "templateParameters": [
+                  {
+                    "name": "id",
+                    "required": true,
+                    "type": "string"
+                  }
+                ]
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.ApiManagement/service/apis', parameters('apiServiceName'), 'mercury-health')]"
+              ]
+            },
+            {
+              "type": "Microsoft.ApiManagement/service/apis/operations",
+              "apiVersion": "2021-12-01-preview",
+              "name": "[format('{0}/{1}/{2}', parameters('apiServiceName'), 'mercury-health', 'NutritionsPUTSingle')]",
+              "properties": {
+                "displayName": "Put a Nutrition item",
+                "method": "PUT",
+                "urlTemplate": "/api/Nutritions/{id}",
+                "description": "A demonstration of a PUT call",
+                "templateParameters": [
+                  {
+                    "name": "id",
+                    "required": true,
+                    "type": "string"
+                  }
+                ]
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.ApiManagement/service/apis', parameters('apiServiceName'), 'mercury-health')]"
+              ]
+            },
+            {
+              "type": "Microsoft.ApiManagement/service/apis/operations",
+              "apiVersion": "2021-12-01-preview",
+              "name": "[format('{0}/{1}/{2}', parameters('apiServiceName'), 'mercury-health', 'NutritionsPOSTSingle')]",
+              "properties": {
+                "displayName": "Post a Nutrition item",
+                "method": "POST",
+                "urlTemplate": "/api/Nutritions",
+                "description": "A demonstration of a POST call"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.ApiManagement/service/apis', parameters('apiServiceName'), 'mercury-health')]"
+              ]
+            },
+            {
+              "type": "Microsoft.ApiManagement/service/apis/operations",
+              "apiVersion": "2021-12-01-preview",
+              "name": "[format('{0}/{1}/{2}', parameters('apiServiceName'), 'mercury-health', 'ExercisesGETMany')]",
+              "properties": {
+                "displayName": "Get all Exercises items",
+                "method": "GET",
+                "urlTemplate": "/api/Exercises",
+                "description": "A demonstration of a GET a call"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.ApiManagement/service/apis', parameters('apiServiceName'), 'mercury-health')]"
+              ]
+            },
+            {
+              "type": "Microsoft.ApiManagement/service/apis/operations",
+              "apiVersion": "2021-12-01-preview",
+              "name": "[format('{0}/{1}/{2}', parameters('apiServiceName'), 'mercury-health', 'ExercisesGETSingle')]",
+              "properties": {
+                "displayName": "Get a Exercises item",
+                "method": "GET",
+                "urlTemplate": "/api/Exercises/{id}",
+                "description": "A demonstration of a GET single call",
+                "templateParameters": [
+                  {
+                    "name": "id",
+                    "required": true,
+                    "type": "string"
+                  }
+                ]
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.ApiManagement/service/apis', parameters('apiServiceName'), 'mercury-health')]"
+              ]
+            },
+            {
+              "type": "Microsoft.ApiManagement/service/apis/operations",
+              "apiVersion": "2021-12-01-preview",
+              "name": "[format('{0}/{1}/{2}', parameters('apiServiceName'), 'mercury-health', 'ExercisesDELETESingle')]",
+              "properties": {
+                "displayName": "Delete a Exercises item",
+                "method": "DELETE",
+                "urlTemplate": "/api/Exercises/{id}",
+                "description": "A demonstration of a DELETE call",
+                "templateParameters": [
+                  {
+                    "name": "id",
+                    "required": true,
+                    "type": "string"
+                  }
+                ]
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.ApiManagement/service/apis', parameters('apiServiceName'), 'mercury-health')]"
+              ]
+            },
+            {
+              "type": "Microsoft.ApiManagement/service/apis/operations",
+              "apiVersion": "2021-12-01-preview",
+              "name": "[format('{0}/{1}/{2}', parameters('apiServiceName'), 'mercury-health', 'NExercisesPUTSingle')]",
+              "properties": {
+                "displayName": "Put a Exercises item",
+                "method": "PUT",
+                "urlTemplate": "/api/Exercises/{id}",
+                "description": "A demonstration of a PUT call",
+                "templateParameters": [
+                  {
+                    "name": "id",
+                    "required": true,
+                    "type": "string"
+                  }
+                ]
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.ApiManagement/service/apis', parameters('apiServiceName'), 'mercury-health')]"
+              ]
+            },
+            {
+              "type": "Microsoft.ApiManagement/service/apis/operations",
+              "apiVersion": "2021-12-01-preview",
+              "name": "[format('{0}/{1}/{2}', parameters('apiServiceName'), 'mercury-health', 'ExercisesPOSTSingle')]",
+              "properties": {
+                "displayName": "Post a Exercises item",
+                "method": "POST",
+                "urlTemplate": "/api/Exercises",
+                "description": "A demonstration of a POST call"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.ApiManagement/service/apis', parameters('apiServiceName'), 'mercury-health')]"
+              ]
+            },
+            {
+              "type": "Microsoft.ApiManagement/service/apis/operations/policies",
+              "apiVersion": "2021-12-01-preview",
+              "name": "[format('{0}/{1}/{2}/{3}', parameters('apiServiceName'), 'mercury-health', 'NutritionsGETMany', 'policy')]",
+              "properties": {
+                "format": "rawxml",
+                "value": "[variables('$fxv#2')]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('apiServiceName'), 'mercury-health', 'NutritionsGETMany')]"
+              ]
+            },
+            {
+              "type": "Microsoft.ApiManagement/service/apis/operations/policies",
+              "apiVersion": "2021-12-01-preview",
+              "name": "[format('{0}/{1}/{2}/{3}', parameters('apiServiceName'), 'mercury-health', 'ExercisesGETMany', 'policy')]",
+              "properties": {
+                "format": "rawxml",
+                "value": "[variables('$fxv#3')]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('apiServiceName'), 'mercury-health', 'ExercisesGETMany')]"
+              ]
+            },
+            {
+              "type": "Microsoft.ApiManagement/service/apis/operations/policies",
+              "apiVersion": "2021-12-01-preview",
+              "name": "[format('{0}/{1}/{2}/{3}', parameters('apiServiceName'), 'mercury-health', 'NutritionsDELETESingle', 'policy')]",
+              "properties": {
+                "format": "rawxml",
+                "value": "[variables('$fxv#4')]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('apiServiceName'), 'mercury-health', 'NutritionsDELETESingle')]"
+              ]
+            },
+            {
+              "type": "Microsoft.ApiManagement/service/apis/operations/policies",
+              "apiVersion": "2021-12-01-preview",
+              "name": "[format('{0}/{1}/{2}/{3}', parameters('apiServiceName'), 'mercury-health', 'ExercisesDELETESingle', 'policy')]",
+              "properties": {
+                "format": "rawxml",
+                "value": "[variables('$fxv#5')]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('apiServiceName'), 'mercury-health', 'ExercisesDELETESingle')]"
               ]
             }
           ],
           "outputs": {
             "out_ApimSubscriptionKeyString": {
               "type": "string",
-              "value": "[listSecrets(resourceId('Microsoft.ApiManagement/service/subscriptions', parameters('apiServiceName'), 'developers'), '2021-12-01-preview').primaryKey]"
+              "value": "[listSecrets(resourceId('Microsoft.ApiManagement/service/subscriptions', parameters('apiServiceName'), 'Developers'), '2021-12-01-preview').primaryKey]"
             },
             "out_ApimWebServiceURL": {
               "type": "string",
@@ -1916,7 +2171,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.10.61.36676",
-              "templateHash": "17248602541078314729"
+              "templateHash": "16040889279524662019"
             }
           },
           "parameters": {
@@ -2110,6 +2365,7 @@
                 "ConnectionStrings:AppConfig": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('kvValue_configStoreConnectionName'))]",
                 "DeployedEnvironment": "[parameters('Deployed_Environment')]",
                 "WEBSITE_RUN_FROM_PACKAGE": "1",
+                "WEBSITE_SENTINEL": "1",
                 "APPINSIGHTS_INSTRUMENTATIONKEY": "[parameters('appInsightsInstrumentationKey')]",
                 "APPINSIGHTS_PROFILERFEATURE_VERSION": "1.0.0",
                 "APPINSIGHTS_SNAPSHOTFEATURE_VERSION": "1.0.0",

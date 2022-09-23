@@ -1,0 +1,14 @@
+<policies>
+    <inbound>
+        <mock-response status-code="200" content-type="application/json" />
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>

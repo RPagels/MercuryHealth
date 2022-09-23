@@ -25,6 +25,9 @@ param publisherName string = 'Randy Pagels'
 param sku string = 'Developer' // 'Developer' or 'Consumption'
 param skuCount int = 1  // Developr = 1, Consumption = 0
 
+///////////////////////////////////////////
+// Create API Management Service Definition
+///////////////////////////////////////////
 resource apiManagement 'Microsoft.ApiManagement/service@2021-12-01-preview' = {
   name: apiServiceName
   location: location
@@ -42,46 +45,62 @@ resource apiManagement 'Microsoft.ApiManagement/service@2021-12-01-preview' = {
   }
 }
 
+///////////////////////////////////////////
 // Create the Subscription for Developers
+///////////////////////////////////////////
 resource apiManagementSubscription 'Microsoft.ApiManagement/service/subscriptions@2021-12-01-preview' = {
   parent: apiManagement
-  name: 'developers'
+  name: 'Developers'
   properties: {
     scope: '/apis' // Subscription applies to all APIs
-    displayName: 'Mercury Health - Developers'
+    displayName: 'Mercury Health Developers'
     state: 'active'
   }
 }
 
-// Create the Product
+///////////////////////////////////////////
+// Create Product
+///////////////////////////////////////////
 resource apiManagementProduct 'Microsoft.ApiManagement/service/products@2021-12-01-preview' = {
   parent: apiManagement
-  name: 'development'
+  name: 'Development'
   properties: {
     approvalRequired: false
     state: 'published'
     subscriptionRequired: true
     subscriptionsLimit: 1
     description: 'Product used for Mercury Health Development Teams'
-    displayName: 'Mercury Health - Developers'
-     terms: 'These are the terms of use ...'
+    displayName: 'Mercury Health Developers'
+     terms: 'These are the terms of use ... .etc'
   }
 }
 
-// Create the Product Policies
+///////////////////////////////////////////
+// Create Policy for Product Definitions 
+///////////////////////////////////////////
 resource apiManagementProductPolicies 'Microsoft.ApiManagement/service/products/policies@2021-12-01-preview' = {
-  name: 'policy'
   parent: apiManagementProduct
+  name: 'policyProduct'
   properties: {
-    value: '<policies>\r\n  <inbound>\r\n    <rate-limit calls="5" renewal-period="60" />\r\n    <quota calls="100" renewal-period="604800" />\r\n    <base />\r\n  </inbound>\r\n  <backend>\r\n    <base />\r\n  </backend>\r\n  <outbound>\r\n    <base />\r\n  </outbound>\r\n  <on-error>\r\n    <base />\r\n  </on-error>\r\n</policies>'
-    format: 'xml'
+    format: 'rawxml'
+    value: loadTextContent('./policy_Products.xml')
   }
 }
+// resource apiManagementProductPolicies 'Microsoft.ApiManagement/service/products/policies@2021-12-01-preview' = {
+//   name: 'policy'
+//   parent: apiManagementProduct
+//   properties: {
+//     value: '<policies>\r\n  <inbound>\r\n    <rate-limit calls="5" renewal-period="60" />\r\n    <quota calls="100" renewal-period="604800" />\r\n    <base />\r\n  </inbound>\r\n  <backend>\r\n    <base />\r\n  </backend>\r\n  <outbound>\r\n    <base />\r\n  </outbound>\r\n  <on-error>\r\n    <base />\r\n  </on-error>\r\n</policies>'
+//     format: 'xml'
+//   }
+// }
 
+///////////////////////////////////////////
 // Create the API Logger for Application Insights
+///////////////////////////////////////////
 resource appInsightsAPILogger 'Microsoft.ApiManagement/service/loggers@2021-12-01-preview' = {
   parent: apiManagement
-  name: appInsightsName // 'MercuryHealth-applicationinsights'
+  name: appInsightsName
   properties: {
     loggerType: 'applicationInsights'
     description: 'Mercury Health Application Insights instance.'
@@ -123,39 +142,49 @@ resource appInsightsAPILogger 'Microsoft.ApiManagement/service/loggers@2021-12-0
 // Mercury Health Swagger
 //
 
-////////////////////////////
-// Create API Definition
+///////////////////////////////////////////
+// Create API Service Definition
+///////////////////////////////////////////
 resource apiManagementMercuryHealthAPIs 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
   parent: apiManagement
   name: 'mercury-health'
   properties: {
     displayName: 'Mercury Health'
-    description: 'Description for Mercury Health'
+    description: 'A sample API that uses a Mercury Health as an example to demonstrate features.'
     serviceUrl: 'https://${webSiteName}.azurewebsites.net/'
-    path: 'examplepath'
+    path: ''
     protocols: [
       'https'
     ]
   }
 }
-///////////////////////////////////////////
 
-// Create the Product for API
-resource apiManagementProductApi 'Microsoft.ApiManagement/service/products/apis@2021-12-01-preview' = {
-  parent: apiManagementProduct
-  name: 'mercury-health'
-  dependsOn: [
-    apiManagementMercuryHealthAPIs
-  ]
+///////////////////////////////////////////
+// Create Policy for API Definitions 
+///////////////////////////////////////////
+resource apiPolicy 'Microsoft.ApiManagement/service/apis/policies@2021-12-01-preview' = {
+  parent: apiManagementMercuryHealthAPIs
+  name: 'policy'
+  properties: {
+    format: 'rawxml'
+    value: loadTextContent('./policy_API.xml')
+  }
 }
 
-// Create reference to existing API
-// resource apiManagementMercuryHealthApis 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' existing = {
+///////////////////////////////////////////
+// Create the Product for API Service
+///////////////////////////////////////////
+// resource apiManagementProductApi 'Microsoft.ApiManagement/service/products/apis@2021-12-01-preview' = {
+//   parent: apiManagementProduct
 //   name: 'mercury-health'
-//   parent: apiManagement
+//   dependsOn: [
+//     apiManagementMercuryHealthAPIs
+//   ]
 // }
 
-// Configure logging for the API.
+///////////////////////////////////////////
+// Configure logging for the API Service
+///////////////////////////////////////////
 resource appInsightsAPIMercuryHealthdiagnostics 'Microsoft.ApiManagement/service/apis/diagnostics@2021-12-01-preview' = {
   parent: apiManagementMercuryHealthAPIs
   name: 'applicationinsights'
@@ -200,15 +229,18 @@ resource appInsightsAPIMercuryHealthdiagnostics 'Microsoft.ApiManagement/service
   }
 }
 
-resource apiManagementServiceName_exampleUser1 'Microsoft.ApiManagement/service/users@2021-12-01-preview' = {
+///////////////////////////////////////////
+// Create User Account for the API Service
+///////////////////////////////////////////
+resource apiManagementServiceName_User1 'Microsoft.ApiManagement/service/users@2021-12-01-preview' = {
   parent: apiManagement
-  name: 'exampleUser1'
+  name: 'User1'
   properties: {
-    firstName: 'ExampleFirstName1'
-    lastName: 'ExampleLastName1'
-    email: 'ExampleFirst1@example.com'
+    firstName: 'FirstName'
+    lastName: 'LastName'
+    email: 'FirstName.LastName@example.com'
     state: 'active'
-    note: 'note for example user 1'
+    note: 'Note for example user 1'
   }
 }
 
@@ -228,23 +260,91 @@ resource apiManagementServiceName_exampleUser1 'Microsoft.ApiManagement/service/
 //   }
 // }
 
-resource apiManagementServiceName_exampleApiWithPolicy 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
-  parent: apiManagement
-  name: 'exampleApiWithPolicy'
+///////////////////////////////////////////
+// Create API Service Definition
+///////////////////////////////////////////
+// resource apiManagementMercuryHealthAPIsv2 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
+//   parent: apiManagement
+//   name: 'mercury-health-v2'
+//   properties: {
+//     displayName: 'Mercury Health'
+//     description: 'A sample API that uses a Mercury Health as an example to demonstrate features.'
+//     serviceUrl: 'https://${webSiteName}.azurewebsites.net/'
+//     path: ''
+//     protocols: [
+//       'https'
+//     ]
+//   }
+// }
+
+///////////////////////////////////////////
+// Create Operation Definitions 
+///////////////////////////////////////////
+
+// Create Operation Definitions - Access Logs
+resource apiManagementMercuryHealthAPIs_AccessLogsGETMany 'Microsoft.ApiManagement/service/apis/operations@2021-12-01-preview' = {
+  parent: apiManagementMercuryHealthAPIs
+  name: 'AccessLogsGETMany'
   properties: {
-    displayName: 'Example API Name with Policy'
-    description: 'Description for example API with policy'
-    serviceUrl: 'https://exampleapiwithpolicy.net'
-    path: 'exampleapiwithpolicypath'
-    protocols: [
-      'https'
+    displayName: 'Get all Access Logs items'
+    method: 'GET'
+    urlTemplate: '/api/AccessLogs'
+    description: 'A demonstration of a GET  call'
+  }
+}
+// Create Operation Definitions - Access Logs
+resource apiManagementMercuryHealthAPIs_AccessLogsGETSingle 'Microsoft.ApiManagement/service/apis/operations@2021-12-01-preview' = {
+  parent: apiManagementMercuryHealthAPIs
+  name: 'AccessLogsGETSingle'
+  properties: {
+    displayName: 'Get a Access Logs item'
+    method: 'GET'
+    urlTemplate: '/api/AccessLogs/{id}'
+    description: 'A demonstration of a GET single call'
+    templateParameters: [
+      {
+        name: 'id'
+        required: true
+        type: 'string'
+      }
     ]
   }
 }
 
-resource apiManagementServiceName_exampleApi_exampleOperationsDELETE 'Microsoft.ApiManagement/service/apis/operations@2021-12-01-preview' = {
-  parent: apiManagementServiceName_exampleApiWithPolicy
-  name: 'exampleOperationsDELETE'
+// Create Operation Definitions - Nutritions
+resource apiManagementMercuryHealthAPIs_NutritionsGETMany 'Microsoft.ApiManagement/service/apis/operations@2021-12-01-preview' = {
+  parent: apiManagementMercuryHealthAPIs
+  name: 'NutritionsGETMany'
+  properties: {
+    displayName: 'Get all Nutrition items'
+    method: 'GET'
+    urlTemplate: '/api/Nutritions'
+    description: 'A demonstration of a GET call'
+  }
+}
+// Create Operation Definitions - Nutritions
+resource apiManagementMercuryHealthAPIs_NutritionsGETSingle 'Microsoft.ApiManagement/service/apis/operations@2021-12-01-preview' = {
+  parent: apiManagementMercuryHealthAPIs
+  name: 'NutritionsGETSingle'
+  properties: {
+    displayName: 'Get a Nutrition item'
+    method: 'GET'
+    urlTemplate: '/api/Nutritions/{id}'
+    description: 'A demonstration of a GET single call'
+    templateParameters: [
+      {
+        name: 'id'
+        required: true
+        type: 'string'
+      }
+    ]
+  }
+}
+
+// Create Operation Definitions - Nutritions
+resource apiManagementMercuryHealthAPIs_NutritionsDELETESingle 'Microsoft.ApiManagement/service/apis/operations@2021-12-01-preview' = {
+  parent: apiManagementMercuryHealthAPIs
+  name: 'NutritionsDELETESingle'
   properties: {
     displayName: 'Delete a Nutrition item'
     method: 'DELETE'
@@ -259,27 +359,15 @@ resource apiManagementServiceName_exampleApi_exampleOperationsDELETE 'Microsoft.
     ]
   }
 }
-
-// Create GET-many operation
-resource apiManagementServiceName_exampleApi_exampleOperationsGETMany 'Microsoft.ApiManagement/service/apis/operations@2021-12-01-preview' = {
-  parent: apiManagementServiceName_exampleApiWithPolicy
-  name: 'exampleOperationsGET1'
+// Create Operation Definitions - Nutritions
+resource apiManagementMercuryHealthAPIs_NutritionsPUTSingle 'Microsoft.ApiManagement/service/apis/operations@2021-12-01-preview' = {
+  parent: apiManagementMercuryHealthAPIs
+  name: 'NutritionsPUTSingle'
   properties: {
-    displayName: 'Get all Nutrition items'
-    method: 'GET'
-    urlTemplate: '/api/Nutritions'
-    description: 'A demonstration of a GET a call'
-  }
-}
-// Create GET-single operation
-resource apiManagementServiceName_exampleApi_exampleOperationsGET2 'Microsoft.ApiManagement/service/apis/operations@2021-12-01-preview' = {
-  parent: apiManagementServiceName_exampleApiWithPolicy
-  name: 'exampleOperationsGET2'
-  properties: {
-    displayName: 'Get a Nutrition item'
-    method: 'GET'
+    displayName: 'Put a Nutrition item'
+    method: 'PUT'
     urlTemplate: '/api/Nutritions/{id}'
-    description: 'A demonstration of a GET one call'
+    description: 'A demonstration of a PUT call'
     templateParameters: [
       {
         name: 'id'
@@ -289,47 +377,151 @@ resource apiManagementServiceName_exampleApi_exampleOperationsGET2 'Microsoft.Ap
     ]
   }
 }
-// Apply policy for GET-many operations
-resource apiManagementServiceName_exampleApi_exampleOperationsGET_policy 'Microsoft.ApiManagement/service/apis/operations/policies@2021-12-01-preview' = {
-  parent: apiManagementServiceName_exampleApi_exampleOperationsGETMany
-  name: 'policy'
+// Create Operation Definitions - Nutritions
+resource apiManagementMercuryHealthAPIs_NutritionsPOSTSingle 'Microsoft.ApiManagement/service/apis/operations@2021-12-01-preview' = {
+  parent: apiManagementMercuryHealthAPIs
+  name: 'NutritionsPOSTSingle'
   properties: {
-    format: 'rawxml'
-    value: loadTextContent('./operationGETPolicy.xml')
-  }
-}
-// Apply policy for DELETE operations
-resource apiManagementServiceName_exampleApi_exampleOperationsDELETE_policy 'Microsoft.ApiManagement/service/apis/operations/policies@2021-12-01-preview' = {
-  parent: apiManagementServiceName_exampleApi_exampleOperationsDELETE
-  name: 'policy'
-  properties: {
-    format: 'rawxml'
-    value: loadTextContent('./operationDELETEPolicy.xml')
-  }
-}
-// Apply policy for all API
-resource apiPolicy 'Microsoft.ApiManagement/service/apis/policies@2021-12-01-preview' = {
-  parent: apiManagementServiceName_exampleApiWithPolicy
-  name: 'policy'
-  properties: {
-    format: 'rawxml'
-    value: loadTextContent('./operationAPIPolicy.xml')
+    displayName: 'Post a Nutrition item'
+    method: 'POST'
+    urlTemplate: '/api/Nutritions'
+    description: 'A demonstration of a POST call'
   }
 }
 
-resource apiManagementServiceName_exampleProduct 'Microsoft.ApiManagement/service/products@2021-12-01-preview' = {
-  parent: apiManagement
-  name: 'exampleProduct'
+// Create Operation Definitions - Exercises
+resource apiManagementMercuryHealthAPIs_ExercisesGETMany 'Microsoft.ApiManagement/service/apis/operations@2021-12-01-preview' = {
+  parent: apiManagementMercuryHealthAPIs
+  name: 'ExercisesGETMany'
   properties: {
-    displayName: 'Example Product Name'
-    description: 'Description for example product'
-    terms: 'Terms for example product'
-    subscriptionRequired: true
-    approvalRequired: false
-    subscriptionsLimit: 1
-    state: 'published'
+    displayName: 'Get all Exercises items'
+    method: 'GET'
+    urlTemplate: '/api/Exercises'
+    description: 'A demonstration of a GET a call'
   }
 }
+// Create Operation Definitions - Exercises
+resource apiManagementMercuryHealthAPIs_ExercisesGETSingle 'Microsoft.ApiManagement/service/apis/operations@2021-12-01-preview' = {
+  parent: apiManagementMercuryHealthAPIs
+  name: 'ExercisesGETSingle'
+  properties: {
+    displayName: 'Get a Exercises item'
+    method: 'GET'
+    urlTemplate: '/api/Exercises/{id}'
+    description: 'A demonstration of a GET single call'
+    templateParameters: [
+      {
+        name: 'id'
+        required: true
+        type: 'string'
+      }
+    ]
+  }
+}
+
+// Create Operation Definitions - Exercises
+resource apiManagementMercuryHealthAPIs_ExercisesDELETESingle 'Microsoft.ApiManagement/service/apis/operations@2021-12-01-preview' = {
+  parent: apiManagementMercuryHealthAPIs
+  name: 'ExercisesDELETESingle'
+  properties: {
+    displayName: 'Delete a Exercises item'
+    method: 'DELETE'
+    urlTemplate: '/api/Exercises/{id}'
+    description: 'A demonstration of a DELETE call'
+    templateParameters: [
+      {
+        name: 'id'
+        required: true
+        type: 'string'
+      }
+    ]
+  }
+}
+// Create Operation Definitions - Exercises
+resource apiManagementMercuryHealthAPIs_ExercisesPUTSingle 'Microsoft.ApiManagement/service/apis/operations@2021-12-01-preview' = {
+  parent: apiManagementMercuryHealthAPIs
+  name: 'NExercisesPUTSingle'
+  properties: {
+    displayName: 'Put a Exercises item'
+    method: 'PUT'
+    urlTemplate: '/api/Exercises/{id}'
+    description: 'A demonstration of a PUT call'
+    templateParameters: [
+      {
+        name: 'id'
+        required: true
+        type: 'string'
+      }
+    ]
+  }
+}
+// Create Operation Definitions - Exercises
+resource apiManagementMercuryHealthAPIs_ExercisesPOSTSingle 'Microsoft.ApiManagement/service/apis/operations@2021-12-01-preview' = {
+  parent: apiManagementMercuryHealthAPIs
+  name: 'ExercisesPOSTSingle'
+  properties: {
+    displayName: 'Post a Exercises item'
+    method: 'POST'
+    urlTemplate: '/api/Exercises'
+    description: 'A demonstration of a POST call'
+  }
+}
+
+///////////////////////////////////////////
+// Create Policy for Operation Definitions 
+///////////////////////////////////////////
+
+// Apply policy GET operations - Nutritions
+resource apiManagementMercuryHealthAPIs_NutritionsGETMany_policy 'Microsoft.ApiManagement/service/apis/operations/policies@2021-12-01-preview' = {
+  parent: apiManagementMercuryHealthAPIs_NutritionsGETMany
+  name: 'policy'
+  properties: {
+    format: 'rawxml'
+    value: loadTextContent('./policy_NutritionsGETMany.xml')
+  }
+}
+// Apply policy GET operations - Exercises
+resource apiManagementMercuryHealthAPIs_ExercisesGETMany_policy 'Microsoft.ApiManagement/service/apis/operations/policies@2021-12-01-preview' = {
+  parent: apiManagementMercuryHealthAPIs_ExercisesGETMany
+  name: 'policy'
+  properties: {
+    format: 'rawxml'
+    value: loadTextContent('./policy_ExercisesGETMany.xml')
+  }
+}
+// Apply policy for DELETE operations - Nutritions
+resource apiManagementMercuryHealthAPIs_NutritionsDELETE_policy 'Microsoft.ApiManagement/service/apis/operations/policies@2021-12-01-preview' = {
+  parent: apiManagementMercuryHealthAPIs_NutritionsDELETESingle
+  name: 'policy'
+  properties: {
+    format: 'rawxml'
+    value: loadTextContent('./policy_NutritionsDELETE.xml')
+  }
+}
+// Apply policy for DELETE operations - Exercises
+resource apiManagementMercuryHealthAPIs_ExercisesDELETE_policy 'Microsoft.ApiManagement/service/apis/operations/policies@2021-12-01-preview' = {
+  parent: apiManagementMercuryHealthAPIs_ExercisesDELETESingle
+  name: 'policy'
+  properties: {
+    format: 'rawxml'
+    value: loadTextContent('./policy_ExercisesDELETE.xml')
+  }
+}
+
+
+// resource apiManagementServiceName_exampleProduct 'Microsoft.ApiManagement/service/products@2021-12-01-preview' = {
+//   parent: apiManagement
+//   name: 'exampleProduct'
+//   properties: {
+//     displayName: 'Example Product Name'
+//     description: 'Description for example product'
+//     terms: 'Terms for example product'
+//     subscriptionRequired: true
+//     approvalRequired: false
+//     subscriptionsLimit: 1
+//     state: 'published'
+//   }
+// }
 
 // resource apiManagementServiceName_exampleProduct_exampleApi 'Microsoft.ApiManagement/service/products/apis@2021-12-01-preview' = {
 //   parent: apiManagementServiceName_exampleProduct
@@ -338,26 +530,19 @@ resource apiManagementServiceName_exampleProduct 'Microsoft.ApiManagement/servic
 //     apiManagementServiceName_exampleApi
 //   ]
 // }
-resource apiManagementServiceName_exampleProduct_policy 'Microsoft.ApiManagement/service/products/policies@2021-12-01-preview' = {
-  parent: apiManagementServiceName_exampleProduct
-  name: 'policy'
-  properties: {
-    format: 'rawxml'
-    value: loadTextContent('./operationPRODUCTPolicy.xml')
-  }
-}
 
-resource apiManagementServiceName_exampleproperties 'Microsoft.ApiManagement/service/properties@2019-01-01' = {
-  parent: apiManagement
-  name: 'exampleproperties'
-  properties: {
-    displayName: 'propertyExampleName'
-    value: 'propertyExampleValue'
-    tags: [
-      'exampleTag'
-    ]
-  }
-}
+
+// resource apiManagementServiceName_exampleproperties 'Microsoft.ApiManagement/service/properties@2019-01-01' = {
+//   parent: apiManagement
+//   name: 'exampleproperties'
+//   properties: {
+//     displayName: 'propertyExampleName'
+//     value: 'propertyExampleValue'
+//     tags: [
+//       'exampleTag'
+//     ]
+//   }
+// }
 
 // resource apiManagementServiceName_examplesubscription1 'Microsoft.ApiManagement/service/subscriptions@2021-12-01-preview' = {
 //   parent: apiManagement

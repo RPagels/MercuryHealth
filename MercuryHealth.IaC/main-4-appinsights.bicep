@@ -55,7 +55,7 @@ resource metricAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
           name: '1st criterion'
           metricName: 'requests/duration'
           operator: 'GreaterThan'
-          threshold: 300
+          threshold: 500
           timeAggregation: 'Average'
           criterionType: 'StaticThresholdCriterion'
         }
@@ -70,7 +70,7 @@ resource metricAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
 }
 
 resource emailActionGroup 'Microsoft.Insights/actionGroups@2021-09-01' = {
-  name: 'ag--${uniqueString(resourceGroup().id)}' //'emailActionGroup'
+  name: 'ag--${uniqueString(resourceGroup().id)}'
   location: 'global'
   properties: {
     groupShortName: 'Randy Pagels'
