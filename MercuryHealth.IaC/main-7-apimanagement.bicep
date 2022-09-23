@@ -89,14 +89,6 @@ resource apiManagementProductPolicies 'Microsoft.ApiManagement/service/products/
     value: loadTextContent('./policy_Products.xml')
   }
 }
-// resource apiManagementProductPolicies 'Microsoft.ApiManagement/service/products/policies@2021-12-01-preview' = {
-//   name: 'policy'
-//   parent: apiManagementProduct
-//   properties: {
-//     value: '<policies>\r\n  <inbound>\r\n    <rate-limit calls="5" renewal-period="60" />\r\n    <quota calls="100" renewal-period="604800" />\r\n    <base />\r\n  </inbound>\r\n  <backend>\r\n    <base />\r\n  </backend>\r\n  <outbound>\r\n    <base />\r\n  </outbound>\r\n  <on-error>\r\n    <base />\r\n  </on-error>\r\n</policies>'
-//     format: 'xml'
-//   }
-// }
 
 ///////////////////////////////////////////
 // Create the API Logger for Application Insights
@@ -175,7 +167,7 @@ resource apiPolicy 'Microsoft.ApiManagement/service/apis/policies@2021-12-01-pre
 }
 
 ///////////////////////////////////////////
-// Create the Product for API
+// Create the API for Product
 ///////////////////////////////////////////
 resource apiManagementProductApi 'Microsoft.ApiManagement/service/products/apis@2021-12-01-preview' = {
   parent: apiManagementProduct

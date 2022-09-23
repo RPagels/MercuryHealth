@@ -1,7 +1,7 @@
 <policies>
     <inbound>
         <base />
-        <rate-limit-by-key calls="5" renewal-period="60" counter-key="@(context.Subscription?.Key ?? "anonymous")" />
+        <rate-limit-by-key calls="2" renewal-period="60" counter-key="@(context.Subscription?.Key ?? "anonymous")" />
     </inbound>
     <backend>
         <base />
