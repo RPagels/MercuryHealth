@@ -15,6 +15,7 @@ param publisherEmail string = 'rpagels@microsoft.com'
 @minLength(1)
 param publisherName string = 'Randy Pagels'
 
+// 'Developer' or 'Consumption'
 @allowed([
   'Consumption'
   'Developer'
@@ -22,8 +23,10 @@ param publisherName string = 'Randy Pagels'
   'Standard'
   'Premium'
 ])
-param sku string = 'Developer' // 'Developer' or 'Consumption'
-param skuCount int = 1  // Developr = 1, Consumption = 0
+param sku string = 'Developer'
+
+// Developr = 1, Consumption = 0
+param skuCount int = 1
 
 ///////////////////////////////////////////
 // Create API Management Service Definition
@@ -80,7 +83,7 @@ resource apiManagementProduct 'Microsoft.ApiManagement/service/products@2021-12-
 ///////////////////////////////////////////
 resource apiManagementProductPolicies 'Microsoft.ApiManagement/service/products/policies@2021-12-01-preview' = {
   parent: apiManagementProduct
-  name: 'policyProduct'
+  name: 'policy'
   properties: {
     format: 'rawxml'
     value: loadTextContent('./policy_Products.xml')
@@ -558,6 +561,16 @@ resource apiManagementMercuryHealthAPIs_ExercisesDELETE_policy 'Microsoft.ApiMan
 // }
 
 //////////////////////////////////////////////
+// Add Pet Store APIs for example
+//////////////////////////////////////////////
+resource petStoreApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
+  name: '${apiManagement.name}/PetStoreSwaggerImportExample'
+  properties: {
+    format: 'swagger-link-json'
+    value: 'http://petstore.swagger.io/v2/swagger.json'
+    path: 'examplepetstore'
+  }
+}
 
 var ApimSubscriptionKeyString = apiManagementSubscription.listSecrets().primaryKey
 
@@ -567,15 +580,6 @@ output out_ApimWebServiceURL string = apiManagement.properties.gatewayUrl
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 //////////////////////////////////////////////
-
-// resource petStoreApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
-//   name: '${apiManagement.name}/PetStoreSwaggerImportExample'
-//   properties: {
-//     format: 'swagger-link-json'
-//     value: 'http://petstore.swagger.io/v2/swagger.json'
-//     path: 'examplepetstore'
-//   }
-// }
 
 // param swaggerType string = 'yaml-v3'
 
