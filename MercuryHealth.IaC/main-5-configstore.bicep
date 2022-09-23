@@ -16,14 +16,14 @@ param FontSizeValue string
 //
 // TBD! These WILL be deleted...NOT needed - App Configuation
 //
-param ConfigName1 string = 'App:Settings:FontSize$lablegoeshere'
-param ConfigValue1 string = '12'
-param ConfigName2 string = 'App:Settings:FontColor$lablegoeshere'
-param ConfigValue2 string = 'black'
-param ConfigName3 string = 'App:Settings:BackgroundColor$lablegoeshere'
-param ConfigValue3 string = 'white'
-param ConfigName4 string = 'App:Settings:Sentinel$lablegoeshere'
-param ConfigValue4 string = '1'
+// param ConfigName1 string = 'App:Settings:FontSize$lablegoeshere'
+// param ConfigValue1 string = '12'
+// param ConfigName2 string = 'App:Settings:FontColor$lablegoeshere'
+// param ConfigValue2 string = 'black'
+// param ConfigName3 string = 'App:Settings:BackgroundColor$lablegoeshere'
+// param ConfigValue3 string = 'white'
+// param ConfigName4 string = 'App:Settings:Sentinel$lablegoeshere'
+// param ConfigValue4 string = '1'
 //
 // TBD! These WILL be deleted...NOT needed - App Configuation
 //
@@ -77,42 +77,42 @@ resource config 'Microsoft.AppConfiguration/configurationStores@2022-05-01' = {
   }
 }
 
-resource configStoreName_Values1 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
-  name: ConfigName1
-  parent: config
-  properties: {
-    value: ConfigValue1
-    contentType: 'application/json'
-    tags: defaultTags
-  }
-}
-resource configStoreName_Values2 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
-  name: ConfigName2
-  parent: config
-  properties: {
-    value: ConfigValue2
-    contentType: 'application/json'
-    tags: defaultTags
-  }
-}
-resource configStoreName_Values3 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
-  name: ConfigName3
-  parent: config
-  properties: {
-    value: ConfigValue3
-    contentType: 'application/json'
-    tags: defaultTags
-  }
-}
-resource configStoreName_Values4 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
-  name: ConfigName4
-  parent: config
-  properties: {
-    value: ConfigValue4
-    contentType: 'application/json'
-    tags: defaultTags
-  }
-}
+// resource configStoreName_Values1 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
+//   name: ConfigName1
+//   parent: config
+//   properties: {
+//     value: ConfigValue1
+//     contentType: 'application/json'
+//     tags: defaultTags
+//   }
+// }
+// resource configStoreName_Values2 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
+//   name: ConfigName2
+//   parent: config
+//   properties: {
+//     value: ConfigValue2
+//     contentType: 'application/json'
+//     tags: defaultTags
+//   }
+// }
+// resource configStoreName_Values3 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
+//   name: ConfigName3
+//   parent: config
+//   properties: {
+//     value: ConfigValue3
+//     contentType: 'application/json'
+//     tags: defaultTags
+//   }
+// }
+// resource configStoreName_Values4 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
+//   name: ConfigName4
+//   parent: config
+//   properties: {
+//     value: ConfigValue4
+//     contentType: 'application/json'
+//     tags: defaultTags
+//   }
+// }
 
 // Feature Flag 1
 resource configStoreName_featureflags_1 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {

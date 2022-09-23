@@ -29,7 +29,7 @@ param sku string = 'Developer'
 param skuCount int = 1
 
 ///////////////////////////////////////////
-// Create API Management Service Definition
+// 1-Create API Management Service Definition
 ///////////////////////////////////////////
 resource apiManagement 'Microsoft.ApiManagement/service@2021-12-01-preview' = {
   name: apiServiceName
@@ -49,7 +49,7 @@ resource apiManagement 'Microsoft.ApiManagement/service@2021-12-01-preview' = {
 }
 
 ///////////////////////////////////////////
-// Create the Subscription for Developers
+// 2-Create the Subscription for Developers
 ///////////////////////////////////////////
 resource apiManagementSubscription 'Microsoft.ApiManagement/service/subscriptions@2021-12-01-preview' = {
   parent: apiManagement
@@ -62,7 +62,7 @@ resource apiManagementSubscription 'Microsoft.ApiManagement/service/subscription
 }
 
 ///////////////////////////////////////////
-// Create Product
+// 3-Create a Product
 ///////////////////////////////////////////
 resource apiManagementProduct 'Microsoft.ApiManagement/service/products@2021-12-01-preview' = {
   parent: apiManagement
@@ -79,7 +79,7 @@ resource apiManagementProduct 'Microsoft.ApiManagement/service/products@2021-12-
 }
 
 ///////////////////////////////////////////
-// Create Policy for Product Definitions 
+// 4-Create Policy for Product Definitions 
 ///////////////////////////////////////////
 resource apiManagementProductPolicies 'Microsoft.ApiManagement/service/products/policies@2021-12-01-preview' = {
   parent: apiManagementProduct
@@ -87,22 +87,6 @@ resource apiManagementProductPolicies 'Microsoft.ApiManagement/service/products/
   properties: {
     format: 'rawxml'
     value: loadTextContent('./policy_Products.xml')
-  }
-}
-
-///////////////////////////////////////////
-// Create the API Logger for Application Insights
-///////////////////////////////////////////
-resource appInsightsAPILogger 'Microsoft.ApiManagement/service/loggers@2021-12-01-preview' = {
-  parent: apiManagement
-  name: appInsightsName
-  properties: {
-    loggerType: 'applicationInsights'
-    description: 'Mercury Health Application Insights instance.'
-    resourceId: applicationInsightsID
-    credentials: {
-      instrumentationKey: appInsightsInstrumentationKey
-    }
   }
 }
 
@@ -178,6 +162,22 @@ resource apiManagementProductApi 'Microsoft.ApiManagement/service/products/apis@
 }
 
 ///////////////////////////////////////////
+// Create the API Logger for Application Insights
+///////////////////////////////////////////
+resource appInsightsAPILogger 'Microsoft.ApiManagement/service/loggers@2021-12-01-preview' = {
+  parent: apiManagement
+  name: appInsightsName
+  properties: {
+    loggerType: 'applicationInsights'
+    description: 'Mercury Health Application Insights instance.'
+    resourceId: applicationInsightsID
+    credentials: {
+      instrumentationKey: appInsightsInstrumentationKey
+    }
+  }
+}
+
+///////////////////////////////////////////
 // Configure logging for the API Service
 ///////////////////////////////////////////
 resource appInsightsAPIMercuryHealthdiagnostics 'Microsoft.ApiManagement/service/apis/diagnostics@2021-12-01-preview' = {
@@ -238,39 +238,6 @@ resource apiManagementServiceName_User1 'Microsoft.ApiManagement/service/users@2
     note: 'Note for example user 1'
   }
 }
-
-//////////////////////////////////////////////
-
-// resource apiManagementServiceName_exampleApi 'Microsoft.ApiManagement/service/apis@2017-03-01' = {
-//   parent: apiManagement
-//   name: 'exampleApi'
-//   properties: {
-//     displayName: 'Example API Name'
-//     description: 'Description for example API'
-//     serviceUrl: 'https://example.net'
-//     path: 'exampleapipath'
-//     protocols: [
-//       'https'
-//     ]
-//   }
-// }
-
-///////////////////////////////////////////
-// Create API Service Definition
-///////////////////////////////////////////
-// resource apiManagementMercuryHealthAPIsv2 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
-//   parent: apiManagement
-//   name: 'mercury-health-v2'
-//   properties: {
-//     displayName: 'Mercury Health'
-//     description: 'A sample API that uses a Mercury Health as an example to demonstrate features.'
-//     serviceUrl: 'https://${webSiteName}.azurewebsites.net/'
-//     path: ''
-//     protocols: [
-//       'https'
-//     ]
-//   }
-// }
 
 ///////////////////////////////////////////
 // Create Operation Definitions 
@@ -503,55 +470,6 @@ resource apiManagementMercuryHealthAPIs_ExercisesDELETE_policy 'Microsoft.ApiMan
   }
 }
 
-
-// resource apiManagementServiceName_exampleProduct 'Microsoft.ApiManagement/service/products@2021-12-01-preview' = {
-//   parent: apiManagement
-//   name: 'exampleProduct'
-//   properties: {
-//     displayName: 'Example Product Name'
-//     description: 'Description for example product'
-//     terms: 'Terms for example product'
-//     subscriptionRequired: true
-//     approvalRequired: false
-//     subscriptionsLimit: 1
-//     state: 'published'
-//   }
-// }
-
-// resource apiManagementServiceName_exampleProduct_exampleApi 'Microsoft.ApiManagement/service/products/apis@2021-12-01-preview' = {
-//   parent: apiManagementServiceName_exampleProduct
-//   name: 'exampleApi'
-//   dependsOn: [
-//     apiManagementServiceName_exampleApi
-//   ]
-// }
-
-
-// resource apiManagementServiceName_exampleproperties 'Microsoft.ApiManagement/service/properties@2019-01-01' = {
-//   parent: apiManagement
-//   name: 'exampleproperties'
-//   properties: {
-//     displayName: 'propertyExampleName'
-//     value: 'propertyExampleValue'
-//     tags: [
-//       'exampleTag'
-//     ]
-//   }
-// }
-
-// resource apiManagementServiceName_examplesubscription1 'Microsoft.ApiManagement/service/subscriptions@2021-12-01-preview' = {
-//   parent: apiManagement
-//   name: 'examplesubscription1'
-//   properties: {
-//     productId: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/exampleServiceName/products/exampleProduct'
-//     userId: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/exampleServiceName/users/exampleUser1'
-//   }
-//   dependsOn: [
-//     apiManagementServiceName_exampleProduct
-//     apiManagementServiceName_exampleUser1
-//   ]
-// }
-
 //////////////////////////////////////////////
 // Add Pet Store APIs for example
 //////////////////////////////////////////////
@@ -568,41 +486,3 @@ var ApimSubscriptionKeyString = apiManagementSubscription.listSecrets().primaryK
 
 output out_ApimSubscriptionKeyString string = ApimSubscriptionKeyString
 output out_ApimWebServiceURL string = apiManagement.properties.gatewayUrl
-
-//////////////////////////////////////////////
-//////////////////////////////////////////////
-//////////////////////////////////////////////
-
-// param swaggerType string = 'yaml-v3'
-
-// // This url needs to be reachable for APIM
-// param urlToSwagger string = 'https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json'
-// // There can be only one api without path
-// param apiPath string = ''
-// param name string = 'MercuryHealthSwaggerImportExample'
-
-// var format = ((swaggerType == 'yaml-v3')  ? 'openapi-link' : 'openapi+json-link')
-
-// // Create APIs from "Dev" instance
-// resource api 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
-//   name: '${apiManagement.name}/${name}'
-//   properties: {
-//     format: format
-//     value: urlToSwagger
-//     path: apiPath
-//     displayName: 'MercuryHealthSwaggerImportExample'
-//     // apiVersion: apiVersion
-//     // apiVersionSetId: apiVersionSet.id
-//   }
-// }
-
-// Copy APIs from "Dev" instance
-//resource MercuryHealthApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
-//  name: '${apiManagement.name}/MercuryHealthSwaggerImportExample'
-//  properties: {
-//    format: 'openapi-link'
-//    value: 'https://app-fq3ruuhxgjony.azurewebsites.net/swagger/v1/swagger.json'
-//    path: ''
-//    displayName: 'Mercury Health TEST'
-//  }
-//}
