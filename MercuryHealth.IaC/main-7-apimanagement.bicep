@@ -55,7 +55,7 @@ resource apiManagementSubscription 'Microsoft.ApiManagement/service/subscription
   parent: apiManagement
   name: 'Developers'
   properties: {
-    scope: '/apis' // Subscription applies to all APIs
+    scope: '/apis'
     displayName: 'Mercury Health Developers'
     state: 'active'
   }
