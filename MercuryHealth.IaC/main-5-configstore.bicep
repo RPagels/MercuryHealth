@@ -13,21 +13,6 @@ param FontNameValue string
 param FontColorValue string
 param FontSizeValue string
 
-//
-// TBD! These WILL be deleted...NOT needed - App Configuation
-//
-// param ConfigName1 string = 'App:Settings:FontSize$lablegoeshere'
-// param ConfigValue1 string = '12'
-// param ConfigName2 string = 'App:Settings:FontColor$lablegoeshere'
-// param ConfigValue2 string = 'black'
-// param ConfigName3 string = 'App:Settings:BackgroundColor$lablegoeshere'
-// param ConfigValue3 string = 'white'
-// param ConfigName4 string = 'App:Settings:Sentinel$lablegoeshere'
-// param ConfigValue4 string = '1'
-//
-// TBD! These WILL be deleted...NOT needed - App Configuation
-//
-
 // Feature Flags
 param FeatureFlagKey1 string = 'PrivacyBeta'
 param FeatureFlagLabel1 string = ''
