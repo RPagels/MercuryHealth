@@ -1,7 +1,7 @@
 <policies>
     <inbound>
-        <rate-limit calls="5" renewal-period="60" />
-        <quota calls="100" renewal-period="604800" />
+        <!-- <rate-limit calls="5" renewal-period="60" />
+        <quota calls="100" renewal-period="604800" /> -->
         <base />
     </inbound>
     <backend>
