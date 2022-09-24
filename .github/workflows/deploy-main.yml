@@ -1,8 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 name: Deploy-Main
 
-#
-
 ###################################################################
 # Triggers - Controls when the action will run.
 ###################################################################
@@ -89,63 +87,63 @@ jobs:
       # Upload Artifacts
       ###########################################
       - name: Upload Build Artifacts-Website
-        if: ${{ github.event_name != 'pull_request' }}
+        #if: ${{ github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v2
         with:
           name: MercuryHealth.Website
           path: ${{ github.workspace }}/web
 
       - name: Upload Build Artifacts-Create Release Annotation PS File
-        if: ${{ github.event_name != 'pull_request' }}
+        #if: ${{ github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v2
         with:
           name: MercuryHealth.Website
           path: ${{ github.workspace }}/MercuryHealth.Web/CreateReleaseAnnotation.ps1
           
       - name: Upload Build Artifacts-FunctionApp
-        if: ${{ github.event_name != 'pull_request' }}
+        #if: ${{ github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v2
         with:
           name: MercuryHealth.FunctionApp
           path: ${{ github.workspace }}/functionapp
 
       - name: Upload Build Artifacts-Database
-        if: ${{ github.event_name != 'pull_request' }}
+        #if: ${{ github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v2
         with:
           name: MercuryHealth.Database
           path: ${{ github.workspace }}/database
 
       - name: Upload Build Artifacts-UI Tests
-        if: ${{ github.event_name != 'pull_request' }}
+        #if: ${{ github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v2
         with:
           name: MercuryHealth.UITests
           path: ${{ github.workspace }}/uitests
 
       - name: Upload Build Artifacts-UI Tests runsettings file
-        if: ${{ github.event_name != 'pull_request' }}
+        #if: ${{ github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v2
         with:
           name: MercuryHealth.UITests
           path: ${{ github.workspace }}/MercuryHealth.UITests/MercuryHealthTests.runsettings
 
       - name: Upload Build Artifacts-UI Tests runsettings Transform PS file
-        if: ${{ github.event_name != 'pull_request' }}
+        #if: ${{ github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v2
         with:
           name: MercuryHealth.UITests
           path: ${{ github.workspace }}/MercuryHealth.UITests/TransformRunSettings.ps1
           
       - name: Upload Infrastucture Files
-        if: ${{ github.event_name != 'pull_request' }}
+        #if: ${{ github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v2
         with:
           name: MercuryHealth.IaC
           path: ${{ github.workspace }}/MercuryHealth.IaC/*.*
 
       - name: Upload Load Test Files
-        if: ${{ github.event_name != 'pull_request' }}
+        #if: ${{ github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v2
         with:
           name: MercuryHealth.LoadTests
@@ -155,7 +153,7 @@ jobs:
 # Deploy to Environments
 ###########################################
   dev:
-    if: contains(github.event_name, 'push')
+    #if: contains(github.event_name, 'push')
     needs: Build_Application
     uses: ./.github/workflows/deploy-environment.yml
     with:
@@ -167,7 +165,7 @@ jobs:
       azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
   qa:
-      if: contains(github.event_name, 'push')
+      #if: contains(github.event_name, 'push')
       needs: [Build_Application, dev]
       uses: ./.github/workflows/deploy-environment.yml
       with:
@@ -179,7 +177,7 @@ jobs:
         azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
   prod:
-      if: contains(github.event_name, 'push')
+      #if: contains(github.event_name, 'push')
       needs: [Build_Application, qa]
       uses: ./.github/workflows/deploy-environment.yml
       with:
