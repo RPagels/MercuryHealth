@@ -227,17 +227,17 @@ resource appInsightsAPIMercuryHealthdiagnostics 'Microsoft.ApiManagement/service
 ///////////////////////////////////////////
 // Create User Account for the API Service
 ///////////////////////////////////////////
-resource apiManagementServiceName_User1 'Microsoft.ApiManagement/service/users@2021-12-01-preview' = {
-  parent: apiManagement
-  name: 'User1'
-  properties: {
-    firstName: 'FirstName'
-    lastName: 'LastName'
-    email: 'FirstName.LastName@example.com'
-    state: 'active'
-    note: 'Note for example user 1'
-  }
-}
+// resource apiManagementServiceName_User1 'Microsoft.ApiManagement/service/users@2021-12-01-preview' = {
+//   parent: apiManagement
+//   name: 'User1'
+//   properties: {
+//     firstName: 'FirstName'
+//     lastName: 'LastName'
+//     email: 'FirstName.LastName@example.com'
+//     state: 'active'
+//     note: 'Note for example user 1'
+//   }
+// }
 
 ///////////////////////////////////////////
 // Create Operation Definitions 
