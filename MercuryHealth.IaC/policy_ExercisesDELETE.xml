@@ -1,6 +1,6 @@
 <policies>
     <inbound>
-        <mock-response status-code="200" content-type="application/json" />
+        <!-- <mock-response status-code="200" content-type="application/json" /> -->
     </inbound>
     <backend>
         <base />
