@@ -1,4 +1,4 @@
-name: Deploy-Environment-HDC
+name: deploy-environment-hdc
 
 on:
   workflow_call:
