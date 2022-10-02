@@ -151,7 +151,7 @@ jobs:
     needs: Build_Application
     uses: ./.github/workflows/deploy-environment-hdc.yml
     with:
-      resource-group-base-name: 'rg-hdc-v6'
+      resource-group-base-name: 'rg-hdc-demo'
       environment-suffix: 'dev'
       resource-group-location: 'eastus2'
       approval-required: true
