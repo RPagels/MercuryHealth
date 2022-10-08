@@ -44,7 +44,7 @@ resource workflows_MercuryHealth_resource 'Microsoft.Logic/workflows@2019-05-01'
             method: 'get'
             path: '/onnewtweet'
             queries: {
-              searchQuery: '#MercuryHealth'
+              searchQuery: '#MercuryHealth #Health'
             }
           }
         }
