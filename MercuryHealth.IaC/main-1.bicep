@@ -178,7 +178,7 @@ module configstoremod './main-5-configstore.bicep' = {
   ]
 }
 
-module logicappmod './15-logicapp.bicep' = {
+module logicappmod './main-15-logicapp.bicep' = {
   name: logicAppName
   params: {
     defaultTags: defaultTags
