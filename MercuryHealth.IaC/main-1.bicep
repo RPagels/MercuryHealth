@@ -30,7 +30,7 @@ var keyvaultName = 'kv-${uniqueString(resourceGroup().id)}'
 var blobstorageName = 'stablob${uniqueString(resourceGroup().id)}'
 //var dashboardName = 'dashboard-${uniqueString(resourceGroup().id)}'
 var frontDoorName = 'fd-${uniqueString(resourceGroup().id)}'
-var logicAppName = 'logicapp-twitter-${uniqueString(resourceGroup().id)}'
+var logicAppName = 'logicapp-${uniqueString(resourceGroup().id)}'
 
 // Tags
 var defaultTags = {
