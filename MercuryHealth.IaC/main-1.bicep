@@ -30,6 +30,7 @@ var keyvaultName = 'kv-${uniqueString(resourceGroup().id)}'
 var blobstorageName = 'stablob${uniqueString(resourceGroup().id)}'
 //var dashboardName = 'dashboard-${uniqueString(resourceGroup().id)}'
 var frontDoorName = 'fd-${uniqueString(resourceGroup().id)}'
+var logicAppName = 'logic-${uniqueString(resourceGroup().id)}'
 
 // Tags
 var defaultTags = {
@@ -175,6 +176,18 @@ module configstoremod './main-5-configstore.bicep' = {
     webappmod
     functionappmod
   ]
+}
+
+module logicappmod './15-logicapp.bicep' = {
+  name: logicAppName
+  params: {
+    defaultTags: defaultTags
+    logicAppName: logicAppName
+    location: location
+    // connections_office365_externalid: connections_office365_externalid
+    // connections_sql_externalid: connections_sql_externalid
+    // connections_teams_externalid: connections_teams_externalid
+  }
 }
 
 // module portaldashboardmod './main-11-Dashboard.bicep' = {
