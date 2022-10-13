@@ -36,6 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       output_loadTestsName: ${{ steps.Infra.outputs.out_loadTestsName }}
+      output_loadTests2ndName: ${{ steps.Infra.outputs.out_loadTests2ndName }}
       output_apiServiceName: ${{ steps.Infra.outputs.out_apiServiceName }}
       output_webSiteName: ${{ steps.Infra.outputs.out_webSiteName }}
       output_functionAppName: ${{ steps.Infra.outputs.out_functionAppName }}
@@ -146,6 +147,7 @@ jobs:
     - name: DEBUG ONLY Display Output Variables
       run: |
          echo 'output_loadTestsName: ${{ steps.Infra.outputs.out_loadTestsName }}'
+         echo 'output_loadTests2ndName: ${{ steps.Infra.outputs.out_loadTests2ndName }}'
          echo 'output_apiServiceName: ${{ steps.Infra.outputs.out_apiServiceName }}'
          echo 'output_webSiteName: ${{ steps.Infra.outputs.out_webSiteName }}'
          echo 'output_functionAppName: ${{ steps.Infra.outputs.out_functionAppName }}'
@@ -206,6 +208,7 @@ jobs:
     - name: DEBUG ONLY Display Output Variables
       run: |
          echo 'output_loadTestsName: ${{ needs.deploy_infrastructure.outputs.output_loadTestsName }}'
+         echo 'output_loadTests2ndName: ${{ needs.deploy_infrastructure.outputs.output_loadTests2ndName }}'
          echo 'output_webSiteName: ${{ needs.deploy_infrastructure.outputs.output_webSiteName }}'
          echo 'output_functionAppName: ${{ needs.deploy_infrastructure.outputs.output_functionAppName }}'
          echo 'output_sqlserverFQName: ${{ needs.deploy_infrastructure.outputs.output_sqlserverFQName }}'
@@ -438,6 +441,7 @@ jobs:
       - name: DEBUG ONLY Display Output Variables
         run: |
            echo 'output_loadTestsName: ${{ needs.deploy_infrastructure.outputs.output_loadTestsName }}'
+           echo 'output_loadTests2ndName: ${{ needs.deploy_infrastructure.outputs.output_loadTests2ndName }}'
            echo 'env:webapp: ${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net'
            
       # Download Artifacts under $GITHUB_WORKSPACE, so your job can access it
@@ -477,6 +481,29 @@ jobs:
               }
             ]
 
+      # Extremely Important. Do not use end slash for webHost value. "/"
+      - name: 'Azure Load Testing'
+        uses: azure/load-testing@v1
+        continue-on-error: true
+        with:
+          loadTestConfigFile: './MercuryHealth.LoadTests/API_Testing.yaml'
+          loadTestResource: ${{needs.deploy_infrastructure.outputs.output_loadTests2ndName}}
+          resourceGroup: ${{ env.Azure_Resource_GroupName }}
+          env: |
+            [
+               {
+                 "name": "webapp",
+                 "value": "${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net"
+               }
+            ]
+
+          secrets: |
+            [
+              {
+                "name": "appToken",
+                "value": "12345678"
+              }
+            ]
       - name: 'Upload Load Test Results'
         uses: actions/upload-artifact@v2
         continue-on-error: true
