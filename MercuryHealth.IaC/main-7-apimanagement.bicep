@@ -90,37 +90,6 @@ resource apiManagementProductPolicies 'Microsoft.ApiManagement/service/products/
   }
 }
 
-//
-// Mercury Health Swagger
-//
-// @allowed([
-//   'yaml-v3' //uses 'openapi-link' format
-//   'json-v3' //uses 'openapi+json-link' format
-// ])
-// param swaggerType string = 'yaml-v3'
-
-// // This url needs to be reachable for APIM
-// param urlToSwagger string = 'https://raw.githubusercontent.com/RPagels/MercuryHealth/master/MercuryHealth.IaC/MercuryHealth.openapi.yaml'
-// //param urlToSwagger string = './MercuryHealth.IaC/MercuryHealth.openapi.yaml'
-// param apiPath string = '' // There can be only one api without path
-// param name string = 'mercury-health'
-// var format = ((swaggerType == 'yaml-v3')  ? 'openapi-link' : 'openapi+json-link')
-
-// // Create APIs from template
-// resource apiManagementMercuryHealthImport 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
-//   name: '${apiManagement.name}/${name}'
-//   properties: {
-//     format: format
-//     value: urlToSwagger // OR value: loadTextContent('./MercuryHealth.swagger.json')
-//     path: apiPath
-//     displayName: 'Mercury Health'
-//     serviceUrl: 'https://${webSiteName}.azurewebsites.net/'
-//   }
-// }
-//
-// Mercury Health Swagger
-//
-
 ///////////////////////////////////////////
 // Create API Service Definition
 ///////////////////////////////////////////
@@ -132,6 +101,7 @@ resource apiManagementMercuryHealthAPIs 'Microsoft.ApiManagement/service/apis@20
     description: 'A sample API that uses a Mercury Health as an example to demonstrate features.'
     serviceUrl: 'https://${webSiteName}.azurewebsites.net/'
     path: ''
+    subscriptionRequired: false
     protocols: [
       'https'
     ]
@@ -481,6 +451,37 @@ resource petStoreApiExample 'Microsoft.ApiManagement/service/apis@2021-12-01-pre
     path: 'examplepetstore'
   }
 }
+
+//
+// Mercury Health Swagger
+//
+// @allowed([
+//   'yaml-v3' //uses 'openapi-link' format
+//   'json-v3' //uses 'openapi+json-link' format
+// ])
+// param swaggerType string = 'yaml-v3'
+
+// // This url needs to be reachable for APIM
+// param urlToSwagger string = 'https://raw.githubusercontent.com/RPagels/MercuryHealth/master/MercuryHealth.IaC/MercuryHealth.openapi.yaml'
+// //param urlToSwagger string = './MercuryHealth.IaC/MercuryHealth.openapi.yaml'
+// param apiPath string = '' // There can be only one api without path
+// param name string = 'mercury-health'
+// var format = ((swaggerType == 'yaml-v3')  ? 'openapi-link' : 'openapi+json-link')
+
+// // Create APIs from template
+// resource apiManagementMercuryHealthImport 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
+//   name: '${apiManagement.name}/${name}'
+//   properties: {
+//     format: format
+//     value: urlToSwagger // OR value: loadTextContent('./MercuryHealth.swagger.json')
+//     path: apiPath
+//     displayName: 'Mercury Health'
+//     serviceUrl: 'https://${webSiteName}.azurewebsites.net/'
+//   }
+// }
+//
+// Mercury Health Swagger
+//
 
 var ApimSubscriptionKeyString = apiManagementSubscription.listSecrets().primaryKey
 
