@@ -272,6 +272,7 @@ output out_functionAppName string = functionAppName
 output out_apiServiceName string = apiServiceName
 output out_loadTestsName string = loadTestsName
 output out_loadTests2ndName string = loadTests2ndName
+output out_apimSubscriptionKey string = apimservicemod.outputs.out_ApimSubscriptionKeyString
 output out_keyvaultName string = keyvaultName
 output out_secretConnectionString string = webappmod.outputs.out_secretConnectionString
 output out_appInsightsApplicationId string = appinsightsmod.outputs.out_appInsightsApplicationId

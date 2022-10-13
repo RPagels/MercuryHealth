@@ -38,6 +38,7 @@ jobs:
       output_loadTestsName: ${{ steps.Infra.outputs.out_loadTestsName }}
       output_loadTests2ndName: ${{ steps.Infra.outputs.out_loadTests2ndName }}
       output_apiServiceName: ${{ steps.Infra.outputs.out_apiServiceName }}
+      out_apimSubscriptionKey: ${{ steps.Infra.outputs.out_apimSubscriptionKey }}
       output_webSiteName: ${{ steps.Infra.outputs.out_webSiteName }}
       output_functionAppName: ${{ steps.Infra.outputs.out_functionAppName }}
       output_sqlserverFQName: ${{ steps.Infra.outputs.out_sqlserverFQName }}
@@ -149,6 +150,7 @@ jobs:
          echo 'output_loadTestsName: ${{ steps.Infra.outputs.out_loadTestsName }}'
          echo 'output_loadTests2ndName: ${{ steps.Infra.outputs.out_loadTests2ndName }}'
          echo 'output_apiServiceName: ${{ steps.Infra.outputs.out_apiServiceName }}'
+         echo 'output_apimSubscriptionKey: ${{ steps.Infra.outputs.out_apimSubscriptionKey }}'
          echo 'output_webSiteName: ${{ steps.Infra.outputs.out_webSiteName }}'
          echo 'output_functionAppName: ${{ steps.Infra.outputs.out_functionAppName }}'
          echo 'output_sqlserverFQName: ${{ steps.Infra.outputs.out_sqlserverFQName }}'
@@ -219,6 +221,7 @@ jobs:
          echo 'output_secretConnectionString: ${{ needs.deploy_infrastructure.outputs.output_secretConnectionString }}'
          echo 'output_secretConnectionString: ${{ needs.deploy_infrastructure.outputs.output_secretConnectionString }}'
          echo 'output_apiServiceName: ${{ needs.deploy_infrastructure.outputs.output_apiServiceName }}'
+         echo 'output_apimSubscriptionKey: ${{ needs.deploy_infrastructure.outputs.output_apimSubscriptionKey }}'
 
     - name: Login to Azure
       uses: azure/login@v1
@@ -443,6 +446,7 @@ jobs:
            echo 'output_loadTestsName: ${{ needs.deploy_infrastructure.outputs.output_loadTestsName }}'
            echo 'output_loadTests2ndName: ${{ needs.deploy_infrastructure.outputs.output_loadTests2ndName }}'
            echo 'output_apiServiceName: ${{ needs.deploy_infrastructure.outputs.output_apiServiceName }}'
+           echo 'output_apimSubscriptionKey: ${{ needs.deploy_infrastructure.outputs.output_apimSubscriptionKey }}'
            echo 'env:webapp: ${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net'
            
       # Download Artifacts under $GITHUB_WORKSPACE, so your job can access it
@@ -506,7 +510,7 @@ jobs:
             [
               {
                 "name": "appToken",
-                "value": "123456"
+                "value": "${{needs.deploy_infrastructure.outputs.output_ApimSubscriptionKey}}"
               }
             ]
       - name: 'Upload Load Test Results'
