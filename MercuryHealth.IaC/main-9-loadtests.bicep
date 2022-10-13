@@ -1,5 +1,9 @@
 param location string = resourceGroup().location
 param loadTestsName string
+
+param loadTests2ndLocation string
+param loadTests2ndName string
+
 param defaultTags object
 //targetScope = 'subscription'
 // param principalId string = 'rpagels@microsoft.com'
@@ -19,6 +23,17 @@ param defaultTags object
 resource loadtesting 'Microsoft.LoadTestService/loadTests@2022-04-15-preview' = {
     location: location
     name: loadTestsName
+    tags: defaultTags
+    properties: {
+        description: 'Azure Load Testing Service'
+    }
+
+}
+
+// Stand up 2nd location for APIM stats
+resource loadtestingnortheurope 'Microsoft.LoadTestService/loadTests@2022-04-15-preview' = {
+    location: loadTests2ndLocation
+    name: loadTests2ndName
     tags: defaultTags
     properties: {
         description: 'Azure Load Testing Service'

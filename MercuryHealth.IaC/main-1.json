@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.10.61.36676",
-      "templateHash": "6901123871099177171"
+      "templateHash": "15499715815993642593"
     }
   },
   "parameters": {
@@ -68,6 +68,7 @@
     "blobstorageName": "[format('stablob{0}', uniqueString(resourceGroup().id))]",
     "frontDoorName": "[format('fd-{0}', uniqueString(resourceGroup().id))]",
     "logicAppName": "[format('logic-{0}', uniqueString(resourceGroup().id))]",
+    "cognitiveServiceName": "[format('cog-{0}', uniqueString(resourceGroup().id))]",
     "defaultTags": {
       "Env": "[parameters('Deployed_Environment')]",
       "App": "Mercury Health",
@@ -1110,7 +1111,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.10.61.36676",
-              "templateHash": "14098227477545563294"
+              "templateHash": "10641090573981881647"
             }
           },
           "parameters": {
@@ -1163,12 +1164,12 @@
             }
           },
           "variables": {
-            "$fxv#0": "<policies>\r\n    <inbound>\r\n        <!-- 'quota-by-key': Policy is not allowed in 'Consumption' sku -->\r\n        <!-- 'rate-limit-by-key': Policy is not allowed in 'Consumption' sku -->\r\n        <!-- <rate-limit calls=\"5\" renewal-period=\"60\" /> -->\r\n        <!-- quota calls=\"100\" renewal-period=\"604800\" /> -->\r\n        <base />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>",
+            "$fxv#0": "<policies>\r\n    <inbound>\r\n        <!-- 'quota-by-key': Policy is not allowed in 'Consumption' sku -->\r\n        <!-- 'rate-limit-by-key': Policy is not allowed in 'Consumption' sku -->\r\n        <rate-limit calls=\"5\" renewal-period=\"60\" />\r\n        <quota calls=\"100\" renewal-period=\"604800\" />\r\n        <base />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>\r\n",
             "$fxv#1": "<policies>\r\n    <inbound>\r\n        <base />\r\n        <!-- <rate-limit-by-key calls=\"10\" renewal-period=\"60\" counter-key=\"@(context.Subscription?.Key ?? \"anonymous\")\" /> -->\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>",
-            "$fxv#2": "<policies>\r\n    <inbound>\r\n        <base />\r\n        <!-- <rate-limit-by-key calls=\"2\" renewal-period=\"60\" counter-key=\"@(context.Subscription?.Key ?? \"anonymous\")\" /> -->\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>",
-            "$fxv#3": "<policies>\r\n    <inbound>\r\n        <base />\r\n        <!-- <rate-limit-by-key calls=\"5\" renewal-period=\"60\" counter-key=\"@(context.Subscription?.Key ?? \"anonymous\")\" /> -->\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>",
-            "$fxv#4": "<policies>\r\n    <inbound>\r\n        <!-- <mock-response status-code=\"200\" content-type=\"application/json\" /> -->\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>",
-            "$fxv#5": "<policies>\r\n    <inbound>\r\n        <!-- <mock-response status-code=\"200\" content-type=\"application/json\" /> -->\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>"
+            "$fxv#2": "<policies>\r\n    <inbound>\r\n        <base />\r\n        <rate-limit-by-key calls=\"2\" renewal-period=\"60\" counter-key=\"@(context.Subscription?.Key ?? \"anonymous\")\" />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>\r\n",
+            "$fxv#3": "<policies>\r\n    <inbound>\r\n        <base />\r\n        <rate-limit-by-key calls=\"5\" renewal-period=\"60\" counter-key=\"@(context.Subscription?.Key ?? \"anonymous\")\" />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>\r\n",
+            "$fxv#4": "<policies>\r\n    <inbound>\r\n        <mock-response status-code=\"200\" content-type=\"application/json\" />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>\r\n",
+            "$fxv#5": "<policies>\r\n    <inbound>\r\n        <mock-response status-code=\"200\" content-type=\"application/json\" />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>\r\n"
           },
           "resources": [
             {
@@ -1655,7 +1656,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.10.61.36676",
-              "templateHash": "11799732222362968717"
+              "templateHash": "2251391700947868398"
             }
           },
           "parameters": {
@@ -1665,6 +1666,14 @@
             },
             "loadTestsName": {
               "type": "string"
+            },
+            "loadTests2ndLocation": {
+              "type": "string",
+              "defaultValue": "northeurope"
+            },
+            "loadTestsName2ndLocation": {
+              "type": "string",
+              "defaultValue": "[format('loadtests-northeurope-{0}', uniqueString(resourceGroup().id))]"
             },
             "defaultTags": {
               "type": "object"
@@ -1676,6 +1685,16 @@
               "apiVersion": "2022-04-15-preview",
               "name": "[parameters('loadTestsName')]",
               "location": "[parameters('location')]",
+              "tags": "[parameters('defaultTags')]",
+              "properties": {
+                "description": "Azure Load Testing Service"
+              }
+            },
+            {
+              "type": "Microsoft.LoadTestService/loadTests",
+              "apiVersion": "2022-04-15-preview",
+              "name": "[parameters('loadTestsName2ndLocation')]",
+              "location": "[parameters('loadTests2ndLocation')]",
               "tags": "[parameters('defaultTags')]",
               "properties": {
                 "description": "Azure Load Testing Service"
@@ -2035,7 +2054,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.10.61.36676",
-              "templateHash": "14042186922051592433"
+              "templateHash": "5513402969847065184"
             }
           },
           "parameters": {
@@ -2073,7 +2092,7 @@
               "location": "[parameters('location')]",
               "tags": "[parameters('defaultTags')]",
               "properties": {
-                "state": "Disabled",
+                "state": "Enabled",
                 "definition": {
                   "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
                   "contentVersion": "1.0.0.0",
@@ -2104,7 +2123,7 @@
                         "method": "get",
                         "path": "/onnewtweet",
                         "queries": {
-                          "searchQuery": "#MercuryHealth"
+                          "searchQuery": "#MercuryHealth #Health"
                         }
                       }
                     }
@@ -2330,6 +2349,86 @@
                     }
                   }
                 }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-10-01",
+      "name": "[variables('cognitiveServiceName')]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "defaultTags": {
+            "value": "[variables('defaultTags')]"
+          },
+          "cognitiveServiceName": {
+            "value": "[variables('cognitiveServiceName')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.10.61.36676",
+              "templateHash": "6255822280934604939"
+            }
+          },
+          "parameters": {
+            "cognitiveServiceName": {
+              "type": "string"
+            },
+            "location": {
+              "type": "string"
+            },
+            "defaultTags": {
+              "type": "object"
+            },
+            "sku": {
+              "type": "string",
+              "defaultValue": "S1",
+              "allowedValues": [
+                "S0",
+                "S1"
+              ]
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.CognitiveServices/accounts",
+              "apiVersion": "2022-10-01",
+              "name": "[parameters('cognitiveServiceName')]",
+              "tags": "[parameters('defaultTags')]",
+              "location": "[parameters('location')]",
+              "sku": {
+                "name": "[parameters('sku')]"
+              },
+              "kind": "ComputerVision",
+              "identity": {
+                "type": "SystemAssigned"
+              },
+              "properties": {
+                "customSubDomainName": "[format('mercuryhealth-{0}', uniqueString(resourceGroup().id))]",
+                "networkAcls": {
+                  "defaultAction": "Allow",
+                  "virtualNetworkRules": [],
+                  "ipRules": []
+                },
+                "apiProperties": {
+                  "statisticsEnabled": false
+                },
+                "publicNetworkAccess": "Enabled"
               }
             }
           ]

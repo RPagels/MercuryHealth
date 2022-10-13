@@ -20,7 +20,7 @@ resource cognitiveService 'Microsoft.CognitiveServices/accounts@2022-10-01' = {
     type:'SystemAssigned'
   }
   properties: {
-    customSubDomainName: 'mercuryhealth-${uniqueString(resourceGroup().id)}' // 'cognitiveservicesvision-mercuryhealth'
+    customSubDomainName: 'mercuryhealth-${uniqueString(resourceGroup().id)}'
     networkAcls: {
       defaultAction: 'Allow'
       virtualNetworkRules: []

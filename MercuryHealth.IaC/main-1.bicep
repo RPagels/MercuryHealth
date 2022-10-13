@@ -26,6 +26,8 @@ var functionAppName = 'func-${uniqueString(resourceGroup().id)}'
 var functionAppServiceName = 'funcplan-${uniqueString(resourceGroup().id)}'
 var apiServiceName = 'apim-${uniqueString(resourceGroup().id)}'
 var loadTestsName = 'loadtests-${uniqueString(resourceGroup().id)}'
+var loadTests2ndLocation = 'northeurope'
+var loadTests2ndName = 'loadtests-${loadTests2ndLocation}-${uniqueString(resourceGroup().id)}'
 var keyvaultName = 'kv-${uniqueString(resourceGroup().id)}'
 var blobstorageName = 'stablob${uniqueString(resourceGroup().id)}'
 //var dashboardName = 'dashboard-${uniqueString(resourceGroup().id)}'
@@ -149,6 +151,8 @@ module loadtestsmod './main-9-loadtests.bicep' = {
   params: {
     location: location
     loadTestsName: loadTestsName
+    loadTests2ndLocation: loadTests2ndLocation
+    loadTests2ndName: loadTests2ndName
     defaultTags: defaultTags
   }
 }
@@ -267,6 +271,7 @@ output out_appInsightsName string = appInsightsName
 output out_functionAppName string = functionAppName
 output out_apiServiceName string = apiServiceName
 output out_loadTestsName string = loadTestsName
+output out_loadTests2ndName string = loadTests2ndName
 output out_keyvaultName string = keyvaultName
 output out_secretConnectionString string = webappmod.outputs.out_secretConnectionString
 output out_appInsightsApplicationId string = appinsightsmod.outputs.out_appInsightsApplicationId
