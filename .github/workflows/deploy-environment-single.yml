@@ -513,6 +513,7 @@ jobs:
                 "value": "${{needs.deploy_infrastructure.outputs.output_ApimSubscriptionKey}}"
               }
             ]
+
       - name: 'Upload Load Test Results'
         uses: actions/upload-artifact@v2
         continue-on-error: true
