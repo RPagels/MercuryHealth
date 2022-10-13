@@ -30,7 +30,9 @@ var keyvaultName = 'kv-${uniqueString(resourceGroup().id)}'
 var blobstorageName = 'stablob${uniqueString(resourceGroup().id)}'
 //var dashboardName = 'dashboard-${uniqueString(resourceGroup().id)}'
 var frontDoorName = 'fd-${uniqueString(resourceGroup().id)}'
-var logicAppName = 'logicapp-${uniqueString(resourceGroup().id)}'
+var logicAppName = 'logic-${uniqueString(resourceGroup().id)}'
+var cognitiveServiceName = 'cog-${uniqueString(resourceGroup().id)}'
+
 
 // Tags
 var defaultTags = {
@@ -187,6 +189,15 @@ module logicappmod './main-15-logicapp.bicep' = {
     // connections_office365_externalid: connections_office365_externalid
     // connections_sql_externalid: connections_sql_externalid
     // connections_teams_externalid: connections_teams_externalid
+  }
+}
+
+module cognitiveservicemod 'main-16-cognitiveservice.bicep' = {
+  name: cognitiveServiceName
+  params: {
+    defaultTags: defaultTags
+    cognitiveServiceName: cognitiveServiceName
+    location: location
   }
 }
 
