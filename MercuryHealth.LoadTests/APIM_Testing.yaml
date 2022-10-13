@@ -1,0 +1,19 @@
+version: v0.1
+testName: APIM_Testing
+testPlan: APIM_Testing.jmx
+description: Testing website pages through APIM
+engineInstances: 2
+configurationFiles:
+  - 'SampleData.csv'
+failureCriteria:
+  - avg(response_time_ms) > 10000
+  - percentage(error) > 50
+#env:
+#  - name: my-variable
+#    value: my-value
+#secrets:
+#  - name: my-secret-ClientId
+#    value: https://kv-fq3ruuhxgjony.vault.azure.net/secrets/ClientId/<yourGUID>
+#  - name: my-secret-SubscriptionKey
+#    value: https://kv-fq3ruuhxgjony.vault.azure.net/secrets/SubscriptionKey/<yourGUID>
+#

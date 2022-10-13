@@ -442,6 +442,7 @@ jobs:
         run: |
            echo 'output_loadTestsName: ${{ needs.deploy_infrastructure.outputs.output_loadTestsName }}'
            echo 'output_loadTests2ndName: ${{ needs.deploy_infrastructure.outputs.output_loadTests2ndName }}'
+           echo 'output_apiServiceName: ${{ needs.deploy_infrastructure.outputs.output_apiServiceName }}'
            echo 'env:webapp: ${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net'
            
       # Download Artifacts under $GITHUB_WORKSPACE, so your job can access it
@@ -458,6 +459,8 @@ jobs:
           creds: ${{ secrets.azure-credentials }}
 
       # Extremely Important. Do not use end slash for webHost value. "/"
+      #
+      # Testing the Web App API
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
         continue-on-error: true
@@ -482,18 +485,20 @@ jobs:
             ]
 
       # Extremely Important. Do not use end slash for webHost value. "/"
+      #
+      # Testing the API Management Layer that calls the Web App API
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
         continue-on-error: true
         with:
-          loadTestConfigFile: './MercuryHealth.LoadTests/API_Testing.yaml'
+          loadTestConfigFile: './MercuryHealth.LoadTests/APIM_Testing.yaml'
           loadTestResource: ${{needs.deploy_infrastructure.outputs.output_loadTests2ndName}}
           resourceGroup: ${{ env.Azure_Resource_GroupName }}
           env: |
             [
                {
                  "name": "webapp",
-                 "value": "${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net"
+                 "value": "${{needs.deploy_infrastructure.outputs.output_apiServiceName}}.azure-api.net"
                }
             ]
 
@@ -501,7 +506,7 @@ jobs:
             [
               {
                 "name": "appToken",
-                "value": "12345678"
+                "value": "123456"
               }
             ]
       - name: 'Upload Load Test Results'
