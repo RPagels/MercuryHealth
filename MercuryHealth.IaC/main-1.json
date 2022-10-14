@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.10.61.36676",
-      "templateHash": "15499715815993642593"
+      "version": "0.11.1.770",
+      "templateHash": "17736264315727686558"
     }
   },
   "parameters": {
@@ -64,6 +64,8 @@
     "functionAppServiceName": "[format('funcplan-{0}', uniqueString(resourceGroup().id))]",
     "apiServiceName": "[format('apim-{0}', uniqueString(resourceGroup().id))]",
     "loadTestsName": "[format('loadtests-{0}', uniqueString(resourceGroup().id))]",
+    "loadTests2ndLocation": "northeurope",
+    "loadTests2ndName": "[format('loadtests-{0}-{1}', uniqueString(resourceGroup().id), variables('loadTests2ndLocation'))]",
     "keyvaultName": "[format('kv-{0}', uniqueString(resourceGroup().id))]",
     "blobstorageName": "[format('stablob{0}', uniqueString(resourceGroup().id))]",
     "frontDoorName": "[format('fd-{0}', uniqueString(resourceGroup().id))]",
@@ -106,8 +108,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.10.61.36676",
-              "templateHash": "17961984419192349145"
+              "version": "0.11.1.770",
+              "templateHash": "10556728505086222797"
             }
           },
           "parameters": {
@@ -229,8 +231,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.10.61.36676",
-              "templateHash": "15638239025430484174"
+              "version": "0.11.1.770",
+              "templateHash": "17917053742744263833"
             }
           },
           "parameters": {
@@ -566,8 +568,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.10.61.36676",
-              "templateHash": "1871768688850824183"
+              "version": "0.11.1.770",
+              "templateHash": "13163093028551611228"
             }
           },
           "parameters": {
@@ -677,8 +679,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.10.61.36676",
-              "templateHash": "16635943887784128922"
+              "version": "0.11.1.770",
+              "templateHash": "1103596773260696898"
             }
           },
           "parameters": {
@@ -842,8 +844,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.10.61.36676",
-              "templateHash": "3323012928520371069"
+              "version": "0.11.1.770",
+              "templateHash": "10753060668950334015"
             }
           },
           "parameters": {
@@ -1110,8 +1112,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.10.61.36676",
-              "templateHash": "10641090573981881647"
+              "version": "0.11.1.770",
+              "templateHash": "3756809297099523967"
             }
           },
           "parameters": {
@@ -1241,6 +1243,7 @@
                 "description": "A sample API that uses a Mercury Health as an example to demonstrate features.",
                 "serviceUrl": "[format('https://{0}.azurewebsites.net/', parameters('webSiteName'))]",
                 "path": "",
+                "subscriptionRequired": false,
                 "protocols": [
                   "https"
                 ]
@@ -1645,6 +1648,12 @@
           "loadTestsName": {
             "value": "[variables('loadTestsName')]"
           },
+          "loadTests2ndLocation": {
+            "value": "[variables('loadTests2ndLocation')]"
+          },
+          "loadTests2ndName": {
+            "value": "[variables('loadTests2ndName')]"
+          },
           "defaultTags": {
             "value": "[variables('defaultTags')]"
           }
@@ -1655,8 +1664,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.10.61.36676",
-              "templateHash": "2251391700947868398"
+              "version": "0.11.1.770",
+              "templateHash": "15394922612083738466"
             }
           },
           "parameters": {
@@ -1668,12 +1677,10 @@
               "type": "string"
             },
             "loadTests2ndLocation": {
-              "type": "string",
-              "defaultValue": "northeurope"
+              "type": "string"
             },
-            "loadTestsName2ndLocation": {
-              "type": "string",
-              "defaultValue": "[format('loadtests-northeurope-{0}', uniqueString(resourceGroup().id))]"
+            "loadTests2ndName": {
+              "type": "string"
             },
             "defaultTags": {
               "type": "object"
@@ -1693,7 +1700,7 @@
             {
               "type": "Microsoft.LoadTestService/loadTests",
               "apiVersion": "2022-04-15-preview",
-              "name": "[parameters('loadTestsName2ndLocation')]",
+              "name": "[parameters('loadTests2ndName')]",
               "location": "[parameters('loadTests2ndLocation')]",
               "tags": "[parameters('defaultTags')]",
               "properties": {
@@ -1727,8 +1734,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.10.61.36676",
-              "templateHash": "7835194516533621073"
+              "version": "0.11.1.770",
+              "templateHash": "16755376819579025537"
             }
           },
           "parameters": {
@@ -1815,8 +1822,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.10.61.36676",
-              "templateHash": "12732867163737527058"
+              "version": "0.11.1.770",
+              "templateHash": "5345210114025855349"
             }
           },
           "parameters": {
@@ -2053,8 +2060,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.10.61.36676",
-              "templateHash": "5513402969847065184"
+              "version": "0.11.1.770",
+              "templateHash": "10321506624518527094"
             }
           },
           "parameters": {
@@ -2381,8 +2388,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.10.61.36676",
-              "templateHash": "6255822280934604939"
+              "version": "0.11.1.770",
+              "templateHash": "4946306504995989833"
             }
           },
           "parameters": {
@@ -2521,8 +2528,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.10.61.36676",
-              "templateHash": "16040889279524662019"
+              "version": "0.11.1.770",
+              "templateHash": "3813920494319839078"
             }
           },
           "parameters": {
@@ -2788,8 +2795,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.10.61.36676",
-              "templateHash": "15150651347782490480"
+              "version": "0.11.1.770",
+              "templateHash": "14492627563229715970"
             }
           },
           "parameters": {
@@ -2943,6 +2950,14 @@
     "out_loadTestsName": {
       "type": "string",
       "value": "[variables('loadTestsName')]"
+    },
+    "out_loadTests2ndName": {
+      "type": "string",
+      "value": "[variables('loadTests2ndName')]"
+    },
+    "out_apimSubscriptionKey": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('apiServiceName'))).outputs.out_ApimSubscriptionKeyString.value]"
     },
     "out_keyvaultName": {
       "type": "string",

@@ -127,7 +127,7 @@ module functionappmod './main-6-funcapp.bicep' = {
   ]
 }
 
-// Create Function App
+// Create API Management
 module apimservicemod './main-7-apimanagement.bicep' = {
   name: apiServiceName
     params: {

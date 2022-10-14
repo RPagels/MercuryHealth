@@ -29,7 +29,7 @@ param sku string = 'Developer'
 param skuCount int = 1
 
 ///////////////////////////////////////////
-// 1-Create API Management Service Definition
+// Create API Management Service Definition
 ///////////////////////////////////////////
 resource apiManagement 'Microsoft.ApiManagement/service@2021-12-01-preview' = {
   name: apiServiceName
@@ -49,7 +49,7 @@ resource apiManagement 'Microsoft.ApiManagement/service@2021-12-01-preview' = {
 }
 
 ///////////////////////////////////////////
-// 2-Create the Subscription for Developers
+// Create the Subscription for Developers
 ///////////////////////////////////////////
 resource apiManagementSubscription 'Microsoft.ApiManagement/service/subscriptions@2021-12-01-preview' = {
   parent: apiManagement
@@ -62,7 +62,7 @@ resource apiManagementSubscription 'Microsoft.ApiManagement/service/subscription
 }
 
 ///////////////////////////////////////////
-// 3-Create a Product
+// Create a Product
 ///////////////////////////////////////////
 resource apiManagementProduct 'Microsoft.ApiManagement/service/products@2021-12-01-preview' = {
   parent: apiManagement
@@ -79,7 +79,7 @@ resource apiManagementProduct 'Microsoft.ApiManagement/service/products@2021-12-
 }
 
 ///////////////////////////////////////////
-// 4-Create Policy for Product Definitions 
+// Create Policy for Product Definitions 
 ///////////////////////////////////////////
 resource apiManagementProductPolicies 'Microsoft.ApiManagement/service/products/policies@2021-12-01-preview' = {
   parent: apiManagementProduct
@@ -210,7 +210,9 @@ resource appInsightsAPIMercuryHealthdiagnostics 'Microsoft.ApiManagement/service
 // }
 
 ///////////////////////////////////////////
-// Create Operation Definitions 
+///////////////////////////////////////////
+// Create ALL Operation Definitions 
+///////////////////////////////////////////
 ///////////////////////////////////////////
 
 // Create Operation Definitions - Access Logs
