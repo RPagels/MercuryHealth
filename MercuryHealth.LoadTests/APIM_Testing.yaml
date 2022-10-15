@@ -2,7 +2,7 @@ version: v0.1
 testName: APIM_Testing
 testPlan: APIM_Testing.jmx
 description: Testing website pages through APIM
-engineInstances: 2
+engineInstances: 1
 configurationFiles:
   - 'SampleData.csv'
 failureCriteria:

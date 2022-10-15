@@ -101,7 +101,7 @@ resource apiManagementMercuryHealthAPIs 'Microsoft.ApiManagement/service/apis@20
     description: 'A sample API that uses a Mercury Health as an example to demonstrate features.'
     serviceUrl: 'https://${webSiteName}.azurewebsites.net/'
     path: ''
-    subscriptionRequired: false
+    subscriptionRequired: true
     protocols: [
       'https'
     ]
