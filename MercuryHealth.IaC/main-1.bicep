@@ -218,7 +218,8 @@ module cognitiveservicemod 'main-16-cognitiveservice.bicep' = {
 param AzObjectIdPagels string = 'b6be0700-1fda-4f88-bf20-1aa508a91f73'
 
 // Application Id of Service Principal "MercuryHealth_ServicePrincipal_Full"
-param ADOServiceprincipalObjectId string = '5bc20bf4-172c-48ac-86e7-a5185394237b'
+//param ADOServiceprincipalObjectId string = '5bc20bf4-172c-48ac-86e7-a5185394237b'
+param ADOServiceprincipalObjectId string = 'e7f4d4b8-26e0-452a-868f-6818be23ef73'
 
 // Create Configuration Entries
 module configsettingsmod './main-13-configsettings.bicep' = {
