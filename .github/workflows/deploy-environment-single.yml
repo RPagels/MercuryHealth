@@ -519,7 +519,7 @@ jobs:
             [
               {
                 "name": "appToken",
-                "value": "${{needs.deploy_infrastructure.outputs.output_ApimSubscriptionKey}}"
+                "value": "${{ steps.myKeyVaultValue.outputs.ApimSubscriptionKey }}"
               }
             ]
 
