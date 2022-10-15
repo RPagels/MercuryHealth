@@ -217,6 +217,9 @@ module cognitiveservicemod 'main-16-cognitiveservice.bicep' = {
 
 param AzObjectIdPagels string = 'b6be0700-1fda-4f88-bf20-1aa508a91f73'
 
+// Application Id of Service Principal "MercuryHealth_ServicePrincipal_Full"
+param ADOServiceprincipalObjectId string = '5bc20bf4-172c-48ac-86e7-a5185394237b'
+
 // Create Configuration Entries
 module configsettingsmod './main-13-configsettings.bicep' = {
   name: 'configSettings'
@@ -245,6 +248,7 @@ module configsettingsmod './main-13-configsettings.bicep' = {
     Deployed_Environment: Deployed_Environment
     ApimWebServiceURL: apimservicemod.outputs.out_ApimWebServiceURL
     AzObjectIdPagels: AzObjectIdPagels
+    ADOServiceprincipalObjectId: ADOServiceprincipalObjectId
     }
     dependsOn:  [
      keyvaultmod

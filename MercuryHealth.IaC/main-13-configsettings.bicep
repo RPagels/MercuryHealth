@@ -41,6 +41,9 @@ param tenant string = subscription().tenantId
 @secure()
 param AzObjectIdPagels string
 
+@secure()
+param ADOServiceprincipalObjectId string
+
 // Define KeyVault accessPolicies
 param accessPolicies array = [
   {
@@ -84,6 +87,20 @@ param accessPolicies array = [
         'list'
         'set'
         'delete'
+      ]
+    }
+  }
+  {
+    tenantId: tenant
+    objectId: ADOServiceprincipalObjectId
+    permissions: {
+      keys: [
+        'get'
+        'list'
+      ]
+      secrets: [
+        'get'
+        'list'
       ]
     }
   }
