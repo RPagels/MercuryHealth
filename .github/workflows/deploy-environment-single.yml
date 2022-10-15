@@ -46,7 +46,7 @@ jobs:
       output_appInsightsApplicationId: ${{ steps.Infra.outputs.out_appInsightsApplicationId }}
       output_appInsightsAPIApplicationId: ${{ steps.Infra.outputs.out_appInsightsAPIApplicationId }}
       output_secretConnectionString: ${{ steps.Infra.outputs.out_secretConnectionString }}
-      #output_TestMyConnectionString: 'Server=tcp:${{ steps.Infra.outputs.out_sqlserverFQName }},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User Id=${sqlAdminLoginName}@${sqlserverName};Password=${sqlAdminLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+      output_keyvaultName: ${{ steps.Infra.outputs.out_keyvaultName }}
 
     name: Deploy Infrastructure
     env:
