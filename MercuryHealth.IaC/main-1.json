@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.11.1.770",
-      "templateHash": "17736264315727686558"
+      "templateHash": "5042078619530870319"
     }
   },
   "parameters": {
@@ -43,6 +43,10 @@
     "kvValue_WebsiteContentAzureFileConnectionString": {
       "type": "string",
       "defaultValue": "WebsiteContentAzureFileConnectionString"
+    },
+    "kvValue_ApimSubscriptionKeyName": {
+      "type": "string",
+      "defaultValue": "ApimSubscriptionKey"
     },
     "AzObjectIdPagels": {
       "type": "string",
@@ -1113,7 +1117,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.11.1.770",
-              "templateHash": "3756809297099523967"
+              "templateHash": "4082543633607295339"
             }
           },
           "parameters": {
@@ -1167,9 +1171,9 @@
           },
           "variables": {
             "$fxv#0": "<policies>\r\n    <inbound>\r\n        <!-- 'quota-by-key': Policy is not allowed in 'Consumption' sku -->\r\n        <!-- 'rate-limit-by-key': Policy is not allowed in 'Consumption' sku -->\r\n        <rate-limit calls=\"5\" renewal-period=\"60\" />\r\n        <quota calls=\"100\" renewal-period=\"604800\" />\r\n        <base />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>\r\n",
-            "$fxv#1": "<policies>\r\n    <inbound>\r\n        <base />\r\n        <!-- <rate-limit-by-key calls=\"10\" renewal-period=\"60\" counter-key=\"@(context.Subscription?.Key ?? \"anonymous\")\" /> -->\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>",
-            "$fxv#2": "<policies>\r\n    <inbound>\r\n        <base />\r\n        <rate-limit-by-key calls=\"2\" renewal-period=\"60\" counter-key=\"@(context.Subscription?.Key ?? \"anonymous\")\" />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>\r\n",
-            "$fxv#3": "<policies>\r\n    <inbound>\r\n        <base />\r\n        <rate-limit-by-key calls=\"5\" renewal-period=\"60\" counter-key=\"@(context.Subscription?.Key ?? \"anonymous\")\" />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>\r\n",
+            "$fxv#1": "<policies>\r\n    <inbound>\r\n        <base />\r\n        <rate-limit-by-key calls=\"20\" renewal-period=\"60\" counter-key=\"@(context.Subscription?.Key ?? \"anonymous\")\" />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>",
+            "$fxv#2": "<policies>\r\n    <inbound>\r\n        <base />\r\n        <rate-limit-by-key calls=\"30\" renewal-period=\"60\" counter-key=\"@(context.Subscription?.Key ?? \"anonymous\")\" />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>\r\n",
+            "$fxv#3": "<policies>\r\n    <inbound>\r\n        <base />\r\n        <rate-limit-by-key calls=\"15\" renewal-period=\"60\" counter-key=\"@(context.Subscription?.Key ?? \"anonymous\")\" />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>\r\n",
             "$fxv#4": "<policies>\r\n    <inbound>\r\n        <mock-response status-code=\"200\" content-type=\"application/json\" />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>\r\n",
             "$fxv#5": "<policies>\r\n    <inbound>\r\n        <mock-response status-code=\"200\" content-type=\"application/json\" />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>\r\n"
           },
@@ -1243,7 +1247,7 @@
                 "description": "A sample API that uses a Mercury Health as an example to demonstrate features.",
                 "serviceUrl": "[format('https://{0}.azurewebsites.net/', parameters('webSiteName'))]",
                 "path": "",
-                "subscriptionRequired": false,
+                "subscriptionRequired": true,
                 "protocols": [
                   "https"
                 ]
@@ -2503,6 +2507,12 @@
           "kvValue_WebsiteContentAzureFileConnectionStringName": {
             "value": "[parameters('kvValue_WebsiteContentAzureFileConnectionString')]"
           },
+          "kvValue_ApimSubscriptionKeyName": {
+            "value": "[parameters('kvValue_ApimSubscriptionKeyName')]"
+          },
+          "kvValue_ApimSubscriptionKeyValue": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('apiServiceName'))).outputs.out_ApimSubscriptionKeyString.value]"
+          },
           "appInsightsInstrumentationKey": {
             "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')).outputs.out_appInsightsInstrumentationKey.value]"
           },
@@ -2511,9 +2521,6 @@
           },
           "Deployed_Environment": {
             "value": "[parameters('Deployed_Environment')]"
-          },
-          "ApimSubscriptionKey": {
-            "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('apiServiceName'))).outputs.out_ApimSubscriptionKeyString.value]"
           },
           "ApimWebServiceURL": {
             "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('apiServiceName'))).outputs.out_ApimWebServiceURL.value]"
@@ -2529,7 +2536,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.11.1.770",
-              "templateHash": "3813920494319839078"
+              "templateHash": "5609549100539282173"
             }
           },
           "parameters": {
@@ -2551,6 +2558,9 @@
             "kvValue_AzureWebJobsStorageName": {
               "type": "string"
             },
+            "kvValue_ApimSubscriptionKeyName": {
+              "type": "string"
+            },
             "kvValue_WebsiteContentAzureFileConnectionStringName": {
               "type": "string"
             },
@@ -2561,9 +2571,6 @@
               "type": "string"
             },
             "Deployed_Environment": {
-              "type": "string"
-            },
-            "ApimSubscriptionKey": {
               "type": "string"
             },
             "ApimWebServiceURL": {
@@ -2597,6 +2604,9 @@
               "type": "secureString"
             },
             "kvValue_AzureWebJobsStorageValue": {
+              "type": "secureString"
+            },
+            "kvValue_ApimSubscriptionKeyValue": {
               "type": "secureString"
             },
             "tenant": {
@@ -2704,6 +2714,15 @@
               }
             },
             {
+              "type": "Microsoft.KeyVault/vaults/secrets",
+              "apiVersion": "2022-07-01",
+              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('kvValue_ApimSubscriptionKeyName'))]",
+              "properties": {
+                "contentType": "text/plain",
+                "value": "[parameters('kvValue_ApimSubscriptionKeyValue')]"
+              }
+            },
+            {
               "type": "Microsoft.Authorization/roleAssignments",
               "apiVersion": "2020-04-01-preview",
               "scope": "[format('Microsoft.AppConfiguration/configurationStores/{0}', parameters('configStoreName'))]",
@@ -2748,7 +2767,7 @@
               "properties": {
                 "AzureWebJobsStorage": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('kvValue_AzureWebJobsStorageName'))]",
                 "WebsiteContentAzureFileConnectionString": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('kvValue_WebsiteContentAzureFileConnectionStringName'))]",
-                "ApimSubscriptionKey": "[parameters('ApimSubscriptionKey')]",
+                "ApimSubscriptionKey": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('kvValue_ApimSubscriptionKeyName'))]",
                 "ApimWebServiceURL": "[parameters('ApimWebServiceURL')]",
                 "APPINSIGHTS_INSTRUMENTATIONKEY": "[parameters('appInsightsInstrumentationKey')]",
                 "APPLICATIONINSIGHTS_CONNECTION_STRING": "[parameters('appInsightsConnectionString')]",

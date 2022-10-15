@@ -49,6 +49,7 @@ param kvValue_configStoreConnectionName string = 'ConnectionStringsAppConfig'
 param kvValue_ConnectionStringName string = 'ConnectionStringsMercuryHealthWebContext'
 param kvValue_AzureWebJobsStorageName string = 'AzureWebJobsStorage'
 param kvValue_WebsiteContentAzureFileConnectionString string = 'WebsiteContentAzureFileConnectionString'
+param kvValue_ApimSubscriptionKeyName string = 'ApimSubscriptionKey'
 
 // App Configuration Settings
 var FontNameKey = 'FontName'
@@ -237,10 +238,11 @@ module configsettingsmod './main-13-configsettings.bicep' = {
     kvValue_AzureWebJobsStorageName: kvValue_AzureWebJobsStorageName
     kvValue_AzureWebJobsStorageValue: functionappmod.outputs.out_AzureWebJobsStorage
     kvValue_WebsiteContentAzureFileConnectionStringName: kvValue_WebsiteContentAzureFileConnectionString
+    kvValue_ApimSubscriptionKeyName: kvValue_ApimSubscriptionKeyName
+    kvValue_ApimSubscriptionKeyValue: apimservicemod.outputs.out_ApimSubscriptionKeyString
     appInsightsInstrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
     appInsightsConnectionString: appinsightsmod.outputs.out_appInsightsConnectionString
     Deployed_Environment: Deployed_Environment
-    ApimSubscriptionKey: apimservicemod.outputs.out_ApimSubscriptionKeyString
     ApimWebServiceURL: apimservicemod.outputs.out_ApimWebServiceURL
     AzObjectIdPagels: AzObjectIdPagels
     }

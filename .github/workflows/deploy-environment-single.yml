@@ -447,7 +447,8 @@ jobs:
            echo 'output_loadTests2ndName: ${{ needs.deploy_infrastructure.outputs.output_loadTests2ndName }}'
            echo 'output_apiServiceName: ${{ needs.deploy_infrastructure.outputs.output_apiServiceName }}'
            echo 'output_apimSubscriptionKey: ${{ needs.deploy_infrastructure.outputs.output_apimSubscriptionKey }}'
-           echo 'env:webapp: ${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net'
+           echo 'env:webapp: ${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net
+           echo 'output_keyvaultName: ${{ needs.deploy_infrastructure.outputs.output_keyvaultName }}'
            
       # Download Artifacts under $GITHUB_WORKSPACE, so your job can access it
       - name: 'Download Build Artifacts-Load Tests'
@@ -461,6 +462,14 @@ jobs:
         continue-on-error: false
         with:
           creds: ${{ secrets.azure-credentials }}
+
+      - name: 'Get Key Vault Values'
+        uses: Azure/get-keyvault-secrets@v1
+        continue-on-error: true
+        with:
+          keyvault: ${{ needs.deploy_infrastructure.outputs.output_keyvaultName }}
+          secrets: 'ApimSubscriptionKey'
+          id: myKeyVaultValue # ID for secrets that you will reference
 
       # Extremely Important. Do not use end slash for webHost value. "/"
       #
@@ -484,7 +493,7 @@ jobs:
             [
               {
                 "name": "appToken",
-                "value": "12345678"
+                "value": "${{ steps.myKeyVaultValue.outputs.ApimSubscriptionKey }}"
               }
             ]
 
