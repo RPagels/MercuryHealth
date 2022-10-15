@@ -463,13 +463,25 @@ jobs:
         with:
           creds: ${{ secrets.azure-credentials }}
 
-      - name: 'Get Key Vault Values'
-        uses: Azure/get-keyvault-secrets@v1
+      #- name: 'Get Key Vault Values'
+      #  uses: Azure/get-keyvault-secrets@v1
+      #  continue-on-error: true
+      #  with:
+      #    keyvault: ${{ needs.deploy_infrastructure.outputs.output_keyvaultName }}
+      #    secrets: 'ApimSubscriptionKey'
+      #    id: myKeyVaultValue # ID for secrets that you will reference
+
+      - name: 'Get Key Vault Value'
+        id: GetAPIMKey
+        uses: Azure/CLI@v1
         continue-on-error: true
         with:
-          keyvault: ${{ needs.deploy_infrastructure.outputs.output_keyvaultName }}
-          secrets: 'ApimSubscriptionKey'
-          id: myKeyVaultValue # ID for secrets that you will reference
+          inlineScript: |
+            result=$(az az keyvault secret show \
+                        --name "ApimSubscriptionKey" \
+                        --vault-name "${{ needs.deploy_infrastructure.outputs.output_keyvaultName }}" \
+                        --query "apimKey" --output tsv)
+            echo "::set-output name=apimKey::$result"
 
       # Extremely Important. Do not use end slash for webHost value. "/"
       #
@@ -493,7 +505,7 @@ jobs:
             [
               {
                 "name": "appToken",
-                "value": "${{ steps.myKeyVaultValue.outputs.ApimSubscriptionKey }}"
+                "value": "${{ steps.GetAPIMKey.outputs.apimKey }}"
               }
             ]
 
