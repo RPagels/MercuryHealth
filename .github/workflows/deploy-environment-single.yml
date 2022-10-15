@@ -477,7 +477,8 @@ jobs:
         continue-on-error: true
         with:
           inlineScript: |
-            result=$(az az keyvault secret show \
+            az config set extension.use_dynamic_install=yes_without_prompt
+            result=$(az keyvault secret show \
                         --name "ApimSubscriptionKey" \
                         --vault-name "${{ needs.deploy_infrastructure.outputs.output_keyvaultName }}" \
                         --query "apimKey" --output tsv)
