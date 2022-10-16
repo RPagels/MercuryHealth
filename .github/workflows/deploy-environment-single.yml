@@ -472,7 +472,7 @@ jobs:
       #    id: myKeyVaultValue # ID for secrets that you will reference
 
 # $retrievedSecretId = (az keyvault secret show  --name "ApimSubscriptionKey" --vault-name "kv-fq3ruuhxgjony" | ConvertFrom-Json).value
-      - name: 'Get Key Vault Value'
+      - name: 'CLI Get Key Vault Value'
         id: GetAPIMKey
         uses: Azure/CLI@v1
         continue-on-error: true
@@ -485,9 +485,21 @@ jobs:
                         --query "apiKey" --output tsv)
             echo "::set-output name=apimKey::$result"
 
+      - name: 'PS Get Key Vault Values'
+        uses: Azure/powershell@v1
+        continue-on-error: false
+        id: GetAPIMKeyUsingPS
+        env:
+          POWERSHELL_TELEMETRY_OPTOUT: 1
+        with:
+          inlineScript: result=(az keyvault secret show  --name "ApimSubscriptionKey" --vault-name "kv-fq3ruuhxgjony" | ConvertFrom-Json).value \ echo "::set-output name=apimKey::$result"
+          azPSVersion: 3.4.0
+          errorActionPreference: continue
+          
       - name: DEBUG ONLY Display Key Vault Secret
         run: |
            echo 'apimKey: ${{ steps.GetAPIMKey.outputs.apimKey }}'
+           echo 'apimKey: ${{ steps.GetAPIMKeyUsingPS.outputs.apimKey }}'
 
       # Extremely Important. Do not use end slash for webHost value. "/"
       #
