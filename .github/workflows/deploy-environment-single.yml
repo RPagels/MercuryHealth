@@ -471,6 +471,7 @@ jobs:
       #    secrets: 'ApimSubscriptionKey'
       #    id: myKeyVaultValue # ID for secrets that you will reference
 
+# $retrievedSecretId = (az keyvault secret show  --name "ApimSubscriptionKey" --vault-name "kv-fq3ruuhxgjony" | ConvertFrom-Json).value
       - name: 'Get Key Vault Value'
         id: GetAPIMKey
         uses: Azure/CLI@v1
@@ -481,8 +482,12 @@ jobs:
             result=$(az keyvault secret show \
                         --name "ApimSubscriptionKey" \
                         --vault-name "${{ needs.deploy_infrastructure.outputs.output_keyvaultName }}" \
-                        --query "apimKey" --output tsv)
+                        | ConvertFrom-Json).value
             echo "::set-output name=apimKey::$result"
+
+      - name: DEBUG ONLY Display Key Vault Secret
+        run: |
+           echo 'apimKey: ${{ steps.GetAPIMKey.outputs.apimKey }}'
 
       # Extremely Important. Do not use end slash for webHost value. "/"
       #
