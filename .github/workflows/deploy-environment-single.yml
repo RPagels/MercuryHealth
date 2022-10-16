@@ -518,6 +518,9 @@ jobs:
       # Extremely Important. Do not use end slash for webHost value. "/"
       #
       # Testing the API Management Layer that calls the Web App API
+      #
+      # ?
+      #
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
         continue-on-error: true
@@ -537,7 +540,7 @@ jobs:
             [
               {
                 "name": "appToken",
-                "value": "${{ steps.myKeyVaultValue.outputs.ApimSubscriptionKey }}"
+                "value": "${{ steps.GetAPIMKey.outputs.apimKey }}"
               }
             ]
 
