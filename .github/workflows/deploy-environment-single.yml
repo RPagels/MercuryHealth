@@ -490,6 +490,8 @@ jobs:
 
       # Extremely Important. Do not use end slash for webHost value. "/"
       #
+      # ${{ steps.GetAPIMKey.outputs.apimKey }}
+      #
       # Testing the Web App API
       - name: 'Azure Load Testing, API'
         uses: azure/load-testing@v1
@@ -510,7 +512,7 @@ jobs:
             [
               {
                 "name": "appToken",
-                "value": "${{ steps.GetAPIMKey.outputs.apimKey }}"
+                "value": "18a7ee5ea8cb45bd8d7ae733367a1af6"
               }
             ]
 
