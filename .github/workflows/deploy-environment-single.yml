@@ -512,7 +512,7 @@ jobs:
             [
               {
                 "name": "appToken",
-                "value": "18a7ee5ea8cb45bd8d7ae733367a1af6"
+                "value": "${{ steps.GetAPIMKey.outputs.apimKey }}"
               }
             ]
 
@@ -541,7 +541,7 @@ jobs:
             [
               {
                 "name": "appToken",
-                "value": "${{ steps.GetAPIMKey.outputs.apimKey }}"
+                "value": "18a7ee5ea8cb45bd8d7ae733367a1af6"
               }
             ]
 
