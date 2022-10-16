@@ -471,8 +471,7 @@ jobs:
       #    secrets: 'ApimSubscriptionKey'
       #    id: myKeyVaultValue # ID for secrets that you will reference
 
-# $retrievedSecretId = (az keyvault secret show  --name "ApimSubscriptionKey" --vault-name "kv-fq3ruuhxgjony" | ConvertFrom-Json).value
-      - name: 'CLI Get Key Vault Value'
+      - name: 'Get Key Vault Value'
         id: GetAPIMKey
         uses: Azure/CLI@v1
         continue-on-error: true
@@ -492,7 +491,7 @@ jobs:
       # Extremely Important. Do not use end slash for webHost value. "/"
       #
       # Testing the Web App API
-      - name: 'Azure Load Testing'
+      - name: 'Azure Load Testing, API'
         uses: azure/load-testing@v1
         continue-on-error: true
         with:
@@ -521,7 +520,7 @@ jobs:
       #
       # ?
       #
-      - name: 'Azure Load Testing'
+      - name: 'Azure Load Testing, APIM'
         uses: azure/load-testing@v1
         continue-on-error: true
         with:
