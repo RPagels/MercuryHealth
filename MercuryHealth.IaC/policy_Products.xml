@@ -2,8 +2,8 @@
     <inbound>
         <!-- 'quota-by-key': Policy is not allowed in 'Consumption' sku -->
         <!-- 'rate-limit-by-key': Policy is not allowed in 'Consumption' sku -->
-        <rate-limit calls="5" renewal-period="60" />
-        <quota calls="100" renewal-period="604800" />
+        <rate-limit calls="30" renewal-period="60" />
+        <quota calls="500" renewal-period="604800" />
         <base />
     </inbound>
     <backend>
