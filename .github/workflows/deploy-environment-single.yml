@@ -482,7 +482,7 @@ jobs:
             result=$(az keyvault secret show \
                         --name "ApimSubscriptionKey" \
                         --vault-name "${{ needs.deploy_infrastructure.outputs.output_keyvaultName }}" \
-                        | ConvertFrom-Json).value
+                        --query "apiKey" --output tsv)
             echo "::set-output name=apimKey::$result"
 
       - name: DEBUG ONLY Display Key Vault Secret
