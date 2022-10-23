@@ -47,6 +47,7 @@ jobs:
       output_appInsightsApplicationId: ${{ steps.Infra.outputs.out_appInsightsApplicationId }}
       output_appInsightsAPIApplicationId: ${{ steps.Infra.outputs.out_appInsightsAPIApplicationId }}
       output_secretConnectionString: ${{ steps.Infra.outputs.out_secretConnectionString }}
+      output_keyvaultName: ${{ steps.Infra.outputs.out_keyvaultName }}
 
     name: Deploy Infrastructure
     ###################################################################
@@ -117,17 +118,6 @@ jobs:
     #    inlineScript: |
     #      az rest --method get --header "Accept=application/json" -u 'https://management.azure.com/subscriptions/f5e66d29-1a7f-4ee3-822e-74f644d3e665/providers/Microsoft.ApiManagement/deletedservices?api-version=2021-08-01'
         
-    #- name: Purge soft-deleted instance of APIM, if exists
-    #  if: contains(github.event_name, 'push')
-    #  uses: Azure/CLI@v1
-    #  continue-on-error: true
-    #  with:
-    #    inlineScript: |
-    #      az rest --method get --header "Accept=application/json" -u 'https://management.azure.com/subscriptions/{subscriptionId}/providers/Microsoft.ApiManagement/deletedservices?api-version=2021-08-01'
-    #      az rest --method delete --header "Accept=application/json" -u 'https://management.azure.com/subscriptions/{subscriptionId}/providers/Microsoft.ApiManagement/locations/${{ inputs.resource-group-location }}/deletedservices/${{ env.APIM_PurgeNameDev }}?api-version=2021-08-01'
-    #      az rest --method delete --header "Accept=application/json" -u 'https://management.azure.com/subscriptions/{subscriptionId}/providers/Microsoft.ApiManagement/locations/${{ inputs.resource-group-location }}/deletedservices/${{ env.APIM_PurgeNameQA }}?api-version=2021-08-01'
-    #      az rest --method delete --header "Accept=application/json" -u 'https://management.azure.com/subscriptions/{subscriptionId}/providers/Microsoft.ApiManagement/locations/${{ inputs.resource-group-location }}/deletedservices/${{ env.APIM_PurgeNameProd }}?api-version=2021-08-01'
-
       ###########################################
       # Deploy Infrastructure using ARM Template generated from Bicep DSL
       ###########################################
@@ -161,7 +151,9 @@ jobs:
     - name: DEBUG ONLY Display Output Variables
       run: |
          echo 'output_loadTestsName: ${{ steps.Infra.outputs.out_loadTestsName }}'
+         echo 'output_loadTests2ndName: ${{ steps.Infra.outputs.out_loadTests2ndName }}'
          echo 'output_apiServiceName: ${{ steps.Infra.outputs.out_apiServiceName }}'
+         echo 'output_apimSubscriptionKey: ${{ steps.Infra.outputs.out_apimSubscriptionKey }}'
          echo 'output_webSiteName: ${{ steps.Infra.outputs.out_webSiteName }}'
          echo 'output_functionAppName: ${{ steps.Infra.outputs.out_functionAppName }}'
          echo 'output_appInsightsName: ${{ steps.Infra.outputs.out_appInsightsName }}'
@@ -221,7 +213,8 @@ jobs:
  
     - name: DEBUG ONLY Display Output Variables
       run: |
-         echo 'output_loadTestsName: ${{ needs.deploy_infrastructure.outputs.output_loadTestsName }}'
+         echo 'output_loadTestsName: ${{ needs.deploy_infrastructure.outputs.output_loadTestsName }}'                  echo 'output_loadTests2ndName: ${{ needs.deploy_infrastructure.outputs.output_loadTests2ndName }}'
+         echo 'output_loadTests2ndName: ${{ needs.deploy_infrastructure.outputs.output_loadTests2ndName }}'
          echo 'output_webSiteName: ${{ needs.deploy_infrastructure.outputs.output_webSiteName }}'
          echo 'output_functionAppName: ${{ needs.deploy_infrastructure.outputs.output_functionAppName }}'
          echo 'output_appInsightsName: ${{ needs.deploy_infrastructure.outputs.output_appInsightsName }}'
@@ -231,6 +224,8 @@ jobs:
          echo 'output_appInsightsAPIApplicationId: ${{ needs.deploy_infrastructure.outputs.output_appInsightsAPIApplicationId }}'
          echo 'output_keyvaultName: ${{ needs.deploy_infrastructure.outputs.output_keyvaultName }}'
          echo 'output_secretConnectionString: ${{ needs.deploy_infrastructure.outputs.output_secretConnectionString }}'
+         echo 'output_apiServiceName: ${{ needs.deploy_infrastructure.outputs.output_apiServiceName }}'
+         echo 'output_apimSubscriptionKey: ${{ needs.deploy_infrastructure.outputs.output_apimSubscriptionKey }}'
 
     - name: Login to Azure
       uses: azure/login@v1
@@ -246,13 +241,13 @@ jobs:
     #    inlineScript: |
     #      az lock create --name DontDeleteMe --lock-type CanNotDelete --resource-group ${{ env.Azure_Resource_GroupName }} --resource-name ${{ steps.Infra.outputs.out_apiServiceName }} --resource-type Microsoft.ApiManagement/service --notes 'Prevent deletion of the resource group'
 
-    #- name: Ensure Resource Group is Locked
-    #  if: contains(github.event_name, 'push')
-    #  uses: Azure/CLI@v1
-    #  continue-on-error: true
-    #  with:
-    #    inlineScript: |
-    #      az group lock create --lock-type CanNotDelete --name DontDeleteMe --resource-group ${{ env.Azure_Resource_GroupName }} --notes 'Prevent deletion of the resource group'
+    - name: Ensure Resource Group is Locked
+      if: contains(github.event_name, 'push')
+      uses: Azure/CLI@v1
+      continue-on-error: true
+      with:
+        inlineScript: |
+          az group lock create --lock-type CanNotDelete --name DontDeleteMe --resource-group ${{ env.Azure_Resource_GroupName }} --notes 'Prevent deletion of the resource group'
 
     #- name: Download Build Artifact-Database
     #  uses: actions/download-artifact@v2
@@ -459,6 +454,11 @@ jobs:
       - name: DEBUG ONLY Display Output Variables
         run: |
            echo 'output_loadTestsName: ${{ needs.deploy_infrastructure.outputs.output_loadTestsName }}'
+           echo 'output_loadTests2ndName: ${{ needs.deploy_infrastructure.outputs.output_loadTests2ndName }}'
+           echo 'output_apiServiceName: ${{ needs.deploy_infrastructure.outputs.output_apiServiceName }}'
+           echo 'output_apimSubscriptionKey: ${{ needs.deploy_infrastructure.outputs.output_apimSubscriptionKey }}'
+           echo 'env:webapp: ${{needs.deploy_infrastructure.outputs.output_webSiteName}}.azurewebsites.net'
+           echo 'output_keyvaultName: ${{ needs.deploy_infrastructure.outputs.output_keyvaultName }}'
            
       # Download Artifacts under $GITHUB_WORKSPACE, so your job can access it
       - name: 'Download Build Artifacts-Load Tests'
@@ -473,8 +473,24 @@ jobs:
         with:
           creds: ${{ secrets.azure-credentials }}
 
+      - name: 'Get Key Vault Value'
+        id: GetAPIMKey
+        uses: Azure/CLI@v1
+        continue-on-error: true
+        with:
+          inlineScript: |
+            az config set extension.use_dynamic_install=yes_without_prompt
+            result=$(az keyvault secret show \
+                        --name "ApimSubscriptionKey" \
+                        --vault-name "${{ needs.deploy_infrastructure.outputs.output_keyvaultName }}" \
+                        --query "value" --output tsv)
+            echo "::set-output name=apimKey::$result"
+      - name: DEBUG ONLY Display Key Vault Secret
+        run: |
+           echo 'apimKey: ${{ steps.GetAPIMKey.outputs.apimKey }}'
+           
       # Extremely Important!!! - Do not use end slash for webHost value. "/"
-      - name: 'Azure Load Testing'
+      - name: 'Azure Load Testing, API'
         uses: azure/load-testing@v1
         continue-on-error: true
         with:
@@ -492,10 +508,32 @@ jobs:
             [
               {
                 "name": "appToken",
-                "value": "12345678"
+                "value": "${{ steps.GetAPIMKey.outputs.apimKey }}"
               }
             ]
 
+      - name: 'Azure Load Testing, APIM'
+        uses: azure/load-testing@v1
+        continue-on-error: true
+        with:
+          loadTestConfigFile: './MercuryHealth.LoadTests/APIM_Testing.yaml'
+          loadTestResource: ${{needs.deploy_infrastructure.outputs.output_loadTests2ndName}}
+          resourceGroup: ${{ env.Azure_Resource_GroupName }}
+          env: |
+            [
+               {
+                 "name": "webapp",
+                 "value": "${{needs.deploy_infrastructure.outputs.output_apiServiceName}}.azure-api.net"
+               }
+            ]
+          secrets: |
+            [
+              {
+                "name": "appToken",
+                "value": "${{ steps.GetAPIMKey.outputs.apimKey }}"
+              }
+            ]
+            
       - name: 'Upload Load Test Results'
         uses: actions/upload-artifact@v2
         continue-on-error: true
@@ -561,7 +599,7 @@ jobs:
             [
               {
                 "name": "appToken",
-                "value": "12345678"
+                "value": "${{ steps.GetAPIMKey.outputs.apimKey }}"
               }
             ]
 
