@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.11.1.770",
-      "templateHash": "5042078619530870319"
+      "version": "0.12.1.58429",
+      "templateHash": "13784563659269569520"
     }
   },
   "parameters": {
@@ -51,6 +51,10 @@
     "AzObjectIdPagels": {
       "type": "string",
       "defaultValue": "b6be0700-1fda-4f88-bf20-1aa508a91f73"
+    },
+    "ADOServiceprincipalObjectId": {
+      "type": "string",
+      "defaultValue": "61ad559f-a07a-4d8f-981b-c88e69216dd1"
     }
   },
   "variables": {
@@ -112,8 +116,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.11.1.770",
-              "templateHash": "10556728505086222797"
+              "version": "0.12.1.58429",
+              "templateHash": "3484376297536767315"
             }
           },
           "parameters": {
@@ -205,10 +209,10 @@
             "value": "[parameters('location')]"
           },
           "appInsightsInstrumentationKey": {
-            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')).outputs.out_appInsightsInstrumentationKey.value]"
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy'), '2020-10-01').outputs.out_appInsightsInstrumentationKey.value]"
           },
           "appInsightsConnectionString": {
-            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')).outputs.out_appInsightsConnectionString.value]"
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy'), '2020-10-01').outputs.out_appInsightsConnectionString.value]"
           },
           "defaultTags": {
             "value": "[variables('defaultTags')]"
@@ -223,7 +227,7 @@
             "value": "[variables('sqlDBName')]"
           },
           "sqlserverfullyQualifiedDomainName": {
-            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'sqldbdeploy')).outputs.sqlserverfullyQualifiedDomainName.value]"
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'sqldbdeploy'), '2020-10-01').outputs.sqlserverfullyQualifiedDomainName.value]"
           },
           "sqlserverName": {
             "value": "[variables('sqlserverName')]"
@@ -235,8 +239,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.11.1.770",
-              "templateHash": "17917053742744263833"
+              "version": "0.12.1.58429",
+              "templateHash": "2397276135949832755"
             }
           },
           "parameters": {
@@ -519,7 +523,7 @@
             },
             "out_webSiteName": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.Web/sites', parameters('webSiteName'))).defaultHostName]"
+              "value": "[reference(resourceId('Microsoft.Web/sites', parameters('webSiteName')), '2021-03-01').defaultHostName]"
             },
             "out_appServiceprincipalId": {
               "type": "string",
@@ -572,8 +576,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.11.1.770",
-              "templateHash": "13163093028551611228"
+              "version": "0.12.1.58429",
+              "templateHash": "18169019845470429523"
             }
           },
           "parameters": {
@@ -645,7 +649,7 @@
           "outputs": {
             "sqlserverfullyQualifiedDomainName": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.Sql/servers', parameters('sqlserverName'))).fullyQualifiedDomainName]"
+              "value": "[reference(resourceId('Microsoft.Sql/servers', parameters('sqlserverName')), '2021-11-01-preview').fullyQualifiedDomainName]"
             }
           }
         }
@@ -683,8 +687,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.11.1.770",
-              "templateHash": "1103596773260696898"
+              "version": "0.12.1.58429",
+              "templateHash": "17223144594744698218"
             }
           },
           "parameters": {
@@ -801,19 +805,19 @@
             },
             "out_appInsightsInstrumentationKey": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName'))).InstrumentationKey]"
+              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName')), '2020-02-02').InstrumentationKey]"
             },
             "out_appInsightsConnectionString": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName'))).ConnectionString]"
+              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName')), '2020-02-02').ConnectionString]"
             },
             "out_appInsightsApplicationId": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName'))).ApplicationId]"
+              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName')), '2020-02-02').ApplicationId]"
             },
             "out_appInsightsAPIApplicationId": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName'))).AppId]"
+              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName')), '2020-02-02').AppId]"
             }
           }
         }
@@ -848,8 +852,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.11.1.770",
-              "templateHash": "10753060668950334015"
+              "version": "0.12.1.58429",
+              "templateHash": "15286441590807193995"
             }
           },
           "parameters": {
@@ -1101,10 +1105,10 @@
             "value": "[variables('appInsightsName')]"
           },
           "applicationInsightsID": {
-            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')).outputs.out_applicationInsightsID.value]"
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy'), '2020-10-01').outputs.out_applicationInsightsID.value]"
           },
           "appInsightsInstrumentationKey": {
-            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')).outputs.out_appInsightsInstrumentationKey.value]"
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy'), '2020-10-01').outputs.out_appInsightsInstrumentationKey.value]"
           },
           "webSiteName": {
             "value": "[variables('webSiteName')]"
@@ -1116,8 +1120,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.11.1.770",
-              "templateHash": "4082543633607295339"
+              "version": "0.12.1.58429",
+              "templateHash": "4372361044706592182"
             }
           },
           "parameters": {
@@ -1170,10 +1174,10 @@
             }
           },
           "variables": {
-            "$fxv#0": "<policies>\r\n    <inbound>\r\n        <!-- 'quota-by-key': Policy is not allowed in 'Consumption' sku -->\r\n        <!-- 'rate-limit-by-key': Policy is not allowed in 'Consumption' sku -->\r\n        <rate-limit calls=\"5\" renewal-period=\"60\" />\r\n        <quota calls=\"100\" renewal-period=\"604800\" />\r\n        <base />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>\r\n",
-            "$fxv#1": "<policies>\r\n    <inbound>\r\n        <base />\r\n        <rate-limit-by-key calls=\"20\" renewal-period=\"60\" counter-key=\"@(context.Subscription?.Key ?? \"anonymous\")\" />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>",
-            "$fxv#2": "<policies>\r\n    <inbound>\r\n        <base />\r\n        <rate-limit-by-key calls=\"30\" renewal-period=\"60\" counter-key=\"@(context.Subscription?.Key ?? \"anonymous\")\" />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>\r\n",
-            "$fxv#3": "<policies>\r\n    <inbound>\r\n        <base />\r\n        <rate-limit-by-key calls=\"15\" renewal-period=\"60\" counter-key=\"@(context.Subscription?.Key ?? \"anonymous\")\" />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>\r\n",
+            "$fxv#0": "<policies>\r\n    <inbound>\r\n        <!-- 'quota-by-key': Policy is not allowed in 'Consumption' sku -->\r\n        <!-- 'rate-limit-by-key': Policy is not allowed in 'Consumption' sku -->\r\n        <rate-limit calls=\"30\" renewal-period=\"60\" />\r\n        <quota calls=\"500\" renewal-period=\"604800\" />\r\n        <base />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>\r\n",
+            "$fxv#1": "<policies>\r\n    <inbound>\r\n        <base />\r\n        <!-- <rate-limit-by-key calls=\"20\" renewal-period=\"60\" counter-key=\"@(context.Subscription?.Key ?? \"anonymous\")\" /> -->\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>",
+            "$fxv#2": "<policies>\r\n    <inbound>\r\n        <base />\r\n        <rate-limit-by-key calls=\"60\" renewal-period=\"60\" counter-key=\"@(context.Subscription?.Key ?? \"anonymous\")\" />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>\r\n",
+            "$fxv#3": "<policies>\r\n    <inbound>\r\n        <base />\r\n        <rate-limit-by-key calls=\"30\" renewal-period=\"60\" counter-key=\"@(context.Subscription?.Key ?? \"anonymous\")\" />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>\r\n",
             "$fxv#4": "<policies>\r\n    <inbound>\r\n        <mock-response status-code=\"200\" content-type=\"application/json\" />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>\r\n",
             "$fxv#5": "<policies>\r\n    <inbound>\r\n        <mock-response status-code=\"200\" content-type=\"application/json\" />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>\r\n"
           },
@@ -1627,7 +1631,7 @@
             },
             "out_ApimWebServiceURL": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.ApiManagement/service', parameters('apiServiceName'))).gatewayUrl]"
+              "value": "[reference(resourceId('Microsoft.ApiManagement/service', parameters('apiServiceName')), '2021-12-01-preview').gatewayUrl]"
             }
           }
         }
@@ -1668,8 +1672,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.11.1.770",
-              "templateHash": "15394922612083738466"
+              "version": "0.12.1.58429",
+              "templateHash": "17852631848688119201"
             }
           },
           "parameters": {
@@ -1738,8 +1742,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.11.1.770",
-              "templateHash": "16755376819579025537"
+              "version": "0.12.1.58429",
+              "templateHash": "7211909693384049493"
             }
           },
           "parameters": {
@@ -1826,8 +1830,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.11.1.770",
-              "templateHash": "5345210114025855349"
+              "version": "0.12.1.58429",
+              "templateHash": "7554701782893694371"
             }
           },
           "parameters": {
@@ -2028,7 +2032,7 @@
             },
             "out_configStoreEndPoint": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.AppConfiguration/configurationStores', parameters('configStoreName'))).endpoint]"
+              "value": "[reference(resourceId('Microsoft.AppConfiguration/configurationStores', parameters('configStoreName')), '2022-05-01').endpoint]"
             }
           }
         }
@@ -2064,8 +2068,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.11.1.770",
-              "templateHash": "10321506624518527094"
+              "version": "0.12.1.58429",
+              "templateHash": "15370956634136252001"
             }
           },
           "parameters": {
@@ -2392,8 +2396,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.11.1.770",
-              "templateHash": "4946306504995989833"
+              "version": "0.12.1.58429",
+              "templateHash": "8276802751048246383"
             }
           },
           "parameters": {
@@ -2463,16 +2467,16 @@
             "value": "[parameters('kvValue_configStoreConnectionName')]"
           },
           "kvValue_configStoreConnectionValue": {
-            "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('configStoreName'))).outputs.out_configStoreConnectionString.value]"
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('configStoreName')), '2020-10-01').outputs.out_configStoreConnectionString.value]"
           },
           "kvValue_ConnectionStringName": {
             "value": "[parameters('kvValue_ConnectionStringName')]"
           },
           "kvValue_ConnectionStringValue": {
-            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'webappdeploy')).outputs.out_secretConnectionString.value]"
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'webappdeploy'), '2020-10-01').outputs.out_secretConnectionString.value]"
           },
           "appServiceprincipalId": {
-            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'webappdeploy')).outputs.out_appServiceprincipalId.value]"
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'webappdeploy'), '2020-10-01').outputs.out_appServiceprincipalId.value]"
           },
           "webappName": {
             "value": "[variables('webSiteName')]"
@@ -2481,10 +2485,10 @@
             "value": "[variables('functionAppName')]"
           },
           "funcAppServiceprincipalId": {
-            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'functionappdeploy')).outputs.out_funcAppServiceprincipalId.value]"
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'functionappdeploy'), '2020-10-01').outputs.out_funcAppServiceprincipalId.value]"
           },
           "configStoreEndPoint": {
-            "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('configStoreName'))).outputs.out_configStoreEndPoint.value]"
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('configStoreName')), '2020-10-01').outputs.out_configStoreEndPoint.value]"
           },
           "configStoreName": {
             "value": "[variables('configStoreName')]"
@@ -2502,7 +2506,7 @@
             "value": "[parameters('kvValue_AzureWebJobsStorageName')]"
           },
           "kvValue_AzureWebJobsStorageValue": {
-            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'functionappdeploy')).outputs.out_AzureWebJobsStorage.value]"
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'functionappdeploy'), '2020-10-01').outputs.out_AzureWebJobsStorage.value]"
           },
           "kvValue_WebsiteContentAzureFileConnectionStringName": {
             "value": "[parameters('kvValue_WebsiteContentAzureFileConnectionString')]"
@@ -2511,22 +2515,25 @@
             "value": "[parameters('kvValue_ApimSubscriptionKeyName')]"
           },
           "kvValue_ApimSubscriptionKeyValue": {
-            "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('apiServiceName'))).outputs.out_ApimSubscriptionKeyString.value]"
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('apiServiceName')), '2020-10-01').outputs.out_ApimSubscriptionKeyString.value]"
           },
           "appInsightsInstrumentationKey": {
-            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')).outputs.out_appInsightsInstrumentationKey.value]"
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy'), '2020-10-01').outputs.out_appInsightsInstrumentationKey.value]"
           },
           "appInsightsConnectionString": {
-            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')).outputs.out_appInsightsConnectionString.value]"
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy'), '2020-10-01').outputs.out_appInsightsConnectionString.value]"
           },
           "Deployed_Environment": {
             "value": "[parameters('Deployed_Environment')]"
           },
           "ApimWebServiceURL": {
-            "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('apiServiceName'))).outputs.out_ApimWebServiceURL.value]"
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('apiServiceName')), '2020-10-01').outputs.out_ApimWebServiceURL.value]"
           },
           "AzObjectIdPagels": {
             "value": "[parameters('AzObjectIdPagels')]"
+          },
+          "ADOServiceprincipalObjectId": {
+            "value": "[parameters('ADOServiceprincipalObjectId')]"
           }
         },
         "template": {
@@ -2535,8 +2542,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.11.1.770",
-              "templateHash": "5609549100539282173"
+              "version": "0.12.1.58429",
+              "templateHash": "5861575805038603713"
             }
           },
           "parameters": {
@@ -2616,6 +2623,9 @@
             "AzObjectIdPagels": {
               "type": "secureString"
             },
+            "ADOServiceprincipalObjectId": {
+              "type": "secureString"
+            },
             "accessPolicies": {
               "type": "array",
               "defaultValue": [
@@ -2660,6 +2670,20 @@
                       "list",
                       "set",
                       "delete"
+                    ]
+                  }
+                },
+                {
+                  "tenantId": "[parameters('tenant')]",
+                  "objectId": "[parameters('ADOServiceprincipalObjectId')]",
+                  "permissions": {
+                    "keys": [
+                      "get",
+                      "list"
+                    ],
+                    "secrets": [
+                      "get",
+                      "list"
                     ]
                   }
                 }
@@ -2814,8 +2838,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.11.1.770",
-              "templateHash": "14492627563229715970"
+              "version": "0.12.1.58429",
+              "templateHash": "1241087138420359991"
             }
           },
           "parameters": {
@@ -2948,7 +2972,7 @@
     },
     "out_sqlserverFQName": {
       "type": "string",
-      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'sqldbdeploy')).outputs.sqlserverfullyQualifiedDomainName.value]"
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'sqldbdeploy'), '2020-10-01').outputs.sqlserverfullyQualifiedDomainName.value]"
     },
     "out_configStoreName": {
       "type": "string",
@@ -2976,7 +3000,7 @@
     },
     "out_apimSubscriptionKey": {
       "type": "string",
-      "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('apiServiceName'))).outputs.out_ApimSubscriptionKeyString.value]"
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('apiServiceName')), '2020-10-01').outputs.out_ApimSubscriptionKeyString.value]"
     },
     "out_keyvaultName": {
       "type": "string",
@@ -2984,15 +3008,15 @@
     },
     "out_secretConnectionString": {
       "type": "string",
-      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'webappdeploy')).outputs.out_secretConnectionString.value]"
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'webappdeploy'), '2020-10-01').outputs.out_secretConnectionString.value]"
     },
     "out_appInsightsApplicationId": {
       "type": "string",
-      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')).outputs.out_appInsightsApplicationId.value]"
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy'), '2020-10-01').outputs.out_appInsightsApplicationId.value]"
     },
     "out_appInsightsAPIApplicationId": {
       "type": "string",
-      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')).outputs.out_appInsightsAPIApplicationId.value]"
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy'), '2020-10-01').outputs.out_appInsightsAPIApplicationId.value]"
     },
     "out_releaseAnnotationGuidID": {
       "type": "string",
