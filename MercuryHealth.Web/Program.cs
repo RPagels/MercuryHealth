@@ -70,7 +70,9 @@ builder.Services.AddHealthChecks()
 //builder.Services.AddSingleton<ITelemetryInitializer, AddAppVersion>();
 
 // Add Azure Application Insights services to the container
-builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
+// InstrumentationKey based global ingestion is being deprecated.
+//builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
+builder.Services.AddApplicationInsightsTelemetry();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
