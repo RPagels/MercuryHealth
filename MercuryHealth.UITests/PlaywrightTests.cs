@@ -106,9 +106,23 @@ namespace MercuryHealth.UITests
 
             myPageTitle = await page.TitleAsync();
 
+            var mycurrentdirectory = Path.Combine(Directory.GetCurrentDirectory());
+
+            await page.ScreenshotAsync(new()
+            {
+                Path = "screenshot_Home-Homepage1.png",
+                FullPage = true,
+            });
+
+            await page.ScreenshotAsync(new()
+            {
+                Path = mycurrentdirectory + "screenshot_Home-Homepage2.png",
+                FullPage = true,
+            });
+
             // Take screenshot & Add as Test Attachment
-            await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "Home-Homepage.png"), await page.ScreenshotAsync());
-            TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "Home-Homepage.png"), "Home-Homepage.png");
+            //await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "Home-Homepage.png"), await page.ScreenshotAsync());
+            //TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "Home-Homepage.png"), "Home-Homepage.png");
 
             Assert.AreEqual("Home Page - Mercury Health", myPageTitle);
 
