@@ -416,21 +416,31 @@ jobs:
       #    path: ${{ github.workspace }}/MercuryHealth.UITests/*.png
       #    retention-days: 30
 
+      # Upload the test result artifacts
       - name: 'Upload Playwright Test Results'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: MercuryHealth.UITestsResults
-          path: ${{ github.workspace }}/MercuryHealth.UITests/*.*
+          name: MercuryHealth.UITestsResultsBinDebugNet6
+          path: ${{ github.workspace }}/MercuryHealth.UITests/bin/Debug/net6.0/*.png
+          retention-days: 30
+
+      # Upload the test result artifacts
+      - name: 'Upload Playwright Test Results'
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: MercuryHealth.UITestsResultsBinDebugNet6
+          path: ${{ github.workspace }}/MercuryHealth.UITests/bin/Debug/net6.0/*.zip
           retention-days: 30
           
-      #- name: 'Upload Playwright Trace Results-Report'
-      #  uses: actions/upload-artifact@v2
-      #  if: always()
-      #  with:
-      #    name: MercuryHealth.UITestsResults
-      #    path: ${{ github.workspace }}/MercuryHealth.UITests/TestResults/*.zip
-      #    retention-days: 30
+      - name: 'Upload Playwright Trace Results-Report'
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: MercuryHealth.UITestsResults_TestResults
+          path: ${{ github.workspace }}/MercuryHealth.UITests/TestResults
+          retention-days: 30
           
 ##################################################################
 # CD Stage - Load and Performance Testing >>> Home Page          #
