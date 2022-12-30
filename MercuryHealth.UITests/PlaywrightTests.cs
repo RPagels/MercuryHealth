@@ -108,15 +108,10 @@ namespace MercuryHealth.UITests
 
             var mycurrentdirectory = Path.Combine(Directory.GetCurrentDirectory());
 
+            // Take screenshot
             await page.ScreenshotAsync(new()
             {
-                Path = "screenshot_Home-Homepage1.png",
-                FullPage = true,
-            });
-
-            await page.ScreenshotAsync(new()
-            {
-                Path = mycurrentdirectory + "screenshot_Home-Homepage2.png",
+                Path = "screenshot_Home-Homepage.png",
                 FullPage = true,
             });
 
@@ -173,8 +168,15 @@ namespace MercuryHealth.UITests
             myPageTitle = await page.TitleAsync();
 
             // Take screenshot & Add as Test Attachment
-            await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "Nutrition-Homepage.png"), await page.ScreenshotAsync());
-            TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "Nutrition-Homepage.png"), "Nutrition-Homepage.png");
+            //await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "Nutrition-Homepage.png"), await page.ScreenshotAsync());
+            //TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "Nutrition-Homepage.png"), "Nutrition-Homepage.png");
+
+            // Take screenshot
+            await page.ScreenshotAsync(new()
+            {
+                Path = "screenshot_Home-Homepage.png",
+                FullPage = true,
+            });
 
             Assert.AreEqual("Nutrition - Mercury Health", myPageTitle);
 
@@ -205,6 +207,14 @@ namespace MercuryHealth.UITests
             var page = await context.NewPageAsync();
             page.SetDefaultTimeout(myDefaultTimeout);
 
+            // Start tracing before creating / navigating a page.
+            await context.Tracing.StartAsync(new()
+            {
+                Screenshots = true,
+                Snapshots = true,
+                Sources = true
+            });
+
             await page.GotoAsync(pageURL);
 
             // Click on the cookie policy acceptance button if it exists
@@ -226,8 +236,15 @@ namespace MercuryHealth.UITests
             Assert.AreEqual("Details - Mercury Health", myPageTitle);
 
             // Take screenshot & Add as Test Attachment
-            await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "nutrition_details_25.png"), await page.ScreenshotAsync());
-            TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "nutrition_details_25.png"), "nutrition_details_25.png");
+            //await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "nutrition_details_25.png"), await page.ScreenshotAsync());
+            //TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "nutrition_details_25.png"), "nutrition_details_25.png");
+
+            // Take screenshot
+            await page.ScreenshotAsync(new()
+            {
+                Path = "screenshot_nutrition_details_25.png",
+                FullPage = true,
+            });
 
             Assert.AreEqual(pageURL + "Nutritions/Details/25", page.Url);
 
@@ -238,8 +255,15 @@ namespace MercuryHealth.UITests
             myDescription = myDescription.TrimEnd();
 
             // Take screenshot & Add as Test Attachment
-            await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "Item-Description.png"), await page.ScreenshotAsync());
-            TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "Item-Description.png"), "Item-Description.png");
+            //await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "Item-Description.png"), await page.ScreenshotAsync());
+            //TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "Item-Description.png"), "Item-Description.png");
+
+            // Take screenshot
+            await page.ScreenshotAsync(new()
+            {
+                Path = "screenshot_Item-Description.png",
+                FullPage = true,
+            });
 
             // Randomize a failure
             Random rnd = new Random();
@@ -257,6 +281,12 @@ namespace MercuryHealth.UITests
 
             // Click text=Home
             await page.ClickAsync("text=Home");
+
+            // Stop tracing and export it into a zip archive.
+            await context.Tracing.StopAsync(new()
+            {
+                Path = "trace_Verify_NavToNutritionDetail.zip"
+            });
 
         }
 
@@ -276,6 +306,14 @@ namespace MercuryHealth.UITests
             var context = await browser.NewContextAsync();
             var page = await context.NewPageAsync();
             page.SetDefaultTimeout(myDefaultTimeout);
+
+            // Start tracing before creating / navigating a page.
+            await context.Tracing.StartAsync(new()
+            {
+                Screenshots = true,
+                Snapshots = true,
+                Sources = true
+            });
 
             await page.GotoAsync(pageURL);
 
@@ -341,6 +379,12 @@ namespace MercuryHealth.UITests
 
             // Click text=Home
             await page.ClickAsync("text=Home");
+
+            // Stop tracing and export it into a zip archive.
+            await context.Tracing.StopAsync(new()
+            {
+                Path = "trace_Verify_NavToNutritionEdit.zip"
+            });
         }
 
         [Test]
