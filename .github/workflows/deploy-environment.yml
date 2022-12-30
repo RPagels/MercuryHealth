@@ -418,21 +418,31 @@ jobs:
          dotnet publish MercuryHealth.UITests/MercuryHealth.UITests.csproj --configuration ${{ env.buildConfiguration }} -o './MercuryHealth.UITests'
          dotnet test MercuryHealth.UITests/MercuryHealth.UITests.csproj --filter "TestCategory=Playwright_Tests_Chromium|TestCategory=Playwright_Tests_FireFox" -l "console;verbosity=normal" -l "trx;LogFileName=TestResults.trx" --settings MercuryHealth.UITests/MercuryHealthTests.runsettings
 
-      - name: 'Upload Playwright Test Results-ScreenShots'
-        uses: actions/upload-artifact@v2
+      # Upload the test result artifacts
+      - name: 'Upload Playwright Screenshot Files'
+        uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: MercuryHealth.UITestsResults
-          path: ${{ github.workspace }}/MercuryHealth.UITests/*.png
+          name: MercuryHealth.UITestsResults_Playwright
+          path: ${{ github.workspace }}/MercuryHealth.UITests/bin/Debug/net6.0/screenshot_*.png
           retention-days: 30
 
-      - name: 'Upload Playwright Test Results-Report'
-        uses: actions/upload-artifact@v2
+      # Upload the test result artifacts
+      - name: 'Upload Playwright Trace Files'
+        uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: MercuryHealth.UITestsResults
-          path: ${{ github.workspace }}/MercuryHealth.UITests/TestResults/
+          name: MercuryHealth.UITestsResults_Playwright
+          path: ${{ github.workspace }}/MercuryHealth.UITests/bin/Debug/net6.0/trace_*.zip
           retention-days: 30
+
+      #- name: 'Upload Playwright Test Results-Report'
+      #  uses: actions/upload-artifact@v2
+      #  if: always()
+      #  with:
+      #    name: MercuryHealth.UITestsResults
+      #    path: ${{ github.workspace }}/MercuryHealth.UITests/TestResults/
+      #    retention-days: 30
           
 ##################################################################
 # CD Stage - Load and Performance Testing >>> Load Test APIs     #
