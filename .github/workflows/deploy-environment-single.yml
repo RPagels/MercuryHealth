@@ -430,19 +430,10 @@ jobs:
         uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: MercuryHealth.UITestsResultsBinDebugNet6
+          name: MercuryHealth.UITestsResults_Playwright
           path: ${{ github.workspace }}/MercuryHealth.UITests/bin/Debug/net6.0/trace_*.zip
           retention-days: 30
 
-      # Upload the test result artifacts
-      - name: 'Upload Playwright Trace Files'
-        uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: MercuryHealth.UITestsResultsEntireDirectory
-          path: ${{ github.workspace }}/MercuryHealth.UITests/bin/Debug/net6.0/
-          retention-days: 30
-          
       # Add screenshots and Test Attachments
       #- name: 'Upload Playwright Trace Results-Report'
       #  uses: actions/upload-artifact@v3
