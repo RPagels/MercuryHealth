@@ -333,9 +333,16 @@ namespace MercuryHealth.UITests
             // Click #button_edit_25
             await page.ClickAsync("#button_edit_25");
 
+            // Take screenshot
+            await page.ScreenshotAsync(new()
+            {
+                Path = "screenshot_nutrition_edit_25.png",
+                FullPage = true,
+            });
+
             // Take screenshot & Add as Test Attachment
-            await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "nutrition_edit_25.png"), await page.ScreenshotAsync());
-            TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "nutrition_edit_25.png"), "nutrition_edit_25.png");
+            //await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "nutrition_edit_25.png"), await page.ScreenshotAsync());
+            //TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "nutrition_edit_25.png"), "nutrition_edit_25.png");
 
             Assert.AreEqual(pageURL + "Nutritions/Edit/25", page.Url);
 
@@ -356,9 +363,16 @@ namespace MercuryHealth.UITests
             myDescription = myDescription.TrimStart();
             myDescription = myDescription.TrimEnd();
 
+            // Take screenshot
+            await page.ScreenshotAsync(new()
+            {
+                Path = "screenshot_nutrition_editcheck_25.png",
+                FullPage = true,
+            });
+
             // Take screenshot & Add as Test Attachment
-            await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "nutrition_editcheck_25.png"), await page.ScreenshotAsync());
-            TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "nutrition_editcheck_25.png"), "nutrition_editcheck_25.png");
+            //await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "nutrition_editcheck_25.png"), await page.ScreenshotAsync());
+            //TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "nutrition_editcheck_25.png"), "nutrition_editcheck_25.png");
 
             // Assert that field
             Assert.AreEqual("Playwright is Fun", myDescription);
@@ -404,6 +418,14 @@ namespace MercuryHealth.UITests
             var page = await context.NewPageAsync();
             page.SetDefaultTimeout(myDefaultTimeout);
 
+            // Start tracing before creating / navigating a page.
+            await context.Tracing.StartAsync(new()
+            {
+                Screenshots = true,
+                Snapshots = true,
+                Sources = true
+            });
+
             await page.GotoAsync(pageURL);
 
             // Click on the cookie policy acceptance button if it exists
@@ -418,15 +440,27 @@ namespace MercuryHealth.UITests
             await page.ClickAsync("#menu_exercises");
             myPageTitle = await page.TitleAsync();
 
+            // Take screenshot
+            await page.ScreenshotAsync(new()
+            {
+                Path = "screenshot_exercises-homepage.png",
+                FullPage = true,
+            });
+
             // Take screenshot & Add as Test Attachment
-            await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "Exercises-Homepage.png"), await page.ScreenshotAsync());
-            TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "Exercises-Homepage.png"), "Exercises-Homepage.png");
+            //await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "Exercises-Homepage.png"), await page.ScreenshotAsync());
+            //TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "Exercises-Homepage.png"), "Exercises-Homepage.png");
 
             Assert.AreEqual("Exercises - Mercury Health", myPageTitle);
 
             // Click text=Home
             await page.ClickAsync("text=Home");
 
+            // Stop tracing and export it into a zip archive.
+            await context.Tracing.StopAsync(new()
+            {
+                Path = "trace_Verify_NavToExercises.zip"
+            });
         }
 
         [Test]
@@ -445,6 +479,14 @@ namespace MercuryHealth.UITests
             var context = await browser.NewContextAsync();
             var page = await context.NewPageAsync();
             page.SetDefaultTimeout(myDefaultTimeout);
+
+            // Start tracing before creating / navigating a page.
+            await context.Tracing.StartAsync(new()
+            {
+                Screenshots = true,
+                Snapshots = true,
+                Sources = true
+            });
 
             await page.GotoAsync(pageURL);
 
@@ -466,9 +508,16 @@ namespace MercuryHealth.UITests
             myPageTitle = await page.TitleAsync();
             Assert.AreEqual("Details - Mercury Health", myPageTitle);
 
+            // Take screenshot
+            await page.ScreenshotAsync(new()
+            {
+                Path = "screenshot_exercises_details_25.png",
+                FullPage = true,
+            });
+
             // Take screenshot & Add as Test Attachment
-            await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "exercises_details_25.png"), await page.ScreenshotAsync());
-            TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "exercises_details_25.png"), "exercises_details_25.png");
+            //await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "exercises_details_25.png"), await page.ScreenshotAsync());
+            //TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "exercises_details_25.png"), "exercises_details_25.png");
 
             Assert.AreEqual(pageURL + "Exercises/Details/25", page.Url);
 
@@ -478,9 +527,16 @@ namespace MercuryHealth.UITests
             myDescription = myDescription.TrimStart();
             myDescription = myDescription.TrimEnd();
 
+            // Take screenshot
+            await page.ScreenshotAsync(new()
+            {
+                Path = "screenshot_exercises_item_description.png",
+                FullPage = true,
+            });
+
             // Take screenshot & Add as Test Attachment
-            await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "Item-Description.png"), await page.ScreenshotAsync());
-            TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "Item-Description.png"), "Item-Description.png");
+            //await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "Item-Description.png"), await page.ScreenshotAsync());
+            //TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "Item-Description.png"), "Item-Description.png");
 
             // Assert that field is API Update!!!
             //Assert.AreEqual("API Update", myDescription);
@@ -503,6 +559,11 @@ namespace MercuryHealth.UITests
             // Click text=Home
             await page.ClickAsync("text=Home");
 
+            // Stop tracing and export it into a zip archive.
+            await context.Tracing.StopAsync(new()
+            {
+                Path = "trace_Verify_NavToExercisesDetail.zip"
+            });
         }
 
         [Test]
@@ -521,6 +582,14 @@ namespace MercuryHealth.UITests
             var context = await browser.NewContextAsync();
             var page = await context.NewPageAsync();
             page.SetDefaultTimeout(myDefaultTimeout);
+
+            // Start tracing before creating / navigating a page.
+            await context.Tracing.StartAsync(new()
+            {
+                Screenshots = true,
+                Snapshots = true,
+                Sources = true
+            });
 
             await page.GotoAsync(pageURL);
 
@@ -542,9 +611,16 @@ namespace MercuryHealth.UITests
             myPageTitle = await page.TitleAsync();
             Assert.AreEqual("Edit - Mercury Health", myPageTitle);
 
+            // Take screenshot
+            await page.ScreenshotAsync(new()
+            {
+                Path = "screenshot_exercises_edit_25.png",
+                FullPage = true,
+            });
+
             // Take screenshot & Add as Test Attachment
-            await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "exercises_edit_25.png"), await page.ScreenshotAsync());
-            TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "exercises_edit_25.png"), "exercises_edit_25.png");
+            //await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "exercises_edit_25.png"), await page.ScreenshotAsync());
+            //TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "exercises_edit_25.png"), "exercises_edit_25.png");
 
             Assert.AreEqual(pageURL + "Exercises/Edit/25", page.Url);
 
@@ -565,9 +641,16 @@ namespace MercuryHealth.UITests
             myDescription = myDescription.TrimStart();
             myDescription = myDescription.TrimEnd();
 
+            // Take screenshot
+            await page.ScreenshotAsync(new()
+            {
+                Path = "screenshot_exercises_editcheck_25.png",
+                FullPage = true,
+            });
+
             // Take screenshot & Add as Test Attachment
-            await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "exercises_editcheck_25.png"), await page.ScreenshotAsync());
-            TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "exercises_editcheck_25.png"), "exercises_editcheck_25.png");
+            //await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "exercises_editcheck_25.png"), await page.ScreenshotAsync());
+            //TestContext.AddTestAttachment(Path.Combine(Directory.GetCurrentDirectory(), "exercises_editcheck_25.png"), "exercises_editcheck_25.png");
 
             // Assert that field
             Assert.AreEqual("Playwright is Fun", myDescription);
@@ -587,21 +670,62 @@ namespace MercuryHealth.UITests
             // Click text=Home
             await page.ClickAsync("text=Home");
 
+            // Stop tracing and export it into a zip archive.
+            await context.Tracing.StopAsync(new()
+            {
+                Path = "trace_Verify_NavToExercisesEdit.zip"
+            });
         }
 
         [Test]
         [Category("Playwright_Tests_Chromium")]
         public async Task Verify_PlaywrightPageTitleOnChromium()
         {
+            //using var playwright = await Playwright.CreateAsync();
+            //await using var browser = await playwright.Chromium.LaunchAsync();
+            //var page = await browser.NewPageAsync();
+            //page.SetDefaultTimeout(myDefaultTimeout);
+            //await page.GotoAsync("https://playwright.dev/dotnet");
+
+            // Go to home page
+            //var page = await browser.NewPageAsync();
             using var playwright = await Playwright.CreateAsync();
+            //await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+            //{
+            //    Headless = false,
+            //});
+
             await using var browser = await playwright.Chromium.LaunchAsync();
-            var page = await browser.NewPageAsync();
+            var context = await browser.NewContextAsync();
+            var page = await context.NewPageAsync();
             page.SetDefaultTimeout(myDefaultTimeout);
+
+            // Start tracing before creating / navigating a page.
+            await context.Tracing.StartAsync(new()
+            {
+                Screenshots = true,
+                Snapshots = true,
+                Sources = true
+            });
+
             await page.GotoAsync("https://playwright.dev/dotnet");
 
             myPageTitle = await page.TitleAsync();
+
+            // Take screenshot
+            await page.ScreenshotAsync(new()
+            {
+                Path = "screenshot_playwright.dev.png",
+                FullPage = true,
+            });
+
             Assert.AreEqual("Fast and reliable end-to-end testing for modern web apps | Playwright .NET", myPageTitle);
 
+            // Stop tracing and export it into a zip archive.
+            await context.Tracing.StopAsync(new()
+            {
+                Path = "screenshot_playwrightpagetitleonchromium.zip"
+            });
         }
 
         //[Test]
@@ -624,15 +748,43 @@ namespace MercuryHealth.UITests
         public async Task Verify_MicrosoftOnChromium()
         {
             using var playwright = await Playwright.CreateAsync();
+            //await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+            //{
+            //    Headless = false,
+            //});
+
             await using var browser = await playwright.Chromium.LaunchAsync();
-            var page = await browser.NewPageAsync();
+            var context = await browser.NewContextAsync();
+            var page = await context.NewPageAsync();
             page.SetDefaultTimeout(myDefaultTimeout);
+
+            // Start tracing before creating / navigating a page.
+            await context.Tracing.StartAsync(new()
+            {
+                Screenshots = true,
+                Snapshots = true,
+                Sources = true
+            });
+
             await page.GotoAsync("https://www.microsoft.com/");
 
             myPageTitle = await page.TitleAsync();
             //Assert.AreEqual(true, myPageTitle.Contains("Microsoft"), myPageTitle);
+
+            // Take screenshot
+            await page.ScreenshotAsync(new()
+            {
+                Path = "screenshot_microsoft.png",
+                FullPage = true,
+            });
+
             Assert.AreEqual(true, myPageTitle.Contains("Microsoft"));
 
+            // Stop tracing and export it into a zip archive.
+            await context.Tracing.StopAsync(new()
+            {
+                Path = "trace_Verify_MicrosoftOnChromium.zip"
+            });
         }
 
         [Test]
@@ -640,13 +792,42 @@ namespace MercuryHealth.UITests
         public async Task Verify_GoogleOnChromium()
         {
             using var playwright = await Playwright.CreateAsync();
+            //await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+            //{
+            //    Headless = false,
+            //});
+
             await using var browser = await playwright.Chromium.LaunchAsync();
-            var page = await browser.NewPageAsync();
+            var context = await browser.NewContextAsync();
+            var page = await context.NewPageAsync();
             page.SetDefaultTimeout(myDefaultTimeout);
+
+            // Start tracing before creating / navigating a page.
+            await context.Tracing.StartAsync(new()
+            {
+                Screenshots = true,
+                Snapshots = true,
+                Sources = true
+            });
+
             await page.GotoAsync("https://www.google.com");
 
             myPageTitle = await page.TitleAsync();
+
+            // Take screenshot
+            await page.ScreenshotAsync(new()
+            {
+                Path = "screenshot_google.png",
+                FullPage = true,
+            });
+
             Assert.AreEqual("Google", myPageTitle);
+
+            // Stop tracing and export it into a zip archive.
+            await context.Tracing.StopAsync(new()
+            {
+                Path = "trace_Verify_GoogleOnChromium.zip"
+            });
 
         }
 
@@ -655,14 +836,42 @@ namespace MercuryHealth.UITests
         public async Task Verify_BingOnFirefox()
         {
             using var playwright = await Playwright.CreateAsync();
+            //await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+            //{
+            //    Headless = false,
+            //});
+
             await using var browser = await playwright.Chromium.LaunchAsync();
-            var page = await browser.NewPageAsync();
+            var context = await browser.NewContextAsync();
+            var page = await context.NewPageAsync();
             page.SetDefaultTimeout(myDefaultTimeout);
+
+            // Start tracing before creating / navigating a page.
+            await context.Tracing.StartAsync(new()
+            {
+                Screenshots = true,
+                Snapshots = true,
+                Sources = true
+            });
+
             await page.GotoAsync("https://www.bing.com");
 
             myPageTitle = await page.TitleAsync();
+
+            // Take screenshot
+            await page.ScreenshotAsync(new()
+            {
+                Path = "screenshot_bingonfirefox.png",
+                FullPage = true,
+            });
+
             Assert.AreEqual("Bing", myPageTitle);
 
+            // Stop tracing and export it into a zip archive.
+            await context.Tracing.StopAsync(new()
+            {
+                Path = "trace_Verify_BingOnFirefox.zip"
+            });
         }
 
         [Test]
@@ -670,13 +879,42 @@ namespace MercuryHealth.UITests
         public async Task Verify_GoogleOnFirefox()
         {
             using var playwright = await Playwright.CreateAsync();
+            //await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+            //{
+            //    Headless = false,
+            //});
+
             await using var browser = await playwright.Chromium.LaunchAsync();
-            var page = await browser.NewPageAsync();
+            var context = await browser.NewContextAsync();
+            var page = await context.NewPageAsync();
             page.SetDefaultTimeout(myDefaultTimeout);
+
+            // Start tracing before creating / navigating a page.
+            await context.Tracing.StartAsync(new()
+            {
+                Screenshots = true,
+                Snapshots = true,
+                Sources = true
+            });
+
             await page.GotoAsync("https://www.google.com");
 
             myPageTitle = await page.TitleAsync();
+
+            // Take screenshot
+            await page.ScreenshotAsync(new()
+            {
+                Path = "screenshot_googleonfirefox.png",
+                FullPage = true,
+            });
+
             Assert.AreEqual("Google", myPageTitle);
+
+            // Stop tracing and export it into a zip archive.
+            await context.Tracing.StopAsync(new()
+            {
+                Path = "trace_Verify_GoogleOnFirefox.zip"
+            });
 
         }
 
@@ -684,15 +922,51 @@ namespace MercuryHealth.UITests
         [Category("Playwright_Tests_FireFox")]
         public async Task Verify_PlaywrightPageTitleOnFirefox()
         {
+            //using var playwright = await Playwright.CreateAsync();
+            //await using var browser = await playwright.Chromium.LaunchAsync();
+            //var page = await browser.NewPageAsync();
+            //page.SetDefaultTimeout(myDefaultTimeout);
+            //await page.GotoAsync("https://playwright.dev/dotnet");
+
+            // Go to home page
+            //var page = await browser.NewPageAsync();
             using var playwright = await Playwright.CreateAsync();
+            //await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+            //{
+            //    Headless = false,
+            //});
+
             await using var browser = await playwright.Chromium.LaunchAsync();
-            var page = await browser.NewPageAsync();
+            var context = await browser.NewContextAsync();
+            var page = await context.NewPageAsync();
             page.SetDefaultTimeout(myDefaultTimeout);
+
+            // Start tracing before creating / navigating a page.
+            await context.Tracing.StartAsync(new()
+            {
+                Screenshots = true,
+                Snapshots = true,
+                Sources = true
+            });
+
             await page.GotoAsync("https://playwright.dev/dotnet");
 
             myPageTitle = await page.TitleAsync();
+
+            // Take screenshot
+            await page.ScreenshotAsync(new()
+            {
+                Path = "screenshot_playwrightpagetitleonfirefox.png",
+                FullPage = true,
+            });
+
             Assert.AreEqual("Fast and reliable end-to-end testing for modern web apps | Playwright .NET", myPageTitle);
 
+            // Stop tracing and export it into a zip archive.
+            await context.Tracing.StopAsync(new()
+            {
+                Path = "trace_Verify_PlaywrightPageTitleOnFirefox.zip"
+            });
         }
     }
 }
