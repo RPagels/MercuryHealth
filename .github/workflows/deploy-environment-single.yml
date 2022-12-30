@@ -424,6 +424,14 @@ jobs:
           path: ${{ github.workspace }}/MercuryHealth.UITests/TestResults/
           retention-days: 30
           
+      - name: 'Upload Playwright Trace Results-Report'
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: MercuryHealth.UITestsResults
+          path: ${{ github.workspace }}/MercuryHealth.UITests/TestResults/*.zip
+          retention-days: 30
+          
 ##################################################################
 # CD Stage - Load and Performance Testing >>> Home Page          #
 ##################################################################
