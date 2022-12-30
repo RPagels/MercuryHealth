@@ -88,6 +88,14 @@ namespace MercuryHealth.UITests
             var page = await context.NewPageAsync();
             page.SetDefaultTimeout(myDefaultTimeout);
 
+            // Start tracing before creating / navigating a page.
+            await context.Tracing.StartAsync(new()
+            {
+                Screenshots = true,
+                Snapshots = true,
+                Sources = true
+            });
+
             await page.GotoAsync(pageURL);
 
             // Click on the cookie policy acceptance button if it exists
@@ -104,6 +112,11 @@ namespace MercuryHealth.UITests
 
             Assert.AreEqual("Home Page - Mercury Health", myPageTitle);
 
+            // Stop tracing and export it into a zip archive.
+            await context.Tracing.StopAsync(new()
+            {
+                Path = "trace_Verify_NavToHome.zip"
+            });
         }
 
         [Test]
@@ -122,6 +135,14 @@ namespace MercuryHealth.UITests
             var context = await browser.NewContextAsync();
             var page = await context.NewPageAsync();
             page.SetDefaultTimeout(myDefaultTimeout);
+
+            // Start tracing before creating / navigating a page.
+            await context.Tracing.StartAsync(new()
+            {
+                Screenshots = true,
+                Snapshots = true,
+                Sources = true
+            });
 
             await page.GotoAsync(pageURL);
 
@@ -146,6 +167,11 @@ namespace MercuryHealth.UITests
             // Click text=Home
             await page.ClickAsync("text=Home");
 
+            // Stop tracing and export it into a zip archive.
+            await context.Tracing.StopAsync(new()
+            {
+                Path = "trace_Verify_NavToNutrition.zip"
+            });
         }
 
         [Test]
