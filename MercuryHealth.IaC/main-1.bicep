@@ -215,7 +215,8 @@ module logicappmod './main-15-logicapp.bicep' = {
 //   }
 // }
 
-param AzObjectIdPagels string = 'b6be0700-1fda-4f88-bf20-1aa508a91f73'
+//param AzObjectIdPagels string = 'b6be0700-1fda-4f88-bf20-1aa508a91f73'
+param AzObjectIdPagels string = '197b8610-80f8-4317-b9c4-06e5b3246e87'
 
 // Application Id of Service Principal "MercuryHealth_ServicePrincipal"
 //param ADOServiceprincipalObjectId string = '5bc20bf4-172c-48ac-86e7-a5185394237b'
