@@ -186,4 +186,5 @@ jobs:
         resource-group-location: 'eastus2'
         approval-required: true
       secrets:
-        azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+        #azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+        azure-credentials: ${{ AZURE_CREDENTIALS_MCAPS }}
