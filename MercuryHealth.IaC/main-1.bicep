@@ -197,14 +197,14 @@ module logicappmod './main-15-logicapp.bicep' = {
   }
 }
 
-module cognitiveservicemod 'main-16-cognitiveservice.bicep' = {
-  name: cognitiveServiceName
-  params: {
-    defaultTags: defaultTags
-    cognitiveServiceName: cognitiveServiceName
-    location: location
-  }
-}
+// module cognitiveservicemod 'main-16-cognitiveservice.bicep' = {
+//   name: cognitiveServiceName
+//   params: {
+//     defaultTags: defaultTags
+//     cognitiveServiceName: cognitiveServiceName
+//     location: location
+//   }
+// }
 
 // module portaldashboardmod './main-11-Dashboard.bicep' = {
 //   name: dashboardName
