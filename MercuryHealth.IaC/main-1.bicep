@@ -7,7 +7,7 @@ param createdBy string = 'Randy Pagels' // resourceGroup().managedBy
 param costCenter string = '74f644d3e665'
 param releaseAnnotationGuid string = newGuid()
 param Deployed_Environment string
-
+fr
 // Generate Azure SQL Credentials
 var sqlAdminLoginName = 'AzureAdmin'
 var sqlAdminLoginPassword = '${substring(base64(uniqueString(resourceGroup().id)), 0, 10)}.${uniqueString(resourceGroup().id)}'
@@ -262,13 +262,13 @@ module configsettingsmod './main-13-configsettings.bicep' = {
  }
 
  // Create Front Door
-module frontdoormod './main-14-frontdoor.bicep' = {
-  name: frontDoorName
-  params: {
-  backendAddress: '${apiServiceName}.azure-api.net'  //
-  frontDoorName: frontDoorName
-  }
-}
+//module frontdoormod './main-14-frontdoor.bicep' = {
+//  name: frontDoorName
+//  params: {
+//  backendAddress: '${apiServiceName}.azure-api.net'  //
+//  frontDoorName: frontDoorName
+//  }
+//}
 
 // Output Params used for IaC deployment in pipeline
 output out_webSiteName string = webSiteName
